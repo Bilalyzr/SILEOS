@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Genetics: Punnett Squares — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="./genetics-punnett/styles.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Genetics: Punnett Squares<span class="lk-tag">Class 10 &amp; 12 · Biology</span></h1>
+    <div class="lk-meta">CBSE: Heredity &amp; Evolution / Principles of Inheritance — Mendel's laws, genotype vs phenotype</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><div style="height:100%;display:flex;align-items:center;justify-content:center;overflow:auto;">
+    <div id="punnettBox"></div>
+  </div></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Trait: pea flower colour</h2>
+      <div class="lk-readout"><b>P (dominant)</b> = purple flowers &nbsp;·&nbsp; <b>p (recessive)</b> = white flowers</div>
+    </div>
+    <div class="lk-card">
+      <h2>Parent 1 genotype</h2>
+      <div class="lk-seg" id="p1Seg">
+        <button data-g="PP">PP (purple)</button>
+        <button class="active" data-g="Pp">Pp (purple)</button>
+        <button data-g="pp">pp (white)</button>
+      </div>
+    </div>
+    <div class="lk-card">
+      <h2>Parent 2 genotype</h2>
+      <div class="lk-seg" id="p2Seg">
+        <button data-g="PP">PP (purple)</button>
+        <button class="active" data-g="Pp">Pp (purple)</button>
+        <button data-g="pp">pp (white)</button>
+      </div>
+    </div>
+    <div class="lk-card">
+      <h2>Predicted offspring</h2>
+      <div class="lk-readout" id="genoR"></div>
+      <div class="lk-readout" id="phenoR"></div>
+      <div class="bar" id="phenoBar"></div>
+      <button class="lk-btn ghost" id="flipBtn" style="margin-top:8px;">🎲 Breed 100 random offspring</button>
+      <div class="lk-readout" id="randomRes" style="margin-top:8px;"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint">Cross two hybrids <b>Pp × Pp</b>: the classic <b>3 : 1</b> phenotype
+      ratio appears. But look at the genotypes — it's really <b>1 PP : 2 Pp : 1 pp</b>.
+      Why can't you tell a PP plant from a Pp plant just by looking? That's Mendel's
+      law of dominance in action.</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./genetics-punnett/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/html2canvas.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

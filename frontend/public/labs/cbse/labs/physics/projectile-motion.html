@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projectile Motion — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Projectile Motion<span class="lk-tag">Class 11 · Physics</span></h1>
+    <div class="lk-meta">CBSE: Motion in a Plane — projectile motion, range, time of flight, g on different planets</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Launcher</h2>
+      <div class="lk-row"><label class="lk-name">Angle θ</label><input type="range" id="ang" min="5" max="85" step="1" value="45"><span class="lk-val" id="angv">45°</span></div>
+      <div class="lk-row"><label class="lk-name">Speed u</label><input type="range" id="spd" min="5" max="60" step="1" value="30"><span class="lk-val" id="spdv">30 m/s</span></div>
+      <div class="lk-seg" id="gSeg">
+        <button class="active">Earth g=9.8</button>
+        <button>Moon 1.6</button>
+        <button>Mars 3.7</button>
+        <button>Jupiter 24.8</button>
+      </div>
+    </div>
+    <div class="lk-card">
+      <h2>Prediction (formulas)</h2>
+      <div class="lk-readout" id="rRange"></div>
+      <div class="lk-readout" id="rHeight"></div>
+      <div class="lk-readout" id="rTime"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Measured from flight</h2>
+      <div class="lk-readout" id="rLive">Press Launch to fire!</div>
+      <button class="lk-btn" id="launchBtn">🚀 Launch</button>
+      <button class="lk-btn ghost" id="clearBtn" style="margin-top:8px;">Clear trails</button>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint">Range <b>R = u² sin2θ / g</b> is maximum at <b>45°</b>. Complementary
+      angles (30° &amp; 60°) land at the same spot — try it! Now switch to the Moon: same
+      throw, huge range. Gravity changes <i>how far</i>, never <i>how fast sideways</i>.</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./projectile-motion/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

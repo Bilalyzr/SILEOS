@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>H5P Player</title>
+<link rel="stylesheet" href="/h5p/styles/h5p.css" />
+<style>
+  /*
+   * This page is loaded ONLY inside an iframe with
+   * sandbox="allow-scripts" (NEVER allow-same-origin — see
+   * docs/superpowers/specs/2026-09-02-learning-experience-design.md
+   * section B3). Without allow-same-origin the browser treats this
+   * document as a unique opaque origin on every load: window.location.origin
+   * reads "null", and any storage access (localStorage/sessionStorage/
+   * indexedDB/cookies) THROWS a SecurityError instead of silently
+   * no-opping.
+   *
+   * Requests split into TWO categories under an opaque origin, and the
+   * difference is what made review finding C1 fatal:
+   *
+   *   1. Plain resource GETs issued by the parser — <script src>, <link
+   *      rel=stylesheet>, <img> — are NOT origin-checked, so our own
+   *      /h5p/main.bundle.js and /h5p/styles/h5p.css load fine.
+   *   2. fetch()/XHR IS origin-checked. From an opaque origin the browser
+   *      sends `Origin: null` and treats the request as CROSS-ORIGIN even
+   *      though the URL is same-site, so the response is rejected unless it
+   *      carries an `Access-Control-Allow-Origin` header that matches
+   *      (`*`, since "null" cannot be allow-listed safely).
+   *
+   * h5p-standalone loads the package via fetch() (h5p.json,
+   * content/content.json, library descriptors), so /uploads/h5p/* MUST be
+   * served with `Access-Control-Allow-Origin: *` or the player never boots.
+   * That header is added by the dedicated /uploads/h5p mount in
+   * backend/app/main.py and by the `location /uploads/h5p/` blocks in the
+   * nginx configs — do not remove either without breaking this page.
+   *
+   * postMessage's targetOrigin and any storage API are likewise affected;
+   * see the shims below.
+   */
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #0a0a0a;
+    overflow: hidden;
+  }
+  #h5p-container {
+    width: 100%;
+    height: 100%;
+  }
+  #boot-error, #boot-loading {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #e5e5e5;
+    text-align: center;
+    padding: 24px;
+    box-sizing: border-box;
+  }
+  #boot-error { color: #fca5a5; display: none; }
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.15);
+    border-top-color: #6366f1;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+  <div id="boot-loading">
+    <div class="spinner"></div>
+    <p>Loading interactive content&hellip;</p>
+  </div>
+  <div id="boot-error"></div>
+  <div id="h5p-container" style="display:none"></div>
+
+  <script>
+  (function () {
+    "use strict";
+
+    // -------------------------------------------------------------------
+    // Storage shim (spec deviation, documented in Task 5 report):
+    // h5p-standalone / the H5P core runtime may touch localStorage (e.g.
+    // for UI preference caching) even though we never pass ajax/
+    // contentUserData options. Inside a sandbox="allow-scripts" iframe
+    // WITHOUT allow-same-origin, `window.localStorage` itself throws a
+    // SecurityError just from being READ (not just written), which would
+    // hard-crash the H5P bundle before it ever renders anything. Polyfill
+    // an in-memory Storage-shaped object BEFORE loading the H5P scripts so
+    // any access silently degrades to a per-load, non-persistent store
+    // instead of throwing. This never touches the shared sanitizeHtml
+    // utility and never grants the sandboxed content any real persistence
+    // or access to the parent app's storage.
+    // -------------------------------------------------------------------
+    function makeMemoryStorage() {
+      var store = Object.create(null);
+      return {
+        getItem: function (k) { return Object.prototype.hasOwnProperty.call(store, k) ? store[k] : null; },
+        setItem: function (k, v) { store[k] = String(v); },
+        removeItem: function (k) { delete store[k]; },
+        clear: function () { store = Object.create(null); },
+        key: function (i) { return Object.keys(store)[i] || null; },
+        get length() { return Object.keys(store).length; }
+      };
+    }
+
+    function shimStorage(propName) {
+      try {
+        // Merely READING window.localStorage/sessionStorage can throw in an
+        // opaque-origin sandboxed iframe — this probe is itself inside the
+        // try.
+        var probe = window[propName];
+        if (probe) {
+          // Some browsers hand back a real (but inert/non-persistent) object
+          // for a sandboxed frame instead of throwing — verify it actually
+          // works before trusting it.
+          probe.setItem("__h5p_probe__", "1");
+          probe.removeItem("__h5p_probe__");
+          return; // native storage usable as-is, nothing to shim
+        }
+      } catch (e) {
+        // fall through to shim
+      }
+      try {
+        Object.defineProperty(window, propName, {
+          configurable: true,
+          get: function () { return makeMemoryStorage(); }
+        });
+      } catch (e) {
+        // Some browsers won't let us redefine window.localStorage at all —
+        // in that case there is nothing more we can do here; H5P's own
+        // try/catch (if any) is the last line of defense. We still never
+        // let this exception escape and block boot.
+      }
+    }
+
+    shimStorage("localStorage");
+    shimStorage("sessionStorage");
+
+    // -------------------------------------------------------------------
+    // ?content= validation. Reject anything that isn't exactly 32 lowercase
+    // hex chars (matches h5p_service.generate_public_id's secrets.token_hex(16)
+    // output) BEFORE it touches the DOM in any form — no template
+    // interpolation of the raw param anywhere on this page.
+    // -------------------------------------------------------------------
+    var PUBLIC_ID_RE = /^[a-f0-9]{32}$/;
+
+    function getContentIdFromQuery() {
+      var params = new URLSearchParams(window.location.search);
+      var raw = params.get("content");
+      if (!raw || !PUBLIC_ID_RE.test(raw)) return null;
+      return raw;
+    }
+
+    function showError(message) {
+      var loading = document.getElementById("boot-loading");
+      var errorEl = document.getElementById("boot-error");
+      if (loading) loading.style.display = "none";
+      if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.style.display = "flex";
+      }
+    }
+
+    function showPlayer() {
+      var loading = document.getElementById("boot-loading");
+      var container = document.getElementById("h5p-container");
+      if (loading) loading.style.display = "none";
+      if (container) container.style.display = "block";
+    }
+
+    // -------------------------------------------------------------------
+    // Result reporting to the parent. targetOrigin is '*' deliberately:
+    // window.location.origin is the string "null" for a sandboxed iframe
+    // without allow-same-origin, and passing "null" as postMessage's
+    // targetOrigin does not mean "same opaque origin only" — it does not
+    // reliably restrict delivery the way a real origin string would, so it
+    // buys nothing over '*' here. The security boundary is therefore
+    // pushed to the PARENT: React verifies the message's `source` is
+    // exactly this iframe's contentWindow (not spoofable by another frame/
+    // window — postMessage's event.source is a live window reference set
+    // by the browser, never attacker-controlled) and validates the payload
+    // shape before trusting it. This is a deliberate, documented deviation
+    // from the spec text's origin-check wording (see Task 5 report).
+    // -------------------------------------------------------------------
+    function postResult(payload) {
+      try {
+        window.parent.postMessage(payload, "*");
+      } catch (e) {
+        // Swallow — a broken postMessage should never crash the player.
+      }
+    }
+
+    var contentId = getContentIdFromQuery();
+    if (!contentId) {
+      showError("Invalid or missing content id.");
+      postResult({ type: "h5p-error", message: "invalid_content_id" });
+      return;
+    }
+
+    var h5pJsonPath = "/uploads/h5p/" + contentId;
+
+    function loadScript(src) {
+      return new Promise(function (resolve, reject) {
+        var s = document.createElement("script");
+        s.src = src;
+        s.async = true;
+        s.onload = function () { resolve(); };
+        s.onerror = function () { reject(new Error("Failed to load " + src)); };
+        document.head.appendChild(s);
+      });
+    }
+
+    function boot() {
+      var container = document.getElementById("h5p-container");
+      var options = {
+        id: "h5p-" + contentId,
+        h5pJsonPath: h5pJsonPath,
+        frameJs: "/h5p/frame.bundle.js",
+        frameCss: "/h5p/styles/h5p.css",
+        frame: false,
+        copyright: false,
+        export: false,
+        icon: false,
+        fullScreen: false,
+        embed: false
+      };
+
+      if (!window.H5PStandalone || !window.H5PStandalone.H5P) {
+        showError("H5P player failed to load.");
+        postResult({ type: "h5p-error", message: "player_script_missing" });
+        return;
+      }
+
+      new window.H5PStandalone.H5P(container, options)
+        .then(function () {
+          showPlayer();
+          attachXapiListener();
+        })
+        .catch(function (err) {
+          showError("This interactive content could not be loaded.");
+          postResult({ type: "h5p-error", message: "boot_failed", detail: String(err && err.message || err) });
+        });
+    }
+
+    // -------------------------------------------------------------------
+    // xAPI listener. H5P.externalDispatcher fires "xAPI" events for every
+    // interaction; only the top-level "completed"/"answered" statements
+    // (verb.id ending in /completed or /answered, with a result object)
+    // that ALSO report the whole content item (event.getVerifiedStatementValue
+    // is not available on every H5P version, so we read the raw statement
+    // defensively) are treated as the lesson-level result. H5P content
+    // reports many sub-interaction xAPI events (one per question in a quiz,
+    // for instance) — we only forward the one whose object matches this
+    // content's own xAPIObjectIRI-shaped id (best-effort: falls back to
+    // "any completed/answered event with a result" if that can't be
+    // determined, since some content types don't set a distinguishing id).
+    // -------------------------------------------------------------------
+    function attachXapiListener() {
+      try {
+        if (!window.H5P || !window.H5P.externalDispatcher) return;
+        var reported = false;
+        window.H5P.externalDispatcher.on("xAPI", function (event) {
+          try {
+            var statement = event && event.data && event.data.statement;
+            if (!statement) return;
+            var verbId = statement.verb && statement.verb.id;
+            var isTerminal = verbId === "http://adlnet.gov/expapi/verbs/completed" ||
+              verbId === "http://adlnet.gov/expapi/verbs/answered";
+            if (!isTerminal) return;
+
+            var result = statement.result || {};
+            var completed = result.completion !== false; // absent => treat as completed
+            var score = null;
+            var maxScore = null;
+            if (result.score) {
+              if (typeof result.score.raw === "number") score = result.score.raw;
+              if (typeof result.score.max === "number") maxScore = result.score.max;
+            }
+
+            // Prefer the LAST terminal event with a score (covers content
+            // types, e.g. Question Set, that fire an interim "answered" per
+            // question before a final "completed" for the whole set) —
+            // once we've seen one WITH a score, ignore later ones without.
+            if (reported && score === null) return;
+            reported = true;
+
+            postResult({
+              type: "h5p-result",
+              score: score,
+              maxScore: maxScore,
+              completed: completed
+            });
+          } catch (e) {
+            // A malformed statement must never crash the listener.
+          }
+        });
+      } catch (e) {
+        // H5P.externalDispatcher missing/misbehaving — no xAPI reporting,
+        // but the content still plays.
+      }
+    }
+
+    loadScript("/h5p/main.bundle.js")
+      .then(boot)
+      .catch(function () {
+        showError("H5P player failed to load.");
+        postResult({ type: "h5p-error", message: "player_script_load_failed" });
+      });
+  })();
+  </script>
+</body>
+</html>

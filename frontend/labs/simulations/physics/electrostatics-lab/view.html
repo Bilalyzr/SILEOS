@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-size=1">
+<title>Electrostatics: Charges &amp; Fields — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Charges &amp; Fields<span class="lk-tag">Class 12 · Physics</span></h1>
+    <div class="lk-meta">Electric Charges and Fields — Coulomb's law, field lines, potential</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Charges (drag them!)</h2>
+      <div class="lk-row"><label class="lk-name">Charge q₁</label><input type="range" id="q1" min="-4" max="4" step="1" value="2"><span class="lk-val" id="q1v">+2</span></div>
+      <div class="lk-row"><label class="lk-name">Charge q₂</label><input type="range" id="q2" min="-4" max="4" step="1" value="-2"><span class="lk-val" id="q2v">−2</span></div>
+      <button class="lk-btn ghost" id="flipBtn">↺ Reset layout</button>
+    </div>
+    <div class="lk-card">
+      <h2>Readings</h2>
+      <div class="lk-readout" id="coulomb"></div>
+      <div class="lk-readout" id="mode"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint">Field lines flow out of <b>+</b> and into <b>−</b>. Two opposite
+      charges make a <b>dipole</b> — lines run straight from one to the other. Make both
+      charges positive and watch the lines <b>repel</b>, leaving a neutral point between
+      them. Coulomb's force falls as 1/r² — drag a charge to feel it.</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./electrostatics-lab/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

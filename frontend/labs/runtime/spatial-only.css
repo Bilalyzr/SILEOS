@@ -1,0 +1,20 @@
+/* LMS design adapter: shared calm surfaces and accessible controls. */
+:root { --brand:#ea580c; }
+body.lk-app { background:#faf8f5; color:#243449; }
+.lk-header { background:#fff; border-bottom:1px solid #e8e2da; }
+.lk-card { border-radius:20px; border:1px solid #e8e2da; box-shadow:0 4px 18px #25344808; }
+.lk-stage { border-radius:22px; overflow:hidden; }
+.lk-btn { background:#c2410c; border-radius:12px; }
+.lk-btn:focus-visible, input:focus-visible,select:focus-visible { outline:3px solid #0d8f9e; outline-offset:3px; }
+.sasha-spatial-bar { display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:14px 24px; background:#fff7ed; border-bottom:1px solid #f1d8c5; }
+.sasha-spatial-bar strong { margin-right:auto; }
+.sasha-spatial-bar p { flex-basis:100%; margin:0; color:#5b6573; font-size:12px; }
+.sasha-spatial-bar button:disabled { opacity:.5; cursor:not-allowed; }
+@media(prefers-reduced-motion:reduce) { * { scroll-behavior:auto!important; } }
+body.lk-app.sasha-in-ar { background:transparent; }
+.sasha-in-ar .lk-header { display:none; }
+.sasha-in-ar .lk-stage, .sasha-in-ar #stage { opacity:0; pointer-events:none; }
+.sasha-in-ar .lk-panel, .sasha-in-ar #panel { position:fixed; bottom:0; left:0; right:0; max-height:35vh; overflow:auto; background:#ffffffed; padding:12px; }
+.sasha-in-ar .sasha-spatial-bar { background:#ffffffdc; font-size:12px; }
+
+.sasha-spatial-bar button.lk-btn { width:auto; min-height:38px; padding:8px 16px; }

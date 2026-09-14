@@ -1,0 +1,62 @@
+/* Deliberately scoped: Aurum's global utility normalization should not flatten
+   the dark AI surfaces or their high-contrast type. */
+.astra-theme .rd-screen-admin-ai-providers .ai-vault-hero-title {
+  color: #f8fafc !important;
+  -webkit-text-fill-color: #f8fafc !important;
+}
+
+.astra-theme .rd-screen-admin-ai-providers .ai-vault-gradient {
+  background: linear-gradient(90deg, #fb923c, #fcd34d) !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.astra-theme .rd-screen-admin-ai-providers .ai-vault-modal,
+.astra-theme .rd-screen-admin-ai-providers .ai-vault-delete-modal {
+  background: #fff !important;
+  color: #0f172a;
+}
+
+.astra-theme .rd-screen-admin-ai-providers .ai-vault-modal .ai-vault-modal-title {
+  color: #f8fafc !important;
+  -webkit-text-fill-color: #f8fafc !important;
+}
+
+.astra-theme .sasha-ai-studio :is(.text-slate-200, .text-slate-300) {
+  color: #e2e8f0 !important;
+}
+
+.astra-theme .sasha-ai-studio .text-slate-400 {
+  color: #aab8cb !important;
+}
+
+.astra-theme .sasha-ai-studio :is(.text-slate-500, .text-slate-600) {
+  color: #8b9bb2 !important;
+}
+
+.astra-theme .sasha-ai-studio .text-white {
+  color: #fff !important;
+}
+
+.astra-theme .sasha-ai-studio #sasha-course-context {
+  background: rgb(255 255 255 / 8%) !important;
+  border-color: rgb(255 255 255 / 14%) !important;
+  color: #e2e8f0 !important;
+  box-shadow: none !important;
+}
+
+.astra-theme .sasha-ai-studio #sasha-ai-composer {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: #f8fafc !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.astra-theme .sasha-ai-studio #sasha-ai-composer::placeholder {
+  color: #8b9bb2 !important;
+  opacity: 1;
+}

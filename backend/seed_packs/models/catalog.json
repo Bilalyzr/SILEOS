@@ -1,0 +1,49 @@
+{
+  "format": "sasha-model-library",
+  "version": 1,
+  "models": [
+    {
+      "title": "Duck (sample)",
+      "file": "65bf938f54d6073e619e76e007820bbf980cdc3dc0daec0d94830ffc4ae54ab5.glb",
+      "sha256": "65bf938f54d6073e619e76e007820bbf980cdc3dc0daec0d94830ffc4ae54ab5",
+      "bytes": 120484,
+      "original_model_id": 3,
+      "meshes": 1
+    },
+    {
+      "title": "Textured Box (sample)",
+      "file": "2d055d2d56a492d1b9302de6e733046b625cf51e5f2a3090bd3a8c11acc93c17.glb",
+      "sha256": "2d055d2d56a492d1b9302de6e733046b625cf51e5f2a3090bd3a8c11acc93c17",
+      "bytes": 6540,
+      "original_model_id": 4,
+      "meshes": 1
+    },
+    {
+      "title": "snub_cube",
+      "file": "ed545d347edf45933c1f765a943aca00559089e87a18b783907e761014c8883d.glb",
+      "sha256": "ed545d347edf45933c1f765a943aca00559089e87a18b783907e761014c8883d",
+      "bytes": 36740,
+      "original_model_id": 5,
+      "meshes": 38
+    },
+    {
+      "title": "Sasha-Character",
+      "file": "0a7b010a7d44f9a6f10be1fd18de3d5323ad809eccbe777b7630f8e7d1413887.glb",
+      "sha256": "0a7b010a7d44f9a6f10be1fd18de3d5323ad809eccbe777b7630f8e7d1413887",
+      "bytes": 4381240,
+      "original_model_id": 6,
+      "meshes": 3
+    }
+  ],
+  "unavailable": [
+    {
+      "title": "New Lesson",
+      "file": "d9d6c5005b05f6ee298a537b2fa6ae9e50a87ec3525e7239b2adcc9801ab26dd.glb",
+      "sha256": "d9d6c5005b05f6ee298a537b2fa6ae9e50a87ec3525e7239b2adcc9801ab26dd",
+      "bytes": 196,
+      "original_model_id": 2,
+      "meshes": 1,
+      "reason": "Invalid original GLB: scenes is a number instead of a scene list, POSITION accessor is missing, and no geometry buffers are present. Original preserved for recovery; not installed as a working model."
+    }
+  ]
+}

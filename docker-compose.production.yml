@@ -1,0 +1,237 @@
+# Production Docker Compose - Single Container Setup
+
+services:
+  sashainfinity-lms:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+      args:
+        - NODE_ENV=production
+    container_name: sashainfinity-lms
+    ports:
+      - "8081:80"
+      - "8443:443"
+    environment: &production-environment
+      # Database
+      # Password comes from .env (compose auto-loads it) — never hardcode it here.
+      # A hardcoded password that drifts from the volume's actual password is what
+      # triggered the 2026-08-15 incident (DB auth failure -> destructive volume recreate).
+      - DATABASE_URL=postgresql://tutor:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@postgres:5432/tutor_lms
+      - REDIS_URL=redis://redis:6379/0
+
+      # Security
+      - SECRET_KEY=${SECRET_KEY:?Set a persistent 32+ character SECRET_KEY}
+      - AI_CREDENTIAL_ENCRYPTION_KEY=${AI_CREDENTIAL_ENCRYPTION_KEY:?Set a stable AI credential encryption key}
+      - JWT_SECRET=${JWT_SECRET:?Set a distinct persistent 32+ character JWT_SECRET}
+      - VIDEO_SECRET=${VIDEO_SECRET:?Set a distinct 32+ character video signing secret}
+      - JITSI_JWT_SECRET=${JITSI_JWT_SECRET:?Set a distinct 32+ character Jitsi signing secret}
+      - INTERNAL_TOKEN=${INTERNAL_TOKEN:?Set a distinct 32+ character internal-service token}
+      - JITSI_PUBLIC_URL=${JITSI_PUBLIC_URL:-https://live.sashainfinity.com}
+      - JITSI_JWT_APP_ID=${JITSI_JWT_APP_ID:-sashainfinity}
+      - CODE_RUNNER_TOKEN=${CODE_RUNNER_TOKEN:-}
+      # Fail closed: no known default admin password. Deploy must set ADMIN_PASSWORD.
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:?ADMIN_PASSWORD must be set in the environment}
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-admin@sashainfinity.com}
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-sashainfinity_admin}
+      - MIN_WITHDRAWAL_INR=${MIN_WITHDRAWAL_INR:-500}
+
+      # Payment
+      - RAZORPAY_KEY=${RAZORPAY_KEY:?Set the production Razorpay key}
+      - RAZORPAY_SECRET=${RAZORPAY_SECRET:?Set the production Razorpay secret}
+      - RAZORPAY_WEBHOOK_SECRET=${RAZORPAY_WEBHOOK_SECRET:?Set the Razorpay webhook signing secret}
+
+      # Meta WhatsApp Cloud API — secrets are read only by the backend.
+      - WHATSAPP_PHONE_NUMBER_ID=${WHATSAPP_PHONE_NUMBER_ID:-}
+      - WHATSAPP_BUSINESS_ACCOUNT_ID=${WHATSAPP_BUSINESS_ACCOUNT_ID:-}
+      - WHATSAPP_BUSINESS_PHONE=${WHATSAPP_BUSINESS_PHONE:-}
+      - WHATSAPP_ACCESS_TOKEN=${WHATSAPP_ACCESS_TOKEN:-}
+      - WHATSAPP_APP_SECRET=${WHATSAPP_APP_SECRET:-}
+      - WHATSAPP_VERIFY_TOKEN=${WHATSAPP_VERIFY_TOKEN:-}
+      - WHATSAPP_API_VERSION=${WHATSAPP_API_VERSION:-v23.0}
+      - WHATSAPP_APPROVED_TEMPLATES=${WHATSAPP_APPROVED_TEMPLATES:-}
+
+      # Email / SMTP — required for verification + password-reset mail.
+      # Without these the EmailService silently no-ops (logs "would be sent")
+      # and no mail is ever delivered. Values come from .env (compose
+      # auto-loads it for ${...} substitution).
+      - SMTP_HOST=${SMTP_HOST:?Set the production SMTP host}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER:?Set the production SMTP user}
+      - SMTP_PASSWORD=${SMTP_PASSWORD:?Set the production SMTP password}
+      - EMAIL_FROM=${EMAIL_FROM:-noreply@sashainfinity.com}
+
+      # Bunny.net CDN (course video streaming) — bunny.py reads these via
+      # os.getenv(), so they must be present in the container environment.
+      - BUNNY_LIBRARY_ID=${BUNNY_LIBRARY_ID:-618286}
+      - BUNNY_API_KEY=${BUNNY_API_KEY}
+      - BUNNY_CDN_HOSTNAME=${BUNNY_CDN_HOSTNAME:-vz-60dda74a-f32.b-cdn.net}
+      - BUNNY_TOKEN_AUTH_KEY=${BUNNY_TOKEN_AUTH_KEY:-}
+      - BUNNY_SIGNED_URL_TTL=${BUNNY_SIGNED_URL_TTL:-3600}
+
+      # Application
+      - ENVIRONMENT=production
+      - BACKGROUND_TASK_MODE=worker
+      - OBSERVABILITY_TOKEN=${OBSERVABILITY_TOKEN:-}
+      - SENTRY_DSN=${SENTRY_DSN:-}
+      - DEBUG=false
+      # Toggle via prod .env. Default false keeps the email-verification gate;
+      # set AUTO_VERIFY_EMAIL=true to let new signups log in without verifying
+      # (use only as a stopgap while SMTP delivery is being fixed).
+      - AUTO_VERIFY_EMAIL=${AUTO_VERIFY_EMAIL:-false}
+      - FRONTEND_URL=${FRONTEND_URL:-https://lms.sashainfinity.com}
+      - BACKEND_URL=${BACKEND_URL:-https://backend.sashainfinity.com}
+      - DOMAIN=${DOMAIN:-sashainfinity.com}
+
+      # Security Configuration
+      - ENABLE_API_RATE_LIMITING=${ENABLE_API_RATE_LIMITING:-true}
+      - ENABLE_SECURITY_HEADERS=${ENABLE_SECURITY_HEADERS:-true}
+      - ALERT_ON_SECURITY_EVENTS=${ALERT_ON_SECURITY_EVENTS:-true}
+      - SECURITY_ALERT_EMAIL=${SECURITY_ALERT_EMAIL:-admin@sashainfinity.com}
+      - MIN_PASSWORD_LENGTH=${MIN_PASSWORD_LENGTH:-12}
+      - SESSION_TIMEOUT_MINUTES=${SESSION_TIMEOUT_MINUTES:-30}
+
+      # File Uploads
+      - MAX_FILE_SIZE=${MAX_FILE_SIZE:-10485760}
+      - UPLOAD_DIR=/app/uploads
+      - SCAN_UPLOADED_FILES=${SCAN_UPLOADED_FILES:-true}
+
+      # CORS
+      - CORS_ORIGINS=${CORS_ORIGINS:-["https://lms.sashainfinity.com", "https://backend.sashainfinity.com", "https://meiporul.sashainfinity.com", "https://seyappaduporul.sashainfinity.com", "https://utporul.sashainfinity.com"]}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-["lms.sashainfinity.com", "backend.sashainfinity.com", "meiporul.sashainfinity.com", "seyappaduporul.sashainfinity.com", "utporul.sashainfinity.com", "localhost"]}
+
+      # Python
+      - PYTHONPATH=/app/backend
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+    volumes: &production-volumes
+      - ./uploads:/app/uploads
+      - ./backend/three_d:/app/backend/three_d
+      - ./certificates:/app/certificates
+      # Invoice PDFs are legal documents and must outlive the container.
+      # invoice_pdf.py writes them to a CWD-relative "invoices/" directory and
+      # supervisord runs the backend with directory=/app/backend, so the
+      # container path is /app/backend/invoices — NOT /app/invoices. Without
+      # this mount every PDF vanishes on redeploy and both PDF endpoints 404.
+      - ./invoices:/app/backend/invoices
+      # Private ebook library files (paid content) must outlive the
+      # container for the same reason. library_storage.py resolves
+      # EBOOKS_ROOT to <backend package dir>/ebooks, which under
+      # supervisord's directory=/app/backend is /app/backend/ebooks.
+      - ./ebooks:/app/backend/ebooks
+      - ./logs:/var/log/sashainfinity
+      - ./ssl:/etc/nginx/ssl
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      # 127.0.0.1, not localhost: curl tries ::1 first and nginx here only
+      # listens on IPv4, so a "localhost" probe fails on an otherwise fine edge.
+      test: ["CMD", "curl", "-f", "http://127.0.0.1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      - postgres
+      - redis
+
+  runtime-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    environment: *production-environment
+    volumes: *production-volumes
+    working_dir: /app/backend
+    entrypoint: ["python", "-m", "app.workers.runtime"]
+    command: []
+    init: true
+    networks: [app-network]
+    depends_on: [postgres, redis]
+    restart: unless-stopped
+    stop_grace_period: 120s
+    healthcheck:
+      test: ["CMD", "python", "-m", "app.workers.runtime", "--health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
+
+  code-judge-worker:
+    profiles: ["coding"]
+    build:
+      context: ./code-judge-worker
+      dockerfile: Dockerfile
+    environment:
+      - BACKEND_INTERNAL_URL=http://sashainfinity-lms/api/v1
+      - CODE_RUNNER_TOKEN=${CODE_RUNNER_TOKEN:-}
+      - CODE_RUNNER_VERSION=${CODE_RUNNER_VERSION:-judge0-worker-1.0}
+      - CODE_RUNNER_POLL_SECONDS=${CODE_RUNNER_POLL_SECONDS:-1}
+      - JUDGE0_URL=${JUDGE0_URL:-}
+      - JUDGE0_AUTH_TOKEN=${JUDGE0_AUTH_TOKEN:-}
+    depends_on:
+      - sashainfinity-lms
+    networks:
+      - app-network
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m,noexec,nosuid,nodev
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 256m
+    cpus: 0.50
+    restart: unless-stopped
+
+  # External services (if needed)
+  postgres:
+    image: postgres:15-alpine
+    container_name: sashainfinity-postgres
+    environment:
+      - POSTGRES_DB=tutor_lms
+      - POSTGRES_USER=tutor
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      - POSTGRES_INITDB_ARGS="--encoding=UTF-8"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "127.0.0.1:15432:5432"
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tutor -d tutor_lms"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: sashainfinity-redis
+    volumes:
+      - redis_data:/data
+    ports:
+      - "127.0.0.1:16379:6379"
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    command: redis-server --appendonly yes
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

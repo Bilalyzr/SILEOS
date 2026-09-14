@@ -1,0 +1,1236 @@
+{
+  "format": "sasha-concept-labs",
+  "version": 1,
+  "labs": [
+    {
+      "title": "Components of Food — concept investigation",
+      "subject": "science",
+      "description": "Classify nutrients by their principal role in this simplified comparison.",
+      "config": {
+        "engine": "classification",
+        "objective": "Classify nutrients by their principal role in this simplified comparison.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Classify nutrients by their principal role in this simplified comparison.",
+        "chapter_ids": [
+          "6-science-1"
+        ],
+        "cards": [
+          {
+            "label": "Starch",
+            "group": "Energy sources",
+            "explanation": "Carbohydrates and fats supply energy."
+          },
+          {
+            "label": "Dietary fat",
+            "group": "Energy sources",
+            "explanation": "Carbohydrates and fats supply energy."
+          },
+          {
+            "label": "Protein",
+            "group": "Body building and regulation",
+            "explanation": "Proteins support tissue growth; vitamins help regulate processes."
+          },
+          {
+            "label": "Vitamin C",
+            "group": "Body building and regulation",
+            "explanation": "Proteins support tissue growth; vitamins help regulate processes."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Sorting Materials into Groups — concept investigation",
+      "subject": "science",
+      "description": "Compare whether a material transmits light clearly.",
+      "config": {
+        "engine": "classification",
+        "objective": "Compare whether a material transmits light clearly.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Compare whether a material transmits light clearly.",
+        "chapter_ids": [
+          "6-science-2"
+        ],
+        "cards": [
+          {
+            "label": "Clear glass",
+            "group": "Transparent",
+            "explanation": "Most visible light passes through with little scattering."
+          },
+          {
+            "label": "Clean water",
+            "group": "Transparent",
+            "explanation": "Most visible light passes through with little scattering."
+          },
+          {
+            "label": "Wood",
+            "group": "Opaque",
+            "explanation": "Visible light does not pass through the bulk material."
+          },
+          {
+            "label": "Steel sheet",
+            "group": "Opaque",
+            "explanation": "Visible light does not pass through the bulk material."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Separation of Substances — concept investigation",
+      "subject": "science",
+      "description": "Choose the separation method suited to the mixture.",
+      "config": {
+        "engine": "classification",
+        "objective": "Choose the separation method suited to the mixture.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Choose the separation method suited to the mixture.",
+        "chapter_ids": [
+          "6-science-3"
+        ],
+        "cards": [
+          {
+            "label": "Sand in water",
+            "group": "Filtration",
+            "explanation": "An insoluble solid can be retained by a filter."
+          },
+          {
+            "label": "Tea leaves in tea",
+            "group": "Filtration",
+            "explanation": "An insoluble solid can be retained by a filter."
+          },
+          {
+            "label": "Salt solution",
+            "group": "Evaporation",
+            "explanation": "Remove solvent to recover a dissolved nonvolatile solid."
+          },
+          {
+            "label": "Sugar solution",
+            "group": "Evaporation",
+            "explanation": "Remove solvent to recover a dissolved nonvolatile solid."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Body Movements — concept investigation",
+      "subject": "science",
+      "description": "Compare the movement possible at different joints.",
+      "config": {
+        "engine": "classification",
+        "objective": "Compare the movement possible at different joints.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Compare the movement possible at different joints.",
+        "chapter_ids": [
+          "6-science-5"
+        ],
+        "cards": [
+          {
+            "label": "Elbow",
+            "group": "Hinge joint",
+            "explanation": "Movement is mainly bending and straightening in one plane."
+          },
+          {
+            "label": "Knee",
+            "group": "Hinge joint",
+            "explanation": "Movement is mainly bending and straightening in one plane."
+          },
+          {
+            "label": "Shoulder",
+            "group": "Ball-and-socket joint",
+            "explanation": "Movement is possible about several axes."
+          },
+          {
+            "label": "Hip",
+            "group": "Ball-and-socket joint",
+            "explanation": "Movement is possible about several axes."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Water & Air Around Us — concept investigation",
+      "subject": "science",
+      "description": "Distinguish changes of state in the water cycle.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish changes of state in the water cycle.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish changes of state in the water cycle.",
+        "chapter_ids": [
+          "6-science-11"
+        ],
+        "cards": [
+          {
+            "label": "A puddle drying",
+            "group": "Evaporation",
+            "explanation": "Liquid water changes into water vapour."
+          },
+          {
+            "label": "Wet clothes drying",
+            "group": "Evaporation",
+            "explanation": "Liquid water changes into water vapour."
+          },
+          {
+            "label": "Dew forming",
+            "group": "Condensation",
+            "explanation": "Water vapour changes into liquid water."
+          },
+          {
+            "label": "Droplets outside a cold glass",
+            "group": "Condensation",
+            "explanation": "Water vapour changes into liquid water."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Knowing Our Numbers — concept investigation",
+      "subject": "mathematics",
+      "description": "Read place value in base ten.",
+      "config": {
+        "engine": "classification",
+        "objective": "Read place value in base ten.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Read place value in base ten.",
+        "chapter_ids": [
+          "6-mathematics-1"
+        ],
+        "cards": [
+          {
+            "label": "4 in 4,215",
+            "group": "Thousands place",
+            "explanation": "This digit represents multiples of 1000."
+          },
+          {
+            "label": "7 in 17,302",
+            "group": "Thousands place",
+            "explanation": "This digit represents multiples of 1000."
+          },
+          {
+            "label": "2 in 4,215",
+            "group": "Hundreds place",
+            "explanation": "This digit represents multiples of 100."
+          },
+          {
+            "label": "3 in 17,302",
+            "group": "Hundreds place",
+            "explanation": "This digit represents multiples of 100."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Whole Numbers — concept investigation",
+      "subject": "mathematics",
+      "description": "Distinguish whole numbers from other real numbers.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish whole numbers from other real numbers.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish whole numbers from other real numbers.",
+        "chapter_ids": [
+          "6-mathematics-2"
+        ],
+        "cards": [
+          {
+            "label": "0",
+            "group": "Whole number",
+            "explanation": "The whole numbers are 0, 1, 2, 3 and so on."
+          },
+          {
+            "label": "27",
+            "group": "Whole number",
+            "explanation": "The whole numbers are 0, 1, 2, 3 and so on."
+          },
+          {
+            "label": "−3",
+            "group": "Not a whole number",
+            "explanation": "Negative values and non-integer fractions are excluded."
+          },
+          {
+            "label": "1/2",
+            "group": "Not a whole number",
+            "explanation": "Negative values and non-integer fractions are excluded."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Playing with Numbers — concept investigation",
+      "subject": "mathematics",
+      "description": "Use the definition of a prime number.",
+      "config": {
+        "engine": "classification",
+        "objective": "Use the definition of a prime number.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Use the definition of a prime number.",
+        "chapter_ids": [
+          "6-mathematics-3"
+        ],
+        "cards": [
+          {
+            "label": "2",
+            "group": "Prime",
+            "explanation": "A positive integer greater than 1 with exactly two positive divisors."
+          },
+          {
+            "label": "13",
+            "group": "Prime",
+            "explanation": "A positive integer greater than 1 with exactly two positive divisors."
+          },
+          {
+            "label": "1",
+            "group": "Not prime",
+            "explanation": "1 has one positive divisor; a composite number has more than two."
+          },
+          {
+            "label": "15",
+            "group": "Not prime",
+            "explanation": "1 has one positive divisor; a composite number has more than two."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Basic Geometrical Ideas — concept investigation",
+      "subject": "mathematics",
+      "description": "Compare bounded and unbounded geometric objects.",
+      "config": {
+        "engine": "classification",
+        "objective": "Compare bounded and unbounded geometric objects.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Compare bounded and unbounded geometric objects.",
+        "chapter_ids": [
+          "6-mathematics-4"
+        ],
+        "cards": [
+          {
+            "label": "A line segment AB",
+            "group": "Bounded",
+            "explanation": "The object has endpoints and finite length."
+          },
+          {
+            "label": "A side of a triangle",
+            "group": "Bounded",
+            "explanation": "The object has endpoints and finite length."
+          },
+          {
+            "label": "A ray AB",
+            "group": "Unbounded",
+            "explanation": "The object extends indefinitely in at least one direction."
+          },
+          {
+            "label": "A line AB",
+            "group": "Unbounded",
+            "explanation": "The object extends indefinitely in at least one direction."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Understanding Elementary Shapes — concept investigation",
+      "subject": "mathematics",
+      "description": "Classify angles by size.",
+      "config": {
+        "engine": "classification",
+        "objective": "Classify angles by size.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Classify angles by size.",
+        "chapter_ids": [
+          "6-mathematics-5"
+        ],
+        "cards": [
+          {
+            "label": "35°",
+            "group": "Acute",
+            "explanation": "An angle greater than 0° and less than 90°."
+          },
+          {
+            "label": "75°",
+            "group": "Acute",
+            "explanation": "An angle greater than 0° and less than 90°."
+          },
+          {
+            "label": "110°",
+            "group": "Obtuse",
+            "explanation": "An angle greater than 90° and less than 180°."
+          },
+          {
+            "label": "145°",
+            "group": "Obtuse",
+            "explanation": "An angle greater than 90° and less than 180°."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Integers — concept investigation",
+      "subject": "mathematics",
+      "description": "Distinguish integers from non-integers.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish integers from non-integers.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish integers from non-integers.",
+        "chapter_ids": [
+          "6-mathematics-6"
+        ],
+        "cards": [
+          {
+            "label": "−8",
+            "group": "Integer",
+            "explanation": "An integer has no fractional part and may be negative, zero or positive."
+          },
+          {
+            "label": "0",
+            "group": "Integer",
+            "explanation": "An integer has no fractional part and may be negative, zero or positive."
+          },
+          {
+            "label": "2.5",
+            "group": "Not an integer",
+            "explanation": "The value has a nonzero fractional part."
+          },
+          {
+            "label": "−3/4",
+            "group": "Not an integer",
+            "explanation": "The value has a nonzero fractional part."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Data Handling — concept investigation",
+      "subject": "mathematics",
+      "description": "Distinguish categorical and numerical observations.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish categorical and numerical observations.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish categorical and numerical observations.",
+        "chapter_ids": [
+          "6-mathematics-9"
+        ],
+        "cards": [
+          {
+            "label": "Favourite fruit",
+            "group": "Categorical",
+            "explanation": "The observation names a category, not a measured amount."
+          },
+          {
+            "label": "Colour of a bag",
+            "group": "Categorical",
+            "explanation": "The observation names a category, not a measured amount."
+          },
+          {
+            "label": "Number of books",
+            "group": "Numerical",
+            "explanation": "The observation records a count or measured quantity."
+          },
+          {
+            "label": "Height in centimetres",
+            "group": "Numerical",
+            "explanation": "The observation records a count or measured quantity."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Ratio and Proportion — concept investigation",
+      "subject": "mathematics",
+      "description": "Test whether ratios are equivalent to 2:3.",
+      "config": {
+        "engine": "classification",
+        "objective": "Test whether ratios are equivalent to 2:3.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Test whether ratios are equivalent to 2:3.",
+        "chapter_ids": [
+          "6-mathematics-12"
+        ],
+        "cards": [
+          {
+            "label": "4:6",
+            "group": "Equivalent",
+            "explanation": "Multiplying both terms by the same nonzero factor preserves a ratio."
+          },
+          {
+            "label": "10:15",
+            "group": "Equivalent",
+            "explanation": "Multiplying both terms by the same nonzero factor preserves a ratio."
+          },
+          {
+            "label": "4:5",
+            "group": "Not equivalent",
+            "explanation": "Cross products with 2:3 are unequal."
+          },
+          {
+            "label": "6:8",
+            "group": "Not equivalent",
+            "explanation": "Cross products with 2:3 are unequal."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Symmetry — concept investigation",
+      "subject": "mathematics",
+      "description": "Count reflection symmetries of ideal shapes.",
+      "config": {
+        "engine": "classification",
+        "objective": "Count reflection symmetries of ideal shapes.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Count reflection symmetries of ideal shapes.",
+        "chapter_ids": [
+          "6-mathematics-13"
+        ],
+        "cards": [
+          {
+            "label": "A non-equilateral isosceles triangle",
+            "group": "Exactly one line",
+            "explanation": "Only one reflection maps the shape onto itself."
+          },
+          {
+            "label": "A non-rhombus kite",
+            "group": "Exactly one line",
+            "explanation": "Only one reflection maps the shape onto itself."
+          },
+          {
+            "label": "A square",
+            "group": "More than one line",
+            "explanation": "Several distinct reflections map the shape onto itself."
+          },
+          {
+            "label": "An equilateral triangle",
+            "group": "More than one line",
+            "explanation": "Several distinct reflections map the shape onto itself."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Nutrition in Animals — concept investigation",
+      "subject": "science",
+      "description": "Separate digestive organs by the main function highlighted here.",
+      "config": {
+        "engine": "classification",
+        "objective": "Separate digestive organs by the main function highlighted here.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Separate digestive organs by the main function highlighted here.",
+        "chapter_ids": [
+          "7-science-2"
+        ],
+        "cards": [
+          {
+            "label": "Chewing by teeth",
+            "group": "Mechanical processing",
+            "explanation": "Physical actions break or mix food without defining a chemical change."
+          },
+          {
+            "label": "Churning by stomach muscles",
+            "group": "Mechanical processing",
+            "explanation": "Physical actions break or mix food without defining a chemical change."
+          },
+          {
+            "label": "Amylase acting on starch",
+            "group": "Chemical digestion",
+            "explanation": "Enzymes break large food molecules into smaller molecules."
+          },
+          {
+            "label": "Protease acting on protein",
+            "group": "Chemical digestion",
+            "explanation": "Enzymes break large food molecules into smaller molecules."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Physical and Chemical Changes — concept investigation",
+      "subject": "science",
+      "description": "Use formation of new substances as the classification rule.",
+      "config": {
+        "engine": "classification",
+        "objective": "Use formation of new substances as the classification rule.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Use formation of new substances as the classification rule.",
+        "chapter_ids": [
+          "7-science-5"
+        ],
+        "cards": [
+          {
+            "label": "Melting ice",
+            "group": "Physical change",
+            "explanation": "No new chemical substance is required for the change."
+          },
+          {
+            "label": "Cutting paper",
+            "group": "Physical change",
+            "explanation": "No new chemical substance is required for the change."
+          },
+          {
+            "label": "Rusting iron",
+            "group": "Chemical change",
+            "explanation": "New chemical substances form."
+          },
+          {
+            "label": "Burning magnesium",
+            "group": "Chemical change",
+            "explanation": "New chemical substances form."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Respiration in Organisms — concept investigation",
+      "subject": "science",
+      "description": "Compare oxygen use in respiration pathways.",
+      "config": {
+        "engine": "classification",
+        "objective": "Compare oxygen use in respiration pathways.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Compare oxygen use in respiration pathways.",
+        "chapter_ids": [
+          "7-science-6"
+        ],
+        "cards": [
+          {
+            "label": "Aerobic respiration in leaf cells",
+            "group": "Aerobic",
+            "explanation": "Oxygen participates in aerobic energy release."
+          },
+          {
+            "label": "Aerobic respiration in human cells",
+            "group": "Aerobic",
+            "explanation": "Oxygen participates in aerobic energy release."
+          },
+          {
+            "label": "Alcohol fermentation by yeast",
+            "group": "Anaerobic pathway",
+            "explanation": "Energy release can proceed without oxygen in these examples."
+          },
+          {
+            "label": "Lactate formation in oxygen-limited muscle",
+            "group": "Anaerobic pathway",
+            "explanation": "Energy release can proceed without oxygen in these examples."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Transportation in Animals and Plants — concept investigation",
+      "subject": "science",
+      "description": "Classify transport by plant tissue.",
+      "config": {
+        "engine": "classification",
+        "objective": "Classify transport by plant tissue.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Classify transport by plant tissue.",
+        "chapter_ids": [
+          "7-science-7"
+        ],
+        "cards": [
+          {
+            "label": "Water moving from root to leaf",
+            "group": "Xylem",
+            "explanation": "Xylem primarily carries water and mineral ions from roots."
+          },
+          {
+            "label": "Mineral ions moving up a stem",
+            "group": "Xylem",
+            "explanation": "Xylem primarily carries water and mineral ions from roots."
+          },
+          {
+            "label": "Sucrose moving from leaf to fruit",
+            "group": "Phloem",
+            "explanation": "Phloem carries organic food from sources to sinks."
+          },
+          {
+            "label": "Sugars moving to growing roots",
+            "group": "Phloem",
+            "explanation": "Phloem carries organic food from sources to sinks."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Reproduction in Plants — concept investigation",
+      "subject": "science",
+      "description": "Identify whether gamete fusion occurs in reproduction.",
+      "config": {
+        "engine": "classification",
+        "objective": "Identify whether gamete fusion occurs in reproduction.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Identify whether gamete fusion occurs in reproduction.",
+        "chapter_ids": [
+          "7-science-8"
+        ],
+        "cards": [
+          {
+            "label": "Budding in yeast",
+            "group": "Asexual",
+            "explanation": "A new organism arises without fusion of gametes."
+          },
+          {
+            "label": "Vegetative propagation from a potato tuber",
+            "group": "Asexual",
+            "explanation": "A new organism arises without fusion of gametes."
+          },
+          {
+            "label": "Fertilisation in a flowering plant",
+            "group": "Sexual",
+            "explanation": "Male and female gametes fuse."
+          },
+          {
+            "label": "Fertilisation in humans",
+            "group": "Sexual",
+            "explanation": "Male and female gametes fuse."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Integers — concept investigation",
+      "subject": "mathematics",
+      "description": "Distinguish integers from non-integers.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish integers from non-integers.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish integers from non-integers.",
+        "chapter_ids": [
+          "7-mathematics-1"
+        ],
+        "cards": [
+          {
+            "label": "−8",
+            "group": "Integer",
+            "explanation": "An integer has no fractional part and may be negative, zero or positive."
+          },
+          {
+            "label": "0",
+            "group": "Integer",
+            "explanation": "An integer has no fractional part and may be negative, zero or positive."
+          },
+          {
+            "label": "2.5",
+            "group": "Not an integer",
+            "explanation": "The value has a nonzero fractional part."
+          },
+          {
+            "label": "−3/4",
+            "group": "Not an integer",
+            "explanation": "The value has a nonzero fractional part."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Lines and Angles — concept investigation",
+      "subject": "mathematics",
+      "description": "Classify angles by size.",
+      "config": {
+        "engine": "classification",
+        "objective": "Classify angles by size.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Classify angles by size.",
+        "chapter_ids": [
+          "7-mathematics-5"
+        ],
+        "cards": [
+          {
+            "label": "35°",
+            "group": "Acute",
+            "explanation": "An angle greater than 0° and less than 90°."
+          },
+          {
+            "label": "75°",
+            "group": "Acute",
+            "explanation": "An angle greater than 0° and less than 90°."
+          },
+          {
+            "label": "110°",
+            "group": "Obtuse",
+            "explanation": "An angle greater than 90° and less than 180°."
+          },
+          {
+            "label": "145°",
+            "group": "Obtuse",
+            "explanation": "An angle greater than 90° and less than 180°."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Comparing Quantities — concept investigation",
+      "subject": "mathematics",
+      "description": "Convert percentages to a change of a known amount.",
+      "config": {
+        "engine": "classification",
+        "objective": "Convert percentages to a change of a known amount.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Convert percentages to a change of a known amount.",
+        "chapter_ids": [
+          "7-mathematics-7"
+        ],
+        "cards": [
+          {
+            "label": "100 increased by 20% becomes 120",
+            "group": "Increase",
+            "explanation": "The new value exceeds the starting amount."
+          },
+          {
+            "label": "200 increased by 10% becomes 220",
+            "group": "Increase",
+            "explanation": "The new value exceeds the starting amount."
+          },
+          {
+            "label": "100 reduced by 20% becomes 80",
+            "group": "Decrease",
+            "explanation": "The new value is below the starting amount."
+          },
+          {
+            "label": "200 reduced by 10% becomes 180",
+            "group": "Decrease",
+            "explanation": "The new value is below the starting amount."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Rational Numbers — concept investigation",
+      "subject": "mathematics",
+      "description": "Use rationality as the sorting rule.",
+      "config": {
+        "engine": "classification",
+        "objective": "Use rationality as the sorting rule.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Use rationality as the sorting rule.",
+        "chapter_ids": [
+          "7-mathematics-8"
+        ],
+        "cards": [
+          {
+            "label": "0.75",
+            "group": "Rational",
+            "explanation": "The value equals p/q for integers p and nonzero q."
+          },
+          {
+            "label": "−7/3",
+            "group": "Rational",
+            "explanation": "The value equals p/q for integers p and nonzero q."
+          },
+          {
+            "label": "√2",
+            "group": "Irrational",
+            "explanation": "The value cannot equal a ratio of two integers."
+          },
+          {
+            "label": "π",
+            "group": "Irrational",
+            "explanation": "The value cannot equal a ratio of two integers."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Perimeter and Area — concept investigation",
+      "subject": "mathematics",
+      "description": "Distinguish boundary length from surface measure.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish boundary length from surface measure.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish boundary length from surface measure.",
+        "chapter_ids": [
+          "7-mathematics-9"
+        ],
+        "cards": [
+          {
+            "label": "20 cm around a square of side 5 cm",
+            "group": "Perimeter",
+            "explanation": "Perimeter measures length around a boundary."
+          },
+          {
+            "label": "14 m around a 3 m by 4 m rectangle",
+            "group": "Perimeter",
+            "explanation": "Perimeter measures length around a boundary."
+          },
+          {
+            "label": "25 cm² for a square of side 5 cm",
+            "group": "Area",
+            "explanation": "Area measures the size of a two-dimensional region."
+          },
+          {
+            "label": "12 m² for a 3 m by 4 m rectangle",
+            "group": "Area",
+            "explanation": "Area measures the size of a two-dimensional region."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Algebraic Expressions — concept investigation",
+      "subject": "mathematics",
+      "description": "Distinguish an expression from an identity.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish an expression from an identity.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish an expression from an identity.",
+        "chapter_ids": [
+          "7-mathematics-10"
+        ],
+        "cards": [
+          {
+            "label": "3x + 2",
+            "group": "Expression",
+            "explanation": "This algebraic object contains terms but no asserted equality."
+          },
+          {
+            "label": "a² − b²",
+            "group": "Expression",
+            "explanation": "This algebraic object contains terms but no asserted equality."
+          },
+          {
+            "label": "(a+b)² = a²+2ab+b²",
+            "group": "Identity",
+            "explanation": "The equality holds for every value for which both sides are defined."
+          },
+          {
+            "label": "(a−b)(a+b) = a²−b²",
+            "group": "Identity",
+            "explanation": "The equality holds for every value for which both sides are defined."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Exponents and Powers — concept investigation",
+      "subject": "mathematics",
+      "description": "Check exponent laws for nonzero a.",
+      "config": {
+        "engine": "classification",
+        "objective": "Check exponent laws for nonzero a.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Check exponent laws for nonzero a.",
+        "chapter_ids": [
+          "7-mathematics-11"
+        ],
+        "cards": [
+          {
+            "label": "a² × a³ = a⁵",
+            "group": "Valid law",
+            "explanation": "The exponent rules hold for the stated nonzero base."
+          },
+          {
+            "label": "a⁵ / a² = a³",
+            "group": "Valid law",
+            "explanation": "The exponent rules hold for the stated nonzero base."
+          },
+          {
+            "label": "a² + a³ = a⁵",
+            "group": "Invalid law",
+            "explanation": "Multiplication or addition has been applied incorrectly."
+          },
+          {
+            "label": "(a²)³ = a⁵",
+            "group": "Invalid law",
+            "explanation": "Multiplication or addition has been applied incorrectly."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Symmetry — concept investigation",
+      "subject": "mathematics",
+      "description": "Count reflection symmetries of ideal shapes.",
+      "config": {
+        "engine": "classification",
+        "objective": "Count reflection symmetries of ideal shapes.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Count reflection symmetries of ideal shapes.",
+        "chapter_ids": [
+          "7-mathematics-12"
+        ],
+        "cards": [
+          {
+            "label": "A non-equilateral isosceles triangle",
+            "group": "Exactly one line",
+            "explanation": "Only one reflection maps the shape onto itself."
+          },
+          {
+            "label": "A non-rhombus kite",
+            "group": "Exactly one line",
+            "explanation": "Only one reflection maps the shape onto itself."
+          },
+          {
+            "label": "A square",
+            "group": "More than one line",
+            "explanation": "Several distinct reflections map the shape onto itself."
+          },
+          {
+            "label": "An equilateral triangle",
+            "group": "More than one line",
+            "explanation": "Several distinct reflections map the shape onto itself."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Crop Production and Management — concept investigation",
+      "subject": "science",
+      "description": "Distinguish how crop yield is supported.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish how crop yield is supported.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish how crop yield is supported.",
+        "chapter_ids": [
+          "8-science-1"
+        ],
+        "cards": [
+          {
+            "label": "Adding compost",
+            "group": "Nutrient supply",
+            "explanation": "The intervention replenishes nutrients in soil."
+          },
+          {
+            "label": "Applying an appropriate fertiliser",
+            "group": "Nutrient supply",
+            "explanation": "The intervention replenishes nutrients in soil."
+          },
+          {
+            "label": "Drip irrigation",
+            "group": "Water supply",
+            "explanation": "The intervention supplies or manages water."
+          },
+          {
+            "label": "Sprinkler irrigation",
+            "group": "Water supply",
+            "explanation": "The intervention supplies or manages water."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Microorganisms: Friend and Foe — concept investigation",
+      "subject": "science",
+      "description": "Sort examples by their role in the stated context.",
+      "config": {
+        "engine": "classification",
+        "objective": "Sort examples by their role in the stated context.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Sort examples by their role in the stated context.",
+        "chapter_ids": [
+          "8-science-2"
+        ],
+        "cards": [
+          {
+            "label": "Lactobacillus in curd",
+            "group": "Useful microbial activity",
+            "explanation": "The microbial process is used to produce food or treat waste."
+          },
+          {
+            "label": "Microorganisms in sewage treatment",
+            "group": "Useful microbial activity",
+            "explanation": "The microbial process is used to produce food or treat waste."
+          },
+          {
+            "label": "Pathogenic bacteria causing foodborne disease",
+            "group": "Harmful microbial activity",
+            "explanation": "The microbial process causes disease or spoilage in this context."
+          },
+          {
+            "label": "Mould spoiling bread",
+            "group": "Harmful microbial activity",
+            "explanation": "The microbial process causes disease or spoilage in this context."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Coal and Petroleum — concept investigation",
+      "subject": "science",
+      "description": "Distinguish fossil sources from renewable energy sources.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish fossil sources from renewable energy sources.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish fossil sources from renewable energy sources.",
+        "chapter_ids": [
+          "8-science-3"
+        ],
+        "cards": [
+          {
+            "label": "Coal",
+            "group": "Fossil source",
+            "explanation": "Formation takes geological time from ancient organic material."
+          },
+          {
+            "label": "Petroleum",
+            "group": "Fossil source",
+            "explanation": "Formation takes geological time from ancient organic material."
+          },
+          {
+            "label": "Sunlight",
+            "group": "Renewable source",
+            "explanation": "The energy flow is replenished on human timescales."
+          },
+          {
+            "label": "Wind",
+            "group": "Renewable source",
+            "explanation": "The energy flow is replenished on human timescales."
+          }
+        ]
+      }
+    }
+  ]
+}

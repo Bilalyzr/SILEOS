@@ -1,0 +1,535 @@
+.header {
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 12px 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(203, 213, 225, 0.3);
+  position: sticky;
+  top: 0;
+  /* Tier system (globals.css --z-*): legacy 1001 sat ABOVE toasts (200) and
+     the impersonation banner (300), hiding every toast on public pages. The
+     header must stay above its own mobile menu/backdrop (no in-menu close
+     button — the hamburger in this bar is the toggle), so it takes the
+     dialog tier: below popover (120), toast (200), banner (300). */
+  z-index: var(--z-dialog, 100);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border-radius: 0 0 24px 24px;
+  margin: 0 8px;
+  max-width: calc(100vw - 16px);
+}
+
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  gap: 20px;
+}
+
+.logoLink {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.nav {
+  display: flex;
+  gap: 24px;
+  flex-shrink: 0;
+}
+
+.navLink {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e293b;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  position: relative;
+  white-space: nowrap;
+}
+
+.navLink:hover,
+.navLink.active {
+  color: #f97316;
+  background-color: rgba(249, 115, 22, 0.1);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.searchContainer {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(203, 213, 225, 0.4);
+  border-radius: 16px;
+  overflow: hidden;
+  padding: 2px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  flex-shrink: 0;
+}
+
+.searchContainer:hover,
+.searchContainer:focus-within {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(249, 115, 22, 0.3);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.1);
+}
+
+.categorySelect {
+  border: none;
+  background: transparent;
+  padding: 8px 15px;
+  font-weight: 500;
+  color: #64748b;
+  border-right: 1px solid rgba(203, 213, 225, 0.3);
+  cursor: pointer;
+  outline: none;
+  font-size: 14px;
+}
+
+.categorySelect option {
+  background: white;
+  color: #1e293b;
+}
+
+.searchInput {
+  border: none;
+  padding: 6px 10px;
+  outline: none;
+  width: 120px;
+  font-size: 13px;
+  color: #1e293b;
+  background: transparent;
+}
+
+.searchInput::placeholder {
+  color: #94a3b8;
+}
+
+.searchButton {
+  border: none;
+  background: transparent;
+  padding: 6px 8px;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.searchButton:hover {
+  color: #f97316;
+}
+
+.actionIcon {
+  font-size: 18px;
+  color: #64748b;
+  position: relative;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  padding: 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.actionIcon:hover {
+  color: #f97316;
+  background-color: rgba(249, 115, 22, 0.1);
+  transform: translateY(-1px);
+}
+
+.cartCount {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background: #f97316;
+  color: white;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 600;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginLink {
+  font-weight: 500;
+  color: #64748b;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(203, 213, 225, 0.4);
+  padding: 8px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  white-space: nowrap;
+}
+
+.loginLink:hover {
+  background-color: rgba(255, 255, 255, 1);
+  border-color: rgba(249, 115, 22, 0.3);
+  color: #f97316;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.1);
+}
+
+.instructorButton {
+  background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.25);
+  backdrop-filter: blur(4px);
+  white-space: nowrap;
+}
+
+.instructorButton:hover {
+  background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.35);
+}
+
+.mobileMenuButton {
+  display: none;
+  font-size: 24px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(203, 213, 225, 0.4);
+  color: #64748b;
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.mobileMenuButton:hover {
+  background-color: rgba(255, 255, 255, 1);
+  border-color: rgba(249, 115, 22, 0.3);
+  color: #f97316;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.1);
+}
+
+.mobileMenu {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(203, 213, 225, 0.4);
+  border-bottom: 1px solid rgba(203, 213, 225, 0.6);
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* Below the header (its hamburger is the close toggle), above page modals. */
+  z-index: var(--z-overlay, 90);
+  animation: slideDown 0.3s ease-out;
+  border-radius: 0 0 24px 24px;
+  margin: 0 8px;
+  padding-top: 90px;
+  min-height: 100vh;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scrolled {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.mobileBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: var(--z-modal, 80);
+  animation: fadeIn 0.2s ease-out;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.mobileNav {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.mobileNavLink {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1e293b;
+  transition: all 0.3s ease;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(203, 213, 225, 0.2);
+  text-decoration: none;
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 12px;
+  margin: 2px 0;
+}
+
+.mobileNavLink:last-child {
+  border-bottom: none;
+}
+
+.mobileNavLink:hover,
+.mobileNavLink.active {
+  color: #f97316;
+  background-color: rgba(249, 115, 22, 0.08);
+  border-bottom-color: rgba(249, 115, 22, 0.2);
+}
+
+.mobileDivider {
+  height: 1px;
+  background: rgba(203, 213, 225, 0.4);
+  margin: 15px 0;
+  border-radius: 1px;
+}
+
+/* Responsive */
+
+/* Tighten gap + search width before things start overflowing */
+@media (max-width: 1366px) {
+  .headerContainer {
+    padding: 0 12px;
+    gap: 12px;
+  }
+
+  .nav {
+    gap: 16px;
+  }
+
+  .navLink {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
+  .actions {
+    gap: 8px;
+  }
+
+  .searchInput {
+    width: 90px;
+  }
+
+  .searchContainer {
+    border-radius: 12px;
+  }
+
+  .categorySelect {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+}
+
+/* Drop the categories dropdown so search-only fits, plus shrink CTA buttons */
+@media (max-width: 1280px) {
+  .nav {
+    gap: 10px;
+  }
+
+  .navLink {
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+
+  .categorySelect {
+    display: none;
+  }
+
+  .searchInput {
+    width: 80px;
+  }
+
+  .loginLink,
+  .instructorButton {
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .nav {
+    gap: 8px;
+  }
+
+  .navLink {
+    padding: 4px 6px;
+  }
+
+  .searchContainer {
+    display: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .nav,
+  .actions .searchContainer,
+  .actions .loginLink,
+  .actions .instructorButton {
+    display: none;
+  }
+
+  /* Keep cart icon visible on mobile for better UX */
+  .actions .actionIcon {
+    display: flex;
+  }
+
+  .mobileMenuButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header {
+    padding: 10px 0;
+  }
+
+  .headerContainer {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .headerContainer {
+    padding: 0 12px;
+    gap: 8px;
+  }
+
+  .logo {
+    height: 36px;
+  }
+
+  .mobileMenu {
+    padding: 16px;
+    padding-top: 80px;
+  }
+
+  .mobileNavLink {
+    padding: 16px;
+    font-size: 16px;
+    border-radius: 12px;
+  }
+
+  .mobileMenuButton {
+    padding: 10px;
+  }
+
+  .actionIcon {
+    padding: 10px;
+  }
+
+  .cartCount {
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+    top: -4px;
+    right: -8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .headerContainer {
+    padding: 0 10px;
+  }
+
+  .logo {
+    height: 35px;
+  }
+
+  .mobileMenu {
+    padding: 12px;
+  }
+
+  .mobileNavLink {
+    padding: 12px 12px;
+    font-size: 14px;
+  }
+
+  .mobileMenuButton {
+    padding: 10px;
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 360px) {
+  .headerContainer {
+    padding: 0 8px;
+  }
+
+  .logo {
+    height: 32px;
+  }
+
+  .mobileMenu {
+    padding: 10px;
+  }
+}
+
+/* Shared redesign foundation */
+.header { background:var(--sf-surface); border:0; border-bottom:1px solid var(--sf-line); border-radius:0; margin:0; max-width:none; box-shadow:none; }
+.nav { gap:4px; }
+.navLink { color:var(--sf-ink-2); font-size:13px; }
+.navLink:hover,.navLink.active { color:var(--sf-accent); background:var(--sf-tint); }

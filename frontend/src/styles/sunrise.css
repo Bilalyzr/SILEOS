@@ -1,0 +1,401 @@
+/* Final brand layer: warm light-orange glass across all route families. */
+body.astra-theme,
+body.astra-theme[data-page-family] {
+  --campus-gradient: linear-gradient(
+    120deg,
+    #ffd5a5 0%,
+    #ffb875 52%,
+    #ff9b54 100%
+  );
+  --campus-glow: 0 7px 20px #de792528;
+  --accent-deep: #9a390b;
+  --field-lead: 255, 174, 105;
+  --field-second: 255, 212, 166;
+  --glass-1: rgba(255, 249, 242, 0.62);
+  --glass-2: rgba(255, 253, 249, 0.78);
+  --glass-3: rgba(255, 253, 250, 0.94);
+  --hairline: rgba(157, 85, 36, 0.15);
+  --ring: 25 78% 38%;
+  background: #fff8f1;
+}
+body.astra-theme::before {
+  background:
+    radial-gradient(ellipse at 4% 0%, #ffd9b2a6, transparent 55%),
+    radial-gradient(ellipse at 95% 45%, #ffe4cbb3, transparent 55%),
+    linear-gradient(135deg, #fff8f0, #fffaf7 50%, #ffefdf);
+}
+.astra-theme
+  :is(
+    .sf-primary,
+    .si-btn-primary,
+    .astra-primary,
+    .sf-button[data-variant="default"],
+    .btn-primary,
+    .hero-btn-fill,
+    .rd-signup,
+    .si-gradient,
+    button.bg-primary-500,
+    a.bg-primary-500,
+    .rd-section-nav a[aria-current="page"],
+    [role="tab"][data-state="active"],
+    .rd-sidebar a[aria-current="page"],
+    .rd-sidebar .dash-nav-active,
+    .campus-tabs a[aria-current="page"]
+  ) {
+  background: var(--campus-gradient) !important;
+  color: #51230d !important;
+  border-color: #ffbe8680 !important;
+  box-shadow:
+    var(--campus-glow),
+    inset 0 1px 0 #ffffffb0 !important;
+}
+.astra-theme
+  :is(
+    .sf-button[data-variant="secondary"],
+    .sf-button[data-variant="outline"],
+    .si-btn-secondary
+  ) {
+  color: #843711 !important;
+  background: linear-gradient(120deg, #fff8ef, #ffecd7) !important;
+  border-color: #edc7a7 !important;
+}
+.astra-theme
+  :is(
+    .sf-primary,
+    .si-btn-primary,
+    .sf-button[data-variant="default"]
+  ):hover:not(:disabled) {
+  filter: brightness(1.035);
+  box-shadow: 0 10px 28px #d978303b !important;
+}
+.astra-theme :is(.rd-eyebrow, .sf-eyebrow, .dash-role-pill, .rd-role-badge) {
+  color: #853b14 !important;
+}
+.astra-theme :is(.dash-bg-shape, .sf-orb) {
+  background: #ffc78e !important;
+}
+.astra-theme
+  :is(.sf-auth-story, .rd-home-hero, .rd-page-heading, .rd-migrated-heading) {
+  background: linear-gradient(120deg, #fff9f0dd, #ffead4c4) !important;
+  border: 1px solid #ffffffd9;
+  border-radius: 23px;
+}
+.astra-theme :is(.rd-page-heading, .rd-migrated-heading) {
+  padding: 22px;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.astra-theme :is(.rd-page-heading, .rd-migrated-heading)::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 150px;
+  height: 150px;
+  right: 34px;
+  top: -68px;
+  border: 1px solid rgba(173, 75, 22, 0.12);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 22px rgba(255, 255, 255, 0.22),
+    0 0 0 23px rgba(173, 75, 22, 0.06);
+}
+.astra-theme :is(.rd-page-heading, .rd-migrated-heading) > * {
+  position: relative;
+  z-index: 1;
+}
+.astra-theme :is(.sf-card, .rd-panel, .rd-stat, .campus-panel) {
+  border-color: #fff9 !important;
+  box-shadow:
+    0 8px 28px #8e4d1710,
+    inset 0 1px 0 #fff !important;
+}
+.astra-theme :is(input, textarea, select):focus-visible {
+  outline: 2px solid #ad4b16 !important;
+  outline-offset: 2px;
+}
+.astra-theme :is(a, button):focus-visible {
+  outline: 2px solid #ad4b16;
+  outline-offset: 3px;
+}
+.astra-theme .campus-emblem {
+  color: #70320f;
+}
+.brand-workspace-banner {
+  margin: 22px 28px 0;
+}
+.brand-banner {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(220px, 1fr);
+  gap: 20px;
+  padding: 32px 36px;
+  border-radius: 26px;
+  border: 1px solid #fff;
+  background:
+    radial-gradient(ellipse at 80% 0%, #fff9e4b0, transparent 60%),
+    linear-gradient(120deg, #fff7e9, #ffe2c0 65%, #ffcc9b);
+  box-shadow:
+    0 12px 38px #b3631810,
+    inset 0 1px 0 white;
+  color: #442714;
+}
+.brand-banner-copy {
+  position: relative;
+  z-index: 1;
+  align-self: center;
+  min-width: 0;
+}
+.brand-eyebrow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #8d431c;
+}
+.brand-banner h2 {
+  font-size: clamp(25px, 2.5vw, 38px);
+  letter-spacing: -0.05em;
+  line-height: 1.2;
+  margin: 16px 0 12px;
+  max-width: 650px;
+  overflow-wrap: anywhere;
+}
+.brand-banner p {
+  max-width: 550px;
+  font-size: 13px;
+  line-height: 1.8;
+  color: #75543e;
+}
+.brand-banner-actions {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 22px;
+  font-size: 12px;
+}
+.brand-banner-share {
+  min-height: 40px;
+  border-color: rgba(154, 69, 22, 0.2) !important;
+  background: rgba(255, 250, 241, 0.72) !important;
+  color: #713511 !important;
+  backdrop-filter: blur(12px);
+}
+.brand-text-link {
+  color: #7c3a13;
+  font-weight: 700;
+}
+.brand-art {
+  position: relative;
+  min-height: 200px;
+  display: grid;
+  place-items: center;
+}
+.brand-art-orbit {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border: 1px solid #b56e3230;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 24px #ffffff35,
+    0 0 0 25px #a9692312;
+}
+.brand-art-orbit.second {
+  width: 290px;
+  height: 130px;
+  transform: rotate(-35deg);
+  box-shadow: none;
+}
+.brand-art-book {
+  display: grid;
+  place-items: center;
+  width: 126px;
+  height: 132px;
+  border-radius: 30px;
+  background: linear-gradient(140deg, #fff8e9, #ffb36d);
+  color: #9a4516;
+  border: 1px solid #fff;
+  box-shadow:
+    10px 20px 35px #bf68182e,
+    inset 0 1px 0 #fff;
+  transform: rotate(-10deg);
+}
+.brand-art-spark,
+.brand-art-cap {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  border: 1px solid #fff;
+  background: #fff9edb8;
+  backdrop-filter: blur(12px);
+  color: #b05b23;
+  border-radius: 17px;
+  width: 54px;
+  height: 54px;
+  box-shadow: 0 8px 22px #b5611814;
+}
+.brand-art-spark {
+  top: 12px;
+  right: 25px;
+  transform: rotate(8deg);
+}
+.brand-art-cap {
+  bottom: 20px;
+  left: 20px;
+  transform: rotate(-7deg);
+}
+.brand-art-label {
+  position: absolute;
+  bottom: 1px;
+  right: 0;
+  border-radius: 20px;
+  padding: 8px 12px;
+  background: #fffaf0cd;
+  border: 1px solid #fff;
+  font-size: 9px;
+  color: #8b522a;
+}
+.brand-banner-cover {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.19;
+  z-index: -1;
+}
+.astra-theme :is(.sf-hero, .si-hero) {
+  background:
+    radial-gradient(ellipse at 82% 0%, rgba(255, 251, 231, 0.72), transparent 58%),
+    linear-gradient(120deg, #fff7e9, #ffe2c0 65%, #ffcc9b) !important;
+  border-color: rgba(255, 190, 134, 0.45) !important;
+  box-shadow:
+    0 12px 38px rgba(179, 99, 24, 0.06),
+    inset 0 1px 0 white;
+  color: #442714;
+}
+.astra-theme :is(.sf-hero, .si-hero) :is(h1, h2) {
+  color: #442714 !important;
+}
+.astra-theme :is(.sf-hero, .si-hero) p {
+  color: #75543e !important;
+}
+.brand-banner-compact {
+  padding: 24px;
+  grid-template-columns: 1.6fr 1fr;
+  min-height: 230px;
+}
+.brand-banner-compact h2 {
+  font-size: 25px;
+}
+.brand-banner-compact .brand-art {
+  transform: scale(0.8);
+  min-height: 160px;
+}
+.brand-banner-compact .brand-art-label {
+  display: none;
+}
+.brand-share-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+  margin-top: 16px;
+}
+.brand-share-grid button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid #efd5bc;
+  border-radius: 12px;
+  background: #fff9f0;
+  padding: 12px;
+  font-size: 12px;
+  color: #79421e;
+}
+.brand-share-options {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 16px 0;
+}
+.brand-share-note {
+  font-size: 12px;
+  color: #796554;
+  line-height: 1.7;
+}
+.brand-share-upload {
+  display: grid;
+  gap: 7px;
+  font-size: 12px;
+  margin: 16px 0;
+}
+.brand-share-upload input {
+  max-width: 100%;
+}
+@media (max-width: 700px) {
+  .brand-workspace-banner {
+    margin: 18px 16px 0;
+  }
+  .brand-banner {
+    padding: 24px;
+    grid-template-columns: 1fr;
+    border-radius: 22px;
+  }
+  .brand-banner .brand-art {
+    display: none;
+  }
+  .brand-banner-compact {
+    min-height: 210px;
+  }
+  .brand-share-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .brand-banner-actions {
+    align-items: stretch;
+  }
+  .brand-banner-actions > :is(a, button) {
+    justify-content: center;
+  }
+  .astra-theme :is(.rd-page-heading, .rd-migrated-heading) {
+    padding: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand-banner * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+body[data-high-contrast="true"] .brand-banner {
+  background: #fff;
+  color: #000;
+  border: 2px solid #51230d;
+}
+body[data-high-contrast="true"] .brand-banner p {
+  color: #333;
+}
+
+.astra-theme :is(.dash-cta, .dash-cta-primary, .rd-primary-button) {
+  background: var(--campus-gradient) !important;
+  color: #51230d !important;
+  box-shadow: var(--campus-glow) !important;
+}
+
+@font-face {
+  font-family: "Noto Sans Tamil";
+  src: url("/design/fonts/NotoSansTamil.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+body.astra-theme {
+  font-family: "Plus Jakarta Sans", "Noto Sans Tamil", system-ui, sans-serif;
+}

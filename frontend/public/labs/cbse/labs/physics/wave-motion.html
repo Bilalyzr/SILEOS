@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wave Motion — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Wave Motion<span class="lk-tag">Class 11 · Physics</span></h1>
+    <div class="lk-meta">CBSE: Waves — transverse waves, v = fλ, amplitude, wavelength, frequency</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Wave controls</h2>
+      <div class="lk-row"><label class="lk-name">Amplitude A</label><input type="range" id="amp" min="0.2" max="2" step="0.1" value="1"><span class="lk-val" id="ampv">1.0 m</span></div>
+      <div class="lk-row"><label class="lk-name">Wavelength λ</label><input type="range" id="lam" min="0.5" max="6" step="0.1" value="2"><span class="lk-val" id="lamv">2.0 m</span></div>
+      <div class="lk-row"><label class="lk-name">Frequency f</label><input type="range" id="freq" min="0.1" max="2" step="0.05" value="0.5"><span class="lk-val" id="freqv">0.50 Hz</span></div>
+      <div class="lk-readout" id="rSpeed"></div>
+      <button class="lk-btn" id="playBtn">⏸ Pause</button>
+    </div>
+    <div class="lk-card">
+      <h2>Wave facts</h2>
+      <div class="lk-readout" id="rPeriod"></div>
+      <div class="lk-readout">Wave type: <b>transverse</b> — particles move ⊥ to the wave.</div>
+    </div>
+    <div class="lk-card">
+      <h2>How to play</h2>
+      <p class="lk-hint">The <b>amber marker</b> rides one crest — it travels at exactly
+      <b>v = fλ</b>. The blue dots are string particles: watch how they only bob up and
+      down while the pattern races across. Double f with λ fixed: the wave train moves
+      double speed!</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./wave-motion/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

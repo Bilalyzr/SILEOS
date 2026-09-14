@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chemical Kinetics — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Chemical Kinetics<span class="lk-tag">Class 12 · Chemistry</span></h1>
+    <div class="lk-meta">CBSE: Chemical Kinetics — rate laws, concentration &amp; temperature effects, half-life</div>
+  </div>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <a class="lk-back" href="../../index.html" style="position:absolute;top:12px;right:16px;">← Library</a>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Reaction: A → B (first order)</h2>
+      <div class="lk-row"><label class="lk-name">Initial [A]</label><input type="range" id="c0" min="0.2" max="2" step="0.1" value="1"><span class="lk-val" id="c0v">1.0 M</span></div>
+      <div class="lk-row"><label class="lk-name">Temperature</label><input type="range" id="temp" min="280" max="360" step="10" value="310"><span class="lk-val" id="tempv">310 K</span></div>
+      <div class="lk-row"><label class="lk-name">Rate constant k</label><input type="range" id="k" min="0.02" max="0.4" step="0.02" value="0.1"><span class="lk-val" id="kv">0.10 /s</span></div>
+      <button class="lk-btn" id="playBtn">▶ Run reaction</button>
+      <button class="lk-btn ghost" id="resetBtn" style="margin-top:8px;">↺ Reset</button>
+    </div>
+    <div class="lk-card">
+      <h2>Live data</h2>
+      <div class="lk-readout">t = <b id="rT">0.0 s</b></div>
+      <div class="lk-readout">[A] = <b id="rA" style="color:var(--brand)">1.00 M</b></div>
+      <div class="lk-readout">[B] = <b id="rB" style="color:var(--ok)">0.00 M</b></div>
+      <div class="lk-readout">Rate = k[A] = <b id="rRate">0.100 M/s</b></div>
+      <div class="lk-readout" id="rHalf"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint">Watch the <b>purple A particles turn green</b> as they react.
+      The curve is steepest at the start — plenty of A to collide! Then it flattens as
+      A runs out. <b>Half-life</b> t½ = 0.693/k is the same no matter the starting
+      concentration. Heat it up (Arrhenius!) and everything races.</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./kinetics-lab/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

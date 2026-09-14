@@ -1,0 +1,1195 @@
+{
+  "format": "sasha-concept-labs",
+  "version": 1,
+  "labs": [
+    {
+      "title": "Electric Charges and Fields — concept investigation",
+      "subject": "physics",
+      "description": "Distinguish scalar and vector electric quantities.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish scalar and vector electric quantities.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish scalar and vector electric quantities.",
+        "chapter_ids": [
+          "12-physics-1"
+        ],
+        "cards": [
+          {
+            "label": "Electric charge",
+            "group": "Scalar",
+            "explanation": "Magnitude with a sign is sufficient; there is no spatial direction."
+          },
+          {
+            "label": "Electric potential",
+            "group": "Scalar",
+            "explanation": "Magnitude with a sign is sufficient; there is no spatial direction."
+          },
+          {
+            "label": "Electric field",
+            "group": "Vector",
+            "explanation": "Magnitude and direction are needed."
+          },
+          {
+            "label": "Electric force",
+            "group": "Vector",
+            "explanation": "Magnitude and direction are needed."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Electrostatic Potential and Capacitance — concept investigation",
+      "subject": "physics",
+      "description": "Test effects on an ideal parallel-plate capacitance C = εA/d.",
+      "config": {
+        "engine": "classification",
+        "objective": "Test effects on an ideal parallel-plate capacitance C = εA/d.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Test effects on an ideal parallel-plate capacitance C = εA/d.",
+        "chapter_ids": [
+          "12-physics-2"
+        ],
+        "cards": [
+          {
+            "label": "Doubling plate area",
+            "group": "Increases capacitance",
+            "explanation": "Increasing area or permittivity increases C with other factors fixed."
+          },
+          {
+            "label": "Inserting a dielectric with relative permittivity greater than 1",
+            "group": "Increases capacitance",
+            "explanation": "Increasing area or permittivity increases C with other factors fixed."
+          },
+          {
+            "label": "Doubling plate separation",
+            "group": "Decreases capacitance",
+            "explanation": "Increasing separation or reducing area decreases C."
+          },
+          {
+            "label": "Halving plate area",
+            "group": "Decreases capacitance",
+            "explanation": "Increasing separation or reducing area decreases C."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Moving Charges and Magnetism — concept investigation",
+      "subject": "physics",
+      "description": "Use F = qv × B for magnetic force on a moving charge.",
+      "config": {
+        "engine": "classification",
+        "objective": "Use F = qv × B for magnetic force on a moving charge.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Use F = qv × B for magnetic force on a moving charge.",
+        "chapter_ids": [
+          "12-physics-4"
+        ],
+        "cards": [
+          {
+            "label": "Velocity parallel to B",
+            "group": "Zero magnetic force",
+            "explanation": "The velocity is parallel or antiparallel to the field."
+          },
+          {
+            "label": "Velocity antiparallel to B",
+            "group": "Zero magnetic force",
+            "explanation": "The velocity is parallel or antiparallel to the field."
+          },
+          {
+            "label": "Velocity along x with B along y",
+            "group": "Maximum magnitude at fixed speed",
+            "explanation": "The velocity is perpendicular to the field."
+          },
+          {
+            "label": "Velocity along y with B along z",
+            "group": "Maximum magnitude at fixed speed",
+            "explanation": "The velocity is perpendicular to the field."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Magnetism and Matter — concept investigation",
+      "subject": "physics",
+      "description": "Distinguish magnetic responses of materials.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish magnetic responses of materials.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish magnetic responses of materials.",
+        "chapter_ids": [
+          "12-physics-5"
+        ],
+        "cards": [
+          {
+            "label": "Bismuth",
+            "group": "Diamagnetic example",
+            "explanation": "The induced magnetic response weakly opposes the applied field."
+          },
+          {
+            "label": "Copper",
+            "group": "Diamagnetic example",
+            "explanation": "The induced magnetic response weakly opposes the applied field."
+          },
+          {
+            "label": "Iron",
+            "group": "Ferromagnetic example",
+            "explanation": "Domains can align strongly and retain magnetisation."
+          },
+          {
+            "label": "Cobalt",
+            "group": "Ferromagnetic example",
+            "explanation": "Domains can align strongly and retain magnetisation."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Alternating Current — concept investigation",
+      "subject": "physics",
+      "description": "Compare phase in ideal pure AC elements.",
+      "config": {
+        "engine": "classification",
+        "objective": "Compare phase in ideal pure AC elements.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Compare phase in ideal pure AC elements.",
+        "chapter_ids": [
+          "12-physics-7"
+        ],
+        "cards": [
+          {
+            "label": "A pure capacitor",
+            "group": "Current leads voltage",
+            "explanation": "In an ideal capacitor, current leads voltage by 90°."
+          },
+          {
+            "label": "An ideal capacitive reactance",
+            "group": "Current leads voltage",
+            "explanation": "In an ideal capacitor, current leads voltage by 90°."
+          },
+          {
+            "label": "A pure inductor",
+            "group": "Current lags voltage",
+            "explanation": "In an ideal inductor, current lags voltage by 90°."
+          },
+          {
+            "label": "An ideal inductive reactance",
+            "group": "Current lags voltage",
+            "explanation": "In an ideal inductor, current lags voltage by 90°."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Dual Nature of Radiation and Matter — concept investigation",
+      "subject": "physics",
+      "description": "Distinguish particle-like and wave-like evidence.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish particle-like and wave-like evidence.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish particle-like and wave-like evidence.",
+        "chapter_ids": [
+          "12-physics-11"
+        ],
+        "cards": [
+          {
+            "label": "Photoelectric emission",
+            "group": "Particle-like evidence",
+            "explanation": "Discrete energy or momentum exchanges reveal quantised behaviour."
+          },
+          {
+            "label": "Compton scattering",
+            "group": "Particle-like evidence",
+            "explanation": "Discrete energy or momentum exchanges reveal quantised behaviour."
+          },
+          {
+            "label": "Electron diffraction",
+            "group": "Wave-like evidence",
+            "explanation": "Interference or diffraction demonstrates wave behaviour."
+          },
+          {
+            "label": "Double-slit interference",
+            "group": "Wave-like evidence",
+            "explanation": "Interference or diffraction demonstrates wave behaviour."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Electrochemistry — concept investigation",
+      "subject": "chemistry",
+      "description": "Compare the direction of energy conversion in cells.",
+      "config": {
+        "engine": "classification",
+        "objective": "Compare the direction of energy conversion in cells.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Compare the direction of energy conversion in cells.",
+        "chapter_ids": [
+          "12-chemistry-2"
+        ],
+        "cards": [
+          {
+            "label": "A discharging Daniell cell",
+            "group": "Galvanic cell",
+            "explanation": "A spontaneous redox process supplies electrical energy."
+          },
+          {
+            "label": "A discharging battery",
+            "group": "Galvanic cell",
+            "explanation": "A spontaneous redox process supplies electrical energy."
+          },
+          {
+            "label": "Electrolysis of molten NaCl",
+            "group": "Electrolytic cell",
+            "explanation": "Electrical energy drives a nonspontaneous chemical process."
+          },
+          {
+            "label": "Electroplating driven by a power supply",
+            "group": "Electrolytic cell",
+            "explanation": "Electrical energy drives a nonspontaneous chemical process."
+          }
+        ]
+      }
+    },
+    {
+      "title": "The d- and f-Block Elements — concept investigation",
+      "subject": "chemistry",
+      "description": "Distinguish d-block and f-block examples.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish d-block and f-block examples.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish d-block and f-block examples.",
+        "chapter_ids": [
+          "12-chemistry-4"
+        ],
+        "cards": [
+          {
+            "label": "Iron",
+            "group": "d-block element",
+            "explanation": "The differentiating electron is associated with a d subshell in the usual block classification."
+          },
+          {
+            "label": "Copper",
+            "group": "d-block element",
+            "explanation": "The differentiating electron is associated with a d subshell in the usual block classification."
+          },
+          {
+            "label": "Cerium",
+            "group": "f-block element",
+            "explanation": "The differentiating electron is associated with an f subshell."
+          },
+          {
+            "label": "Uranium",
+            "group": "f-block element",
+            "explanation": "The differentiating electron is associated with an f subshell."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Aldehydes, Ketones and Carboxylic Acids — concept investigation",
+      "subject": "chemistry",
+      "description": "Recognise carbonyl functional groups in simple molecules.",
+      "config": {
+        "engine": "classification",
+        "objective": "Recognise carbonyl functional groups in simple molecules.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Recognise carbonyl functional groups in simple molecules.",
+        "chapter_ids": [
+          "12-chemistry-8"
+        ],
+        "cards": [
+          {
+            "label": "Ethanal",
+            "group": "Aldehyde",
+            "explanation": "The carbonyl carbon is bonded to at least one hydrogen."
+          },
+          {
+            "label": "Methanal",
+            "group": "Aldehyde",
+            "explanation": "The carbonyl carbon is bonded to at least one hydrogen."
+          },
+          {
+            "label": "Propanone",
+            "group": "Ketone",
+            "explanation": "The carbonyl carbon is bonded to two carbon groups."
+          },
+          {
+            "label": "Butan-2-one",
+            "group": "Ketone",
+            "explanation": "The carbonyl carbon is bonded to two carbon groups."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Amines — concept investigation",
+      "subject": "chemistry",
+      "description": "Classify amines by the number of carbon groups on nitrogen.",
+      "config": {
+        "engine": "classification",
+        "objective": "Classify amines by the number of carbon groups on nitrogen.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Classify amines by the number of carbon groups on nitrogen.",
+        "chapter_ids": [
+          "12-chemistry-9"
+        ],
+        "cards": [
+          {
+            "label": "Methylamine",
+            "group": "Primary amine",
+            "explanation": "Nitrogen is bonded to one carbon group and two hydrogens."
+          },
+          {
+            "label": "Ethylamine",
+            "group": "Primary amine",
+            "explanation": "Nitrogen is bonded to one carbon group and two hydrogens."
+          },
+          {
+            "label": "Dimethylamine",
+            "group": "Secondary amine",
+            "explanation": "Nitrogen is bonded to two carbon groups and one hydrogen."
+          },
+          {
+            "label": "Diethylamine",
+            "group": "Secondary amine",
+            "explanation": "Nitrogen is bonded to two carbon groups and one hydrogen."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Relations and Functions — concept investigation",
+      "subject": "mathematics",
+      "description": "Test whether a relation assigns exactly one output to each input in its stated domain.",
+      "config": {
+        "engine": "classification",
+        "objective": "Test whether a relation assigns exactly one output to each input in its stated domain.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Test whether a relation assigns exactly one output to each input in its stated domain.",
+        "chapter_ids": [
+          "12-mathematics-1"
+        ],
+        "cards": [
+          {
+            "label": "{(1,2),(2,3)} on domain {1,2}",
+            "group": "Function",
+            "explanation": "Each input has exactly one output."
+          },
+          {
+            "label": "y = x² for real x",
+            "group": "Function",
+            "explanation": "Each input has exactly one output."
+          },
+          {
+            "label": "{(1,2),(1,3)} on domain {1}",
+            "group": "Not a function",
+            "explanation": "At least one input has more than one output."
+          },
+          {
+            "label": "y² = x considered as y depending on x for x > 0",
+            "group": "Not a function",
+            "explanation": "At least one input has more than one output."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Inverse Trigonometric Functions — concept investigation",
+      "subject": "mathematics",
+      "description": "Check principal inverse-trigonometric values.",
+      "config": {
+        "engine": "classification",
+        "objective": "Check principal inverse-trigonometric values.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Check principal inverse-trigonometric values.",
+        "chapter_ids": [
+          "12-mathematics-2"
+        ],
+        "cards": [
+          {
+            "label": "arcsin(1/2) = π/6",
+            "group": "Correct principal value",
+            "explanation": "The value lies in the principal range and gives the stated sine or cosine."
+          },
+          {
+            "label": "arccos(1/2) = π/3",
+            "group": "Correct principal value",
+            "explanation": "The value lies in the principal range and gives the stated sine or cosine."
+          },
+          {
+            "label": "arcsin(1/2) = 5π/6",
+            "group": "Not the principal value",
+            "explanation": "The angle may give the same trig value but is outside the principal range."
+          },
+          {
+            "label": "arccos(1/2) = 5π/3",
+            "group": "Not the principal value",
+            "explanation": "The angle may give the same trig value but is outside the principal range."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Matrices — concept investigation",
+      "subject": "mathematics",
+      "description": "Check dimensions for matrix multiplication AB.",
+      "config": {
+        "engine": "classification",
+        "objective": "Check dimensions for matrix multiplication AB.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Check dimensions for matrix multiplication AB.",
+        "chapter_ids": [
+          "12-mathematics-3"
+        ],
+        "cards": [
+          {
+            "label": "A is 2×3 and B is 3×4",
+            "group": "Product defined",
+            "explanation": "The number of columns of A equals the number of rows of B."
+          },
+          {
+            "label": "A is 1×2 and B is 2×1",
+            "group": "Product defined",
+            "explanation": "The number of columns of A equals the number of rows of B."
+          },
+          {
+            "label": "A is 2×3 and B is 2×4",
+            "group": "Product not defined",
+            "explanation": "The inner dimensions do not match."
+          },
+          {
+            "label": "A is 3×1 and B is 2×3",
+            "group": "Product not defined",
+            "explanation": "The inner dimensions do not match."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Determinants — concept investigation",
+      "subject": "mathematics",
+      "description": "Use the determinant to identify singular 2×2 matrices.",
+      "config": {
+        "engine": "classification",
+        "objective": "Use the determinant to identify singular 2×2 matrices.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Use the determinant to identify singular 2×2 matrices.",
+        "chapter_ids": [
+          "12-mathematics-4"
+        ],
+        "cards": [
+          {
+            "label": "[[1,2],[2,4]]",
+            "group": "Singular",
+            "explanation": "The determinant ad−bc is zero."
+          },
+          {
+            "label": "[[0,0],[1,3]]",
+            "group": "Singular",
+            "explanation": "The determinant ad−bc is zero."
+          },
+          {
+            "label": "[[1,0],[0,1]]",
+            "group": "Nonsingular",
+            "explanation": "The determinant is nonzero."
+          },
+          {
+            "label": "[[2,1],[1,2]]",
+            "group": "Nonsingular",
+            "explanation": "The determinant is nonzero."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Continuity and Differentiability — concept investigation",
+      "subject": "mathematics",
+      "description": "Test differentiability at x = 0.",
+      "config": {
+        "engine": "classification",
+        "objective": "Test differentiability at x = 0.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Test differentiability at x = 0.",
+        "chapter_ids": [
+          "12-mathematics-5"
+        ],
+        "cards": [
+          {
+            "label": "f(x)=x²",
+            "group": "Differentiable at 0",
+            "explanation": "The left and right derivatives agree and are finite."
+          },
+          {
+            "label": "f(x)=sin x",
+            "group": "Differentiable at 0",
+            "explanation": "The left and right derivatives agree and are finite."
+          },
+          {
+            "label": "f(x)=abs(x)",
+            "group": "Not differentiable at 0",
+            "explanation": "A corner or discontinuity prevents a derivative."
+          },
+          {
+            "label": "f(x)=0 for x<0 and 1 for x≥0",
+            "group": "Not differentiable at 0",
+            "explanation": "A corner or discontinuity prevents a derivative."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Application of Derivatives — concept investigation",
+      "subject": "mathematics",
+      "description": "Classify local rates of change by derivative sign.",
+      "config": {
+        "engine": "classification",
+        "objective": "Classify local rates of change by derivative sign.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Classify local rates of change by derivative sign.",
+        "chapter_ids": [
+          "12-mathematics-6"
+        ],
+        "cards": [
+          {
+            "label": "f(x)=x² at x=2",
+            "group": "Increasing locally",
+            "explanation": "A positive derivative indicates local increase."
+          },
+          {
+            "label": "f(x)=3x at x=0",
+            "group": "Increasing locally",
+            "explanation": "A positive derivative indicates local increase."
+          },
+          {
+            "label": "f(x)=x² at x=−2",
+            "group": "Decreasing locally",
+            "explanation": "A negative derivative indicates local decrease."
+          },
+          {
+            "label": "f(x)=−3x at x=0",
+            "group": "Decreasing locally",
+            "explanation": "A negative derivative indicates local decrease."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Integrals — concept investigation",
+      "subject": "mathematics",
+      "description": "Check proposed indefinite integrals by differentiation.",
+      "config": {
+        "engine": "classification",
+        "objective": "Check proposed indefinite integrals by differentiation.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Check proposed indefinite integrals by differentiation.",
+        "chapter_ids": [
+          "12-mathematics-7"
+        ],
+        "cards": [
+          {
+            "label": "∫2x dx = x²+C",
+            "group": "Correct antiderivative family",
+            "explanation": "Differentiating recovers the integrand."
+          },
+          {
+            "label": "∫cos x dx = sin x+C",
+            "group": "Correct antiderivative family",
+            "explanation": "Differentiating recovers the integrand."
+          },
+          {
+            "label": "∫2x dx = 2x²+C",
+            "group": "Incorrect antiderivative family",
+            "explanation": "Differentiating does not recover the integrand."
+          },
+          {
+            "label": "∫cos x dx = −sin x+C",
+            "group": "Incorrect antiderivative family",
+            "explanation": "Differentiating does not recover the integrand."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Application of Integrals — concept investigation",
+      "subject": "mathematics",
+      "description": "Distinguish signed integrals from geometric area.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish signed integrals from geometric area.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish signed integrals from geometric area.",
+        "chapter_ids": [
+          "12-mathematics-8"
+        ],
+        "cards": [
+          {
+            "label": "∫ from −1 to 1 of x dx = 0",
+            "group": "Signed integral",
+            "explanation": "Contributions below the x-axis count negatively."
+          },
+          {
+            "label": "∫ from 0 to π of −sin x dx = −2",
+            "group": "Signed integral",
+            "explanation": "Contributions below the x-axis count negatively."
+          },
+          {
+            "label": "Area between y=x and the x-axis on [−1,1] is 1",
+            "group": "Geometric area",
+            "explanation": "Area is nonnegative and uses magnitudes of contributions."
+          },
+          {
+            "label": "Area under sin x on [0,π] is 2",
+            "group": "Geometric area",
+            "explanation": "Area is nonnegative and uses magnitudes of contributions."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Differential Equations — concept investigation",
+      "subject": "mathematics",
+      "description": "Identify the order of a differential equation.",
+      "config": {
+        "engine": "classification",
+        "objective": "Identify the order of a differential equation.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Identify the order of a differential equation.",
+        "chapter_ids": [
+          "12-mathematics-9"
+        ],
+        "cards": [
+          {
+            "label": "dy/dx = y",
+            "group": "First order",
+            "explanation": "The highest derivative present is a first derivative."
+          },
+          {
+            "label": "dy/dx + 2y = x",
+            "group": "First order",
+            "explanation": "The highest derivative present is a first derivative."
+          },
+          {
+            "label": "d²y/dx² + y = 0",
+            "group": "Second order",
+            "explanation": "A second derivative is the highest derivative present."
+          },
+          {
+            "label": "d²y/dx² = x",
+            "group": "Second order",
+            "explanation": "A second derivative is the highest derivative present."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Vector Algebra — concept investigation",
+      "subject": "mathematics",
+      "description": "Distinguish dot and cross products of 3D vectors.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish dot and cross products of 3D vectors.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish dot and cross products of 3D vectors.",
+        "chapter_ids": [
+          "12-mathematics-10"
+        ],
+        "cards": [
+          {
+            "label": "a·b = norm(a) norm(b)cos θ",
+            "group": "Dot product",
+            "explanation": "The result is a scalar."
+          },
+          {
+            "label": "Work W = F·s",
+            "group": "Dot product",
+            "explanation": "The result is a scalar."
+          },
+          {
+            "label": "a×b",
+            "group": "Cross product",
+            "explanation": "The result is an axial vector perpendicular to both factors."
+          },
+          {
+            "label": "Torque τ = r×F",
+            "group": "Cross product",
+            "explanation": "The result is an axial vector perpendicular to both factors."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Three-Dimensional Geometry — concept investigation",
+      "subject": "mathematics",
+      "description": "Locate points relative to the xy-plane.",
+      "config": {
+        "engine": "classification",
+        "objective": "Locate points relative to the xy-plane.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Locate points relative to the xy-plane.",
+        "chapter_ids": [
+          "12-mathematics-11"
+        ],
+        "cards": [
+          {
+            "label": "(2,3,0)",
+            "group": "On the xy-plane",
+            "explanation": "The z-coordinate is zero."
+          },
+          {
+            "label": "(−1,4,0)",
+            "group": "On the xy-plane",
+            "explanation": "The z-coordinate is zero."
+          },
+          {
+            "label": "(2,3,1)",
+            "group": "Off the xy-plane",
+            "explanation": "The z-coordinate is nonzero."
+          },
+          {
+            "label": "(0,0,−2)",
+            "group": "Off the xy-plane",
+            "explanation": "The z-coordinate is nonzero."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Linear Programming — concept investigation",
+      "subject": "mathematics",
+      "description": "Separate an objective function from a constraint in a linear program.",
+      "config": {
+        "engine": "classification",
+        "objective": "Separate an objective function from a constraint in a linear program.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Separate an objective function from a constraint in a linear program.",
+        "chapter_ids": [
+          "12-mathematics-12"
+        ],
+        "cards": [
+          {
+            "label": "Maximise 3x+2y",
+            "group": "Objective",
+            "explanation": "This expression is maximised or minimised."
+          },
+          {
+            "label": "Minimise 5x+4y",
+            "group": "Objective",
+            "explanation": "This expression is maximised or minimised."
+          },
+          {
+            "label": "x+y ≤ 10",
+            "group": "Constraint",
+            "explanation": "This condition restricts feasible choices."
+          },
+          {
+            "label": "x ≥ 0",
+            "group": "Constraint",
+            "explanation": "This condition restricts feasible choices."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Sexual Reproduction in Flowering Plants — concept investigation",
+      "subject": "biology",
+      "description": "Distinguish pollination and fertilisation.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish pollination and fertilisation.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish pollination and fertilisation.",
+        "chapter_ids": [
+          "12-biology-1"
+        ],
+        "cards": [
+          {
+            "label": "Pollen carried by a bee to a stigma",
+            "group": "Pollination",
+            "explanation": "Pollen is transferred to a compatible stigma."
+          },
+          {
+            "label": "Pollen transferred by wind to a stigma",
+            "group": "Pollination",
+            "explanation": "Pollen is transferred to a compatible stigma."
+          },
+          {
+            "label": "Fusion of a sperm with an egg",
+            "group": "Fertilisation",
+            "explanation": "Gametes fuse after pollen-tube growth."
+          },
+          {
+            "label": "Triple fusion forming the primary endosperm nucleus",
+            "group": "Fertilisation",
+            "explanation": "Gametes fuse after pollen-tube growth."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Human Reproduction — concept investigation",
+      "subject": "biology",
+      "description": "Distinguish gamete formation and gamete fusion.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish gamete formation and gamete fusion.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish gamete formation and gamete fusion.",
+        "chapter_ids": [
+          "12-biology-2"
+        ],
+        "cards": [
+          {
+            "label": "Spermatogenesis",
+            "group": "Gametogenesis",
+            "explanation": "Specialised cells produce gametes."
+          },
+          {
+            "label": "Oogenesis",
+            "group": "Gametogenesis",
+            "explanation": "Specialised cells produce gametes."
+          },
+          {
+            "label": "Fusion of sperm and ovum",
+            "group": "Fertilisation and its immediate result",
+            "explanation": "The gametes unite and a zygote forms."
+          },
+          {
+            "label": "Restoration of the diploid chromosome number in the zygote",
+            "group": "Fertilisation and its immediate result",
+            "explanation": "The gametes unite and a zygote forms."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Reproductive Health — concept investigation",
+      "subject": "biology",
+      "description": "Separate reproductive-health education and services from biological developmental processes.",
+      "config": {
+        "engine": "classification",
+        "objective": "Separate reproductive-health education and services from biological developmental processes.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Separate reproductive-health education and services from biological developmental processes.",
+        "chapter_ids": [
+          "12-biology-3"
+        ],
+        "cards": [
+          {
+            "label": "Age-appropriate reproductive-health education",
+            "group": "Education or service",
+            "explanation": "The example concerns information or organised healthcare support."
+          },
+          {
+            "label": "Antenatal healthcare services",
+            "group": "Education or service",
+            "explanation": "The example concerns information or organised healthcare support."
+          },
+          {
+            "label": "Ovulation",
+            "group": "Biological process",
+            "explanation": "The example describes physiology rather than a service."
+          },
+          {
+            "label": "Embryonic development",
+            "group": "Biological process",
+            "explanation": "The example describes physiology rather than a service."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Human Health and Disease — concept investigation",
+      "subject": "biology",
+      "description": "Classify immunity by origin.",
+      "config": {
+        "engine": "classification",
+        "objective": "Classify immunity by origin.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Classify immunity by origin.",
+        "chapter_ids": [
+          "12-biology-7"
+        ],
+        "cards": [
+          {
+            "label": "Skin barrier",
+            "group": "Innate immunity",
+            "explanation": "These defences are present without a prior specific antigen response."
+          },
+          {
+            "label": "Phagocytosis by neutrophils",
+            "group": "Innate immunity",
+            "explanation": "These defences are present without a prior specific antigen response."
+          },
+          {
+            "label": "Antibodies produced after antigen exposure",
+            "group": "Adaptive immunity",
+            "explanation": "These responses are antigen-specific and can form memory."
+          },
+          {
+            "label": "Memory T cells",
+            "group": "Adaptive immunity",
+            "explanation": "These responses are antigen-specific and can form memory."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Microbes in Human Welfare — concept investigation",
+      "subject": "biology",
+      "description": "Sort examples by their role in the stated context.",
+      "config": {
+        "engine": "classification",
+        "objective": "Sort examples by their role in the stated context.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Sort examples by their role in the stated context.",
+        "chapter_ids": [
+          "12-biology-8"
+        ],
+        "cards": [
+          {
+            "label": "Lactobacillus in curd",
+            "group": "Useful microbial activity",
+            "explanation": "The microbial process is used to produce food or treat waste."
+          },
+          {
+            "label": "Microorganisms in sewage treatment",
+            "group": "Useful microbial activity",
+            "explanation": "The microbial process is used to produce food or treat waste."
+          },
+          {
+            "label": "Pathogenic bacteria causing foodborne disease",
+            "group": "Harmful microbial activity",
+            "explanation": "The microbial process causes disease or spoilage in this context."
+          },
+          {
+            "label": "Mould spoiling bread",
+            "group": "Harmful microbial activity",
+            "explanation": "The microbial process causes disease or spoilage in this context."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Biotechnology and its Applications — concept investigation",
+      "subject": "biology",
+      "description": "Distinguish agricultural and medical applications of biotechnology.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish agricultural and medical applications of biotechnology.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish agricultural and medical applications of biotechnology.",
+        "chapter_ids": [
+          "12-biology-10"
+        ],
+        "cards": [
+          {
+            "label": "Bt cotton",
+            "group": "Agricultural application",
+            "explanation": "The application concerns crop traits or agricultural production."
+          },
+          {
+            "label": "A crop engineered for improved nutrient content",
+            "group": "Agricultural application",
+            "explanation": "The application concerns crop traits or agricultural production."
+          },
+          {
+            "label": "Recombinant human insulin",
+            "group": "Medical application",
+            "explanation": "The application concerns diagnosis or therapeutic products."
+          },
+          {
+            "label": "PCR-based pathogen detection",
+            "group": "Medical application",
+            "explanation": "The application concerns diagnosis or therapeutic products."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Biodiversity and Conservation — concept investigation",
+      "subject": "biology",
+      "description": "Compare conservation inside and outside natural habitats.",
+      "config": {
+        "engine": "classification",
+        "objective": "Compare conservation inside and outside natural habitats.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Compare conservation inside and outside natural habitats.",
+        "chapter_ids": [
+          "12-biology-13"
+        ],
+        "cards": [
+          {
+            "label": "A wildlife sanctuary",
+            "group": "In situ",
+            "explanation": "Species are conserved within their natural habitats."
+          },
+          {
+            "label": "A biosphere reserve",
+            "group": "In situ",
+            "explanation": "Species are conserved within their natural habitats."
+          },
+          {
+            "label": "A seed bank",
+            "group": "Ex situ",
+            "explanation": "Species or genetic material are conserved outside natural habitats."
+          },
+          {
+            "label": "A botanical garden collection",
+            "group": "Ex situ",
+            "explanation": "Species or genetic material are conserved outside natural habitats."
+          }
+        ]
+      }
+    }
+  ]
+}

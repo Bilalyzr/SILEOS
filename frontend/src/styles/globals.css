@@ -1,0 +1,1342 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* Import Google Fonts - SashaInfinity Technology Theme */
+
+/* CSS Variables for consistent theming */
+@layer base {
+  :root {
+    /* Platform overlay scale (mirror of zIndex tokens in tailwind.config.js).
+       Raw CSS (astra/campus layers, promotional widgets) must use these vars
+       instead of literal values so nothing floats above a dialog scrim. */
+    --z-nav: 40;
+    --z-header: 50;
+    --z-dropdown: 60;
+    --z-fab: 70;
+    --z-modal: 80;
+    --z-overlay: 90;
+    --z-dialog: 100;
+    --z-popover: 120;
+    --z-toast: 200;
+    --z-banner: 300;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 210 40% 98%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 98%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 98%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 217.2 91.2% 59.8%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 217.2 91.2% 59.8%;
+  }
+}
+
+/* Base styles */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body {
+    /* Prevent horizontal scroll caused by absolutely-positioned hero shapes
+       and decorative elements that overflow their containers. Sections that
+       genuinely need horizontal scroll (admin tables, attendance grid) must
+       opt-in via their own scroll container with `overflow-x: auto`.
+       Note: avoid `max-width: 100vw` here — on Windows browsers `100vw`
+       includes the scrollbar gutter and clips ~17px on the right edge of
+       fixed-position elements like the admin sidebar/topbar. */
+    overflow-x: hidden;
+  }
+
+  /* Mobile table safety net (2026-09-14 UI audit): html/body overflow-x
+     hidden means UNwrapped wide tables were silently CLIPPED on phones
+     (spoc/cohort, admin/cohorts+colleges+spocs, institutions, vouchers…).
+     Tables that already sit in a scroll wrapper (overflow-x-auto /
+     campus-table-wrap / TableScrollArea) are excluded via the :not() chain —
+     this rule only rescues the unwrapped ones by making them scroll
+     horizontally instead of being cut off. */
+  @media (max-width: 767px) {
+    .rd-workspace-content :not(.overflow-x-auto):not(.campus-table-wrap):not([data-table-scroll]) > table,
+    .rd-public :not(.overflow-x-auto):not(.campus-table-wrap):not([data-table-scroll]) > table {
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+
+  /* Native form controls (the app has 228 raw <select>, 672 raw <input>)
+     render as unstyled OS defaults on the dark theme. accent-color is the
+     zero-risk global lift; full restyling stays per-component. */
+  input[type='checkbox'],
+  input[type='radio'],
+  input[type='range'] {
+    accent-color: #f97316;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    /* Interactive elements ship their own active/hover feedback; suppress the
+       gray iOS tap flash so it doesn't double up with those states. */
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Pointer affordance: native buttons default to `cursor: default` in most
+     browsers. Disabled controls signal they are not clickable. */
+  button:not(:disabled),
+  [role="button"]:not(:disabled),
+  summary {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Firefox parity with the webkit scrollbar below. */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(128, 128, 128, 0.45) transparent;
+  }
+
+  /* Custom scrollbar — neutral translucent so it reads on both the light
+     pages and the dark Aurum canvas (a light track would glare on dark). */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(128, 128, 128, 0.45);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(128, 128, 128, 0.7);
+  }
+
+  /* Selection styles */
+  ::selection {
+    @apply bg-primary-100 text-primary-900;
+  }
+}
+
+/* Component layer for reusable patterns */
+@layer components {
+  /* Container styles */
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Card component base */
+  .card {
+    @apply bg-card text-card-foreground rounded-lg border shadow-soft;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-medium hover:-translate-y-1;
+  }
+
+  /* Button styles - SashaInfinity theme */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background;
+  }
+
+  .btn-primary {
+    @apply bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary-500 text-white hover:bg-secondary-600 focus:ring-secondary-500;
+  }
+
+  .btn-outline {
+    @apply border border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white focus:ring-primary-500;
+  }
+
+  .btn-ghost {
+    @apply text-neutral-700 hover:bg-neutral-100 focus:ring-neutral-500;
+  }
+
+  .btn-sm {
+    @apply h-9 px-3 text-xs;
+  }
+
+  .btn-md {
+    @apply h-10 py-2 px-4;
+  }
+
+  .btn-lg {
+    @apply h-12 px-8 text-base;
+  }
+
+  /* Input styles */
+  .input {
+    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  /* Badge styles */
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .badge-primary {
+    @apply bg-primary-100 text-primary-800;
+  }
+
+  .badge-secondary {
+    @apply bg-secondary-100 text-secondary-800;
+  }
+
+  .badge-success {
+    @apply bg-success-100 text-success-800;
+  }
+
+  .badge-warning {
+    @apply bg-warning-100 text-warning-800;
+  }
+
+  .badge-danger {
+    @apply bg-danger-100 text-danger-800;
+  }
+
+  /* Progress bar */
+  .progress {
+    @apply h-2 w-full overflow-hidden rounded-full bg-neutral-200;
+  }
+
+  .progress-bar {
+    @apply h-full bg-primary-500 transition-all duration-300 ease-in-out;
+  }
+
+  /* Star rating */
+  .star-rating {
+    @apply flex items-center gap-1;
+  }
+
+  .star {
+    @apply w-4 h-4 text-yellow-400;
+  }
+
+  .star-filled {
+    @apply fill-current;
+  }
+
+  .star-empty {
+    @apply text-neutral-300;
+  }
+
+  /* Loading spinner */
+  .spinner {
+    @apply inline-block animate-spin rounded-full border-2 border-solid border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite];
+  }
+
+  /* Course card styles */
+  .course-card {
+    @apply bg-white rounded-lg shadow-soft overflow-hidden transition-all duration-300 hover:shadow-medium hover:-translate-y-1;
+  }
+
+  .course-card-image {
+    @apply w-full h-48 object-cover;
+  }
+
+  .course-card-content {
+    @apply p-6;
+  }
+
+  .course-card-title {
+    @apply text-lg font-semibold text-neutral-900 mb-2 line-clamp-2;
+  }
+
+  .course-card-instructor {
+    @apply text-sm text-neutral-600 mb-2;
+  }
+
+  .course-card-price {
+    @apply text-xl font-bold text-primary-600;
+  }
+
+  /* Video player container */
+  .video-container {
+    @apply relative w-full bg-black rounded-lg overflow-hidden;
+  }
+
+  .video-container::before {
+    content: "";
+    @apply block w-full;
+    padding-top: 56.25%; /* 16:9 aspect ratio */
+  }
+
+  .video-player {
+    @apply absolute inset-0 w-full h-full;
+  }
+
+  /* Viewport-height helpers that respect the collapsing mobile browser chrome.
+     100vh on mobile is the *expanded* viewport, so it overflows the screen. */
+  .min-h-dvh {
+    min-height: 100vh;
+  }
+
+  .h-dvh {
+    height: 100vh;
+  }
+
+  @supports (height: 100dvh) {
+    .min-h-dvh {
+      min-height: 100dvh;
+    }
+
+    .h-dvh {
+      height: 100dvh;
+    }
+  }
+
+  /* Lesson page video stage.
+     Keeps a true frame for the stream while guaranteeing the whole frame fits
+     on screen. In landscape on a phone, a 16:9 box sized off the viewport width
+     is taller than the screen, so the box is capped by available height and
+     shrinks in width — that preserves the aspect ratio instead of letterboxing
+     or overflowing.
+     --lesson-aspect is the stream's real width/height, set by the page once the
+     video metadata loads; 16/9 is the fallback until then (and for the Bunny
+     iframe, whose dimensions we cannot measure). Sizing off the real ratio
+     matters for 4:3 lessons, which would otherwise be pillarboxed into a
+     fraction of the space they could occupy.
+     --lesson-chrome is the sticky header that sits above the player. */
+  .lesson-video-stage {
+    position: relative;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    aspect-ratio: var(--lesson-aspect, 1.7778);
+    max-width: calc((100vh - var(--lesson-chrome, 3.5rem)) * var(--lesson-aspect, 1.7778));
+  }
+
+  /* dvh tracks the collapsing mobile browser chrome; vh above is the fallback. */
+  @supports (height: 100dvh) {
+    .lesson-video-stage {
+      max-width: calc((100dvh - var(--lesson-chrome, 3.5rem)) * var(--lesson-aspect, 1.7778));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .lesson-video-stage {
+      --lesson-chrome: 0px;
+    }
+  }
+
+  /* Video player sliders (seek + volume).
+     The visible track stays thin, but the control itself is tall enough to be
+     grabbed with a finger — a 6px-tall range is unusable on a touch screen. */
+  .video-range {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 9999px;
+    outline: none;
+    /* Let a drag on the track scrub instead of scrolling the page. */
+    touch-action: none;
+  }
+
+  .video-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 9999px;
+    background: #ffffff;
+    border: 2px solid #f97316;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.5);
+  }
+
+  .video-range::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 9999px;
+    background: #ffffff;
+    border: 2px solid #f97316;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.5);
+  }
+
+  .video-range::-moz-range-track {
+    background: transparent;
+  }
+
+  /* Coarse pointers (phones/tablets): fatter track and thumb. */
+  @media (pointer: coarse) {
+    .video-range {
+      height: 8px;
+    }
+
+    .video-range::-webkit-slider-thumb {
+      width: 20px;
+      height: 20px;
+    }
+
+    .video-range::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  /* Quiz styles */
+  .quiz-container {
+    @apply max-w-4xl mx-auto p-6;
+  }
+
+  .quiz-question {
+    @apply bg-white rounded-lg shadow-soft p-6 mb-6;
+  }
+
+  .quiz-question-title {
+    @apply text-xl font-semibold mb-4;
+  }
+
+  .quiz-answer {
+    @apply p-4 border border-neutral-200 rounded-lg cursor-pointer transition-all duration-200 hover:bg-neutral-50;
+  }
+
+  .quiz-answer-selected {
+    @apply bg-primary-50 border-primary-300;
+  }
+
+  .quiz-answer-correct {
+    @apply bg-success-50 border-success-300;
+  }
+
+  .quiz-answer-incorrect {
+    @apply bg-danger-50 border-danger-300;
+  }
+
+  /* Text utilities */
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent;
+  }
+
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Glassmorphism effects */
+  .glass {
+    @apply bg-white/10 backdrop-blur-lg border border-white/20;
+  }
+
+  .glass-dark {
+    @apply bg-black/10 backdrop-blur-lg border border-white/10;
+  }
+}
+
+/* Utility layer for additional helpers */
+@layer utilities {
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-left {
+    padding-left: env(safe-area-inset-left);
+  }
+
+  .safe-right {
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-in-out;
+  }
+
+  .animate-slide-in-up {
+    animation: slide-in-up 0.5s ease-out;
+  }
+
+  .animate-slide-in-down {
+    animation: slide-in-down 0.5s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.3s ease-out;
+  }
+
+  .animate-bounce-in {
+    animation: bounce-in 0.6s ease-out;
+  }
+
+  /* Hover effects */
+  .hover-lift {
+    @apply transition-transform duration-300 hover:-translate-y-1;
+  }
+
+  .hover-scale {
+    @apply transition-transform duration-300 hover:scale-105;
+  }
+
+  /* Focus styles */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+}
+
+/* Third-party component overrides */
+
+/* React Player */
+.react-player {
+  @apply rounded-lg overflow-hidden;
+}
+
+/* Swiper */
+.swiper {
+  @apply rounded-lg;
+}
+
+.swiper-pagination-bullet {
+  @apply bg-primary-500;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  @apply text-primary-500;
+}
+
+/* React Hot Toast — visual polish lives in the <Toaster> props in App.tsx;
+   the portal inherits the theme tokens from <body>. */
+
+/* Custom Animations for Enhanced Features */
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-200px) scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-down {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-float-up {
+  animation: floatUp 2s ease-out forwards;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  background-size: 1000px 100%;
+}
+
+/* Focus Mode Styles */
+.focus-mode-active {
+  filter: brightness(1.1) contrast(1.05);
+}
+
+.focus-mode-active aside {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: all 0.5s ease-in-out;
+}
+
+/* Custom Scrollbar for Lesson List */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ===== HOME PAGE MOBILE RESPONSIVENESS ===== */
+
+/* Hero Section */
+@media (max-width: 768px) {
+  #home {
+    padding-top: 60px !important;
+    min-height: 100svh !important;
+    overflow: hidden !important;
+  }
+  #home > section {
+    min-height: 100svh !important;
+  }
+  /* Left text block */
+  #home [style*="position:'absolute',left:48"] ,
+  #home [style*="left: 48px"] {
+    position: relative !important;
+    left: 0 !important;
+    top: auto !important;
+    transform: none !important;
+    max-width: 100% !important;
+    padding: 80px 20px 20px !important;
+    z-index: 5;
+  }
+  /* Right text block - hide on mobile */
+  #home [style*="position:'absolute',right:48"],
+  #home [style*="right: 48px"] {
+    display: none !important;
+  }
+  /* 3D model - shrink and reposition */
+  #home [style*="translate(-50%,-50%)"] {
+    width: 90% !important;
+    height: 50% !important;
+    top: 45% !important;
+    opacity: 0.3 !important;
+  }
+}
+
+/* About Section */
+@media (max-width: 768px) {
+  #about {
+    padding: 60px 0 !important;
+  }
+  #about > div > div > div[style*="grid"] {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+    padding: 0 16px !important;
+  }
+  #about > div {
+    padding: 0 16px !important;
+  }
+}
+
+/* Categories Section */
+@media (max-width: 768px) {
+  #categories {
+    padding: 60px 0 !important;
+  }
+  #categories > div {
+    padding: 0 16px !important;
+  }
+  #categories [style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
+
+/* Blog/News Section */
+@media (max-width: 768px) {
+  #blog {
+    padding: 60px 0 !important;
+  }
+  #blog > div {
+    padding: 0 16px !important;
+  }
+  #blog [style*="repeat(3"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Testimonials */
+@media (max-width: 768px) {
+  #testimonials {
+    padding: 60px 0 !important;
+  }
+  #testimonials > div {
+    padding: 0 16px !important;
+  }
+}
+
+/* Partners / CTA Section */
+@media (max-width: 768px) {
+  [style*="padding:'72px'"],
+  [style*="padding: 72px"] {
+    padding: 32px 20px !important;
+  }
+  [style*="flexWrap:'wrap'"] {
+    flex-direction: column !important;
+    text-align: center !important;
+  }
+}
+
+/* General container padding fix */
+@media (max-width: 768px) {
+  [style*="padding:'0 48px'"],
+  [style*="padding: 0 48px"] {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  [style*="maxWidth:1200"],
+  [style*="max-width: 1200px"] {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  [style*="fontSize:42"],
+  [style*="font-size: 42px"] {
+    font-size: 28px !important;
+  }
+  [style*="fontSize:38"],
+  [style*="font-size: 38px"] {
+    font-size: 26px !important;
+  }
+}
+
+/* PublicHeader mobile */
+@media (max-width: 768px) {
+  nav, header {
+    padding: 12px 16px !important;
+  }
+}
+
+/* Stat cards grid */
+@media (max-width: 480px) {
+  [style*="gridTemplateColumns:'1fr 1fr'"] {
+    grid-template-columns: 1fr !important;
+  }
+  [style*="gap:28"],
+  [style*="gap: 28px"] {
+    gap: 16px !important;
+  }
+  h1, h2, h3 {
+    word-break: break-word;
+  }
+}
+
+/* Team cards + About stats mobile fix */
+@media (max-width: 600px) {
+  /* Team cards - 2 per row on mobile */
+  [style*="minmax(160px,1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  /* Card text no overflow */
+  [style*="wordBreak"] {
+    word-break: break-word !important;
+    font-size: 12px !important;
+  }
+  /* About section image card */
+  #about [style*="padding:32"] {
+    padding: 16px !important;
+  }
+  /* Stat items in about */
+  #about [style*="minmax(160px"] {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  /* Team cards - 1 per row on very small screens */
+  [style*="minmax(160px,1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* ===== ENHANCED MOBILE RESPONSIVENESS ===== */
+
+/* Touch-friendly improvements - minimum 44px touch targets */
+@layer utilities {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .touch-target-sm {
+    min-height: 40px;
+    min-width: 40px;
+  }
+}
+
+/* Mobile-safe inputs */
+@media (max-width: 768px) {
+  input[type="email"],
+  input[type="password"],
+  input[type="text"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="url"],
+  select,
+  textarea {
+    font-size: 16px !important; /* Prevent iOS zoom */
+    min-height: 48px !important;
+  }
+
+  /* Touch-friendly buttons */
+  button,
+  .btn,
+  [role="button"] {
+    min-height: 44px !important;
+    padding: 12px 20px !important;
+  }
+
+  button.sm,
+  .btn-sm {
+    min-height: 40px !important;
+    padding: 10px 16px !important;
+  }
+}
+
+/* Safe area for notched devices */
+@media (max-width: 768px) {
+  .safe-header {
+    padding-top: max(16px, env(safe-area-inset-top));
+  }
+
+  .safe-footer {
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+}
+
+/* Mobile card improvements */
+@media (max-width: 640px) {
+  .card,
+  .course-card {
+    border-radius: 16px !important;
+    overflow: hidden;
+  }
+
+  /* Stack flex containers on mobile */
+  .mobile-stack {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  /* Full width buttons on mobile */
+  .mobile-full-btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Center text on mobile */
+  .mobile-center {
+    text-align: center !important;
+  }
+
+  /* Hide less important elements on mobile */
+  .mobile-hide {
+    display: none !important;
+  }
+}
+
+/* Compact text for mobile */
+@media (max-width: 480px) {
+  .mobile-text-compact h1 {
+    font-size: 24px !important;
+    line-height: 1.2 !important;
+  }
+
+  .mobile-text-compact h2 {
+    font-size: 20px !important;
+    line-height: 1.2 !important;
+  }
+
+  .mobile-text-compact h3 {
+    font-size: 18px !important;
+    line-height: 1.2 !important;
+  }
+
+  .mobile-text-compact p,
+  .mobile-text-compact span,
+  .mobile-text-compact div {
+    font-size: 14px !important;
+  }
+}
+
+/* Grid adjustments for mobile */
+@media (max-width: 640px) {
+  .grid-responsive {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .grid-responsive-2 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+}
+
+/* Pagination mobile improvements */
+@media (max-width: 640px) {
+  .pagination {
+    gap: 4px !important;
+  }
+
+  .pagination button,
+  .pagination a {
+    min-width: 36px !important;
+    height: 36px !important;
+    padding: 0 8px !important;
+    font-size: 14px !important;
+  }
+}
+
+/* Mobile dialog/modal improvements */
+@media (max-width: 640px) {
+  [role="dialog"],
+  .modal,
+  .dialog-content {
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    border-radius: 16px 16px 0 0 !important;
+    margin: 0 !important;
+  }
+
+  [data-radix-toast] {
+    max-width: calc(100vw - 32px) !important;
+  }
+}
+
+/* Mobile table alternatives */
+@media (max-width: 640px) {
+  .mobile-table {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  .mobile-table thead {
+    display: none !important;
+  }
+
+  .mobile-table tbody,
+  .mobile-table tr {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .mobile-table td {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 8px 0 !important;
+    border: none !important;
+  }
+
+  .mobile-table td::before {
+    content: attr(data-label) !important;
+    font-weight: 600 !important;
+    color: #475569 !important;
+  }
+}
+
+/* Course card mobile enhancements */
+@media (max-width: 640px) {
+  .course-card-image {
+    height: 160px !important;
+  }
+
+  .course-card-content {
+    padding: 16px !important;
+  }
+
+  .course-card-title {
+    font-size: 16px !important;
+  }
+}
+
+/* Auth form mobile improvements */
+@media (max-width: 640px) {
+  .auth-card {
+    margin: 16px !important;
+    border-radius: 20px !important;
+  }
+
+  .auth-card .card-header {
+    padding: 24px 24px 16px !important;
+  }
+
+  .auth-card .card-content {
+    padding: 16px 24px 24px !important;
+  }
+
+  .auth-title {
+    font-size: 22px !important;
+  }
+
+  .social-buttons {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Mobile navigation improvements */
+@media (max-width: 768px) {
+  .mobile-nav {
+    padding: 16px !important;
+  }
+
+  .mobile-nav-link {
+    padding: 16px !important;
+    font-size: 16px !important;
+    border-bottom: 1px solid rgba(203, 213, 225, 0.3);
+  }
+}
+
+/* Dashboard mobile improvements */
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Drawer tier only: a modal (z-modal and above) must always cover it.
+     The previous z-index: 1000 hoisted the drawer above every dialog scrim. */
+  .dashboard-sidebar {
+    position: fixed !important;
+    left: -100% !important;
+    transition: left 0.3s ease !important;
+    z-index: var(--z-header, 50) !important;
+  }
+
+  .dashboard-sidebar.open {
+    left: 0 !important;
+  }
+
+  .dashboard-main {
+    padding-left: 0 !important;
+  }
+}
+
+/* Filter dialog mobile */
+@media (max-width: 640px) {
+  [data-radix-dialog-content] {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 16px 16px 0 0 !important;
+  }
+}
+
+/* Badges on mobile */
+@media (max-width: 480px) {
+  .badge,
+  .badge-primary,
+  .badge-secondary,
+  .badge-success,
+  .badge-warning,
+  .badge-danger {
+    font-size: 10px !important;
+    padding: 2px 6px !important;
+  }
+}
+
+/* Progress bar mobile */
+@media (max-width: 480px) {
+  .progress {
+    height: 6px !important;
+  }
+}
+
+/* Avatar mobile sizes */
+@media (max-width: 480px) {
+  .avatar-sm {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .avatar-md {
+    width: 36px !important;
+    height: 36px !important;
+  }
+}
+
+/* Search bar mobile */
+@media (max-width: 640px) {
+  .search-container {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .search-input {
+    width: 100% !important;
+  }
+
+  .search-filters {
+    width: 100% !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* Hero section CTA buttons mobile */
+@media (max-width: 640px) {
+  .hero-cta {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .hero-cta button,
+  .hero-cta a {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+/* Testimonial cards mobile */
+@media (max-width: 640px) {
+  .testimonial-card {
+    padding: 20px !important;
+  }
+
+  .testimonial-avatar {
+    width: 48px !important;
+    height: 48px !important;
+  }
+}
+
+/* Stats section mobile */
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .stat-item {
+    padding: 16px !important;
+  }
+
+  .stat-value {
+    font-size: 24px !important;
+  }
+}
+
+/* Feature cards mobile */
+@media (max-width: 640px) {
+  .feature-card {
+    padding: 20px !important;
+  }
+
+  .feature-icon {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
+
+/* ============================================================================
+   SashaInfinity UI system (2026-09-05): orange gradient + glass surfaces +
+   one popup primitive (components/ui/dialog.tsx). Use these classes instead
+   of ad-hoc gradients so the front site and the internal studio read as one.
+   ============================================================================ */
+@layer components {
+  .si-gradient {
+    background-image: linear-gradient(135deg, #fb923c 0%, #f97316 45%, #ea580c 100%);
+  }
+  .si-gradient-soft {
+    background-image: linear-gradient(135deg, #fff7ed 0%, #ffffff 45%, #fff1e6 100%);
+  }
+  .si-hero {
+    background-image:
+      radial-gradient(60rem 24rem at -10% -20%, rgba(251, 146, 60, 0.28), transparent 60%),
+      radial-gradient(40rem 20rem at 110% 10%, rgba(249, 115, 22, 0.18), transparent 60%),
+      linear-gradient(180deg, #fff7ed 0%, #ffffff 70%);
+  }
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-xl border border-white/70 shadow-[0_8px_32px_rgba(249,115,22,0.10),0_1px_0_rgba(255,255,255,0.8)_inset];
+  }
+  .glass-panel-dark {
+    @apply bg-neutral-900/70 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.45)];
+  }
+  .glass-chip {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-white/70 backdrop-blur border border-white/80 text-gray-800 shadow-sm;
+  }
+  .si-glass-halo {
+    @apply rounded-[1.25rem] p-[1px];
+    background-image: linear-gradient(135deg, rgba(251, 146, 60, 0.9), rgba(255, 255, 255, 0.35) 40%, rgba(234, 88, 12, 0.8));
+  }
+  .si-btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white si-gradient shadow-md shadow-orange-500/25 hover:shadow-lg hover:brightness-105 active:brightness-95 disabled:opacity-40 disabled:cursor-not-allowed transition;
+  }
+  .si-btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-gray-800 bg-white/80 border border-gray-200 hover:bg-white disabled:opacity-40 transition;
+  }
+  .si-btn-danger {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-red-600 hover:bg-red-700 disabled:opacity-40 transition;
+  }
+  .si-btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg text-sm text-gray-700 hover:bg-black/5 transition;
+  }
+  /* Keyboard users were invisible on the si-btn system: hover/active/disabled
+     existed but there was no focus-visible ring (the legacy .btn has one).
+     focus-visible (not focus) so mouse clicks don't flash a ring. */
+  .si-btn-primary:focus-visible,
+  .si-btn-secondary:focus-visible,
+  .si-btn-danger:focus-visible,
+  .si-btn-ghost:focus-visible {
+    @apply outline-none ring-2 ring-orange-500 ring-offset-2 ring-offset-white;
+  }
+  /* page enter (item 2): every workspace/main content fades and lifts in once */
+  .si-page-enter { animation: si-page-enter 420ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+  @keyframes si-page-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .si-page-enter { animation: none; } }
+  .si-input {
+    @apply px-3 py-2 rounded-xl border border-gray-200 bg-white/90 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-400/60 focus:border-orange-300;
+  }
+}
+
+/* Global motion guard. The theme layers scope theirs to `.astra-theme *`;
+   this additionally covers the document element (smooth scrolling) and any
+   surface that renders outside the themed tree. */
+@media (prefers-reduced-motion: reduce) {  html {
+    scroll-behavior: auto;
+  }
+
+  .animate-fade-in,
+  .animate-slide-in-up,
+  .animate-slide-in-down,
+  .animate-scale-in,
+  .animate-bounce-in,
+  .animate-float-up,
+  .animate-shimmer,
+  .hover-lift,
+  .hover-scale,
+  .card-hover,
+  .course-card {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .hover-lift:hover,
+  .hover-scale:hover,
+  .card-hover:hover,
+  .course-card:hover {
+    transform: none !important;
+  }
+}
+
+/* Scroll lock for hand-rolled modals. Page modals share the z-modal tier and
+   are conditionally rendered, so any mounted z-modal means the page behind
+   must not scroll. Radix dialogs (GlassDialog, quiz, filters) lock scroll
+   themselves — this covers the ~45 custom `fixed inset-0` modals that don't.
+   :has() is already load-bearing in astra-glass.css / aurum.css. */
+body:has(.z-modal) {
+  overflow: hidden;
+}

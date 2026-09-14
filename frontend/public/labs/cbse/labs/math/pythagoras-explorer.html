@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pythagoras Explorer — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Pythagoras Explorer<span class="lk-tag">Class 7–10 · Mathematics</span></h1>
+    <div class="lk-meta">CBSE: Triangles — the Pythagorean theorem, a² + b² = c²</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Triangle legs</h2>
+      <div class="lk-row"><label class="lk-name">Leg a</label><input type="range" id="sa" min="1" max="9" step="0.5" value="4"><span class="lk-val" id="sav">4</span></div>
+      <div class="lk-row"><label class="lk-name">Leg b</label><input type="range" id="sb" min="1" max="9" step="0.5" value="3"><span class="lk-val" id="sbv">3</span></div>
+    </div>
+    <div class="lk-card">
+      <h2>The theorem</h2>
+      <div class="lk-eq">a² + b² = c²</div>
+      <div class="lk-readout" id="sums"></div>
+    </div>
+    <div class="lk-card">
+      <h2>How to play</h2>
+      <p class="lk-hint">Each side of the triangle grows a <b>square built from unit tiles</b>.
+      Count the tiles: the two smaller squares together always equal the big one on the
+      hypotenuse. Drag the <b class="k1">teal</b> and <b class="k2">amber</b> corner
+      handles, or use the sliders.</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./pythagoras-explorer/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+/* ============================================================
+   LabKit — shared design system for the CBSE Virtual Labs
+   Brand it: change the --brand tokens and the logo colors.
+   ============================================================ */
+:root{
+  color-scheme: light;
+  --ink:#0f172a; --sub:#64748b; --bg:#f1f5f9; --card:#ffffff; --edge:#e2e8f0;
+  --brand:#4f46e5; --brand-soft:#eef2ff;
+  --m:#0d9488; --b:#d97706; --target:#f43f5e; --ok:#16a34a;
+}
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body.lk-app{
+  margin:0; display:flex; flex-direction:column;
+  font-family: system-ui,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  color:var(--ink); background:var(--bg);
+}
+
+/* ---------- header ---------- */
+.lk-header{
+  display:flex; align-items:center; gap:12px; flex-shrink:0;
+  padding:10px 18px; background:#fff; border-bottom:1px solid var(--edge);
+}
+.lk-logo{ width:34px; height:34px; border-radius:9px; background:var(--brand);
+          display:grid; place-items:center; color:#fff; font-weight:800; font-size:15px; flex-shrink:0;
+          text-decoration:none; }
+.lk-title h1{ margin:0; font-size:17px; letter-spacing:.2px; line-height:1.25; }
+.lk-title .lk-meta{ font-size:12.5px; color:var(--sub); margin-top:1px; }
+.lk-tag{ display:inline-block; background:var(--brand-soft); color:var(--brand);
+         font-size:11.5px; font-weight:700; padding:2px 8px; border-radius:999px; margin-left:6px; vertical-align:2px;}
+.lk-header .lk-back{ margin-left:auto; font-size:13px; color:var(--sub); text-decoration:none;
+                     border:1px solid var(--edge); padding:7px 12px; border-radius:9px; background:#fff; white-space:nowrap;}
+.lk-header .lk-back:hover{ background:var(--bg); }
+
+/* ---------- layout ---------- */
+.lk-main{ flex:1; display:flex; min-height:0; }
+.lk-stage{ flex:1; position:relative; min-width:0; background:#fff; overflow:hidden; }
+.lk-stage canvas{ display:block; width:100%; height:100%; touch-action:none; }
+.lk-panel{
+  width:330px; flex-shrink:0; background:#fff; border-left:1px solid var(--edge);
+  padding:16px; overflow-y:auto; display:flex; flex-direction:column; gap:13px;
+}
+
+/* ---------- cards / controls ---------- */
+.lk-card{ background:#fff; border:1px solid var(--edge); border-radius:13px; padding:13px 14px; }
+.lk-card h2{ margin:0 0 6px; font-size:12.5px; text-transform:uppercase; letter-spacing:.7px; color:var(--sub); }
+.lk-hint{ font-size:13px; color:var(--sub); line-height:1.55; margin:2px 0 0; }
+.lk-hint b.k1{ color:var(--m); } .lk-hint b.k2{ color:var(--b); }
+
+.lk-row{ display:flex; align-items:center; gap:10px; margin:9px 0 2px; }
+.lk-row label.lk-name{ width:86px; font-size:13.5px; font-weight:600; flex-shrink:0; }
+.lk-row input[type=range]{ flex:1; min-width:0; accent-color:var(--brand); height:24px; cursor:pointer; }
+.lk-val{ min-width:52px; text-align:center; font-variant-numeric:tabular-nums; font-weight:600;
+         background:var(--bg); border-radius:7px; padding:3px 5px; font-size:13px; }
+
+.lk-check{ display:flex; align-items:center; gap:9px; margin:7px 0; font-size:14px; cursor:pointer; }
+.lk-check input{ width:16px; height:16px; accent-color:var(--brand); cursor:pointer; }
+
+.lk-seg{ display:flex; background:var(--edge); border-radius:11px; padding:3px; }
+.lk-seg button{ flex:1; border:0; background:transparent; padding:8px 4px; border-radius:9px;
+                font:600 13.5px system-ui,sans-serif; color:var(--sub); cursor:pointer; }
+.lk-seg button.active{ background:#fff; color:var(--ink); box-shadow:0 1px 3px rgba(2,6,23,.18); }
+
+button.lk-btn{ width:100%; border:0; background:var(--brand); color:#fff; font:600 14px system-ui,sans-serif;
+               padding:11px; border-radius:10px; cursor:pointer; margin-top:2px; }
+button.lk-btn:hover{ filter:brightness(1.08); }
+button.lk-btn:active{ transform:translateY(1px); }
+button.lk-btn.ghost{ width:100%; border:1px solid var(--edge); background:#fff; color:var(--ink);
+                     font:600 13px system-ui,sans-serif; padding:9px; border-radius:10px; cursor:pointer; }
+button.lk-btn.ghost:hover{ background:var(--bg); }
+button.lk-btn.green{ background:var(--ok); }
+
+.lk-legend{ display:flex; flex-wrap:wrap; gap:14px; align-items:center; font-size:13px; color:var(--sub); margin:4px 0 2px; }
+.lk-sw{ display:inline-block; width:22px; height:0; border-top:4px solid var(--brand); border-radius:3px; vertical-align:middle; }
+
+.lk-readout{ font-variant-numeric:tabular-nums; font-size:14px; margin:5px 0; }
+.lk-readout b{ font-weight:700; }
+.lk-big{ font-size:24px; font-weight:800; text-align:center; padding:4px 0; font-variant-numeric:tabular-nums; }
+.lk-eq{ font-family:Georgia,'Times New Roman',serif; font-style:italic; font-size:24px; text-align:center; padding:6px 0; white-space:nowrap; }
+.tok-m{ color:var(--m);} .tok-b{ color:var(--b);} .tok-t{ color:var(--target);}
+
+table.lk-table{ border-collapse:collapse; width:100%; font-variant-numeric:tabular-nums; font-size:14px; }
+.lk-table th,.lk-table td{ padding:6px 4px; text-align:center; border-bottom:1px solid var(--bg); }
+.lk-table th{ color:var(--sub); font-family:Georgia,serif; font-style:italic; font-weight:600; }
+.lk-table tr:last-child td{ border-bottom:0; }
+
+/* ---------- overlays ---------- */
+.lk-banner{
+  position:absolute; top:16px; left:50%; transform:translateX(-50%);
+  background:var(--ok); color:#fff; padding:10px 20px; border-radius:999px;
+  font-weight:700; font-size:15px; box-shadow:0 6px 20px rgba(22,163,74,.4);
+  animation:lk-pop .4s cubic-bezier(.2,1.6,.4,1); white-space:nowrap; pointer-events:none; z-index:5;
+}
+.lk-coords{
+  position:absolute; pointer-events:none; display:none; z-index:4;
+  background:rgba(15,23,42,.85); color:#fff; padding:3px 9px; border-radius:7px;
+  font:12px/1.6 ui-monospace,Consolas,monospace; white-space:nowrap; transform:translate(14px,-26px);
+}
+@keyframes lk-pop{ from{ transform:translateX(-50%) scale(.5); opacity:0; } }
+
+.hidden{ display:none !important; }
+.lk-footer{ font-size:11.5px; color:var(--sub); text-align:center; line-height:1.5; }
+
+@media (max-width: 840px){
+  body.lk-app{ overflow:auto; }
+  .lk-main{ flex-direction:column; overflow:visible; }
+  .lk-stage{ height:56vh; flex:none; }
+  .lk-panel{ width:auto; border-left:0; border-top:1px solid var(--edge); overflow:visible; }
+}
+
+/* LMS design adapter: shared calm surfaces and accessible controls. */
+:root { --brand:#ea580c; }
+body.lk-app { background:#faf8f5; color:#243449; }
+.lk-header { background:#fff; border-bottom:1px solid #e8e2da; }
+.lk-card { border-radius:20px; border:1px solid #e8e2da; box-shadow:0 4px 18px #25344808; }
+.lk-stage { border-radius:22px; overflow:hidden; }
+.lk-btn { background:#c2410c; border-radius:12px; }
+.lk-btn:focus-visible, input:focus-visible,select:focus-visible { outline:3px solid #0d8f9e; outline-offset:3px; }
+.sasha-spatial-bar { display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:14px 24px; background:#fff7ed; border-bottom:1px solid #f1d8c5; }
+.sasha-spatial-bar strong { margin-right:auto; }
+.sasha-spatial-bar p { flex-basis:100%; margin:0; color:#5b6573; font-size:12px; }
+.sasha-spatial-bar button:disabled { opacity:.5; cursor:not-allowed; }
+@media(prefers-reduced-motion:reduce) { * { scroll-behavior:auto!important; } }
+body.lk-app.sasha-in-ar { background:transparent; }
+.sasha-in-ar .lk-header { display:none; }
+.sasha-in-ar .lk-stage, .sasha-in-ar #stage { opacity:0; pointer-events:none; }
+.sasha-in-ar .lk-panel, .sasha-in-ar #panel { position:fixed; bottom:0; left:0; right:0; max-height:35vh; overflow:auto; background:#ffffffed; padding:12px; }
+.sasha-in-ar .sasha-spatial-bar { background:#ffffffdc; font-size:12px; }
+
+.sasha-spatial-bar button.lk-btn { width:auto; min-height:38px; padding:8px 16px; }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Circles: Chords, Tangents &amp; Areas — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Circles: Theorems &amp; Areas<span class="lk-tag">Class 10 · Mathematics</span></h1>
+    <div class="lk-meta">Circles / Areas Related to Circles — chord, tangent, sector &amp; segment</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Explore</h2>
+      <div class="lk-seg" id="modeSeg">
+        <button class="active">Chord</button><button>Tangent</button><button>Sector</button>
+      </div>
+      <div class="lk-row"><label class="lk-name">Radius r</label><input type="range" id="r" min="30" max="120" step="2" value="80"><span class="lk-val" id="rv">80</span></div>
+      <div class="lk-row"><label class="lk-name">Angle θ</label><input type="range" id="th" min="10" max="170" step="2" value="60"><span class="lk-val" id="thv">60°</span></div>
+    </div>
+    <div class="lk-card">
+      <h2>Theorem / formula</h2>
+      <div class="lk-readout" id="out1"></div>
+      <div class="lk-readout" id="out2"></div>
+      <div class="lk-readout" id="out3"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint"><b>Chord mode</b>: the perpendicular from the centre bisects the
+      chord — always, at any θ. <b>Tangent</b>: radius ⊥ tangent at the point of contact.
+      <b>Sector</b>: area scales with θ/360 — a 90° sector is exactly a quarter pizza!
+      Slice θ to 60° and read the numbers.</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./circles-lab/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

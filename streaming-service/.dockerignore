@@ -1,0 +1,9 @@
+.env
+.env.*
+!.env.example
+__pycache__
+.venv
+venv
+youtube_cookies.txt
+*.log
+yt_dlp_cache

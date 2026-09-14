@@ -1,0 +1,13 @@
+.eq{ font:600 19px Georgia, serif; text-align:center; padding:14px 6px; line-height:2.1; }
+  .eq .grp{ display:inline-block; margin:2px 8px; }
+  .eq .coef{ display:inline-block; min-width:34px; padding:4px 6px; border-radius:9px; background:var(--bg);
+             cursor:pointer; user-select:none; font-weight:800; color:var(--brand); border:1.5px solid var(--edge); }
+  .eq .coef:hover{ border-color:var(--brand); }
+  .eq .coef.zero{ color:#cbd5e1; }
+  .eq .op{ color:var(--sub); font-weight:400; padding:0 2px; }
+  .arrow{ font-size:24px; color:var(--ok); vertical-align:-3px; }
+  table.bal{ width:100%; border-collapse:collapse; font-size:13.5px; margin-top:6px; }
+  table.bal td, table.bal th{ padding:7px 6px; text-align:center; border-bottom:1px solid var(--bg); }
+  table.bal th{ color:var(--sub); font-size:11.5px; text-transform:uppercase; letter-spacing:.5px; }
+  .okTick{ color:var(--ok); font-weight:800; }
+  .badX{ color:var(--target); font-weight:800; }

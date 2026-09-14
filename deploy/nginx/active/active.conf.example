@@ -1,0 +1,17 @@
+# =============================================================================
+# ACTIVE COLOUR — GENERATED FILE, DO NOT EDIT
+# =============================================================================
+# Written by deploy/scripts/switch.sh at 2026-08-02T09:50:40Z
+# Previous colour: green
+# Release:         admin-updates-202608020944
+#
+# Included inside the edge server block. To change the live colour, run
+# switch.sh — editing this file by hand will be detected and corrected by the
+# next deploy.
+# =============================================================================
+
+set $active_color "blue";
+
+set $up_frontend  "frontend-blue:3000";
+set $up_backend   "backend-blue:8000";
+set $up_streaming "streaming-blue:8001";

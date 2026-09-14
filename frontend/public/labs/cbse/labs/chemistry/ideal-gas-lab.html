@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ideal Gas Lab — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Ideal Gas Lab<span class="lk-tag">Class 11 · Chemistry/Physics</span></h1>
+    <div class="lk-meta">CBSE: Kinetic Theory / States of Matter — PV = nRT, particle model of gases</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Controls</h2>
+      <div class="lk-row"><label class="lk-name">Temperature</label><input type="range" id="temp" min="100" max="600" step="10" value="300"><span class="lk-val" id="tempv">300 K</span></div>
+      <div class="lk-row"><label class="lk-name">Volume</label><input type="range" id="vol" min="30" max="100" step="5" value="100"><span class="lk-val" id="volv">100 %</span></div>
+      <div class="lk-readout" id="rP"></div>
+      <div class="lk-readout" id="rV"></div>
+      <div class="lk-readout" id="rConst"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Experiments to try</h2>
+      <p class="lk-hint">
+        <b>Boyle:</b> keep T fixed, halve the volume — pressure doubles.<br>
+        <b>Charles:</b> keep V fixed, double T (K!) — pressure doubles.<br>
+        Watch the particles: hotter = faster, smaller box = more hits per second on the
+        walls. That's all pressure is!
+      </p>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint">Temperature is the <b>average kinetic energy</b> of particles —
+      at 100 K they crawl, at 600 K they swarm. Why does a pressure cooker cook faster?
+      Why do tyres get firmer after a long drive?</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./ideal-gas-lab/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

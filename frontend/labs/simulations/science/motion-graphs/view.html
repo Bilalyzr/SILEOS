@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Motion Graphs — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Distance–Time Graphs<span class="lk-tag">Class 9 · Science (Physics)</span></h1>
+    <div class="lk-meta">CBSE: Motion — distance vs displacement, speed vs velocity, reading graphs</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Controls</h2>
+      <button class="lk-btn ghost" id="demoBtn">▶ Demo: walk at constant 2 m/s</button>
+      <button class="lk-btn ghost" id="clearBtn" style="margin-top:8px;">↺ Clear graph</button>
+    </div>
+    <div class="lk-card">
+      <h2>Live readings</h2>
+      <div class="lk-readout" id="rTime">Time: <b>0.0 s</b></div>
+      <div class="lk-readout" id="rPos">Position: <b>0.0 m</b></div>
+      <div class="lk-readout" id="rDist">Distance travelled: <b>0.0 m</b></div>
+      <div class="lk-readout" id="rDisp">Displacement: <b>0.0 m</b></div>
+      <div class="lk-readout" id="rSpeed">Average speed: <b>0.00 m/s</b></div>
+      <div class="lk-readout" id="rVel">Average velocity: <b>0.00 m/s</b></div>
+    </div>
+    <div class="lk-card">
+      <h2>How to play</h2>
+      <p class="lk-hint"><b>Press and drag the runner</b> on the track — while you hold,
+      time runs and the graph records. A steep line = fast, a flat line = standing still,
+      a falling line = walking back (velocity negative!). Distance is the total path
+      length; displacement is just where you ended up compared to the start.</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./motion-graphs/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

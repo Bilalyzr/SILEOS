@@ -1,0 +1,28 @@
+.scroll-stack-scroller {
+  position: relative;
+  width: 100%;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Only apply overflow/height when the component manages its own scroll
+   container. When useWindowScroll is true the scroller should flow with the page. */
+.scroll-stack-scroller:not(.window-scroll) {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: visible;
+  scroll-behavior: smooth;
+  will-change: scroll-position;
+}
+
+.scroll-stack-lenis-inner {
+  padding: 20vh 0 40rem;
+  min-height: 100vh;
+}
+
+.scroll-stack-end {
+  width: 100%;
+  height: 1px;
+}

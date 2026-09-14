@@ -1,0 +1,9 @@
+.punnett{ border-collapse:collapse; margin:8px auto; }
+  .punnett td, .punnett th{ border:2px solid var(--edge); width:86px; height:64px;
+      text-align:center; font:bold 22px Georgia, serif; }
+  .punnett th{ background:var(--bg); color:var(--sub); font-size:15px; }
+  .punnett td.PP{ background:#ede9fe; color:#6d28d9; }
+  .punnett td.Pp{ background:#f3e8ff; color:#7c3aed; }
+  .punnett td.pp{ background:#f8fafc; color:#64748b; }
+  .bar{ display:flex; height:34px; border-radius:9px; overflow:hidden; font:700 13px system-ui, sans-serif;
+        color:#fff; text-align:center; line-height:34px; }

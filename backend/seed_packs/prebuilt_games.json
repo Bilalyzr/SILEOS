@@ -1,0 +1,118 @@
+{
+  "games": [
+    {
+      "title": "Chemical Reactions: Quick Quiz",
+      "template": "quiz_rush",
+      "config": {
+        "items": [
+          {"prompt": "Which gas is produced when magnesium reacts with hydrochloric acid?", "options": ["Oxygen", "Hydrogen", "Chlorine", "Carbon dioxide"], "answer_index": 1},
+          {"prompt": "In a balanced equation, what is conserved?", "options": ["Number of molecules", "Number of atoms of each element", "Volume of gas", "Colour"], "answer_index": 1},
+          {"prompt": "Rusting of iron is an example of…", "options": ["Decomposition", "Oxidation", "Neutralisation", "Sublimation"], "answer_index": 1},
+          {"prompt": "What does the Haber process make?", "options": ["Sulfuric acid", "Ammonia", "Ethanol", "Chlorine"], "answer_index": 1},
+          {"prompt": "Heating calcium carbonate gives calcium oxide and…", "options": ["Water", "Oxygen", "Carbon dioxide", "Hydrogen"], "answer_index": 2},
+          {"prompt": "A reaction that releases heat is called…", "options": ["Endothermic", "Exothermic", "Isothermal", "Catalytic"], "answer_index": 1}
+        ],
+        "settings": {"seconds_per_question": 20, "shuffle": true}
+      }
+    },
+    {
+      "title": "Cell Organelles and Their Jobs",
+      "template": "match_pairs",
+      "config": {
+        "items": [
+          {"left": "Nucleus", "right": "Holds the DNA"},
+          {"left": "Mitochondrion", "right": "Releases energy by respiration"},
+          {"left": "Ribosome", "right": "Builds proteins"},
+          {"left": "Golgi apparatus", "right": "Packages proteins into vesicles"},
+          {"left": "Lysosome", "right": "Digests worn-out parts"},
+          {"left": "Cell membrane", "right": "Controls what enters and leaves"},
+          {"left": "Vacuole", "right": "Stores water and nutrients"},
+          {"left": "Rough ER", "right": "Folds and transports proteins"}
+        ],
+        "settings": {"time_limit_s": 0}
+      }
+    },
+    {
+      "title": "Skeleton: Axial or Appendicular?",
+      "template": "drag_sort",
+      "config": {
+        "categories": [{"name": "Axial skeleton"}, {"name": "Appendicular skeleton"}],
+        "items": [
+          {"text": "Skull", "category_index": 0},
+          {"text": "Vertebral column", "category_index": 0},
+          {"text": "Rib cage", "category_index": 0},
+          {"text": "Sternum", "category_index": 0},
+          {"text": "Humerus", "category_index": 1},
+          {"text": "Femur", "category_index": 1},
+          {"text": "Pelvis", "category_index": 1},
+          {"text": "Clavicle", "category_index": 1},
+          {"text": "Tibia", "category_index": 1},
+          {"text": "Radius", "category_index": 1}
+        ],
+        "settings": {"time_limit_s": 0}
+      }
+    },
+    {
+      "title": "Stages of Mitosis in Order",
+      "template": "sequence",
+      "config": {
+        "items": [
+          {"text": "Prophase — chromosomes condense"},
+          {"text": "Metaphase — chromosomes line up at the equator"},
+          {"text": "Anaphase — sister chromatids pulled apart"},
+          {"text": "Telophase — two nuclei re-form"},
+          {"text": "Cytokinesis — cytoplasm divides"}
+        ],
+        "settings": {"time_limit_s": 0, "shuffle": true}
+      }
+    },
+    {
+      "title": "Chemistry Vocabulary Builder",
+      "template": "word_builder",
+      "config": {
+        "items": [
+          {"clue": "A substance that speeds up a reaction without being used up", "answer": "catalyst"},
+          {"clue": "The smallest particle of an element", "answer": "atom"},
+          {"clue": "Two or more atoms bonded together", "answer": "molecule"},
+          {"clue": "A reaction between an acid and a base", "answer": "neutralisation"},
+          {"clue": "Loss of electrons", "answer": "oxidation"},
+          {"clue": "A solution with pH below 7", "answer": "acid"}
+        ],
+        "settings": {"hints_allowed": 1}
+      }
+    },
+    {
+      "title": "Forces and Motion: Quick Quiz",
+      "template": "quiz_rush",
+      "config": {
+        "items": [
+          {"prompt": "Newton's first law is also called the law of…", "options": ["Gravity", "Inertia", "Action-reaction", "Momentum"], "answer_index": 1},
+          {"prompt": "F = m × a. Doubling the mass at the same force…", "options": ["Doubles acceleration", "Halves acceleration", "Leaves it unchanged", "Quadruples it"], "answer_index": 1},
+          {"prompt": "The SI unit of force is the…", "options": ["Joule", "Watt", "Newton", "Pascal"], "answer_index": 2},
+          {"prompt": "A projectile's horizontal velocity (ignoring air) is…", "options": ["Increasing", "Decreasing", "Constant", "Zero"], "answer_index": 2},
+          {"prompt": "Friction always acts…", "options": ["Along the motion", "Opposite to motion", "Upwards", "Downwards"], "answer_index": 1}
+        ],
+        "settings": {"seconds_per_question": 20, "shuffle": true}
+      }
+    },
+    {
+      "title": "Periodic Table: Symbols",
+      "template": "match_pairs",
+      "config": {
+        "items": [
+          {"left": "Na", "right": "Sodium"},
+          {"left": "K", "right": "Potassium"},
+          {"left": "Fe", "right": "Iron"},
+          {"left": "Cu", "right": "Copper"},
+          {"left": "Ag", "right": "Silver"},
+          {"left": "Au", "right": "Gold"},
+          {"left": "Pb", "right": "Lead"},
+          {"left": "Sn", "right": "Tin"},
+          {"left": "Hg", "right": "Mercury"},
+          {"left": "W", "right": "Tungsten"}
+        ],
+        "settings": {"time_limit_s": 0}
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+.beakerRow{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; padding:12px 0; }
+  .miniBeaker{ text-align:center; cursor:pointer; border:2px solid transparent; border-radius:12px; padding:8px 6px; }
+  .miniBeaker:hover{ border-color:var(--brand); background:var(--brand-soft); }
+  .miniBeaker.sel{ border-color:var(--brand); background:var(--brand-soft); }
+  .miniBeaker .nm{ font:600 12px system-ui,sans-serif; color:var(--sub); margin-top:6px; }
+  .metalRow{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+  .metalChip{ font:700 13px system-ui,sans-serif; padding:8px 14px; border-radius:999px; cursor:pointer;
+              border:2px solid var(--edge); color:var(--ink); background:#fff; }
+  .metalChip:hover{ border-color:var(--brand); }
+  .metalChip.sel{ background:var(--brand); border-color:var(--brand); color:#fff; }
+  .metalChip.dis{ opacity:.4; cursor:not-allowed; }
+  .series{ font:600 12.5px system-ui,sans-serif; text-align:center; padding:6px; color:var(--sub);
+           letter-spacing:.5px; line-height:2; }
+  .series b{ color:var(--ink); }

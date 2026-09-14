@@ -1,0 +1,32 @@
+groups:
+  - name: sasha-runtime
+    rules:
+      - alert: SashaWorkerUnavailable
+        expr: sasha_runtime_worker_healthy == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: Maintenance worker is missing or stale
+          runbook_url: https://github.com/SashaInfinity/Sasha_lms/blob/main/docs/PRODUCTION_RUNTIME.md
+      - alert: SashaJobNeedsRecovery
+        expr: sasha_runtime_job_dead > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: A maintenance job exhausted automatic retries
+      - alert: SashaServerErrors
+        expr: (sasha_http_error_ratio_15m > 0.02) and (sasha_http_requests_15m > 20)
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: Server errors exceed two percent of recent traffic
+      - alert: SashaMetricsUnavailable
+        expr: (up{job="sasha-runtime"} == 0) or (sasha_telemetry_available == 0)
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: Runtime metrics cannot be collected

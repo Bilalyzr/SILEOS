@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acids, Bases &amp; pH — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Acids, Bases &amp; pH<span class="lk-tag">Class 7 &amp; 10 · Science</span></h1>
+    <div class="lk-meta">CBSE: Acids, Bases and Salts — pH scale, indicators, everyday substances</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Test a substance</h2>
+      <select id="substance" style="width:100%;padding:10px;border-radius:9px;border:1px solid var(--edge);font-size:14px;">
+        <option value="1.5">Gastric juice (stomach acid)</option>
+        <option value="2.4">Lemon juice</option>
+        <option value="3.0">Vinegar</option>
+        <option value="4.5">Tomato juice</option>
+        <option value="5.0">Black coffee</option>
+        <option value="6.5">Milk</option>
+        <option value="7" selected>Pure water</option>
+        <option value="7.4">Blood</option>
+        <option value="9.0">Baking soda solution</option>
+        <option value="10.0">Soap solution</option>
+        <option value="11.0">Household ammonia</option>
+        <option value="12.5">Bleach</option>
+      </select>
+    </div>
+    <div class="lk-card">
+      <h2>Reading</h2>
+      <div class="lk-big" id="phRead">pH 7.0</div>
+      <div class="lk-readout" id="kind"></div>
+      <div class="lk-readout" id="hConc"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Litmus test</h2>
+      <div class="lk-readout" id="litmus"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint">pH measures how many H⁺ ions a solution releases: each step of
+      pH is <b>10×</b> in strength. Acids turn blue litmus red; bases turn red litmus blue.
+      Why do you think blood and pure water sit so close together on the scale?</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./acids-bases-ph/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

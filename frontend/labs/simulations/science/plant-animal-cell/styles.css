@@ -1,0 +1,9 @@
+.cell-stage{ display:flex; align-items:center; justify-content:center; height:100%; background:#fff; overflow:auto; }
+  .cell-stage svg{ width:min(96%, 860px); height:auto; max-height:94%; }
+  .org{ cursor:pointer; transition: .15s; }
+  .org:hover{ filter: brightness(1.12); }
+  .org.sel{ stroke:#4f46e5 !important; stroke-width:5 !important; }
+  .orglabel{ font:italic 13px Georgia, serif; fill:#334155; pointer-events:none; }
+  .chip{ display:inline-block; margin:3px 4px 3px 0; padding:5px 10px; border-radius:999px;
+         background:var(--bg); font-size:12.5px; cursor:pointer; border:1px solid var(--edge); }
+  .chip:hover{ background:var(--brand-soft); border-color:var(--brand); color:var(--brand); }

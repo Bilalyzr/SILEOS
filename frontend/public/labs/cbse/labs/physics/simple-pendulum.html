@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simple Pendulum — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Simple Pendulum<span class="lk-tag">Class 11 · Physics</span></h1>
+    <div class="lk-meta">CBSE: Oscillations &amp; Waves — SHM, time period T = 2π√(L/g)</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Pendulum</h2>
+      <div class="lk-row"><label class="lk-name">Length L</label><input type="range" id="len" min="0.2" max="2.5" step="0.1" value="1"><span class="lk-val" id="lenv">1.0 m</span></div>
+      <div class="lk-row"><label class="lk-name">Release angle</label><input type="range" id="amp" min="5" max="45" step="1" value="15"><span class="lk-val" id="ampv">15°</span></div>
+      <div class="lk-seg" id="gSeg">
+        <button class="active">Earth 9.8</button>
+        <button>Moon 1.6</button>
+        <button>Mars 3.7</button>
+      </div>
+      <label class="lk-check"><input type="checkbox" id="slowChk"> Slow motion (¼ speed)</label>
+    </div>
+    <div class="lk-card">
+      <h2>Stopwatch</h2>
+      <div class="lk-readout" id="rTheory"></div>
+      <div class="lk-readout" id="rMeasured">Measured T: — (watch one full swing)</div>
+      <div class="lk-readout" id="rTheta">θ: 15.0°</div>
+      <button class="lk-btn" id="playBtn">⏸ Pause</button>
+      <button class="lk-btn ghost" id="resetBtn" style="margin-top:8px;">↺ Release again</button>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint">Notice what does <b>not</b> change the time period: the mass, and
+      (for small swings) the release angle! Only <b>length</b> and <b>g</b> matter. Quadruple
+      L — does T double? On the Moon everything swings lazily: that's how astronauts
+      tested low gravity. At 45° the measured T runs slightly long: the small-angle
+      approximation breaks down.</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./simple-pendulum/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

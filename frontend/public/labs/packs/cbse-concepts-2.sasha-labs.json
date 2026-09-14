@@ -1,0 +1,1236 @@
+{
+  "format": "sasha-concept-labs",
+  "version": 1,
+  "labs": [
+    {
+      "title": "Conservation of Plants and Animals — concept investigation",
+      "subject": "science",
+      "description": "Compare conservation inside and outside natural habitats.",
+      "config": {
+        "engine": "classification",
+        "objective": "Compare conservation inside and outside natural habitats.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Compare conservation inside and outside natural habitats.",
+        "chapter_ids": [
+          "8-science-5"
+        ],
+        "cards": [
+          {
+            "label": "A wildlife sanctuary",
+            "group": "In situ",
+            "explanation": "Species are conserved within their natural habitats."
+          },
+          {
+            "label": "A biosphere reserve",
+            "group": "In situ",
+            "explanation": "Species are conserved within their natural habitats."
+          },
+          {
+            "label": "A seed bank",
+            "group": "Ex situ",
+            "explanation": "Species or genetic material are conserved outside natural habitats."
+          },
+          {
+            "label": "A botanical garden collection",
+            "group": "Ex situ",
+            "explanation": "Species or genetic material are conserved outside natural habitats."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Reproduction in Animals — concept investigation",
+      "subject": "science",
+      "description": "Classify where fertilisation occurs.",
+      "config": {
+        "engine": "classification",
+        "objective": "Classify where fertilisation occurs.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Classify where fertilisation occurs.",
+        "chapter_ids": [
+          "8-science-6"
+        ],
+        "cards": [
+          {
+            "label": "Humans",
+            "group": "Internal fertilisation",
+            "explanation": "Gamete fusion takes place inside the female body."
+          },
+          {
+            "label": "Hens",
+            "group": "Internal fertilisation",
+            "explanation": "Gamete fusion takes place inside the female body."
+          },
+          {
+            "label": "Most frogs",
+            "group": "External fertilisation",
+            "explanation": "Gamete fusion takes place outside the female body."
+          },
+          {
+            "label": "Many bony fish",
+            "group": "External fertilisation",
+            "explanation": "Gamete fusion takes place outside the female body."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Reaching the Age of Adolescence — concept investigation",
+      "subject": "science",
+      "description": "Distinguish endocrine signals from their effects.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish endocrine signals from their effects.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish endocrine signals from their effects.",
+        "chapter_ids": [
+          "8-science-7"
+        ],
+        "cards": [
+          {
+            "label": "Testosterone",
+            "group": "Hormone",
+            "explanation": "A chemical messenger is secreted and acts on target tissues."
+          },
+          {
+            "label": "Oestrogen",
+            "group": "Hormone",
+            "explanation": "A chemical messenger is secreted and acts on target tissues."
+          },
+          {
+            "label": "Growth spurt",
+            "group": "Developmental change",
+            "explanation": "This is a bodily change, not a hormone molecule."
+          },
+          {
+            "label": "Maturation of reproductive organs",
+            "group": "Developmental change",
+            "explanation": "This is a bodily change, not a hormone molecule."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Some Natural Phenomena (lightning, earthquakes) — concept investigation",
+      "subject": "science",
+      "description": "Separate electrical and tectonic phenomena.",
+      "config": {
+        "engine": "classification",
+        "objective": "Separate electrical and tectonic phenomena.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Separate electrical and tectonic phenomena.",
+        "chapter_ids": [
+          "8-science-12"
+        ],
+        "cards": [
+          {
+            "label": "Lightning",
+            "group": "Electrical",
+            "explanation": "The phenomenon involves electric charge or its discharge."
+          },
+          {
+            "label": "A charged comb attracting paper",
+            "group": "Electrical",
+            "explanation": "The phenomenon involves electric charge or its discharge."
+          },
+          {
+            "label": "An earthquake at a fault",
+            "group": "Tectonic",
+            "explanation": "The phenomenon involves movement and stress in Earth's crust."
+          },
+          {
+            "label": "Tectonic plate movement",
+            "group": "Tectonic",
+            "explanation": "The phenomenon involves movement and stress in Earth's crust."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Rational Numbers — concept investigation",
+      "subject": "mathematics",
+      "description": "Use rationality as the sorting rule.",
+      "config": {
+        "engine": "classification",
+        "objective": "Use rationality as the sorting rule.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Use rationality as the sorting rule.",
+        "chapter_ids": [
+          "8-mathematics-1"
+        ],
+        "cards": [
+          {
+            "label": "0.75",
+            "group": "Rational",
+            "explanation": "The value equals p/q for integers p and nonzero q."
+          },
+          {
+            "label": "−7/3",
+            "group": "Rational",
+            "explanation": "The value equals p/q for integers p and nonzero q."
+          },
+          {
+            "label": "√2",
+            "group": "Irrational",
+            "explanation": "The value cannot equal a ratio of two integers."
+          },
+          {
+            "label": "π",
+            "group": "Irrational",
+            "explanation": "The value cannot equal a ratio of two integers."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Understanding Quadrilaterals — concept investigation",
+      "subject": "mathematics",
+      "description": "Test whether both pairs of opposite sides are parallel.",
+      "config": {
+        "engine": "classification",
+        "objective": "Test whether both pairs of opposite sides are parallel.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Test whether both pairs of opposite sides are parallel.",
+        "chapter_ids": [
+          "8-mathematics-3"
+        ],
+        "cards": [
+          {
+            "label": "A rectangle",
+            "group": "Parallelogram",
+            "explanation": "Both pairs of opposite sides are parallel."
+          },
+          {
+            "label": "A rhombus",
+            "group": "Parallelogram",
+            "explanation": "Both pairs of opposite sides are parallel."
+          },
+          {
+            "label": "A quadrilateral with exactly one parallel pair",
+            "group": "Not a parallelogram",
+            "explanation": "At least one opposite pair is not parallel."
+          },
+          {
+            "label": "A non-rhombus kite",
+            "group": "Not a parallelogram",
+            "explanation": "At least one opposite pair is not parallel."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Cubes and Cube Roots — concept investigation",
+      "subject": "mathematics",
+      "description": "Recognise perfect cubes of integers.",
+      "config": {
+        "engine": "classification",
+        "objective": "Recognise perfect cubes of integers.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Recognise perfect cubes of integers.",
+        "chapter_ids": [
+          "8-mathematics-6"
+        ],
+        "cards": [
+          {
+            "label": "27",
+            "group": "Perfect cube",
+            "explanation": "The integer is n³ for an integer n."
+          },
+          {
+            "label": "125",
+            "group": "Perfect cube",
+            "explanation": "The integer is n³ for an integer n."
+          },
+          {
+            "label": "16",
+            "group": "Not a perfect cube",
+            "explanation": "No integer cubed equals the stated positive integer."
+          },
+          {
+            "label": "100",
+            "group": "Not a perfect cube",
+            "explanation": "No integer cubed equals the stated positive integer."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Comparing Quantities — concept investigation",
+      "subject": "mathematics",
+      "description": "Convert percentages to a change of a known amount.",
+      "config": {
+        "engine": "classification",
+        "objective": "Convert percentages to a change of a known amount.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Convert percentages to a change of a known amount.",
+        "chapter_ids": [
+          "8-mathematics-7"
+        ],
+        "cards": [
+          {
+            "label": "100 increased by 20% becomes 120",
+            "group": "Increase",
+            "explanation": "The new value exceeds the starting amount."
+          },
+          {
+            "label": "200 increased by 10% becomes 220",
+            "group": "Increase",
+            "explanation": "The new value exceeds the starting amount."
+          },
+          {
+            "label": "100 reduced by 20% becomes 80",
+            "group": "Decrease",
+            "explanation": "The new value is below the starting amount."
+          },
+          {
+            "label": "200 reduced by 10% becomes 180",
+            "group": "Decrease",
+            "explanation": "The new value is below the starting amount."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Algebraic Expressions and Identities — concept investigation",
+      "subject": "mathematics",
+      "description": "Distinguish an expression from an identity.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish an expression from an identity.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish an expression from an identity.",
+        "chapter_ids": [
+          "8-mathematics-8"
+        ],
+        "cards": [
+          {
+            "label": "3x + 2",
+            "group": "Expression",
+            "explanation": "This algebraic object contains terms but no asserted equality."
+          },
+          {
+            "label": "a² − b²",
+            "group": "Expression",
+            "explanation": "This algebraic object contains terms but no asserted equality."
+          },
+          {
+            "label": "(a+b)² = a²+2ab+b²",
+            "group": "Identity",
+            "explanation": "The equality holds for every value for which both sides are defined."
+          },
+          {
+            "label": "(a−b)(a+b) = a²−b²",
+            "group": "Identity",
+            "explanation": "The equality holds for every value for which both sides are defined."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Mensuration — concept investigation",
+      "subject": "mathematics",
+      "description": "Distinguish surface area and volume units.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish surface area and volume units.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish surface area and volume units.",
+        "chapter_ids": [
+          "8-mathematics-9"
+        ],
+        "cards": [
+          {
+            "label": "cm²",
+            "group": "Surface area",
+            "explanation": "Surface area is measured in square units."
+          },
+          {
+            "label": "m²",
+            "group": "Surface area",
+            "explanation": "Surface area is measured in square units."
+          },
+          {
+            "label": "cm³",
+            "group": "Volume",
+            "explanation": "Volume is measured in cubic units."
+          },
+          {
+            "label": "m³",
+            "group": "Volume",
+            "explanation": "Volume is measured in cubic units."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Exponents and Powers — concept investigation",
+      "subject": "mathematics",
+      "description": "Check exponent laws for nonzero a.",
+      "config": {
+        "engine": "classification",
+        "objective": "Check exponent laws for nonzero a.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Check exponent laws for nonzero a.",
+        "chapter_ids": [
+          "8-mathematics-10"
+        ],
+        "cards": [
+          {
+            "label": "a² × a³ = a⁵",
+            "group": "Valid law",
+            "explanation": "The exponent rules hold for the stated nonzero base."
+          },
+          {
+            "label": "a⁵ / a² = a³",
+            "group": "Valid law",
+            "explanation": "The exponent rules hold for the stated nonzero base."
+          },
+          {
+            "label": "a² + a³ = a⁵",
+            "group": "Invalid law",
+            "explanation": "Multiplication or addition has been applied incorrectly."
+          },
+          {
+            "label": "(a²)³ = a⁵",
+            "group": "Invalid law",
+            "explanation": "Multiplication or addition has been applied incorrectly."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Direct and Inverse Proportions — concept investigation",
+      "subject": "mathematics",
+      "description": "Compare proportional relationships with other factors fixed.",
+      "config": {
+        "engine": "classification",
+        "objective": "Compare proportional relationships with other factors fixed.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Compare proportional relationships with other factors fixed.",
+        "chapter_ids": [
+          "8-mathematics-11"
+        ],
+        "cards": [
+          {
+            "label": "Cost and quantity at fixed unit price",
+            "group": "Direct proportion",
+            "explanation": "One quantity changes by the same factor as the other."
+          },
+          {
+            "label": "Distance and time at fixed speed",
+            "group": "Direct proportion",
+            "explanation": "One quantity changes by the same factor as the other."
+          },
+          {
+            "label": "Travel time and speed for a fixed distance",
+            "group": "Inverse proportion",
+            "explanation": "One quantity changes by the reciprocal factor."
+          },
+          {
+            "label": "Workers and completion time for identical workers and a fixed job",
+            "group": "Inverse proportion",
+            "explanation": "One quantity changes by the reciprocal factor."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Factorisation — concept investigation",
+      "subject": "mathematics",
+      "description": "Check a factorisation by expanding it.",
+      "config": {
+        "engine": "classification",
+        "objective": "Check a factorisation by expanding it.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Check a factorisation by expanding it.",
+        "chapter_ids": [
+          "8-mathematics-12"
+        ],
+        "cards": [
+          {
+            "label": "x²−9 = (x−3)(x+3)",
+            "group": "Correct factorisation",
+            "explanation": "Expansion returns the original expression."
+          },
+          {
+            "label": "2x+6 = 2(x+3)",
+            "group": "Correct factorisation",
+            "explanation": "Expansion returns the original expression."
+          },
+          {
+            "label": "x²+9 = (x−3)(x+3)",
+            "group": "Incorrect factorisation",
+            "explanation": "Expansion does not return the original expression."
+          },
+          {
+            "label": "2x+6 = 2(x+6)",
+            "group": "Incorrect factorisation",
+            "explanation": "Expansion does not return the original expression."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Is Matter Around Us Pure? — concept investigation",
+      "subject": "science",
+      "description": "Distinguish pure substances from mixtures.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish pure substances from mixtures.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish pure substances from mixtures.",
+        "chapter_ids": [
+          "9-science-2"
+        ],
+        "cards": [
+          {
+            "label": "Pure copper",
+            "group": "Pure substance",
+            "explanation": "The material has one chemical substance with a definite composition."
+          },
+          {
+            "label": "Pure distilled water",
+            "group": "Pure substance",
+            "explanation": "The material has one chemical substance with a definite composition."
+          },
+          {
+            "label": "Air",
+            "group": "Mixture",
+            "explanation": "Two or more substances are present together."
+          },
+          {
+            "label": "Salt solution",
+            "group": "Mixture",
+            "explanation": "Two or more substances are present together."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Force and Laws of Motion — concept investigation",
+      "subject": "science",
+      "description": "Identify whether the net force is zero.",
+      "config": {
+        "engine": "classification",
+        "objective": "Identify whether the net force is zero.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Identify whether the net force is zero.",
+        "chapter_ids": [
+          "9-science-8"
+        ],
+        "cards": [
+          {
+            "label": "An object at rest with balanced forces",
+            "group": "Zero net force",
+            "explanation": "In an inertial frame, zero acceleration means zero net force."
+          },
+          {
+            "label": "An object moving at constant velocity",
+            "group": "Zero net force",
+            "explanation": "In an inertial frame, zero acceleration means zero net force."
+          },
+          {
+            "label": "A car speeding up in a straight line",
+            "group": "Nonzero net force",
+            "explanation": "Acceleration requires a nonzero vector sum of forces."
+          },
+          {
+            "label": "An object moving at constant speed in a circle",
+            "group": "Nonzero net force",
+            "explanation": "Acceleration requires a nonzero vector sum of forces."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Improvement in Food Resources — concept investigation",
+      "subject": "science",
+      "description": "Compare crop production and animal husbandry.",
+      "config": {
+        "engine": "classification",
+        "objective": "Compare crop production and animal husbandry.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Compare crop production and animal husbandry.",
+        "chapter_ids": [
+          "9-science-12"
+        ],
+        "cards": [
+          {
+            "label": "Selecting a disease-resistant wheat variety",
+            "group": "Crop improvement",
+            "explanation": "The practice improves plant varieties or cultivation."
+          },
+          {
+            "label": "Improving irrigation for rice",
+            "group": "Crop improvement",
+            "explanation": "The practice improves plant varieties or cultivation."
+          },
+          {
+            "label": "Balanced feed for dairy cattle",
+            "group": "Animal husbandry",
+            "explanation": "The practice manages animals for health and production."
+          },
+          {
+            "label": "Hygienic poultry housing",
+            "group": "Animal husbandry",
+            "explanation": "The practice manages animals for health and production."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Number Systems — concept investigation",
+      "subject": "mathematics",
+      "description": "Use rationality as the sorting rule.",
+      "config": {
+        "engine": "classification",
+        "objective": "Use rationality as the sorting rule.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Use rationality as the sorting rule.",
+        "chapter_ids": [
+          "9-mathematics-1"
+        ],
+        "cards": [
+          {
+            "label": "0.75",
+            "group": "Rational",
+            "explanation": "The value equals p/q for integers p and nonzero q."
+          },
+          {
+            "label": "−7/3",
+            "group": "Rational",
+            "explanation": "The value equals p/q for integers p and nonzero q."
+          },
+          {
+            "label": "√2",
+            "group": "Irrational",
+            "explanation": "The value cannot equal a ratio of two integers."
+          },
+          {
+            "label": "π",
+            "group": "Irrational",
+            "explanation": "The value cannot equal a ratio of two integers."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Introduction to Euclid’s Geometry — concept investigation",
+      "subject": "mathematics",
+      "description": "Separate Euclidean postulates from statements needing additional proof.",
+      "config": {
+        "engine": "classification",
+        "objective": "Separate Euclidean postulates from statements needing additional proof.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Separate Euclidean postulates from statements needing additional proof.",
+        "chapter_ids": [
+          "9-mathematics-5"
+        ],
+        "cards": [
+          {
+            "label": "A straight line can join two points",
+            "group": "Euclidean postulate",
+            "explanation": "The construction or property is taken as a starting assumption."
+          },
+          {
+            "label": "A circle can be drawn with any centre and radius",
+            "group": "Euclidean postulate",
+            "explanation": "The construction or property is taken as a starting assumption."
+          },
+          {
+            "label": "Vertically opposite angles are equal",
+            "group": "Derived theorem",
+            "explanation": "The result is proved from definitions and postulates."
+          },
+          {
+            "label": "The angles of a Euclidean triangle sum to 180°",
+            "group": "Derived theorem",
+            "explanation": "The result is proved from definitions and postulates."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Lines and Angles — concept investigation",
+      "subject": "mathematics",
+      "description": "Classify angles by size.",
+      "config": {
+        "engine": "classification",
+        "objective": "Classify angles by size.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Classify angles by size.",
+        "chapter_ids": [
+          "9-mathematics-6"
+        ],
+        "cards": [
+          {
+            "label": "35°",
+            "group": "Acute",
+            "explanation": "An angle greater than 0° and less than 90°."
+          },
+          {
+            "label": "75°",
+            "group": "Acute",
+            "explanation": "An angle greater than 0° and less than 90°."
+          },
+          {
+            "label": "110°",
+            "group": "Obtuse",
+            "explanation": "An angle greater than 90° and less than 180°."
+          },
+          {
+            "label": "145°",
+            "group": "Obtuse",
+            "explanation": "An angle greater than 90° and less than 180°."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Quadrilaterals — concept investigation",
+      "subject": "mathematics",
+      "description": "Test whether both pairs of opposite sides are parallel.",
+      "config": {
+        "engine": "classification",
+        "objective": "Test whether both pairs of opposite sides are parallel.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Test whether both pairs of opposite sides are parallel.",
+        "chapter_ids": [
+          "9-mathematics-8"
+        ],
+        "cards": [
+          {
+            "label": "A rectangle",
+            "group": "Parallelogram",
+            "explanation": "Both pairs of opposite sides are parallel."
+          },
+          {
+            "label": "A rhombus",
+            "group": "Parallelogram",
+            "explanation": "Both pairs of opposite sides are parallel."
+          },
+          {
+            "label": "A quadrilateral with exactly one parallel pair",
+            "group": "Not a parallelogram",
+            "explanation": "At least one opposite pair is not parallel."
+          },
+          {
+            "label": "A non-rhombus kite",
+            "group": "Not a parallelogram",
+            "explanation": "At least one opposite pair is not parallel."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Circles — concept investigation",
+      "subject": "mathematics",
+      "description": "Distinguish lines by their intersection with a circle.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish lines by their intersection with a circle.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish lines by their intersection with a circle.",
+        "chapter_ids": [
+          "9-mathematics-9"
+        ],
+        "cards": [
+          {
+            "label": "A line touching a circle at one point",
+            "group": "Tangent",
+            "explanation": "The line meets the circle at exactly one point."
+          },
+          {
+            "label": "A line perpendicular to a radius at its endpoint on the circle",
+            "group": "Tangent",
+            "explanation": "The line meets the circle at exactly one point."
+          },
+          {
+            "label": "The full line through a diameter",
+            "group": "Secant",
+            "explanation": "The line meets the circle at two distinct points."
+          },
+          {
+            "label": "A line crossing a circle at two points",
+            "group": "Secant",
+            "explanation": "The line meets the circle at two distinct points."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Heron’s Formula — concept investigation",
+      "subject": "mathematics",
+      "description": "Check whether three positive lengths form a nondegenerate triangle before using Heron's formula.",
+      "config": {
+        "engine": "classification",
+        "objective": "Check whether three positive lengths form a nondegenerate triangle before using Heron's formula.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Check whether three positive lengths form a nondegenerate triangle before using Heron's formula.",
+        "chapter_ids": [
+          "9-mathematics-10"
+        ],
+        "cards": [
+          {
+            "label": "3, 4, 5",
+            "group": "Valid triangle",
+            "explanation": "The sum of any two sides is greater than the third."
+          },
+          {
+            "label": "5, 5, 6",
+            "group": "Valid triangle",
+            "explanation": "The sum of any two sides is greater than the third."
+          },
+          {
+            "label": "1, 2, 3",
+            "group": "Not a nondegenerate triangle",
+            "explanation": "At least one pair sums to no more than the third side."
+          },
+          {
+            "label": "2, 3, 7",
+            "group": "Not a nondegenerate triangle",
+            "explanation": "At least one pair sums to no more than the third side."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Surface Areas and Volumes — concept investigation",
+      "subject": "mathematics",
+      "description": "Distinguish surface area and volume units.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish surface area and volume units.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish surface area and volume units.",
+        "chapter_ids": [
+          "9-mathematics-11"
+        ],
+        "cards": [
+          {
+            "label": "cm²",
+            "group": "Surface area",
+            "explanation": "Surface area is measured in square units."
+          },
+          {
+            "label": "m²",
+            "group": "Surface area",
+            "explanation": "Surface area is measured in square units."
+          },
+          {
+            "label": "cm³",
+            "group": "Volume",
+            "explanation": "Volume is measured in cubic units."
+          },
+          {
+            "label": "m³",
+            "group": "Volume",
+            "explanation": "Volume is measured in cubic units."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Control and Coordination — concept investigation",
+      "subject": "science",
+      "description": "Compare rapid neural signalling and hormonal signalling.",
+      "config": {
+        "engine": "classification",
+        "objective": "Compare rapid neural signalling and hormonal signalling.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Compare rapid neural signalling and hormonal signalling.",
+        "chapter_ids": [
+          "10-science-6"
+        ],
+        "cards": [
+          {
+            "label": "Withdrawal reflex through a reflex arc",
+            "group": "Neural signalling",
+            "explanation": "Electrical impulses and synapses transmit signals through neurons."
+          },
+          {
+            "label": "Motor neuron signal to a skeletal muscle",
+            "group": "Neural signalling",
+            "explanation": "Electrical impulses and synapses transmit signals through neurons."
+          },
+          {
+            "label": "Insulin signalling to target tissues",
+            "group": "Hormonal signalling",
+            "explanation": "Chemical messengers travel to target cells, often through blood."
+          },
+          {
+            "label": "Thyroxine regulating metabolism",
+            "group": "Hormonal signalling",
+            "explanation": "Chemical messengers travel to target cells, often through blood."
+          }
+        ]
+      }
+    },
+    {
+      "title": "How do Organisms Reproduce? — concept investigation",
+      "subject": "science",
+      "description": "Identify whether gamete fusion occurs in reproduction.",
+      "config": {
+        "engine": "classification",
+        "objective": "Identify whether gamete fusion occurs in reproduction.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Identify whether gamete fusion occurs in reproduction.",
+        "chapter_ids": [
+          "10-science-7"
+        ],
+        "cards": [
+          {
+            "label": "Budding in yeast",
+            "group": "Asexual",
+            "explanation": "A new organism arises without fusion of gametes."
+          },
+          {
+            "label": "Vegetative propagation from a potato tuber",
+            "group": "Asexual",
+            "explanation": "A new organism arises without fusion of gametes."
+          },
+          {
+            "label": "Fertilisation in a flowering plant",
+            "group": "Sexual",
+            "explanation": "Male and female gametes fuse."
+          },
+          {
+            "label": "Fertilisation in humans",
+            "group": "Sexual",
+            "explanation": "Male and female gametes fuse."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Real Numbers — concept investigation",
+      "subject": "mathematics",
+      "description": "Use rationality as the sorting rule.",
+      "config": {
+        "engine": "classification",
+        "objective": "Use rationality as the sorting rule.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Use rationality as the sorting rule.",
+        "chapter_ids": [
+          "10-mathematics-1"
+        ],
+        "cards": [
+          {
+            "label": "0.75",
+            "group": "Rational",
+            "explanation": "The value equals p/q for integers p and nonzero q."
+          },
+          {
+            "label": "−7/3",
+            "group": "Rational",
+            "explanation": "The value equals p/q for integers p and nonzero q."
+          },
+          {
+            "label": "√2",
+            "group": "Irrational",
+            "explanation": "The value cannot equal a ratio of two integers."
+          },
+          {
+            "label": "π",
+            "group": "Irrational",
+            "explanation": "The value cannot equal a ratio of two integers."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Arithmetic Progressions — concept investigation",
+      "subject": "mathematics",
+      "description": "Test for a constant difference between consecutive terms.",
+      "config": {
+        "engine": "classification",
+        "objective": "Test for a constant difference between consecutive terms.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Test for a constant difference between consecutive terms.",
+        "chapter_ids": [
+          "10-mathematics-5"
+        ],
+        "cards": [
+          {
+            "label": "2, 5, 8, 11",
+            "group": "Arithmetic progression",
+            "explanation": "The difference between consecutive terms is constant."
+          },
+          {
+            "label": "10, 7, 4, 1",
+            "group": "Arithmetic progression",
+            "explanation": "The difference between consecutive terms is constant."
+          },
+          {
+            "label": "1, 2, 4, 8",
+            "group": "Not an arithmetic progression",
+            "explanation": "The differences are not constant."
+          },
+          {
+            "label": "1, 4, 9, 16",
+            "group": "Not an arithmetic progression",
+            "explanation": "The differences are not constant."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Some Applications of Trigonometry — concept investigation",
+      "subject": "mathematics",
+      "description": "Identify the correct trigonometric ratio in a right triangle.",
+      "config": {
+        "engine": "classification",
+        "objective": "Identify the correct trigonometric ratio in a right triangle.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Identify the correct trigonometric ratio in a right triangle.",
+        "chapter_ids": [
+          "10-mathematics-9"
+        ],
+        "cards": [
+          {
+            "label": "sin θ = opposite/hypotenuse",
+            "group": "Sine",
+            "explanation": "Sine of the reference angle equals opposite divided by hypotenuse."
+          },
+          {
+            "label": "sin 30° = 1/2",
+            "group": "Sine",
+            "explanation": "Sine of the reference angle equals opposite divided by hypotenuse."
+          },
+          {
+            "label": "tan θ = opposite/adjacent",
+            "group": "Tangent",
+            "explanation": "Tangent of the reference angle equals opposite divided by adjacent."
+          },
+          {
+            "label": "tan 45° = 1",
+            "group": "Tangent",
+            "explanation": "Tangent of the reference angle equals opposite divided by adjacent."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Circles — concept investigation",
+      "subject": "mathematics",
+      "description": "Distinguish lines by their intersection with a circle.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish lines by their intersection with a circle.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish lines by their intersection with a circle.",
+        "chapter_ids": [
+          "10-mathematics-10"
+        ],
+        "cards": [
+          {
+            "label": "A line touching a circle at one point",
+            "group": "Tangent",
+            "explanation": "The line meets the circle at exactly one point."
+          },
+          {
+            "label": "A line perpendicular to a radius at its endpoint on the circle",
+            "group": "Tangent",
+            "explanation": "The line meets the circle at exactly one point."
+          },
+          {
+            "label": "The full line through a diameter",
+            "group": "Secant",
+            "explanation": "The line meets the circle at two distinct points."
+          },
+          {
+            "label": "A line crossing a circle at two points",
+            "group": "Secant",
+            "explanation": "The line meets the circle at two distinct points."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Areas Related to Circles — concept investigation",
+      "subject": "mathematics",
+      "description": "Distinguish an arc length from a sector area for radius r and angle θ in radians.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish an arc length from a sector area for radius r and angle θ in radians.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish an arc length from a sector area for radius r and angle θ in radians.",
+        "chapter_ids": [
+          "10-mathematics-11"
+        ],
+        "cards": [
+          {
+            "label": "rθ",
+            "group": "Arc length",
+            "explanation": "Arc length has units of length and equals rθ."
+          },
+          {
+            "label": "πr for a semicircular arc",
+            "group": "Arc length",
+            "explanation": "Arc length has units of length and equals rθ."
+          },
+          {
+            "label": "r²θ/2",
+            "group": "Sector area",
+            "explanation": "Sector area has units of area and equals r²θ/2."
+          },
+          {
+            "label": "πr²/2 for a semicircle",
+            "group": "Sector area",
+            "explanation": "Sector area has units of area and equals r²θ/2."
+          }
+        ]
+      }
+    }
+  ]
+}

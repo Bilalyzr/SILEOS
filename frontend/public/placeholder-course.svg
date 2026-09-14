@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340" width="600" height="340" role="img" aria-label="Course thumbnail placeholder">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fef3e7"/>
+      <stop offset="100%" stop-color="#fcd7b0"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="340" fill="url(#bg)"/>
+  <g transform="translate(228 100)" fill="none" stroke="#f4911a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 20 Q72 0 132 20 L132 128 Q72 108 12 128 Z" fill="#ffffff" fill-opacity="0.7"/>
+    <path d="M132 20 Q132 20 132 20 Q192 0 252 20 L252 128 Q192 108 132 128 Z" fill="#ffffff" fill-opacity="0.7"/>
+    <line x1="132" y1="20" x2="132" y2="128"/>
+  </g>
+  <text x="300" y="262" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="600" fill="#082a5e" text-anchor="middle">Course thumbnail</text>
+  <text x="300" y="286" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#6b7280" text-anchor="middle">SashaInfinity LMS</text>
+</svg>

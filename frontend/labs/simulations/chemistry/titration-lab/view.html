@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Titration Lab — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Acid–Base Titration<span class="lk-tag">Class 10–12 · Chemistry</span></h1>
+    <div class="lk-meta">CBSE: Acids, Bases &amp; Salts / Equilibrium — neutralisation, pH curves, end point</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Solutions</h2>
+      <div class="lk-row"><label class="lk-name">HCl conc.</label><input type="range" id="ca" min="0.02" max="0.2" step="0.01" value="0.1"><span class="lk-val" id="cav">0.10 M</span></div>
+      <div class="lk-row"><label class="lk-name">NaOH conc.</label><input type="range" id="cb" min="0.05" max="0.2" step="0.01" value="0.1"><span class="lk-val" id="cbv">0.10 M</span></div>
+      <div class="lk-readout">Flask: <b>25.0 mL</b> HCl + 2 drops phenolphthalein</div>
+    </div>
+    <div class="lk-card">
+      <h2>Titrate</h2>
+      <button class="lk-btn" id="add1">Add 1.0 mL NaOH</button>
+      <button class="lk-btn ghost" id="add01" style="margin-top:8px;">Add 0.1 mL NaOH</button>
+      <button class="lk-btn ghost" id="autoBtn" style="margin-top:8px;">▶ Auto-titrate (drop by drop)</button>
+      <button class="lk-btn ghost" id="resetBtn" style="margin-top:8px;">↺ Refill flask</button>
+    </div>
+    <div class="lk-card">
+      <h2>Readings</h2>
+      <div class="lk-big" id="phBig">pH 1.0</div>
+      <div class="lk-readout" id="vbRead">NaOH added: 0.0 mL</div>
+      <div class="lk-readout" id="eqRead"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint">Watch the <b>pH curve</b> build: it crawls, then leaps near the
+      equivalence point where moles of OH⁻ = moles of H⁺. Phenolphthalein flashes pink
+      just after it. Use <b>0.1 mL adds</b> near the jump — real titrations are won by
+      drop-by-drop care!</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./titration-lab/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

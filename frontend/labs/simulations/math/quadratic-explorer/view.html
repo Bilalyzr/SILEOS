@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quadratic Explorer — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Quadratic Explorer<span class="lk-tag">Class 10 · Mathematics</span></h1>
+    <div class="lk-meta">CBSE: Quadratic Equations &amp; Polynomials — roots, discriminant, vertex</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Equation</h2>
+      <div class="lk-eq" id="eq"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Coefficients</h2>
+      <div class="lk-row"><label class="lk-name">a (curve)</label><input type="range" id="sa" min="-3" max="3" step="0.5" value="1"><span class="lk-val" id="sav">1</span></div>
+      <div class="lk-row"><label class="lk-name">b (slide)</label><input type="range" id="sb" min="-6" max="6" step="0.5" value="-2"><span class="lk-val" id="sbv">−2</span></div>
+      <div class="lk-row"><label class="lk-name">c (lift)</label><input type="range" id="sc" min="-6" max="6" step="0.5" value="-3"><span class="lk-val" id="scv">−3</span></div>
+    </div>
+    <div class="lk-card">
+      <h2>Analysis</h2>
+      <div class="lk-readout" id="vertex"></div>
+      <div class="lk-readout" id="disc"></div>
+      <div class="lk-readout" id="roots"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint">The discriminant <i>D = b² − 4ac</i> decides everything:
+      <b>D &gt; 0</b> two real roots (curve cuts the x-axis twice), <b>D = 0</b> one repeated
+      root (it just touches), <b>D &lt; 0</b> no real roots. Can you slide <i>c</i> until the
+      curve just kisses the axis?</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./quadratic-explorer/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

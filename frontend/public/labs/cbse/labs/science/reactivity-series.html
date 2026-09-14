@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reactivity Series — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="./reactivity-series/styles.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Reactivity Series Lab<span class="lk-tag">Class 10 · Science</span></h1>
+    <div class="lk-meta">CBSE: Metals and Non-metals — displacement reactions, K &gt; Na &gt; … &gt; Au</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage">
+    <canvas id="cv"></canvas>
+  </div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>1 · Solution in the beaker</h2>
+      <div class="beakerRow" id="solBox"></div>
+    </div>
+    <div class="lk-card">
+      <h2>2 · Drop a metal strip</h2>
+      <div class="metalRow" id="metBox"></div>
+      <div class="series" style="margin-top:10px;">most reactive <b>K</b> › Na › Ca › Mg › Al › Zn › Fe › Pb › <b>H</b> › Cu › Ag › <b>Au</b> least reactive</div>
+    </div>
+    <div class="lk-card">
+      <h2>Observation</h2>
+      <div class="lk-readout" id="obs">Pick a solution and a metal, then watch the beaker.</div>
+    </div>
+    <div class="lk-card">
+      <h2>The rule</h2>
+      <p class="lk-hint">A metal can push out (displace) any metal <b>below it</b> in the
+      series from a salt solution — because it's more eager to give away electrons.
+      Copper in iron(II) sulphate? <b>No reaction</b> — copper sits below iron. Iron in
+      copper sulphate? The strip turns copper-red!</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./reactivity-series/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

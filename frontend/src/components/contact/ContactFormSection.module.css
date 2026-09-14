@@ -1,0 +1,448 @@
+/* Contact form section — matched to the About page design language
+   (components/about/AboutSections.module.css): Lexend Deca headings + Inter
+   body, the true Sasha palette (deep navy #082A5E, orange #f4911a → #ffaa44),
+   rounded soft-shadow cards, rounded-square icon chips, gentle hover lifts.
+   The tokens are redeclared locally because this section is not rendered
+   inside the About page's `.about` wrapper that normally provides them. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Lexend+Deca:wght@300;400;500;600;700;800;900&display=swap');
+
+.contactSection {
+  --navy: #082A5E;
+  --navy-soft: #10386f;
+  --orange: #f4911a;
+  --orange-light: #ffaa44;
+  --orange-soft: #fff3e0;
+  --gray: #6b7280;
+  --line: #e9edf3;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  padding: 96px 0;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #1f2937;
+  background:
+    radial-gradient(120% 120% at 100% 0%, rgba(68, 212, 242, 0.07), transparent 45%),
+    radial-gradient(120% 120% at 0% 100%, rgba(244, 145, 26, 0.06), transparent 45%),
+    #fff;
+}
+
+.contactSection h2,
+.contactSection h3 {
+  font-family: 'Lexend Deca', 'Inter', sans-serif;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+}
+
+.contactSection p,
+.contactSection span,
+.contactSection a,
+.contactSection input,
+.contactSection textarea,
+.contactSection button {
+  font-family: 'Inter', sans-serif;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 40% 1fr;
+  gap: 60px;
+  align-items: flex-start;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---- Left column ---- */
+.title {
+  font-size: 2.7rem;
+  line-height: 1.18;
+  margin-bottom: 10px;
+  position: relative;
+  display: inline-block;
+  color: var(--navy);
+}
+
+/* Gradient rule under the heading, same accent treatment the About cards use. */
+.title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--orange), var(--orange-light));
+  border-radius: 2px;
+}
+
+.subtitle {
+  margin-top: 25px;
+  color: var(--gray);
+  line-height: 1.8;
+}
+
+.infoList {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Each contact detail is a soft card that lifts on hover, echoing About's
+   featureItem / statCard rhythm rather than sitting as loose text. */
+.infoItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px 22px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: 0 20px 44px -30px rgba(8, 42, 94, 0.4);
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.35s var(--ease);
+}
+
+.infoItem:hover {
+  transform: translateY(-6px);
+  border-color: rgba(244, 145, 26, 0.35);
+  box-shadow: 0 28px 54px -28px rgba(8, 42, 94, 0.5);
+}
+
+/* About's iconChip: rounded square, tinted wash, inset hairline — not a circle. */
+.iconWrapper {
+  flex-shrink: 0;
+  width: 62px;
+  height: 62px;
+  border-radius: 18px;
+  background: var(--orange-soft);
+  color: var(--orange);
+  display: grid;
+  place-items: center;
+  box-shadow: inset 0 0 0 1px rgba(244, 145, 26, 0.12);
+  transition: transform 0.35s var(--ease);
+}
+
+.infoItem:hover .iconWrapper {
+  transform: translateY(-4px) rotate(-4deg);
+}
+
+/* The icons are lucide SVGs, so font-size does nothing — size the svg. */
+.iconWrapper svg {
+  width: 24px;
+  height: 24px;
+}
+
+.infoContent {
+  padding-top: 5px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--navy);
+  font-weight: 500;
+}
+
+.infoContent a {
+  transition: color 0.3s;
+  color: var(--navy);
+  text-decoration: none;
+}
+
+.infoContent a:hover {
+  color: var(--orange);
+}
+
+/* ---- Form card ---- */
+.formWrapper {
+  background: #fff;
+  padding: 42px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  box-shadow: 0 20px 48px -26px rgba(8, 42, 94, 0.4);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Accent rail across the top of the card. */
+.formWrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--orange), var(--orange-light));
+}
+
+.formTitle {
+  font-size: 1.9rem;
+  margin-bottom: 30px;
+  position: relative;
+  display: inline-block;
+  color: var(--navy);
+}
+
+.formTitle::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--orange), var(--orange-light));
+  border-radius: 2px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* Row gap is smaller than it looks: each field reserves its own error slot
+     below the control, so the visual rhythm stays even with or without errors. */
+  gap: 18px 20px;
+  margin-bottom: 4px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.fieldFull {
+  grid-column: 1 / -1;
+}
+
+.formWrapper input,
+.formWrapper textarea {
+  width: 100%;
+  padding: 15px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 15px;
+  color: var(--navy);
+  background-color: #fbfcfe;
+  transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease), background-color 0.25s var(--ease);
+}
+
+.formWrapper input::placeholder,
+.formWrapper textarea::placeholder {
+  color: #9aa8bd;
+}
+
+.formWrapper input:hover,
+.formWrapper textarea:hover {
+  border-color: #c9d6ea;
+}
+
+.formWrapper input:focus,
+.formWrapper textarea:focus {
+  outline: none;
+  background-color: #fff;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(244, 145, 26, 0.18);
+}
+
+.formWrapper textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+/* Invalid state — red border and matching focus ring, so the colour of the
+   ring never contradicts the error text underneath. */
+.inputError,
+.formWrapper input.inputError,
+.formWrapper textarea.inputError {
+  border-color: #dc2626;
+  background-color: #fff7f7;
+}
+
+.formWrapper input.inputError:focus,
+.formWrapper textarea.inputError:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.18);
+}
+
+.fieldError {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #dc2626;
+}
+
+.errorMessage,
+.successMessage {
+  margin-top: 18px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  border: 1px solid transparent;
+}
+
+.errorMessage {
+  color: #b91c1c;
+  background-color: #fef2f2;
+  border-color: #fecaca;
+}
+
+.successMessage {
+  color: #15803d;
+  background-color: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+/* ---- Submit button (About's .btn) ---- */
+.submitButton {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(120deg, var(--orange), var(--orange-light));
+  color: #fff;
+  padding: 16px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  border: none;
+  cursor: pointer;
+  margin-top: 22px;
+  box-shadow: 0 14px 26px -8px rgba(244, 145, 26, 0.55);
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+
+.submitButton:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 34px -10px rgba(244, 145, 26, 0.7);
+}
+
+.submitButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(8, 42, 94, 0.25), 0 14px 26px -8px rgba(244, 145, 26, 0.55);
+}
+
+/* While submitting the button used to still lift and glow on hover, which read
+   as "clickable" during a request that was already in flight. */
+.submitButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 992px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .infoColumn {
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contactSection {
+    padding: 64px 0;
+  }
+
+  .title {
+    font-size: 2.1rem;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  .infoItem {
+    gap: 15px;
+    padding: 18px;
+  }
+
+  .iconWrapper {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+  }
+
+  .iconWrapper svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .infoContent {
+    font-size: 14px;
+  }
+
+  .formWrapper {
+    padding: 30px;
+  }
+
+  .formTitle {
+    font-size: 1.5rem;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .formWrapper input,
+  .formWrapper textarea {
+    padding: 14px;
+    font-size: 14px;
+  }
+
+  .submitButton {
+    padding: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contactSection {
+    padding: 48px 0;
+  }
+
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .subtitle {
+    font-size: 13px;
+  }
+
+  .infoItem {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .iconWrapper {
+    margin-bottom: 10px;
+  }
+
+  .infoContent {
+    padding-top: 0;
+  }
+
+  .formTitle {
+    font-size: 1.35rem;
+  }
+}
+
+/* ---- Motion safety (About page does the same) ---- */
+@media (prefers-reduced-motion: reduce) {
+  .infoItem,
+  .iconWrapper,
+  .submitButton,
+  .formWrapper input,
+  .formWrapper textarea {
+    transition: none !important;
+  }
+
+  .infoItem:hover,
+  .infoItem:hover .iconWrapper,
+  .submitButton:hover:not(:disabled) {
+    transform: none;
+  }
+}

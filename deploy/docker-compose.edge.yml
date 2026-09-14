@@ -1,0 +1,75 @@
+# =============================================================================
+# Edge tier — the reverse proxy that fronts both colours
+# =============================================================================
+#   docker compose -f deploy/docker-compose.edge.yml up -d
+#
+# Like the data tier, this is started once and then left running. A deploy never
+# recreates this container; it rewrites deploy/nginx/active/active.conf and sends
+# nginx a reload signal. Recreating the proxy would drop every in-flight
+# connection, which is the downtime we are removing.
+#
+# PORT CHOICE
+# Defaults to 3200, NOT the 3100 the current stack uses, so this can be brought
+# up and verified alongside the existing deployment before anything is cut over.
+# Once you are happy, either set EDGE_HTTP_PORT=3100 (after stopping the old
+# nginx) or repoint the host's system nginx / Cloudflare origin at 3200.
+#
+# TLS is terminated upstream of this container — see deploy/nginx/conf.d/10-app.conf.
+# =============================================================================
+
+name: sasha-edge
+
+services:
+  edge:
+    image: nginx:1.27-alpine
+    container_name: sasha-edge
+    ports:
+      - "${EDGE_BIND_ADDR:-0.0.0.0}:${EDGE_HTTP_PORT:-3200}:80"
+    volumes:
+      # Config, all read-only: nothing inside the container should ever be able
+      # to rewrite the routing table.
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/snippets:/etc/nginx/snippets:ro
+      # The active-colour pointer. Read-only is correct even though it changes:
+      # switch.sh writes the file on the HOST, and a bind mount reflects host
+      # writes immediately regardless of the container's ro flag.
+      - ./nginx/active:/etc/nginx/active:ro
+      # Maintenance page + the ON flag file. nginx tests for the flag's existence
+      # per request, so toggling needs no reload.
+      - ./nginx/maintenance:/etc/nginx/maintenance:ro
+      # Shared user content, served straight off disk by the edge.
+      - ../uploads:/var/www/uploads:ro
+      - ../certificates:/var/www/certificates:ro
+      # Access/error logs land on the host so they survive container recreation.
+      - ../logs/edge-nginx:/var/log/nginx
+    networks:
+      - sasha-net
+    restart: unless-stopped
+    # nginx.conf sets worker_connections 4096, but the default container limit is
+    # 1024 file descriptors — nginx warns and the real ceiling stays at 1024.
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+    healthcheck:
+      # Deliberately probes the edge's own endpoint rather than proxying to an
+      # app container: the proxy is healthy if it can serve config, even when
+      # both colours are down. Conflating the two would mark the edge unhealthy
+      # during a deploy and, with restart policies in play, restart it — exactly
+      # what must not happen mid-switch.
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/__edge/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+networks:
+  sasha-net:
+    name: ${DOCKER_NETWORK:-sasha-net}
+    external: true

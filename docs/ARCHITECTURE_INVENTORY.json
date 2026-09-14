@@ -1,0 +1,6831 @@
+{
+  "snapshot": "2026-09-06",
+  "scope": "Outer workspace source; static inventory, not a claim all modules are mounted or runtime-tested.",
+  "counts": {
+    "route_patterns": 185,
+    "lazy_page_modules": 153,
+    "router_mounts": 104,
+    "declared_tables": 222,
+    "source_files": 1266
+  },
+  "routes": [
+    "*",
+    "/",
+    "/about",
+    "/admin",
+    "/admin/analytics",
+    "/admin/approvals",
+    "/admin/blog-templates",
+    "/admin/blogs",
+    "/admin/blogs/create",
+    "/admin/blogs/edit/:id",
+    "/admin/bundles",
+    "/admin/certificates",
+    "/admin/cohorts",
+    "/admin/colleges",
+    "/admin/communications",
+    "/admin/companies",
+    "/admin/company-invoices",
+    "/admin/content-libraries",
+    "/admin/coupons",
+    "/admin/course-packages",
+    "/admin/course-reviews",
+    "/admin/courses",
+    "/admin/courses/:courseId/activity",
+    "/admin/courses/:courseId/assignment-builder",
+    "/admin/courses/:courseId/assignment-builder/:assignmentId",
+    "/admin/courses/:courseId/quiz-builder",
+    "/admin/courses/:courseId/quiz-builder/:quizId",
+    "/admin/courses/:id/edit",
+    "/admin/courses/categories",
+    "/admin/courses/create",
+    "/admin/courses/new",
+    "/admin/courses/tags",
+    "/admin/dashboard",
+    "/admin/enrollments",
+    "/admin/exam-pricing",
+    "/admin/hall-of-fame",
+    "/admin/instructors",
+    "/admin/internship-requests",
+    "/admin/internships",
+    "/admin/lab-studio",
+    "/admin/lessons",
+    "/admin/manage",
+    "/admin/memberships",
+    "/admin/messages",
+    "/admin/operations",
+    "/admin/orders",
+    "/admin/past-classes",
+    "/admin/quizzes",
+    "/admin/settings",
+    "/admin/spocs",
+    "/admin/students",
+    "/assignment/:assignmentId",
+    "/auth/linkedin/callback",
+    "/blog",
+    "/blog/:slug",
+    "/bundles",
+    "/bundles/:slug",
+    "/campus",
+    "/cart",
+    "/categories",
+    "/certificates/:courseId",
+    "/checkout",
+    "/checkout/:courseId",
+    "/communication-preferences",
+    "/company/dashboard",
+    "/contact",
+    "/courses",
+    "/courses/:courseId/assignments/:assignmentId",
+    "/courses/:courseId/certificate",
+    "/courses/:courseId/lessons/:lessonId",
+    "/courses/:courseId/quizzes/:quizId",
+    "/courses/:id",
+    "/courses/:id/learn",
+    "/courses/meiporul",
+    "/courses/seyappaduporul",
+    "/courses/utporul",
+    "/dashboard",
+    "/dashboard/analytics",
+    "/dashboard/internship-inbox",
+    "/dashboard/internship-profile",
+    "/dashboard/messages",
+    "/dashboard/my-internships",
+    "/dashboard/my-internships/:slug",
+    "/dashboard/my-vouchers",
+    "/exam-papers",
+    "/for-companies",
+    "/for-companies/signup",
+    "/forgot-password",
+    "/games/:id/play",
+    "/hall-of-fame",
+    "/help",
+    "/institutions",
+    "/institutions/:institutionId/*",
+    "/instructor",
+    "/instructor/:id",
+    "/instructor/analytics",
+    "/instructor/assessment-studio",
+    "/instructor/assignments/:assignmentId/grade",
+    "/instructor/blog",
+    "/instructor/blog/create",
+    "/instructor/blog/edit/:id",
+    "/instructor/certificate-designer",
+    "/instructor/course-packages",
+    "/instructor/courses",
+    "/instructor/courses/:courseId/assignment-builder",
+    "/instructor/courses/:courseId/assignment-builder/:assignmentId",
+    "/instructor/courses/:courseId/quiz-builder",
+    "/instructor/courses/:courseId/quiz-builder/:quizId",
+    "/instructor/courses/:id/coverage",
+    "/instructor/courses/:id/edit",
+    "/instructor/courses/:id/gradebook",
+    "/instructor/courses/:id/grading-queue",
+    "/instructor/courses/create",
+    "/instructor/dashboard",
+    "/instructor/ebooks",
+    "/instructor/games",
+    "/instructor/games/:id/edit",
+    "/instructor/games/new",
+    "/instructor/grading",
+    "/instructor/h5p",
+    "/instructor/insights",
+    "/instructor/interventions",
+    "/instructor/lab-studio",
+    "/instructor/live-classes",
+    "/instructor/live-classes/:id/console",
+    "/instructor/live-classes/:id/report",
+    "/instructor/live-classes/new",
+    "/instructor/past-classes",
+    "/instructor/recording-lessons",
+    "/instructor/review-queue",
+    "/instructor/students",
+    "/instructor/three-d-tasks",
+    "/internships",
+    "/internships/:slug",
+    "/labs",
+    "/labs/:slug",
+    "/leaderboard",
+    "/library",
+    "/library/:slug",
+    "/login",
+    "/meiporul",
+    "/meiporul-ar",
+    "/membership",
+    "/my-courses",
+    "/my-grades",
+    "/my-library",
+    "/my-mastery",
+    "/my-plan",
+    "/parent",
+    "/privacy",
+    "/profile",
+    "/quiz/:quizId",
+    "/recordings/:classId",
+    "/refund-policy",
+    "/register",
+    "/reset-password",
+    "/search",
+    "/settings",
+    "/seyappaduporul",
+    "/shipping",
+    "/spoc/:spocId/profile",
+    "/spoc/blog",
+    "/spoc/blog/create",
+    "/spoc/blog/edit/:id",
+    "/spoc/cohort/:id",
+    "/spoc/dashboard",
+    "/spoc/internship/:id",
+    "/student/blog/create",
+    "/student/blog/create/:id",
+    "/student/live-classes",
+    "/student/live-classes/:id/join",
+    "/student/live-classes/:id/recording",
+    "/superadmin",
+    "/superadmin/admins",
+    "/superadmin/audit",
+    "/superadmin/dashboard",
+    "/superadmin/instructors",
+    "/superadmin/students",
+    "/terms",
+    "/u/:username",
+    "/utporul",
+    "/verify-certificate",
+    "/verify-certificate/:certificateId",
+    "/verify-email",
+    "/wishlist"
+  ],
+  "page_modules": [
+    "@/pages/About",
+    "@/pages/Contact",
+    "@/pages/admin/analytics",
+    "@/pages/admin/approvals",
+    "@/pages/admin/blog-templates",
+    "@/pages/admin/blogs",
+    "@/pages/admin/bundles",
+    "@/pages/admin/categories",
+    "@/pages/admin/certificates",
+    "@/pages/admin/cohorts",
+    "@/pages/admin/colleges",
+    "@/pages/admin/communications",
+    "@/pages/admin/companies",
+    "@/pages/admin/company-invoices",
+    "@/pages/admin/content-libraries",
+    "@/pages/admin/coupons",
+    "@/pages/admin/courses",
+    "@/pages/admin/dashboard",
+    "@/pages/admin/enrollments",
+    "@/pages/admin/exam-pricing",
+    "@/pages/admin/hall-of-fame",
+    "@/pages/admin/instructors",
+    "@/pages/admin/internship-requests",
+    "@/pages/admin/internships",
+    "@/pages/admin/lessons",
+    "@/pages/admin/manage",
+    "@/pages/admin/memberships",
+    "@/pages/admin/messages",
+    "@/pages/admin/new-course",
+    "@/pages/admin/operations",
+    "@/pages/admin/orders",
+    "@/pages/admin/quizzes",
+    "@/pages/admin/reviews",
+    "@/pages/admin/settings",
+    "@/pages/admin/spocs",
+    "@/pages/admin/student-activity",
+    "@/pages/admin/students",
+    "@/pages/admin/tags",
+    "@/pages/assignment-submission",
+    "@/pages/auth/forgot-password",
+    "@/pages/auth/linkedin-callback",
+    "@/pages/auth/login",
+    "@/pages/auth/register",
+    "@/pages/auth/reset-password",
+    "@/pages/auth/verify-email",
+    "@/pages/blog",
+    "@/pages/blog-detail",
+    "@/pages/bundle-detail",
+    "@/pages/bundles",
+    "@/pages/campus-for-institutions",
+    "@/pages/cart",
+    "@/pages/categories",
+    "@/pages/category-meiporul",
+    "@/pages/category-seyappaduporul",
+    "@/pages/category-utporul",
+    "@/pages/certificate",
+    "@/pages/checkout",
+    "@/pages/communication-preferences",
+    "@/pages/company/dashboard",
+    "@/pages/course-detail",
+    "@/pages/courses",
+    "@/pages/dashboard",
+    "@/pages/dashboard/analytics",
+    "@/pages/dashboard/internship-inbox",
+    "@/pages/dashboard/internship-profile",
+    "@/pages/dashboard/messages",
+    "@/pages/dashboard/my-internship-detail",
+    "@/pages/dashboard/my-internships",
+    "@/pages/dashboard/my-vouchers",
+    "@/pages/exam-papers",
+    "@/pages/for-companies",
+    "@/pages/for-companies/signup",
+    "@/pages/game-play",
+    "@/pages/hall-of-fame",
+    "@/pages/help",
+    "@/pages/institutions",
+    "@/pages/instructor-profile",
+    "@/pages/instructor/analytics",
+    "@/pages/instructor/assessment-studio",
+    "@/pages/instructor/assignment-builder",
+    "@/pages/instructor/assignment-grading",
+    "@/pages/instructor/blog",
+    "@/pages/instructor/blog-editor",
+    "@/pages/instructor/certificate-designer",
+    "@/pages/instructor/course-coverage",
+    "@/pages/instructor/course-packages",
+    "@/pages/instructor/course-start",
+    "@/pages/instructor/courses",
+    "@/pages/instructor/dashboard",
+    "@/pages/instructor/ebooks",
+    "@/pages/instructor/edit-course",
+    "@/pages/instructor/game-builder",
+    "@/pages/instructor/games",
+    "@/pages/instructor/gradebook",
+    "@/pages/instructor/grading",
+    "@/pages/instructor/grading-queue",
+    "@/pages/instructor/h5p-library",
+    "@/pages/instructor/insights",
+    "@/pages/instructor/interventions",
+    "@/pages/instructor/lab-studio",
+    "@/pages/instructor/live-class-console",
+    "@/pages/instructor/live-class-new",
+    "@/pages/instructor/live-class-report",
+    "@/pages/instructor/live-classes",
+    "@/pages/instructor/past-classes",
+    "@/pages/instructor/quiz-builder",
+    "@/pages/instructor/recording-lessons",
+    "@/pages/instructor/review-queue",
+    "@/pages/instructor/students",
+    "@/pages/instructor/three-d-tasks",
+    "@/pages/internship-detail",
+    "@/pages/internships",
+    "@/pages/lab-workspace",
+    "@/pages/labs",
+    "@/pages/leaderboard",
+    "@/pages/lesson-redesigned",
+    "@/pages/library",
+    "@/pages/library-detail",
+    "@/pages/meiporul-ar",
+    "@/pages/membership",
+    "@/pages/my-courses",
+    "@/pages/my-library",
+    "@/pages/not-found",
+    "@/pages/parent/dashboard",
+    "@/pages/privacy",
+    "@/pages/profile",
+    "@/pages/public-profile",
+    "@/pages/quiz-taking",
+    "@/pages/recording-lesson",
+    "@/pages/refund-policy",
+    "@/pages/search",
+    "@/pages/settings",
+    "@/pages/shipping",
+    "@/pages/spoc/blog",
+    "@/pages/spoc/cohort",
+    "@/pages/spoc/dashboard",
+    "@/pages/spoc/internship",
+    "@/pages/spoc/profile",
+    "@/pages/student/blog-create",
+    "@/pages/student/learning-plan",
+    "@/pages/student/live-class-join",
+    "@/pages/student/live-class-recording",
+    "@/pages/student/live-classes",
+    "@/pages/student/my-grades",
+    "@/pages/student/my-mastery",
+    "@/pages/superadmin/admins",
+    "@/pages/superadmin/audit",
+    "@/pages/superadmin/dashboard",
+    "@/pages/superadmin/instructors",
+    "@/pages/superadmin/students",
+    "@/pages/terms",
+    "@/pages/verify-certificate",
+    "@/pages/wishlist"
+  ],
+  "api_router_mounts": [
+    {
+      "router": "auth.router",
+      "prefix": "/api/v1/auth",
+      "line": 1307
+    },
+    {
+      "router": "notifications_router.router",
+      "prefix": "/api/v1/notifications",
+      "line": 1308
+    },
+    {
+      "router": "course_type_capabilities.router",
+      "prefix": "/api/v1",
+      "line": 1309
+    },
+    {
+      "router": "courses.router",
+      "prefix": "/api/v1/courses",
+      "line": 1310
+    },
+    {
+      "router": "categories.router",
+      "prefix": "/api/v1/categories",
+      "line": 1311
+    },
+    {
+      "router": "tags.router",
+      "prefix": "/api/v1/tags",
+      "line": 1312
+    },
+    {
+      "router": "instructors.router",
+      "prefix": "/api/v1/instructors",
+      "line": 1313
+    },
+    {
+      "router": "lessons.router",
+      "prefix": "/api/v1/lessons",
+      "line": 1314
+    },
+    {
+      "router": "checkout.router",
+      "prefix": "/api/v1/checkout",
+      "line": 1315
+    },
+    {
+      "router": "users.router",
+      "prefix": "/api/v1/users",
+      "line": 1316
+    },
+    {
+      "router": "payments.router",
+      "prefix": "/api/v1/payments",
+      "line": 1317
+    },
+    {
+      "router": "payments_proxy.router",
+      "prefix": "/api/v1/payments",
+      "line": 1318
+    },
+    {
+      "router": "memberships.router",
+      "prefix": "/api/v1/memberships",
+      "line": 1319
+    },
+    {
+      "router": "bundles.router",
+      "prefix": "/api/v1/bundles",
+      "line": 1320
+    },
+    {
+      "router": "library.router",
+      "prefix": "/api/v1/library",
+      "line": 1321
+    },
+    {
+      "router": "orders.router",
+      "prefix": "/api/v1/orders",
+      "line": 1322
+    },
+    {
+      "router": "certificates.router",
+      "prefix": "/api/v1/certificates",
+      "line": 1323
+    },
+    {
+      "router": "certificate_designer.router",
+      "prefix": "/api/v1/certificates/designer",
+      "line": 1324
+    },
+    {
+      "router": "admin.router",
+      "prefix": "/api/v1/admin",
+      "line": 1325
+    },
+    {
+      "router": "superadmin.router",
+      "prefix": "/api/v1/superadmin",
+      "line": 1326
+    },
+    {
+      "router": "dashboard.router",
+      "prefix": "/api/v1/dashboard",
+      "line": 1327
+    },
+    {
+      "router": "uploads.router",
+      "prefix": "/api/v1/upload",
+      "line": 1328
+    },
+    {
+      "router": "wishlist.router",
+      "prefix": "/api/v1/wishlist",
+      "line": 1329
+    },
+    {
+      "router": "instructor_reviews.router",
+      "prefix": "/api/v1/instructor-reviews",
+      "line": 1330
+    },
+    {
+      "router": "quizzes.router",
+      "prefix": "/api/v1",
+      "line": 1331
+    },
+    {
+      "router": "assignments.router",
+      "prefix": "/api/v1",
+      "line": 1332
+    },
+    {
+      "router": "gradebook.router",
+      "prefix": "/api/v1",
+      "line": 1333
+    },
+    {
+      "router": "h5p.router",
+      "prefix": "/api/v1/h5p",
+      "line": 1334
+    },
+    {
+      "router": "games.router",
+      "prefix": "/api/v1/games",
+      "line": 1335
+    },
+    {
+      "router": "gamification.router",
+      "prefix": "/api/v1/gamification",
+      "line": 1336
+    },
+    {
+      "router": "certificate_verification.router",
+      "prefix": "/api/v1",
+      "line": 1337
+    },
+    {
+      "router": "blog.router",
+      "prefix": "/api/v1/blog",
+      "line": 1338
+    },
+    {
+      "router": "hall_of_fame.router",
+      "prefix": "/api/v1/hall-of-fame",
+      "line": 1339
+    },
+    {
+      "router": "coupons.router",
+      "prefix": "/api/v1/coupons",
+      "line": 1340
+    },
+    {
+      "router": "video.router",
+      "prefix": "/api/v1/extract",
+      "line": 1341
+    },
+    {
+      "router": "video_streaming.router",
+      "prefix": "/api/v1/stream",
+      "line": 1342
+    },
+    {
+      "router": "embed.router",
+      "prefix": "/api/v1/embed",
+      "line": 1343
+    },
+    {
+      "router": "youtube_embed.router",
+      "prefix": "/api/v1/youtube",
+      "line": 1344
+    },
+    {
+      "router": "player.router",
+      "prefix": "/api/v1/video",
+      "line": 1345
+    },
+    {
+      "router": "progress_router.router",
+      "prefix": "/api/v1/progress",
+      "line": 1346
+    },
+    {
+      "router": "bunny.router",
+      "prefix": "/api/v1/bunny",
+      "line": 1347
+    },
+    {
+      "router": "analytics.router",
+      "prefix": "/api/v1/analytics",
+      "line": 1348
+    },
+    {
+      "router": "internships.router",
+      "prefix": "/api/v1",
+      "line": 1349
+    },
+    {
+      "router": "candidate.router",
+      "prefix": "/api/v1/candidates",
+      "line": 1350
+    },
+    {
+      "router": "companies.router",
+      "prefix": "/api/v1/companies",
+      "line": 1351
+    },
+    {
+      "router": "company_dashboard.router",
+      "prefix": "/api/v1/companies",
+      "line": 1352
+    },
+    {
+      "router": "company_billing.router",
+      "prefix": "/api/v1/companies/billing",
+      "line": 1353
+    },
+    {
+      "router": "cohorts.router",
+      "prefix": "/api/v1/cohorts",
+      "line": 1354
+    },
+    {
+      "router": "student_workspace.router",
+      "prefix": "/api/v1/student",
+      "line": 1355
+    },
+    {
+      "router": "admin_messages.router",
+      "prefix": "/api/v1/admin/messages",
+      "line": 1356
+    },
+    {
+      "router": "export_import.router",
+      "prefix": "/api/v1",
+      "line": 1357
+    },
+    {
+      "router": "question_banks.router",
+      "prefix": "/api/v1/question-banks",
+      "line": 1359
+    },
+    {
+      "router": "sileos.router",
+      "prefix": "/api/v1",
+      "line": 1360
+    },
+    {
+      "router": "ai.router",
+      "prefix": "/api/v1",
+      "line": 1361
+    },
+    {
+      "router": "ai_tutor.router",
+      "prefix": "/api/v1/ai",
+      "line": 1362
+    },
+    {
+      "router": "parents.router",
+      "prefix": "/api/v1/parents",
+      "line": 1363
+    },
+    {
+      "router": "parent_portal.router",
+      "prefix": "/api/v1/parents",
+      "line": 1365
+    },
+    {
+      "router": "geogebra.router",
+      "prefix": "/api/v1/geogebra",
+      "line": 1366
+    },
+    {
+      "router": "three_d.router",
+      "prefix": "/api/v1/three-d",
+      "line": 1367
+    },
+    {
+      "router": "virtual_labs.router",
+      "prefix": "/api/v1/virtual-labs",
+      "line": 1368
+    },
+    {
+      "router": "lab_studio.router",
+      "prefix": "/api/v1/lab-studio",
+      "line": 1369
+    },
+    {
+      "router": "scorable_items.router",
+      "prefix": "/api/v1/scorable-items",
+      "line": 1372
+    },
+    {
+      "router": "three_d_tasks.router",
+      "prefix": "/api/v1/three-d-tasks",
+      "line": 1374
+    },
+    {
+      "router": "mastery.router",
+      "prefix": "/api/v1/mastery",
+      "line": 1376
+    },
+    {
+      "router": "tag_taxonomy.router",
+      "prefix": "/api/v1/tag-taxonomy",
+      "line": 1378
+    },
+    {
+      "router": "ai_engines.router",
+      "prefix": "/api/v1/ai",
+      "line": 1381
+    },
+    {
+      "router": "flywheel.router",
+      "prefix": "/api/v1/flywheel",
+      "line": 1383
+    },
+    {
+      "router": "funnel.router",
+      "prefix": "/api/v1/funnel",
+      "line": 1385
+    },
+    {
+      "router": "course_ops.router",
+      "prefix": "/api/v1/course-ops",
+      "line": 1387
+    },
+    {
+      "router": "learning_signals.router",
+      "prefix": "/api/v1/signals",
+      "line": 1389
+    },
+    {
+      "router": "learning_planner.router",
+      "prefix": "/api/v1/planner",
+      "line": 1391
+    },
+    {
+      "router": "studio.router",
+      "prefix": "/api/v1/studio",
+      "line": 1392
+    },
+    {
+      "router": "content_library_admin.router",
+      "prefix": "/api/v1/admin/content-library",
+      "line": 1393
+    },
+    {
+      "router": "live_class_session.router",
+      "prefix": "/api/v1/live",
+      "line": 1394
+    },
+    {
+      "router": "live_classes.router",
+      "prefix": "/api/v1/live",
+      "line": 1395
+    },
+    {
+      "router": "live_class_attendance.router",
+      "prefix": "/api/v1/live",
+      "line": 1396
+    },
+    {
+      "router": "live_class_polls.router",
+      "prefix": "/api/v1/live",
+      "line": 1397
+    },
+    {
+      "router": "live_class_recordings.router",
+      "prefix": "/api/v1/live",
+      "line": 1398
+    },
+    {
+      "router": "live_class_internal.router",
+      "prefix": "/api/v1/internal/live",
+      "line": 1399
+    },
+    {
+      "router": "chunked_upload.router",
+      "prefix": "/api/v1/upload/chunked",
+      "line": 1403
+    },
+    {
+      "router": "assessment_studio.router",
+      "prefix": "/api/v1/assessment-studio",
+      "line": 1418
+    },
+    {
+      "router": "recording_lessons.router",
+      "prefix": "/api/v1/recording-lessons",
+      "line": 1421
+    },
+    {
+      "router": "operations.router",
+      "prefix": "/api/v1/admin/operations",
+      "line": 1424
+    },
+    {
+      "router": "course_packages.router",
+      "prefix": "/api/v1/course-packages",
+      "line": 1427
+    },
+    {
+      "router": "exam_papers.router",
+      "prefix": "/api/v1/exam-papers",
+      "line": 1430
+    },
+    {
+      "router": "institutions.router",
+      "prefix": "/api/v1/institutions",
+      "line": 1432
+    },
+    {
+      "router": "campus_growth.router",
+      "prefix": "/api/v1/campus-growth",
+      "line": 1435
+    },
+    {
+      "router": "campus_operations.router",
+      "prefix": "/api/v1/institutions",
+      "line": 1438
+    },
+    {
+      "router": "campus_billing.router",
+      "prefix": "/api/v1/institutions",
+      "line": 1439
+    },
+    {
+      "router": "campus_action_center.router",
+      "prefix": "/api/v1/institutions",
+      "line": 1441
+    },
+    {
+      "router": "campus_control_plane.router",
+      "prefix": "/api/v1/institutions",
+      "line": 1443
+    },
+    {
+      "router": "admissions.router",
+      "prefix": "/api/v1/institutions",
+      "line": 1445
+    },
+    {
+      "router": "tuition.router",
+      "prefix": "/api/v1/institutions",
+      "line": 1446
+    },
+    {
+      "router": "brand_sharing.router",
+      "prefix": "/api/v1/share",
+      "line": 1449
+    },
+    {
+      "router": "campus_learning.router",
+      "prefix": "/api/v1/institutions",
+      "line": 1460
+    },
+    {
+      "router": "campus_pilot.router",
+      "prefix": "/api/v1/institutions",
+      "line": 1463
+    },
+    {
+      "router": "campus_pilot.webhook_router",
+      "prefix": "/api/v1/whatsapp",
+      "line": 1464
+    },
+    {
+      "router": "campus_exams.router",
+      "prefix": "/api/v1/institutions",
+      "line": 1466
+    },
+    {
+      "router": "tuition_reminders.router",
+      "prefix": "/api/v1/institutions",
+      "line": 1468
+    },
+    {
+      "router": "tuition_collection.router",
+      "prefix": "/api/v1/institutions",
+      "line": 1470
+    },
+    {
+      "router": "campus_staff.router",
+      "prefix": "/api/v1/institutions",
+      "line": 1472
+    },
+    {
+      "router": "campus_transport.router",
+      "prefix": "/api/v1/institutions",
+      "line": 1474
+    },
+    {
+      "router": "campus_hostel.router",
+      "prefix": "/api/v1/institutions",
+      "line": 1476
+    },
+    {
+      "router": "whatsapp.router",
+      "prefix": "/api/v1/whatsapp",
+      "line": 1478
+    }
+  ],
+  "declared_tables": [
+    {
+      "table": "admin_messages",
+      "file": "backend/app/models/admin_message.py"
+    },
+    {
+      "table": "admission_programs",
+      "file": "backend/app/models/admissions.py"
+    },
+    {
+      "table": "admission_intakes",
+      "file": "backend/app/models/admissions.py"
+    },
+    {
+      "table": "admission_applications",
+      "file": "backend/app/models/admissions.py"
+    },
+    {
+      "table": "admission_documents",
+      "file": "backend/app/models/admissions.py"
+    },
+    {
+      "table": "admission_notes",
+      "file": "backend/app/models/admissions.py"
+    },
+    {
+      "table": "admission_tasks",
+      "file": "backend/app/models/admissions.py"
+    },
+    {
+      "table": "admission_stage_history",
+      "file": "backend/app/models/admissions.py"
+    },
+    {
+      "table": "campus_learner_profiles",
+      "file": "backend/app/models/admissions.py"
+    },
+    {
+      "table": "campus_learner_lifecycle_history",
+      "file": "backend/app/models/admissions.py"
+    },
+    {
+      "table": "tutor_escalations",
+      "file": "backend/app/models/ai_layer.py"
+    },
+    {
+      "table": "content_error_reports",
+      "file": "backend/app/models/ai_layer.py"
+    },
+    {
+      "table": "studio_questions",
+      "file": "backend/app/models/assessment_studio.py"
+    },
+    {
+      "table": "assignments",
+      "file": "backend/app/models/assignment.py"
+    },
+    {
+      "table": "assignment_submissions",
+      "file": "backend/app/models/assignment.py"
+    },
+    {
+      "table": "blog_posts",
+      "file": "backend/app/models/blog.py"
+    },
+    {
+      "table": "blog_comments",
+      "file": "backend/app/models/blog.py"
+    },
+    {
+      "table": "bundles",
+      "file": "backend/app/models/bundle.py"
+    },
+    {
+      "table": "bundle_courses",
+      "file": "backend/app/models/bundle.py"
+    },
+    {
+      "table": "campus_action_items",
+      "file": "backend/app/models/campus_action_center.py"
+    },
+    {
+      "table": "campus_domains",
+      "file": "backend/app/models/campus_control_plane.py"
+    },
+    {
+      "table": "campus_integrations",
+      "file": "backend/app/models/campus_control_plane.py"
+    },
+    {
+      "table": "campus_retention_policies",
+      "file": "backend/app/models/campus_control_plane.py"
+    },
+    {
+      "table": "campus_privacy_requests",
+      "file": "backend/app/models/campus_control_plane.py"
+    },
+    {
+      "table": "campus_consent_receipts",
+      "file": "backend/app/models/campus_control_plane.py"
+    },
+    {
+      "table": "campus_exams",
+      "file": "backend/app/models/campus_exams.py"
+    },
+    {
+      "table": "campus_exam_papers",
+      "file": "backend/app/models/campus_exams.py"
+    },
+    {
+      "table": "campus_exam_marks",
+      "file": "backend/app/models/campus_exams.py"
+    },
+    {
+      "table": "campus_hall_tickets",
+      "file": "backend/app/models/campus_exams.py"
+    },
+    {
+      "table": "campus_leads",
+      "file": "backend/app/models/campus_growth.py"
+    },
+    {
+      "table": "campus_hostel_blocks",
+      "file": "backend/app/models/campus_hostel.py"
+    },
+    {
+      "table": "campus_hostel_rooms",
+      "file": "backend/app/models/campus_hostel.py"
+    },
+    {
+      "table": "campus_hostel_allocations",
+      "file": "backend/app/models/campus_hostel.py"
+    },
+    {
+      "table": "campus_hostel_passes",
+      "file": "backend/app/models/campus_hostel.py"
+    },
+    {
+      "table": "campus_hostel_visitors",
+      "file": "backend/app/models/campus_hostel.py"
+    },
+    {
+      "table": "campus_terms",
+      "file": "backend/app/models/campus_operations.py"
+    },
+    {
+      "table": "campus_attendance",
+      "file": "backend/app/models/campus_operations.py"
+    },
+    {
+      "table": "campus_assessments",
+      "file": "backend/app/models/campus_operations.py"
+    },
+    {
+      "table": "campus_scores",
+      "file": "backend/app/models/campus_operations.py"
+    },
+    {
+      "table": "campus_resources",
+      "file": "backend/app/models/campus_operations.py"
+    },
+    {
+      "table": "campus_branding",
+      "file": "backend/app/models/campus_operations.py"
+    },
+    {
+      "table": "campus_mail_jobs",
+      "file": "backend/app/models/campus_operations.py"
+    },
+    {
+      "table": "parent_link_requests",
+      "file": "backend/app/models/campus_operations.py"
+    },
+    {
+      "table": "campus_subscriptions",
+      "file": "backend/app/models/campus_operations.py"
+    },
+    {
+      "table": "campus_learning_courses",
+      "file": "backend/app/models/campus_operations.py"
+    },
+    {
+      "table": "campus_lessons",
+      "file": "backend/app/models/campus_operations.py"
+    },
+    {
+      "table": "campus_lesson_progress",
+      "file": "backend/app/models/campus_operations.py"
+    },
+    {
+      "table": "campus_onboarding_states",
+      "file": "backend/app/models/campus_pilot.py"
+    },
+    {
+      "table": "campus_events",
+      "file": "backend/app/models/campus_pilot.py"
+    },
+    {
+      "table": "campus_announcements",
+      "file": "backend/app/models/campus_pilot.py"
+    },
+    {
+      "table": "campus_notice_reads",
+      "file": "backend/app/models/campus_pilot.py"
+    },
+    {
+      "table": "campus_goals",
+      "file": "backend/app/models/campus_pilot.py"
+    },
+    {
+      "table": "campus_grade_policies",
+      "file": "backend/app/models/campus_pilot.py"
+    },
+    {
+      "table": "campus_report_comments",
+      "file": "backend/app/models/campus_pilot.py"
+    },
+    {
+      "table": "campus_whatsapp_contacts",
+      "file": "backend/app/models/campus_pilot.py"
+    },
+    {
+      "table": "campus_whatsapp_campaigns",
+      "file": "backend/app/models/campus_pilot.py"
+    },
+    {
+      "table": "campus_whatsapp_messages",
+      "file": "backend/app/models/campus_pilot.py"
+    },
+    {
+      "table": "campus_whatsapp_webhook_events",
+      "file": "backend/app/models/campus_pilot.py"
+    },
+    {
+      "table": "campus_leave_types",
+      "file": "backend/app/models/campus_staff.py"
+    },
+    {
+      "table": "campus_leave_requests",
+      "file": "backend/app/models/campus_staff.py"
+    },
+    {
+      "table": "campus_substitutions",
+      "file": "backend/app/models/campus_staff.py"
+    },
+    {
+      "table": "campus_transport_routes",
+      "file": "backend/app/models/campus_transport.py"
+    },
+    {
+      "table": "campus_transport_stops",
+      "file": "backend/app/models/campus_transport.py"
+    },
+    {
+      "table": "campus_transport_assignments",
+      "file": "backend/app/models/campus_transport.py"
+    },
+    {
+      "table": "campus_transport_logs",
+      "file": "backend/app/models/campus_transport.py"
+    },
+    {
+      "table": "candidate_profiles",
+      "file": "backend/app/models/candidate.py"
+    },
+    {
+      "table": "candidate_eligibility",
+      "file": "backend/app/models/candidate.py"
+    },
+    {
+      "table": "certificates",
+      "file": "backend/app/models/certificate.py"
+    },
+    {
+      "table": "course_certificates",
+      "file": "backend/app/models/certificate.py"
+    },
+    {
+      "table": "issued_certificates",
+      "file": "backend/app/models/certificate.py"
+    },
+    {
+      "table": "certificate_verifications",
+      "file": "backend/app/models/certificate.py"
+    },
+    {
+      "table": "certificate_element_templates",
+      "file": "backend/app/models/certificate.py"
+    },
+    {
+      "table": "colleges",
+      "file": "backend/app/models/cohort.py"
+    },
+    {
+      "table": "cohorts",
+      "file": "backend/app/models/cohort.py"
+    },
+    {
+      "table": "referral_codes",
+      "file": "backend/app/models/cohort.py"
+    },
+    {
+      "table": "cohort_memberships",
+      "file": "backend/app/models/cohort.py"
+    },
+    {
+      "table": "cohort_sessions",
+      "file": "backend/app/models/cohort.py"
+    },
+    {
+      "table": "session_attendance",
+      "file": "backend/app/models/cohort.py"
+    },
+    {
+      "table": "communication_profiles",
+      "file": "backend/app/models/communication_automation.py"
+    },
+    {
+      "table": "communication_topic_preferences",
+      "file": "backend/app/models/communication_automation.py"
+    },
+    {
+      "table": "institution_automation_rules",
+      "file": "backend/app/models/communication_automation.py"
+    },
+    {
+      "table": "automation_dispatches",
+      "file": "backend/app/models/communication_automation.py"
+    },
+    {
+      "table": "communication_outbox",
+      "file": "backend/app/models/communication_automation.py"
+    },
+    {
+      "table": "companies",
+      "file": "backend/app/models/company.py"
+    },
+    {
+      "table": "company_interests",
+      "file": "backend/app/models/company.py"
+    },
+    {
+      "table": "company_managers",
+      "file": "backend/app/models/company_dashboard.py"
+    },
+    {
+      "table": "daily_work_logs",
+      "file": "backend/app/models/company_dashboard.py"
+    },
+    {
+      "table": "internship_announcements",
+      "file": "backend/app/models/company_dashboard.py"
+    },
+    {
+      "table": "internship_performance_reviews",
+      "file": "backend/app/models/company_dashboard.py"
+    },
+    {
+      "table": "company_invoices",
+      "file": "backend/app/models/company_invoice.py"
+    },
+    {
+      "table": "company_invoice_items",
+      "file": "backend/app/models/company_invoice.py"
+    },
+    {
+      "table": "company_seat_pools",
+      "file": "backend/app/models/company_invoice.py"
+    },
+    {
+      "table": "company_seat_assignments",
+      "file": "backend/app/models/company_invoice.py"
+    },
+    {
+      "table": "invoice_counter",
+      "file": "backend/app/models/company_invoice.py"
+    },
+    {
+      "table": "virtual_lab_catalog",
+      "file": "backend/app/models/content_library.py"
+    },
+    {
+      "table": "virtual_lab_results",
+      "file": "backend/app/models/content_library.py"
+    },
+    {
+      "table": "coupons",
+      "file": "backend/app/models/coupon.py"
+    },
+    {
+      "table": "coupon_course_restrictions",
+      "file": "backend/app/models/coupon.py"
+    },
+    {
+      "table": "coupon_usage",
+      "file": "backend/app/models/coupon.py"
+    },
+    {
+      "table": "courses",
+      "file": "backend/app/models/course.py"
+    },
+    {
+      "table": "lessons",
+      "file": "backend/app/models/course.py"
+    },
+    {
+      "table": "course_categories",
+      "file": "backend/app/models/course.py"
+    },
+    {
+      "table": "course_tags",
+      "file": "backend/app/models/course.py"
+    },
+    {
+      "table": "course_reviews",
+      "file": "backend/app/models/course.py"
+    },
+    {
+      "table": "course_category_relations",
+      "file": "backend/app/models/course.py"
+    },
+    {
+      "table": "course_tag_relations",
+      "file": "backend/app/models/course.py"
+    },
+    {
+      "table": "course_collaborators",
+      "file": "backend/app/models/course_ops.py"
+    },
+    {
+      "table": "course_studio_settings",
+      "file": "backend/app/models/course_settings.py"
+    },
+    {
+      "table": "ebooks",
+      "file": "backend/app/models/ebook.py"
+    },
+    {
+      "table": "ebook_grants",
+      "file": "backend/app/models/ebook.py"
+    },
+    {
+      "table": "edgyy_payments",
+      "file": "backend/app/models/edgyy_payment.py"
+    },
+    {
+      "table": "edgyy_payment_sessions",
+      "file": "backend/app/models/edgyy_payment.py"
+    },
+    {
+      "table": "enrollments",
+      "file": "backend/app/models/enrollment.py"
+    },
+    {
+      "table": "lesson_progress",
+      "file": "backend/app/models/enrollment.py"
+    },
+    {
+      "table": "student_course_activities",
+      "file": "backend/app/models/enrollment.py"
+    },
+    {
+      "table": "watch_sessions",
+      "file": "backend/app/models/enrollment.py"
+    },
+    {
+      "table": "course_announcements",
+      "file": "backend/app/models/enrollment.py"
+    },
+    {
+      "table": "wishlist_items",
+      "file": "backend/app/models/enrollment.py"
+    },
+    {
+      "table": "exam_price_slabs",
+      "file": "backend/app/models/exam_paper.py"
+    },
+    {
+      "table": "exam_papers",
+      "file": "backend/app/models/exam_paper.py"
+    },
+    {
+      "table": "teach_backs",
+      "file": "backend/app/models/flywheel.py"
+    },
+    {
+      "table": "teach_back_ratings",
+      "file": "backend/app/models/flywheel.py"
+    },
+    {
+      "table": "funnel_events",
+      "file": "backend/app/models/funnel.py"
+    },
+    {
+      "table": "games",
+      "file": "backend/app/models/game.py"
+    },
+    {
+      "table": "game_results",
+      "file": "backend/app/models/game.py"
+    },
+    {
+      "table": "xp_events",
+      "file": "backend/app/models/gamification.py"
+    },
+    {
+      "table": "user_game_stats",
+      "file": "backend/app/models/gamification.py"
+    },
+    {
+      "table": "badges",
+      "file": "backend/app/models/gamification.py"
+    },
+    {
+      "table": "user_badges",
+      "file": "backend/app/models/gamification.py"
+    },
+    {
+      "table": "geogebra_applets",
+      "file": "backend/app/models/geogebra.py"
+    },
+    {
+      "table": "h5p_contents",
+      "file": "backend/app/models/h5p.py"
+    },
+    {
+      "table": "h5p_results",
+      "file": "backend/app/models/h5p.py"
+    },
+    {
+      "table": "hall_of_fame_members",
+      "file": "backend/app/models/hall_of_fame.py"
+    },
+    {
+      "table": "institutions",
+      "file": "backend/app/models/institution.py"
+    },
+    {
+      "table": "institution_members",
+      "file": "backend/app/models/institution.py"
+    },
+    {
+      "table": "institution_invites",
+      "file": "backend/app/models/institution.py"
+    },
+    {
+      "table": "institution_batches",
+      "file": "backend/app/models/institution.py"
+    },
+    {
+      "table": "institution_batch_members",
+      "file": "backend/app/models/institution.py"
+    },
+    {
+      "table": "institution_courses",
+      "file": "backend/app/models/institution.py"
+    },
+    {
+      "table": "institution_assignments",
+      "file": "backend/app/models/institution.py"
+    },
+    {
+      "table": "institution_audit",
+      "file": "backend/app/models/institution.py"
+    },
+    {
+      "table": "institution_plan_requests",
+      "file": "backend/app/models/institution.py"
+    },
+    {
+      "table": "instructor_reviews",
+      "file": "backend/app/models/instructor_review.py"
+    },
+    {
+      "table": "internships",
+      "file": "backend/app/models/internship.py"
+    },
+    {
+      "table": "internship_vouchers",
+      "file": "backend/app/models/internship.py"
+    },
+    {
+      "table": "internship_attendance",
+      "file": "backend/app/models/internship.py"
+    },
+    {
+      "table": "internship_requests",
+      "file": "backend/app/models/internship_request.py"
+    },
+    {
+      "table": "lab_notebooks",
+      "file": "backend/app/models/lab_notebook.py"
+    },
+    {
+      "table": "learning_goals",
+      "file": "backend/app/models/learning_planner.py"
+    },
+    {
+      "table": "learning_interventions",
+      "file": "backend/app/models/learning_planner.py"
+    },
+    {
+      "table": "learning_plan_tasks",
+      "file": "backend/app/models/learning_planner.py"
+    },
+    {
+      "table": "lab_investigation_attempts",
+      "file": "backend/app/models/learning_release.py"
+    },
+    {
+      "table": "offline_sync_receipts",
+      "file": "backend/app/models/learning_release.py"
+    },
+    {
+      "table": "learning_signals",
+      "file": "backend/app/models/learning_signals.py"
+    },
+    {
+      "table": "lesson_concept_markers",
+      "file": "backend/app/models/learning_signals.py"
+    },
+    {
+      "table": "adaptive_sessions",
+      "file": "backend/app/models/learning_signals.py"
+    },
+    {
+      "table": "live_class_schedules",
+      "file": "backend/app/models/live_class.py"
+    },
+    {
+      "table": "live_classes",
+      "file": "backend/app/models/live_class.py"
+    },
+    {
+      "table": "live_class_join_tokens",
+      "file": "backend/app/models/live_class.py"
+    },
+    {
+      "table": "live_class_attendance",
+      "file": "backend/app/models/live_class.py"
+    },
+    {
+      "table": "live_class_polls",
+      "file": "backend/app/models/live_class.py"
+    },
+    {
+      "table": "live_class_poll_votes",
+      "file": "backend/app/models/live_class.py"
+    },
+    {
+      "table": "live_class_events",
+      "file": "backend/app/models/live_class.py"
+    },
+    {
+      "table": "class_reports",
+      "file": "backend/app/models/live_class_report.py"
+    },
+    {
+      "table": "recording_audit",
+      "file": "backend/app/models/live_class_report.py"
+    },
+    {
+      "table": "concept_links",
+      "file": "backend/app/models/mastery.py"
+    },
+    {
+      "table": "concept_prerequisites",
+      "file": "backend/app/models/mastery.py"
+    },
+    {
+      "table": "mastery_evidence",
+      "file": "backend/app/models/mastery.py"
+    },
+    {
+      "table": "learner_mastery",
+      "file": "backend/app/models/mastery.py"
+    },
+    {
+      "table": "course_outcomes",
+      "file": "backend/app/models/mastery.py"
+    },
+    {
+      "table": "membership_plans",
+      "file": "backend/app/models/membership.py"
+    },
+    {
+      "table": "membership_plan_courses",
+      "file": "backend/app/models/membership.py"
+    },
+    {
+      "table": "memberships",
+      "file": "backend/app/models/membership.py"
+    },
+    {
+      "table": "notifications",
+      "file": "backend/app/models/notification.py"
+    },
+    {
+      "table": "service_heartbeats",
+      "file": "backend/app/models/operations.py"
+    },
+    {
+      "table": "course_transfers",
+      "file": "backend/app/models/operations.py"
+    },
+    {
+      "table": "page_views",
+      "file": "backend/app/models/page_view.py"
+    },
+    {
+      "table": "orders",
+      "file": "backend/app/models/payment.py"
+    },
+    {
+      "table": "order_items",
+      "file": "backend/app/models/payment.py"
+    },
+    {
+      "table": "payments",
+      "file": "backend/app/models/payment.py"
+    },
+    {
+      "table": "earnings",
+      "file": "backend/app/models/payment.py"
+    },
+    {
+      "table": "withdrawals",
+      "file": "backend/app/models/payment.py"
+    },
+    {
+      "table": "quizzes",
+      "file": "backend/app/models/quiz.py"
+    },
+    {
+      "table": "quiz_questions",
+      "file": "backend/app/models/quiz.py"
+    },
+    {
+      "table": "quiz_question_answers",
+      "file": "backend/app/models/quiz.py"
+    },
+    {
+      "table": "quiz_attempts",
+      "file": "backend/app/models/quiz.py"
+    },
+    {
+      "table": "quiz_attempt_answers",
+      "file": "backend/app/models/quiz.py"
+    },
+    {
+      "table": "recording_lessons",
+      "file": "backend/app/models/recording_lesson.py"
+    },
+    {
+      "table": "question_banks",
+      "file": "backend/app/models/sileos_pack.py"
+    },
+    {
+      "table": "bank_questions",
+      "file": "backend/app/models/sileos_pack.py"
+    },
+    {
+      "table": "course_prerequisites",
+      "file": "backend/app/models/sileos_pack.py"
+    },
+    {
+      "table": "learning_paths",
+      "file": "backend/app/models/sileos_pack.py"
+    },
+    {
+      "table": "xapi_statements",
+      "file": "backend/app/models/sileos_pack.py"
+    },
+    {
+      "table": "ai_jobs",
+      "file": "backend/app/models/sileos_pack.py"
+    },
+    {
+      "table": "student_risk_flags",
+      "file": "backend/app/models/sileos_pack.py"
+    },
+    {
+      "table": "tag_clusters",
+      "file": "backend/app/models/tag_cluster.py"
+    },
+    {
+      "table": "three_d_models",
+      "file": "backend/app/models/three_d.py"
+    },
+    {
+      "table": "three_d_tasks",
+      "file": "backend/app/models/three_d_task.py"
+    },
+    {
+      "table": "three_d_task_attempts",
+      "file": "backend/app/models/three_d_task.py"
+    },
+    {
+      "table": "tuition_fee_plans",
+      "file": "backend/app/models/tuition.py"
+    },
+    {
+      "table": "tuition_fee_components",
+      "file": "backend/app/models/tuition.py"
+    },
+    {
+      "table": "tuition_installment_templates",
+      "file": "backend/app/models/tuition.py"
+    },
+    {
+      "table": "tuition_fee_assignments",
+      "file": "backend/app/models/tuition.py"
+    },
+    {
+      "table": "tuition_installments",
+      "file": "backend/app/models/tuition.py"
+    },
+    {
+      "table": "tuition_payments",
+      "file": "backend/app/models/tuition.py"
+    },
+    {
+      "table": "tuition_adjustments",
+      "file": "backend/app/models/tuition.py"
+    },
+    {
+      "table": "tuition_ledger_entries",
+      "file": "backend/app/models/tuition.py"
+    },
+    {
+      "table": "tuition_receipts",
+      "file": "backend/app/models/tuition.py"
+    },
+    {
+      "table": "tuition_invoices",
+      "file": "backend/app/models/tuition_collection.py"
+    },
+    {
+      "table": "tuition_online_orders",
+      "file": "backend/app/models/tuition_collection.py"
+    },
+    {
+      "table": "tuition_reminder_policies",
+      "file": "backend/app/models/tuition_reminders.py"
+    },
+    {
+      "table": "tuition_reminders",
+      "file": "backend/app/models/tuition_reminders.py"
+    },
+    {
+      "table": "users",
+      "file": "backend/app/models/user.py"
+    },
+    {
+      "table": "user_profiles",
+      "file": "backend/app/models/user.py"
+    },
+    {
+      "table": "instructor_profiles",
+      "file": "backend/app/models/user.py"
+    },
+    {
+      "table": "admin_impersonation_logs",
+      "file": "backend/app/models/user.py"
+    },
+    {
+      "table": "user_roles",
+      "file": "backend/app/models/user.py"
+    },
+    {
+      "table": "webhook_events",
+      "file": "backend/app/models/webhook_event.py"
+    },
+    {
+      "table": "whatsapp_contacts",
+      "file": "backend/app/models/whatsapp.py"
+    },
+    {
+      "table": "whatsapp_campaigns",
+      "file": "backend/app/models/whatsapp.py"
+    },
+    {
+      "table": "whatsapp_messages",
+      "file": "backend/app/models/whatsapp.py"
+    },
+    {
+      "table": "whatsapp_status_receipts",
+      "file": "backend/app/models/whatsapp.py"
+    }
+  ],
+  "source_files": [
+    {
+      "file": "backend/app/api/v1/certificate_verification.py",
+      "lines": 194
+    },
+    {
+      "file": "backend/app/core/auth_security.py",
+      "lines": 421
+    },
+    {
+      "file": "backend/app/core/business_verticals.py",
+      "lines": 65
+    },
+    {
+      "file": "backend/app/core/cache_headers.py",
+      "lines": 21
+    },
+    {
+      "file": "backend/app/core/config.py",
+      "lines": 216
+    },
+    {
+      "file": "backend/app/core/config_broken.py",
+      "lines": 78
+    },
+    {
+      "file": "backend/app/core/cors.py",
+      "lines": 44
+    },
+    {
+      "file": "backend/app/core/course_links.py",
+      "lines": 16
+    },
+    {
+      "file": "backend/app/core/course_types.py",
+      "lines": 82
+    },
+    {
+      "file": "backend/app/core/csv_safety.py",
+      "lines": 26
+    },
+    {
+      "file": "backend/app/core/database.py",
+      "lines": 120
+    },
+    {
+      "file": "backend/app/core/database_async.py",
+      "lines": 82
+    },
+    {
+      "file": "backend/app/core/database_postgres.py",
+      "lines": 46
+    },
+    {
+      "file": "backend/app/core/firebase_admin.py",
+      "lines": 167
+    },
+    {
+      "file": "backend/app/core/input_validation.py",
+      "lines": 450
+    },
+    {
+      "file": "backend/app/core/listing.py",
+      "lines": 35
+    },
+    {
+      "file": "backend/app/core/redis.py",
+      "lines": 201
+    },
+    {
+      "file": "backend/app/core/redis_full.py",
+      "lines": 221
+    },
+    {
+      "file": "backend/app/core/secure_upload.py",
+      "lines": 404
+    },
+    {
+      "file": "backend/app/core/security.py",
+      "lines": 127
+    },
+    {
+      "file": "backend/app/core/security_middleware.py",
+      "lines": 641
+    },
+    {
+      "file": "backend/app/core/totp.py",
+      "lines": 66
+    },
+    {
+      "file": "backend/app/main.py",
+      "lines": 1478
+    },
+    {
+      "file": "backend/app/main_email_test.py",
+      "lines": 201
+    },
+    {
+      "file": "backend/app/main_frontend_integration.py",
+      "lines": 170
+    },
+    {
+      "file": "backend/app/main_payment_test.py",
+      "lines": 211
+    },
+    {
+      "file": "backend/app/main_simple.py",
+      "lines": 106
+    },
+    {
+      "file": "backend/app/main_test.py",
+      "lines": 139
+    },
+    {
+      "file": "backend/app/migration/data_migrator.py",
+      "lines": 600
+    },
+    {
+      "file": "backend/app/migration/legacy_extractor.py",
+      "lines": 285
+    },
+    {
+      "file": "backend/app/models/__init__.py",
+      "lines": 322
+    },
+    {
+      "file": "backend/app/models/admin_message.py",
+      "lines": 28
+    },
+    {
+      "file": "backend/app/models/admissions.py",
+      "lines": 455
+    },
+    {
+      "file": "backend/app/models/ai_layer.py",
+      "lines": 47
+    },
+    {
+      "file": "backend/app/models/assessment_studio.py",
+      "lines": 20
+    },
+    {
+      "file": "backend/app/models/assignment.py",
+      "lines": 135
+    },
+    {
+      "file": "backend/app/models/blog.py",
+      "lines": 74
+    },
+    {
+      "file": "backend/app/models/bundle.py",
+      "lines": 36
+    },
+    {
+      "file": "backend/app/models/campus_action_center.py",
+      "lines": 29
+    },
+    {
+      "file": "backend/app/models/campus_control_plane.py",
+      "lines": 107
+    },
+    {
+      "file": "backend/app/models/campus_exams.py",
+      "lines": 104
+    },
+    {
+      "file": "backend/app/models/campus_growth.py",
+      "lines": 38
+    },
+    {
+      "file": "backend/app/models/campus_hostel.py",
+      "lines": 95
+    },
+    {
+      "file": "backend/app/models/campus_operations.py",
+      "lines": 195
+    },
+    {
+      "file": "backend/app/models/campus_pilot.py",
+      "lines": 171
+    },
+    {
+      "file": "backend/app/models/campus_staff.py",
+      "lines": 76
+    },
+    {
+      "file": "backend/app/models/campus_transport.py",
+      "lines": 78
+    },
+    {
+      "file": "backend/app/models/candidate.py",
+      "lines": 99
+    },
+    {
+      "file": "backend/app/models/certificate.py",
+      "lines": 234
+    },
+    {
+      "file": "backend/app/models/cohort.py",
+      "lines": 151
+    },
+    {
+      "file": "backend/app/models/communication_automation.py",
+      "lines": 300
+    },
+    {
+      "file": "backend/app/models/company.py",
+      "lines": 133
+    },
+    {
+      "file": "backend/app/models/company_dashboard.py",
+      "lines": 111
+    },
+    {
+      "file": "backend/app/models/company_invoice.py",
+      "lines": 171
+    },
+    {
+      "file": "backend/app/models/content_library.py",
+      "lines": 51
+    },
+    {
+      "file": "backend/app/models/coupon.py",
+      "lines": 120
+    },
+    {
+      "file": "backend/app/models/course.py",
+      "lines": 253
+    },
+    {
+      "file": "backend/app/models/course_ops.py",
+      "lines": 23
+    },
+    {
+      "file": "backend/app/models/course_settings.py",
+      "lines": 22
+    },
+    {
+      "file": "backend/app/models/ebook.py",
+      "lines": 130
+    },
+    {
+      "file": "backend/app/models/edgyy_payment.py",
+      "lines": 111
+    },
+    {
+      "file": "backend/app/models/enrollment.py",
+      "lines": 220
+    },
+    {
+      "file": "backend/app/models/exam_paper.py",
+      "lines": 40
+    },
+    {
+      "file": "backend/app/models/flywheel.py",
+      "lines": 37
+    },
+    {
+      "file": "backend/app/models/funnel.py",
+      "lines": 24
+    },
+    {
+      "file": "backend/app/models/game.py",
+      "lines": 62
+    },
+    {
+      "file": "backend/app/models/gamification.py",
+      "lines": 138
+    },
+    {
+      "file": "backend/app/models/geogebra.py",
+      "lines": 63
+    },
+    {
+      "file": "backend/app/models/h5p.py",
+      "lines": 73
+    },
+    {
+      "file": "backend/app/models/hall_of_fame.py",
+      "lines": 38
+    },
+    {
+      "file": "backend/app/models/institution.py",
+      "lines": 144
+    },
+    {
+      "file": "backend/app/models/instructor_review.py",
+      "lines": 43
+    },
+    {
+      "file": "backend/app/models/internship.py",
+      "lines": 159
+    },
+    {
+      "file": "backend/app/models/internship_request.py",
+      "lines": 39
+    },
+    {
+      "file": "backend/app/models/lab_notebook.py",
+      "lines": 16
+    },
+    {
+      "file": "backend/app/models/learning_planner.py",
+      "lines": 60
+    },
+    {
+      "file": "backend/app/models/learning_release.py",
+      "lines": 29
+    },
+    {
+      "file": "backend/app/models/learning_signals.py",
+      "lines": 61
+    },
+    {
+      "file": "backend/app/models/live_class.py",
+      "lines": 266
+    },
+    {
+      "file": "backend/app/models/live_class_report.py",
+      "lines": 54
+    },
+    {
+      "file": "backend/app/models/mastery.py",
+      "lines": 83
+    },
+    {
+      "file": "backend/app/models/membership.py",
+      "lines": 84
+    },
+    {
+      "file": "backend/app/models/notification.py",
+      "lines": 22
+    },
+    {
+      "file": "backend/app/models/operations.py",
+      "lines": 29
+    },
+    {
+      "file": "backend/app/models/page_view.py",
+      "lines": 32
+    },
+    {
+      "file": "backend/app/models/payment.py",
+      "lines": 273
+    },
+    {
+      "file": "backend/app/models/quiz.py",
+      "lines": 182
+    },
+    {
+      "file": "backend/app/models/recording_lesson.py",
+      "lines": 27
+    },
+    {
+      "file": "backend/app/models/sileos_pack.py",
+      "lines": 167
+    },
+    {
+      "file": "backend/app/models/tag_cluster.py",
+      "lines": 22
+    },
+    {
+      "file": "backend/app/models/three_d.py",
+      "lines": 28
+    },
+    {
+      "file": "backend/app/models/three_d_task.py",
+      "lines": 53
+    },
+    {
+      "file": "backend/app/models/tuition.py",
+      "lines": 450
+    },
+    {
+      "file": "backend/app/models/tuition_collection.py",
+      "lines": 116
+    },
+    {
+      "file": "backend/app/models/tuition_reminders.py",
+      "lines": 86
+    },
+    {
+      "file": "backend/app/models/user.py",
+      "lines": 187
+    },
+    {
+      "file": "backend/app/models/webhook_event.py",
+      "lines": 41
+    },
+    {
+      "file": "backend/app/models/whatsapp.py",
+      "lines": 124
+    },
+    {
+      "file": "backend/app/routers/__init__.py",
+      "lines": 3
+    },
+    {
+      "file": "backend/app/routers/admin.py",
+      "lines": 5385
+    },
+    {
+      "file": "backend/app/routers/admin_messages.py",
+      "lines": 347
+    },
+    {
+      "file": "backend/app/routers/admissions.py",
+      "lines": 350
+    },
+    {
+      "file": "backend/app/routers/ai.py",
+      "lines": 203
+    },
+    {
+      "file": "backend/app/routers/ai_engines.py",
+      "lines": 416
+    },
+    {
+      "file": "backend/app/routers/ai_tutor.py",
+      "lines": 374
+    },
+    {
+      "file": "backend/app/routers/analytics.py",
+      "lines": 696
+    },
+    {
+      "file": "backend/app/routers/assessment_studio.py",
+      "lines": 194
+    },
+    {
+      "file": "backend/app/routers/assignments.py",
+      "lines": 1151
+    },
+    {
+      "file": "backend/app/routers/auth.py",
+      "lines": 1767
+    },
+    {
+      "file": "backend/app/routers/blog.py",
+      "lines": 824
+    },
+    {
+      "file": "backend/app/routers/brand_sharing.py",
+      "lines": 53
+    },
+    {
+      "file": "backend/app/routers/bundles.py",
+      "lines": 106
+    },
+    {
+      "file": "backend/app/routers/bunny.py",
+      "lines": 246
+    },
+    {
+      "file": "backend/app/routers/campus_action_center.py",
+      "lines": 57
+    },
+    {
+      "file": "backend/app/routers/campus_billing.py",
+      "lines": 278
+    },
+    {
+      "file": "backend/app/routers/campus_control_plane.py",
+      "lines": 198
+    },
+    {
+      "file": "backend/app/routers/campus_exams.py",
+      "lines": 186
+    },
+    {
+      "file": "backend/app/routers/campus_growth.py",
+      "lines": 83
+    },
+    {
+      "file": "backend/app/routers/campus_hostel.py",
+      "lines": 123
+    },
+    {
+      "file": "backend/app/routers/campus_learning.py",
+      "lines": 286
+    },
+    {
+      "file": "backend/app/routers/campus_operations.py",
+      "lines": 651
+    },
+    {
+      "file": "backend/app/routers/campus_pilot.py",
+      "lines": 892
+    },
+    {
+      "file": "backend/app/routers/campus_staff.py",
+      "lines": 118
+    },
+    {
+      "file": "backend/app/routers/campus_transport.py",
+      "lines": 78
+    },
+    {
+      "file": "backend/app/routers/candidate.py",
+      "lines": 290
+    },
+    {
+      "file": "backend/app/routers/categories.py",
+      "lines": 106
+    },
+    {
+      "file": "backend/app/routers/certificate_designer.py",
+      "lines": 587
+    },
+    {
+      "file": "backend/app/routers/certificates.py",
+      "lines": 1887
+    },
+    {
+      "file": "backend/app/routers/checkout.py",
+      "lines": 59
+    },
+    {
+      "file": "backend/app/routers/chunked_upload.py",
+      "lines": 592
+    },
+    {
+      "file": "backend/app/routers/cohorts.py",
+      "lines": 1035
+    },
+    {
+      "file": "backend/app/routers/companies.py",
+      "lines": 1160
+    },
+    {
+      "file": "backend/app/routers/company_billing.py",
+      "lines": 379
+    },
+    {
+      "file": "backend/app/routers/company_dashboard.py",
+      "lines": 1061
+    },
+    {
+      "file": "backend/app/routers/content_library_admin.py",
+      "lines": 360
+    },
+    {
+      "file": "backend/app/routers/coupons.py",
+      "lines": 520
+    },
+    {
+      "file": "backend/app/routers/course_ops.py",
+      "lines": 172
+    },
+    {
+      "file": "backend/app/routers/course_packages.py",
+      "lines": 138
+    },
+    {
+      "file": "backend/app/routers/course_type_capabilities.py",
+      "lines": 26
+    },
+    {
+      "file": "backend/app/routers/courses.py",
+      "lines": 2607
+    },
+    {
+      "file": "backend/app/routers/dashboard.py",
+      "lines": 1053
+    },
+    {
+      "file": "backend/app/routers/embed.py",
+      "lines": 146
+    },
+    {
+      "file": "backend/app/routers/exam_papers.py",
+      "lines": 192
+    },
+    {
+      "file": "backend/app/routers/export_import.py",
+      "lines": 3387
+    },
+    {
+      "file": "backend/app/routers/flywheel.py",
+      "lines": 158
+    },
+    {
+      "file": "backend/app/routers/funnel.py",
+      "lines": 82
+    },
+    {
+      "file": "backend/app/routers/games.py",
+      "lines": 526
+    },
+    {
+      "file": "backend/app/routers/gamification.py",
+      "lines": 195
+    },
+    {
+      "file": "backend/app/routers/geogebra.py",
+      "lines": 190
+    },
+    {
+      "file": "backend/app/routers/gradebook.py",
+      "lines": 207
+    },
+    {
+      "file": "backend/app/routers/h5p.py",
+      "lines": 567
+    },
+    {
+      "file": "backend/app/routers/hall_of_fame.py",
+      "lines": 233
+    },
+    {
+      "file": "backend/app/routers/institutions.py",
+      "lines": 303
+    },
+    {
+      "file": "backend/app/routers/instructor_reviews.py",
+      "lines": 317
+    },
+    {
+      "file": "backend/app/routers/instructors.py",
+      "lines": 43
+    },
+    {
+      "file": "backend/app/routers/internships.py",
+      "lines": 1608
+    },
+    {
+      "file": "backend/app/routers/lab_studio.py",
+      "lines": 188
+    },
+    {
+      "file": "backend/app/routers/learning_planner.py",
+      "lines": 198
+    },
+    {
+      "file": "backend/app/routers/learning_signals.py",
+      "lines": 190
+    },
+    {
+      "file": "backend/app/routers/lessons.py",
+      "lines": 88
+    },
+    {
+      "file": "backend/app/routers/library.py",
+      "lines": 707
+    },
+    {
+      "file": "backend/app/routers/live_class_attendance.py",
+      "lines": 238
+    },
+    {
+      "file": "backend/app/routers/live_class_internal.py",
+      "lines": 150
+    },
+    {
+      "file": "backend/app/routers/live_class_polls.py",
+      "lines": 423
+    },
+    {
+      "file": "backend/app/routers/live_class_recordings.py",
+      "lines": 402
+    },
+    {
+      "file": "backend/app/routers/live_class_session.py",
+      "lines": 385
+    },
+    {
+      "file": "backend/app/routers/live_classes.py",
+      "lines": 346
+    },
+    {
+      "file": "backend/app/routers/mastery.py",
+      "lines": 188
+    },
+    {
+      "file": "backend/app/routers/memberships.py",
+      "lines": 259
+    },
+    {
+      "file": "backend/app/routers/notifications.py",
+      "lines": 65
+    },
+    {
+      "file": "backend/app/routers/operations.py",
+      "lines": 89
+    },
+    {
+      "file": "backend/app/routers/orders.py",
+      "lines": 372
+    },
+    {
+      "file": "backend/app/routers/parent_portal.py",
+      "lines": 16
+    },
+    {
+      "file": "backend/app/routers/parents.py",
+      "lines": 213
+    },
+    {
+      "file": "backend/app/routers/payments.py",
+      "lines": 1056
+    },
+    {
+      "file": "backend/app/routers/payments_proxy.py",
+      "lines": 664
+    },
+    {
+      "file": "backend/app/routers/player.py",
+      "lines": 130
+    },
+    {
+      "file": "backend/app/routers/progress.py",
+      "lines": 320
+    },
+    {
+      "file": "backend/app/routers/question_banks.py",
+      "lines": 425
+    },
+    {
+      "file": "backend/app/routers/quizzes.py",
+      "lines": 2568
+    },
+    {
+      "file": "backend/app/routers/recording_lessons.py",
+      "lines": 200
+    },
+    {
+      "file": "backend/app/routers/scorable_items.py",
+      "lines": 75
+    },
+    {
+      "file": "backend/app/routers/sileos.py",
+      "lines": 730
+    },
+    {
+      "file": "backend/app/routers/student_workspace.py",
+      "lines": 145
+    },
+    {
+      "file": "backend/app/routers/studio.py",
+      "lines": 98
+    },
+    {
+      "file": "backend/app/routers/superadmin.py",
+      "lines": 935
+    },
+    {
+      "file": "backend/app/routers/tag_taxonomy.py",
+      "lines": 75
+    },
+    {
+      "file": "backend/app/routers/tags.py",
+      "lines": 28
+    },
+    {
+      "file": "backend/app/routers/three_d.py",
+      "lines": 249
+    },
+    {
+      "file": "backend/app/routers/three_d_tasks.py",
+      "lines": 362
+    },
+    {
+      "file": "backend/app/routers/tuition.py",
+      "lines": 214
+    },
+    {
+      "file": "backend/app/routers/tuition_collection.py",
+      "lines": 184
+    },
+    {
+      "file": "backend/app/routers/tuition_reminders.py",
+      "lines": 50
+    },
+    {
+      "file": "backend/app/routers/uploads.py",
+      "lines": 692
+    },
+    {
+      "file": "backend/app/routers/users.py",
+      "lines": 605
+    },
+    {
+      "file": "backend/app/routers/video.py",
+      "lines": 116
+    },
+    {
+      "file": "backend/app/routers/video_streaming.py",
+      "lines": 363
+    },
+    {
+      "file": "backend/app/routers/virtual_labs.py",
+      "lines": 370
+    },
+    {
+      "file": "backend/app/routers/whatsapp.py",
+      "lines": 304
+    },
+    {
+      "file": "backend/app/routers/wishlist.py",
+      "lines": 146
+    },
+    {
+      "file": "backend/app/routers/youtube_embed.py",
+      "lines": 260
+    },
+    {
+      "file": "backend/app/schemas/__init__.py",
+      "lines": 3
+    },
+    {
+      "file": "backend/app/schemas/admin.py",
+      "lines": 135
+    },
+    {
+      "file": "backend/app/schemas/admissions.py",
+      "lines": 432
+    },
+    {
+      "file": "backend/app/schemas/assessment.py",
+      "lines": 50
+    },
+    {
+      "file": "backend/app/schemas/auth.py",
+      "lines": 136
+    },
+    {
+      "file": "backend/app/schemas/bundle.py",
+      "lines": 47
+    },
+    {
+      "file": "backend/app/schemas/campus_exams.py",
+      "lines": 66
+    },
+    {
+      "file": "backend/app/schemas/campus_hostel.py",
+      "lines": 72
+    },
+    {
+      "file": "backend/app/schemas/campus_operations.py",
+      "lines": 84
+    },
+    {
+      "file": "backend/app/schemas/campus_pilot.py",
+      "lines": 121
+    },
+    {
+      "file": "backend/app/schemas/campus_staff.py",
+      "lines": 63
+    },
+    {
+      "file": "backend/app/schemas/campus_transport.py",
+      "lines": 64
+    },
+    {
+      "file": "backend/app/schemas/candidate.py",
+      "lines": 92
+    },
+    {
+      "file": "backend/app/schemas/certificate.py",
+      "lines": 229
+    },
+    {
+      "file": "backend/app/schemas/cohort.py",
+      "lines": 211
+    },
+    {
+      "file": "backend/app/schemas/company.py",
+      "lines": 133
+    },
+    {
+      "file": "backend/app/schemas/company_billing.py",
+      "lines": 86
+    },
+    {
+      "file": "backend/app/schemas/company_dashboard.py",
+      "lines": 248
+    },
+    {
+      "file": "backend/app/schemas/company_invoice.py",
+      "lines": 65
+    },
+    {
+      "file": "backend/app/schemas/concept_lab.py",
+      "lines": 145
+    },
+    {
+      "file": "backend/app/schemas/coupon.py",
+      "lines": 175
+    },
+    {
+      "file": "backend/app/schemas/course.py",
+      "lines": 321
+    },
+    {
+      "file": "backend/app/schemas/edgyy_payment.py",
+      "lines": 176
+    },
+    {
+      "file": "backend/app/schemas/exam_paper.py",
+      "lines": 30
+    },
+    {
+      "file": "backend/app/schemas/game_config.py",
+      "lines": 273
+    },
+    {
+      "file": "backend/app/schemas/institution.py",
+      "lines": 67
+    },
+    {
+      "file": "backend/app/schemas/instructor_review.py",
+      "lines": 41
+    },
+    {
+      "file": "backend/app/schemas/internship.py",
+      "lines": 331
+    },
+    {
+      "file": "backend/app/schemas/lab_config.py",
+      "lines": 291
+    },
+    {
+      "file": "backend/app/schemas/live_class.py",
+      "lines": 272
+    },
+    {
+      "file": "backend/app/schemas/membership.py",
+      "lines": 70
+    },
+    {
+      "file": "backend/app/schemas/payment.py",
+      "lines": 101
+    },
+    {
+      "file": "backend/app/schemas/scorable.py",
+      "lines": 210
+    },
+    {
+      "file": "backend/app/schemas/three_d_task_config.py",
+      "lines": 520
+    },
+    {
+      "file": "backend/app/schemas/tuition.py",
+      "lines": 323
+    },
+    {
+      "file": "backend/app/schemas/tuition_reminders.py",
+      "lines": 43
+    },
+    {
+      "file": "backend/app/schemas/user.py",
+      "lines": 110
+    },
+    {
+      "file": "backend/app/schemas/whatsapp.py",
+      "lines": 65
+    },
+    {
+      "file": "backend/app/scripts/__init__.py",
+      "lines": 0
+    },
+    {
+      "file": "backend/app/scripts/cleanup_broken_uploads.py",
+      "lines": 96
+    },
+    {
+      "file": "backend/app/scripts/delete_all_courses.py",
+      "lines": 149
+    },
+    {
+      "file": "backend/app/seed_data/sashainfinity_courses.py",
+      "lines": 277
+    },
+    {
+      "file": "backend/app/seed_data.py",
+      "lines": 406
+    },
+    {
+      "file": "backend/app/services/__init__.py",
+      "lines": 3
+    },
+    {
+      "file": "backend/app/services/admissions_service.py",
+      "lines": 1471
+    },
+    {
+      "file": "backend/app/services/ai_layer_service.py",
+      "lines": 267
+    },
+    {
+      "file": "backend/app/services/assessment_studio_service.py",
+      "lines": 279
+    },
+    {
+      "file": "backend/app/services/attendance_report.py",
+      "lines": 149
+    },
+    {
+      "file": "backend/app/services/auth_service.py",
+      "lines": 240
+    },
+    {
+      "file": "backend/app/services/brand_artwork.py",
+      "lines": 105
+    },
+    {
+      "file": "backend/app/services/business_portfolio_service.py",
+      "lines": 307
+    },
+    {
+      "file": "backend/app/services/campus_action_center.py",
+      "lines": 521
+    },
+    {
+      "file": "backend/app/services/campus_billing.py",
+      "lines": 139
+    },
+    {
+      "file": "backend/app/services/campus_control_plane.py",
+      "lines": 388
+    },
+    {
+      "file": "backend/app/services/campus_exams.py",
+      "lines": 744
+    },
+    {
+      "file": "backend/app/services/campus_growth.py",
+      "lines": 130
+    },
+    {
+      "file": "backend/app/services/campus_hostel.py",
+      "lines": 451
+    },
+    {
+      "file": "backend/app/services/campus_mail.py",
+      "lines": 56
+    },
+    {
+      "file": "backend/app/services/campus_pilot.py",
+      "lines": 431
+    },
+    {
+      "file": "backend/app/services/campus_report_pdf.py",
+      "lines": 529
+    },
+    {
+      "file": "backend/app/services/campus_staff.py",
+      "lines": 633
+    },
+    {
+      "file": "backend/app/services/campus_transport.py",
+      "lines": 443
+    },
+    {
+      "file": "backend/app/services/campus_whatsapp.py",
+      "lines": 721
+    },
+    {
+      "file": "backend/app/services/campus_worker.py",
+      "lines": 67
+    },
+    {
+      "file": "backend/app/services/certificate_html_renderer.py",
+      "lines": 640
+    },
+    {
+      "file": "backend/app/services/certificate_service.py",
+      "lines": 1648
+    },
+    {
+      "file": "backend/app/services/class_report_service.py",
+      "lines": 377
+    },
+    {
+      "file": "backend/app/services/company_scope.py",
+      "lines": 58
+    },
+    {
+      "file": "backend/app/services/coupon_service.py",
+      "lines": 378
+    },
+    {
+      "file": "backend/app/services/course_access.py",
+      "lines": 31
+    },
+    {
+      "file": "backend/app/services/course_asset_service.py",
+      "lines": 63
+    },
+    {
+      "file": "backend/app/services/course_ops_service.py",
+      "lines": 237
+    },
+    {
+      "file": "backend/app/services/course_package_service.py",
+      "lines": 606
+    },
+    {
+      "file": "backend/app/services/course_service.py",
+      "lines": 659
+    },
+    {
+      "file": "backend/app/services/email_service.py",
+      "lines": 1194
+    },
+    {
+      "file": "backend/app/services/exam_paper_service.py",
+      "lines": 196
+    },
+    {
+      "file": "backend/app/services/flywheel_service.py",
+      "lines": 259
+    },
+    {
+      "file": "backend/app/services/fulfillment_service.py",
+      "lines": 519
+    },
+    {
+      "file": "backend/app/services/funnel_service.py",
+      "lines": 229
+    },
+    {
+      "file": "backend/app/services/gamification_service.py",
+      "lines": 770
+    },
+    {
+      "file": "backend/app/services/glb_budget.py",
+      "lines": 114
+    },
+    {
+      "file": "backend/app/services/gradebook_service.py",
+      "lines": 244
+    },
+    {
+      "file": "backend/app/services/h5p_service.py",
+      "lines": 340
+    },
+    {
+      "file": "backend/app/services/institution_service.py",
+      "lines": 673
+    },
+    {
+      "file": "backend/app/services/invoice_pdf.py",
+      "lines": 207
+    },
+    {
+      "file": "backend/app/services/invoice_service.py",
+      "lines": 148
+    },
+    {
+      "file": "backend/app/services/jitsi_token_service.py",
+      "lines": 110
+    },
+    {
+      "file": "backend/app/services/lab_catalog_service.py",
+      "lines": 69
+    },
+    {
+      "file": "backend/app/services/lab_investigation_service.py",
+      "lines": 107
+    },
+    {
+      "file": "backend/app/services/lab_model_service.py",
+      "lines": 123
+    },
+    {
+      "file": "backend/app/services/lab_studio_service.py",
+      "lines": 38
+    },
+    {
+      "file": "backend/app/services/launch_readiness.py",
+      "lines": 28
+    },
+    {
+      "file": "backend/app/services/learning_planner_service.py",
+      "lines": 363
+    },
+    {
+      "file": "backend/app/services/learning_signals_service.py",
+      "lines": 440
+    },
+    {
+      "file": "backend/app/services/library_storage.py",
+      "lines": 432
+    },
+    {
+      "file": "backend/app/services/live_class_service.py",
+      "lines": 603
+    },
+    {
+      "file": "backend/app/services/live_recording_service.py",
+      "lines": 320
+    },
+    {
+      "file": "backend/app/services/live_reminders.py",
+      "lines": 319
+    },
+    {
+      "file": "backend/app/services/llm_provider.py",
+      "lines": 67
+    },
+    {
+      "file": "backend/app/services/mastery_service.py",
+      "lines": 327
+    },
+    {
+      "file": "backend/app/services/media_pipeline.py",
+      "lines": 100
+    },
+    {
+      "file": "backend/app/services/membership_access.py",
+      "lines": 87
+    },
+    {
+      "file": "backend/app/services/model_library_service.py",
+      "lines": 64
+    },
+    {
+      "file": "backend/app/services/notification_service.py",
+      "lines": 48
+    },
+    {
+      "file": "backend/app/services/offline_learning_service.py",
+      "lines": 49
+    },
+    {
+      "file": "backend/app/services/operations_service.py",
+      "lines": 147
+    },
+    {
+      "file": "backend/app/services/parent_portal.py",
+      "lines": 236
+    },
+    {
+      "file": "backend/app/services/payment_service.py",
+      "lines": 197
+    },
+    {
+      "file": "backend/app/services/pricing.py",
+      "lines": 353
+    },
+    {
+      "file": "backend/app/services/public_preview.py",
+      "lines": 35
+    },
+    {
+      "file": "backend/app/services/reconciliation.py",
+      "lines": 521
+    },
+    {
+      "file": "backend/app/services/recording_lesson_service.py",
+      "lines": 162
+    },
+    {
+      "file": "backend/app/services/refund_service.py",
+      "lines": 506
+    },
+    {
+      "file": "backend/app/services/report_theme.py",
+      "lines": 260
+    },
+    {
+      "file": "backend/app/services/retention_service.py",
+      "lines": 328
+    },
+    {
+      "file": "backend/app/services/studio_service.py",
+      "lines": 302
+    },
+    {
+      "file": "backend/app/services/supplied_lab_pack.py",
+      "lines": 127
+    },
+    {
+      "file": "backend/app/services/tag_service.py",
+      "lines": 252
+    },
+    {
+      "file": "backend/app/services/transcription_provider.py",
+      "lines": 38
+    },
+    {
+      "file": "backend/app/services/tuition_collection.py",
+      "lines": 700
+    },
+    {
+      "file": "backend/app/services/tuition_reminders.py",
+      "lines": 694
+    },
+    {
+      "file": "backend/app/services/tuition_service.py",
+      "lines": 1262
+    },
+    {
+      "file": "backend/app/services/user_service.py",
+      "lines": 217
+    },
+    {
+      "file": "backend/app/services/webhook_processor.py",
+      "lines": 587
+    },
+    {
+      "file": "backend/app/services/whatsapp_campaigns.py",
+      "lines": 153
+    },
+    {
+      "file": "backend/app/services/xapi_service.py",
+      "lines": 48
+    },
+    {
+      "file": "backend/app/utils/__init__.py",
+      "lines": 3
+    },
+    {
+      "file": "backend/app/utils/email.py",
+      "lines": 1190
+    },
+    {
+      "file": "backend/app/workers/__init__.py",
+      "lines": 0
+    },
+    {
+      "file": "backend/app/workers/recording_lessons.py",
+      "lines": 32
+    },
+    {
+      "file": "backend/alembic/env.py",
+      "lines": 113
+    },
+    {
+      "file": "backend/alembic/versions/0001_baseline.py",
+      "lines": 40
+    },
+    {
+      "file": "backend/alembic/versions/0002_add_live_class_tables.py",
+      "lines": 205
+    },
+    {
+      "file": "backend/alembic/versions/0003_learning_experience.py",
+      "lines": 426
+    },
+    {
+      "file": "backend/alembic/versions/0004_learning_games.py",
+      "lines": 119
+    },
+    {
+      "file": "backend/alembic/versions/0005_digital_library.py",
+      "lines": 156
+    },
+    {
+      "file": "backend/alembic/versions/0005_money_ops.py",
+      "lines": 124
+    },
+    {
+      "file": "backend/alembic/versions/0006_course_type_normalization.py",
+      "lines": 56
+    },
+    {
+      "file": "backend/alembic/versions/0006_merge_digital_library_and_money_ops.py",
+      "lines": 29
+    },
+    {
+      "file": "backend/alembic/versions/0007_content_libraries.py",
+      "lines": 94
+    },
+    {
+      "file": "backend/alembic/versions/0008_three_d_tasks.py",
+      "lines": 74
+    },
+    {
+      "file": "backend/alembic/versions/0009_mastery_graph.py",
+      "lines": 102
+    },
+    {
+      "file": "backend/alembic/versions/0010_tag_clusters.py",
+      "lines": 35
+    },
+    {
+      "file": "backend/alembic/versions/0011_live_retention.py",
+      "lines": 91
+    },
+    {
+      "file": "backend/alembic/versions/0012_studio_settings.py",
+      "lines": 56
+    },
+    {
+      "file": "backend/alembic/versions/0013_ai_layer.py",
+      "lines": 63
+    },
+    {
+      "file": "backend/alembic/versions/0014_flywheel.py",
+      "lines": 57
+    },
+    {
+      "file": "backend/alembic/versions/0015_funnel_events.py",
+      "lines": 37
+    },
+    {
+      "file": "backend/alembic/versions/0016_course_ops.py",
+      "lines": 49
+    },
+    {
+      "file": "backend/alembic/versions/0017_coupon_membership_offer.py",
+      "lines": 33
+    },
+    {
+      "file": "backend/alembic/versions/0018_assessment_integrity.py",
+      "lines": 43
+    },
+    {
+      "file": "backend/alembic/versions/0019_media_tiers.py",
+      "lines": 33
+    },
+    {
+      "file": "backend/alembic/versions/0020_learning_signals.py",
+      "lines": 74
+    },
+    {
+      "file": "backend/alembic/versions/0021_learning_planner.py",
+      "lines": 79
+    },
+    {
+      "file": "backend/alembic/versions/0022_assessment_studio.py",
+      "lines": 38
+    },
+    {
+      "file": "backend/alembic/versions/0023_recording_lessons.py",
+      "lines": 44
+    },
+    {
+      "file": "backend/alembic/versions/0024_operations_packages.py",
+      "lines": 45
+    },
+    {
+      "file": "backend/alembic/versions/0025_course_tools.py",
+      "lines": 24
+    },
+    {
+      "file": "backend/alembic/versions/0026_transfer_lifecycle.py",
+      "lines": 38
+    },
+    {
+      "file": "backend/alembic/versions/0027_lab_notebooks.py",
+      "lines": 28
+    },
+    {
+      "file": "backend/alembic/versions/0028_exam_papers_course_links.py",
+      "lines": 59
+    },
+    {
+      "file": "backend/alembic/versions/0029_integrated_learning.py",
+      "lines": 19
+    },
+    {
+      "file": "backend/alembic/versions/0030_institutions.py",
+      "lines": 199
+    },
+    {
+      "file": "backend/alembic/versions/0031_campus_operations.py",
+      "lines": 307
+    },
+    {
+      "file": "backend/alembic/versions/0032_campus_learning.py",
+      "lines": 126
+    },
+    {
+      "file": "backend/alembic/versions/0033_campus_pilot.py",
+      "lines": 230
+    },
+    {
+      "file": "backend/alembic/versions/0034_global_whatsapp.py",
+      "lines": 278
+    },
+    {
+      "file": "backend/alembic/versions/0035_admissions_student_lifecycle.py",
+      "lines": 528
+    },
+    {
+      "file": "backend/alembic/versions/0036_tuition_finance.py",
+      "lines": 526
+    },
+    {
+      "file": "backend/alembic/versions/0037_campus_growth_control_plane.py",
+      "lines": 196
+    },
+    {
+      "file": "backend/alembic/versions/0038_campus_exams.py",
+      "lines": 112
+    },
+    {
+      "file": "backend/alembic/versions/0039_tuition_reminders.py",
+      "lines": 86
+    },
+    {
+      "file": "backend/alembic/versions/0040_campus_staff_leave.py",
+      "lines": 94
+    },
+    {
+      "file": "backend/alembic/versions/0041_campus_transport.py",
+      "lines": 115
+    },
+    {
+      "file": "backend/alembic/versions/0042_campus_hostel.py",
+      "lines": 135
+    },
+    {
+      "file": "backend/alembic/versions/0043_fee_collection.py",
+      "lines": 159
+    },
+    {
+      "file": "backend/scripts/build_concept_extensions.py",
+      "lines": 48
+    },
+    {
+      "file": "backend/scripts/install_transcription_model.py",
+      "lines": 13
+    },
+    {
+      "file": "backend/scripts/migrate_wp_orders.py",
+      "lines": 233
+    },
+    {
+      "file": "backend/scripts/rehearse_course_restore.py",
+      "lines": 79
+    },
+    {
+      "file": "backend/scripts/transcribe_local.py",
+      "lines": 22
+    },
+    {
+      "file": "frontend/src/api/admin-messages.ts",
+      "lines": 79
+    },
+    {
+      "file": "frontend/src/api/admin.ts",
+      "lines": 449
+    },
+    {
+      "file": "frontend/src/api/aiLayer.ts",
+      "lines": 70
+    },
+    {
+      "file": "frontend/src/api/assessment-studio.ts",
+      "lines": 15
+    },
+    {
+      "file": "frontend/src/api/assignment.ts",
+      "lines": 79
+    },
+    {
+      "file": "frontend/src/api/auth.ts",
+      "lines": 244
+    },
+    {
+      "file": "frontend/src/api/axios.ts",
+      "lines": 472
+    },
+    {
+      "file": "frontend/src/api/blog.ts",
+      "lines": 96
+    },
+    {
+      "file": "frontend/src/api/bundle.ts",
+      "lines": 48
+    },
+    {
+      "file": "frontend/src/api/campus-control-plane.ts",
+      "lines": 80
+    },
+    {
+      "file": "frontend/src/api/campus-exams.ts",
+      "lines": 164
+    },
+    {
+      "file": "frontend/src/api/campus-growth.ts",
+      "lines": 38
+    },
+    {
+      "file": "frontend/src/api/campus-hostel.ts",
+      "lines": 134
+    },
+    {
+      "file": "frontend/src/api/campus-os.ts",
+      "lines": 1039
+    },
+    {
+      "file": "frontend/src/api/campus-staff.ts",
+      "lines": 131
+    },
+    {
+      "file": "frontend/src/api/campus-transport.ts",
+      "lines": 92
+    },
+    {
+      "file": "frontend/src/api/campus.ts",
+      "lines": 447
+    },
+    {
+      "file": "frontend/src/api/candidate.ts",
+      "lines": 102
+    },
+    {
+      "file": "frontend/src/api/cart.ts",
+      "lines": 100
+    },
+    {
+      "file": "frontend/src/api/certificateDesigner.ts",
+      "lines": 112
+    },
+    {
+      "file": "frontend/src/api/certificates.ts",
+      "lines": 172
+    },
+    {
+      "file": "frontend/src/api/chunked-upload.ts",
+      "lines": 308
+    },
+    {
+      "file": "frontend/src/api/cohort.ts",
+      "lines": 163
+    },
+    {
+      "file": "frontend/src/api/company-dashboard.ts",
+      "lines": 641
+    },
+    {
+      "file": "frontend/src/api/company.ts",
+      "lines": 262
+    },
+    {
+      "file": "frontend/src/api/companyBilling.ts",
+      "lines": 150
+    },
+    {
+      "file": "frontend/src/api/course-packages.ts",
+      "lines": 61
+    },
+    {
+      "file": "frontend/src/api/course.ts",
+      "lines": 391
+    },
+    {
+      "file": "frontend/src/api/courseOps.ts",
+      "lines": 27
+    },
+    {
+      "file": "frontend/src/api/dashboard.ts",
+      "lines": 293
+    },
+    {
+      "file": "frontend/src/api/exam-papers.ts",
+      "lines": 52
+    },
+    {
+      "file": "frontend/src/api/flywheel.ts",
+      "lines": 34
+    },
+    {
+      "file": "frontend/src/api/funnel.ts",
+      "lines": 48
+    },
+    {
+      "file": "frontend/src/api/games.ts",
+      "lines": 220
+    },
+    {
+      "file": "frontend/src/api/gamification.ts",
+      "lines": 104
+    },
+    {
+      "file": "frontend/src/api/geogebra.ts",
+      "lines": 52
+    },
+    {
+      "file": "frontend/src/api/gradebook.ts",
+      "lines": 109
+    },
+    {
+      "file": "frontend/src/api/h5p.ts",
+      "lines": 246
+    },
+    {
+      "file": "frontend/src/api/hallOfFame.ts",
+      "lines": 72
+    },
+    {
+      "file": "frontend/src/api/institutions.ts",
+      "lines": 174
+    },
+    {
+      "file": "frontend/src/api/internship.ts",
+      "lines": 369
+    },
+    {
+      "file": "frontend/src/api/lab-studio.ts",
+      "lines": 158
+    },
+    {
+      "file": "frontend/src/api/labs.ts",
+      "lines": 131
+    },
+    {
+      "file": "frontend/src/api/library.ts",
+      "lines": 152
+    },
+    {
+      "file": "frontend/src/api/liveClasses.ts",
+      "lines": 268
+    },
+    {
+      "file": "frontend/src/api/mastery.ts",
+      "lines": 99
+    },
+    {
+      "file": "frontend/src/api/membership.ts",
+      "lines": 51
+    },
+    {
+      "file": "frontend/src/api/notifications.ts",
+      "lines": 19
+    },
+    {
+      "file": "frontend/src/api/operations.ts",
+      "lines": 146
+    },
+    {
+      "file": "frontend/src/api/parent-portal.ts",
+      "lines": 62
+    },
+    {
+      "file": "frontend/src/api/planner.ts",
+      "lines": 26
+    },
+    {
+      "file": "frontend/src/api/quiz.ts",
+      "lines": 276
+    },
+    {
+      "file": "frontend/src/api/recording-lessons.ts",
+      "lines": 21
+    },
+    {
+      "file": "frontend/src/api/scorable.ts",
+      "lines": 96
+    },
+    {
+      "file": "frontend/src/api/signals.ts",
+      "lines": 59
+    },
+    {
+      "file": "frontend/src/api/studio.ts",
+      "lines": 77
+    },
+    {
+      "file": "frontend/src/api/superadmin.ts",
+      "lines": 154
+    },
+    {
+      "file": "frontend/src/api/threeD.ts",
+      "lines": 51
+    },
+    {
+      "file": "frontend/src/api/threeDTasks.ts",
+      "lines": 81
+    },
+    {
+      "file": "frontend/src/api/tuition-reminders.ts",
+      "lines": 70
+    },
+    {
+      "file": "frontend/src/api/upload.ts",
+      "lines": 188
+    },
+    {
+      "file": "frontend/src/api/video.ts",
+      "lines": 115
+    },
+    {
+      "file": "frontend/src/api/whatsapp.ts",
+      "lines": 130
+    },
+    {
+      "file": "frontend/src/App.tsx",
+      "lines": 2477
+    },
+    {
+      "file": "frontend/src/components/about/AboutSections.module.css",
+      "lines": 928
+    },
+    {
+      "file": "frontend/src/components/about/CoreOfferingsSection.tsx",
+      "lines": 68
+    },
+    {
+      "file": "frontend/src/components/about/CTASection.tsx",
+      "lines": 25
+    },
+    {
+      "file": "frontend/src/components/about/MentorsSection.tsx",
+      "lines": 99
+    },
+    {
+      "file": "frontend/src/components/about/MissionSection.tsx",
+      "lines": 37
+    },
+    {
+      "file": "frontend/src/components/about/PageTitleSection.tsx",
+      "lines": 12
+    },
+    {
+      "file": "frontend/src/components/about/StatsSection.tsx",
+      "lines": 33
+    },
+    {
+      "file": "frontend/src/components/about/WhoWeAreSection.tsx",
+      "lines": 39
+    },
+    {
+      "file": "frontend/src/components/admin/BusinessPortfolio.tsx",
+      "lines": 195
+    },
+    {
+      "file": "frontend/src/components/admin/certificate-templates/index.ts",
+      "lines": 3
+    },
+    {
+      "file": "frontend/src/components/admin/certificate-templates/template-builder.tsx",
+      "lines": 528
+    },
+    {
+      "file": "frontend/src/components/admin/certificate-templates/template-management.tsx",
+      "lines": 539
+    },
+    {
+      "file": "frontend/src/components/admin/certificate-templates/template-uploader.tsx",
+      "lines": 350
+    },
+    {
+      "file": "frontend/src/components/admin/CoursesProgressChart.tsx",
+      "lines": 319
+    },
+    {
+      "file": "frontend/src/components/admin/ExportImportPanel.tsx",
+      "lines": 884
+    },
+    {
+      "file": "frontend/src/components/admin/heatmaps.tsx",
+      "lines": 449
+    },
+    {
+      "file": "frontend/src/components/admin/ImpersonationBanner.tsx",
+      "lines": 165
+    },
+    {
+      "file": "frontend/src/components/admin/InternshipAnalyticsCharts.tsx",
+      "lines": 288
+    },
+    {
+      "file": "frontend/src/components/admin/LaunchReadiness.tsx",
+      "lines": 79
+    },
+    {
+      "file": "frontend/src/components/admin/LearningProgressChart.tsx",
+      "lines": 172
+    },
+    {
+      "file": "frontend/src/components/admin/PasswordResetLinkAction.tsx",
+      "lines": 147
+    },
+    {
+      "file": "frontend/src/components/admin/TableScrollArea.tsx",
+      "lines": 85
+    },
+    {
+      "file": "frontend/src/components/admin/TagClustersPanel.tsx",
+      "lines": 72
+    },
+    {
+      "file": "frontend/src/components/ai/AdaptiveLessonPanel.tsx",
+      "lines": 60
+    },
+    {
+      "file": "frontend/src/components/ai/TutorDrawer.tsx",
+      "lines": 174
+    },
+    {
+      "file": "frontend/src/components/assess/RubricEditor.tsx",
+      "lines": 111
+    },
+    {
+      "file": "frontend/src/components/assess/RubricScorer.tsx",
+      "lines": 94
+    },
+    {
+      "file": "frontend/src/components/assessment/BankDrawDialog.tsx",
+      "lines": 70
+    },
+    {
+      "file": "frontend/src/components/assessment/QuizCsvImport.tsx",
+      "lines": 64
+    },
+    {
+      "file": "frontend/src/components/assessment/ScorableItemsEditor.tsx",
+      "lines": 198
+    },
+    {
+      "file": "frontend/src/components/assessment/ScorableItemsPanel.tsx",
+      "lines": 72
+    },
+    {
+      "file": "frontend/src/components/auth/instructor-register-form.tsx",
+      "lines": 487
+    },
+    {
+      "file": "frontend/src/components/auth/login-form.tsx",
+      "lines": 604
+    },
+    {
+      "file": "frontend/src/components/auth/MobileNumberGate.tsx",
+      "lines": 144
+    },
+    {
+      "file": "frontend/src/components/auth/ProfileCompletionGuard.tsx",
+      "lines": 34
+    },
+    {
+      "file": "frontend/src/components/auth/register-form.tsx",
+      "lines": 368
+    },
+    {
+      "file": "frontend/src/components/auth/RoleSelectionModal.tsx",
+      "lines": 268
+    },
+    {
+      "file": "frontend/src/components/auth/unified-register-form.tsx",
+      "lines": 419
+    },
+    {
+      "file": "frontend/src/components/candidate/InternshipEligibilityWidget.tsx",
+      "lines": 137
+    },
+    {
+      "file": "frontend/src/components/candidate/TagInput.tsx",
+      "lines": 94
+    },
+    {
+      "file": "frontend/src/components/certificate/LinkedInShareDialog.tsx",
+      "lines": 284
+    },
+    {
+      "file": "frontend/src/components/certificates/designer/CertificateDesignerEditor.tsx",
+      "lines": 425
+    },
+    {
+      "file": "frontend/src/components/certificates/designer/DesignerCanvas.tsx",
+      "lines": 420
+    },
+    {
+      "file": "frontend/src/components/certificates/designer/DesignerToolbar.tsx",
+      "lines": 166
+    },
+    {
+      "file": "frontend/src/components/certificates/designer/ElementProperties.tsx",
+      "lines": 412
+    },
+    {
+      "file": "frontend/src/components/certificates/designer/LayersPanel.tsx",
+      "lines": 128
+    },
+    {
+      "file": "frontend/src/components/certificates/designer/TemplateGallery.tsx",
+      "lines": 202
+    },
+    {
+      "file": "frontend/src/components/common/ErrorBoundary.tsx",
+      "lines": 175
+    },
+    {
+      "file": "frontend/src/components/common/scroll-to-top.tsx",
+      "lines": 18
+    },
+    {
+      "file": "frontend/src/components/company/CompanyInternshipCharts.tsx",
+      "lines": 187
+    },
+    {
+      "file": "frontend/src/components/company/InterestModal.tsx",
+      "lines": 75
+    },
+    {
+      "file": "frontend/src/components/contact/ContactFormSection.module.css",
+      "lines": 448
+    },
+    {
+      "file": "frontend/src/components/contact/ContactFormSection.tsx",
+      "lines": 221
+    },
+    {
+      "file": "frontend/src/components/contact/MapSection.module.css",
+      "lines": 145
+    },
+    {
+      "file": "frontend/src/components/contact/MapSection.tsx",
+      "lines": 55
+    },
+    {
+      "file": "frontend/src/components/course/CollaboratorsBlock.tsx",
+      "lines": 69
+    },
+    {
+      "file": "frontend/src/components/course/course-card.tsx",
+      "lines": 328
+    },
+    {
+      "file": "frontend/src/components/course/CourseLinkField.tsx",
+      "lines": 78
+    },
+    {
+      "file": "frontend/src/components/course/LessonPreviewModal.tsx",
+      "lines": 101
+    },
+    {
+      "file": "frontend/src/components/course/TagsEditor.tsx",
+      "lines": 80
+    },
+    {
+      "file": "frontend/src/components/course/TemplatePicker.tsx",
+      "lines": 45
+    },
+    {
+      "file": "frontend/src/components/dashboard/charts.tsx",
+      "lines": 315
+    },
+    {
+      "file": "frontend/src/components/dashboard/ContinueLearning.tsx",
+      "lines": 38
+    },
+    {
+      "file": "frontend/src/components/dashboard/DashboardNavbar.tsx",
+      "lines": 227
+    },
+    {
+      "file": "frontend/src/components/dashboard/DashboardSidebar.tsx",
+      "lines": 511
+    },
+    {
+      "file": "frontend/src/components/dashboard/DashboardWorkspace.tsx",
+      "lines": 174
+    },
+    {
+      "file": "frontend/src/components/dashboard/MembershipCard.tsx",
+      "lines": 141
+    },
+    {
+      "file": "frontend/src/components/dashboard/MyInternshipCharts.tsx",
+      "lines": 216
+    },
+    {
+      "file": "frontend/src/components/dashboard/nav-configs.ts",
+      "lines": 170
+    },
+    {
+      "file": "frontend/src/components/dashboard/primitives.tsx",
+      "lines": 619
+    },
+    {
+      "file": "frontend/src/components/dashboard/RoleLayouts.tsx",
+      "lines": 61
+    },
+    {
+      "file": "frontend/src/components/dashboard/StudentInternshipSummary.tsx",
+      "lines": 92
+    },
+    {
+      "file": "frontend/src/components/dashboard/theme.css",
+      "lines": 274
+    },
+    {
+      "file": "frontend/src/components/dashboard/two-factor-section.tsx",
+      "lines": 275
+    },
+    {
+      "file": "frontend/src/components/dashboard/WorkspaceHeader.tsx",
+      "lines": 80
+    },
+    {
+      "file": "frontend/src/components/dashboard/WorkspaceNavigation.tsx",
+      "lines": 49
+    },
+    {
+      "file": "frontend/src/components/design-system/AstraRouteTheme.tsx",
+      "lines": 46
+    },
+    {
+      "file": "frontend/src/components/design-system/AstraSymbol.tsx",
+      "lines": 15
+    },
+    {
+      "file": "frontend/src/components/design-system/BrandBanner.tsx",
+      "lines": 116
+    },
+    {
+      "file": "frontend/src/components/design-system/GlassSurface.tsx",
+      "lines": 19
+    },
+    {
+      "file": "frontend/src/components/design-system/PageBanner.tsx",
+      "lines": 51
+    },
+    {
+      "file": "frontend/src/components/design-system/PageLayout.tsx",
+      "lines": 102
+    },
+    {
+      "file": "frontend/src/components/flywheel/DigiLockerButton.tsx",
+      "lines": 31
+    },
+    {
+      "file": "frontend/src/components/flywheel/EarningsPanel.tsx",
+      "lines": 70
+    },
+    {
+      "file": "frontend/src/components/flywheel/FlywheelPanel.tsx",
+      "lines": 83
+    },
+    {
+      "file": "frontend/src/components/flywheel/FunnelPanel.tsx",
+      "lines": 49
+    },
+    {
+      "file": "frontend/src/components/flywheel/ReviewQueueCard.tsx",
+      "lines": 37
+    },
+    {
+      "file": "frontend/src/components/flywheel/TeachBackPanel.tsx",
+      "lines": 67
+    },
+    {
+      "file": "frontend/src/components/games/builderValidation.ts",
+      "lines": 156
+    },
+    {
+      "file": "frontend/src/components/games/engines/DragSort.tsx",
+      "lines": 258
+    },
+    {
+      "file": "frontend/src/components/games/engines/MatchPairs.tsx",
+      "lines": 174
+    },
+    {
+      "file": "frontend/src/components/games/engines/QuizRush.tsx",
+      "lines": 168
+    },
+    {
+      "file": "frontend/src/components/games/engines/scoring.ts",
+      "lines": 70
+    },
+    {
+      "file": "frontend/src/components/games/engines/SequenceGame.tsx",
+      "lines": 235
+    },
+    {
+      "file": "frontend/src/components/games/engines/WordBuilder.tsx",
+      "lines": 175
+    },
+    {
+      "file": "frontend/src/components/games/GamePicker.tsx",
+      "lines": 161
+    },
+    {
+      "file": "frontend/src/components/games/GamePlayer.tsx",
+      "lines": 138
+    },
+    {
+      "file": "frontend/src/components/games/GameShell.tsx",
+      "lines": 125
+    },
+    {
+      "file": "frontend/src/components/gamification/AwardToaster.tsx",
+      "lines": 129
+    },
+    {
+      "file": "frontend/src/components/gamification/BadgeGrid.tsx",
+      "lines": 132
+    },
+    {
+      "file": "frontend/src/components/gamification/LeaderboardTable.tsx",
+      "lines": 94
+    },
+    {
+      "file": "frontend/src/components/gamification/StreakCard.tsx",
+      "lines": 91
+    },
+    {
+      "file": "frontend/src/components/gamification/XPLevelCard.tsx",
+      "lines": 86
+    },
+    {
+      "file": "frontend/src/components/geogebra/GeoGebraAuthorCard.tsx",
+      "lines": 118
+    },
+    {
+      "file": "frontend/src/components/geogebra/GeoGebraEmbed.tsx",
+      "lines": 126
+    },
+    {
+      "file": "frontend/src/components/h5p/H5PLesson.tsx",
+      "lines": 255
+    },
+    {
+      "file": "frontend/src/components/h5p/H5PPicker.tsx",
+      "lines": 214
+    },
+    {
+      "file": "frontend/src/components/home/Hero3DBackground.tsx",
+      "lines": 45
+    },
+    {
+      "file": "frontend/src/components/home/HeroSection.module.css",
+      "lines": 302
+    },
+    {
+      "file": "frontend/src/components/home/ScrollStack.css",
+      "lines": 28
+    },
+    {
+      "file": "frontend/src/components/home/ScrollStack.tsx",
+      "lines": 312
+    },
+    {
+      "file": "frontend/src/components/institutions/BillingRecovery.tsx",
+      "lines": 115
+    },
+    {
+      "file": "frontend/src/components/institutions/CampusAcademics.tsx",
+      "lines": 468
+    },
+    {
+      "file": "frontend/src/components/institutions/CampusActionCenter.tsx",
+      "lines": 344
+    },
+    {
+      "file": "frontend/src/components/institutions/CampusAdmissions.tsx",
+      "lines": 429
+    },
+    {
+      "file": "frontend/src/components/institutions/CampusBilling.tsx",
+      "lines": 229
+    },
+    {
+      "file": "frontend/src/components/institutions/CampusControlPlane.tsx",
+      "lines": 192
+    },
+    {
+      "file": "frontend/src/components/institutions/CampusExams.tsx",
+      "lines": 850
+    },
+    {
+      "file": "frontend/src/components/institutions/CampusFinance.tsx",
+      "lines": 517
+    },
+    {
+      "file": "frontend/src/components/institutions/CampusHostel.tsx",
+      "lines": 637
+    },
+    {
+      "file": "frontend/src/components/institutions/CampusLearning.tsx",
+      "lines": 458
+    },
+    {
+      "file": "frontend/src/components/institutions/CampusOsPrimitives.tsx",
+      "lines": 125
+    },
+    {
+      "file": "frontend/src/components/institutions/CampusPilot.tsx",
+      "lines": 861
+    },
+    {
+      "file": "frontend/src/components/institutions/CampusStaff.tsx",
+      "lines": 604
+    },
+    {
+      "file": "frontend/src/components/institutions/CampusTools.tsx",
+      "lines": 509
+    },
+    {
+      "file": "frontend/src/components/institutions/CampusTransport.tsx",
+      "lines": 382
+    },
+    {
+      "file": "frontend/src/components/institutions/FeeCashDesk.tsx",
+      "lines": 184
+    },
+    {
+      "file": "frontend/src/components/institutions/FeeReminders.tsx",
+      "lines": 332
+    },
+    {
+      "file": "frontend/src/components/institutions/GuardianRequests.tsx",
+      "lines": 83
+    },
+    {
+      "file": "frontend/src/components/institutions/InstitutionDialog.tsx",
+      "lines": 530
+    },
+    {
+      "file": "frontend/src/components/institutions/InstitutionPlanQueue.tsx",
+      "lines": 152
+    },
+    {
+      "file": "frontend/src/components/instructor/PurchasesByCourseChart.tsx",
+      "lines": 164
+    },
+    {
+      "file": "frontend/src/components/instructor/QuizSetupModal.tsx",
+      "lines": 565
+    },
+    {
+      "file": "frontend/src/components/labs/concept-templates.ts",
+      "lines": 126
+    },
+    {
+      "file": "frontend/src/components/labs/ConceptLabPlayer.tsx",
+      "lines": 126
+    },
+    {
+      "file": "frontend/src/components/labs/diagrams/CellDiagram.tsx",
+      "lines": 61
+    },
+    {
+      "file": "frontend/src/components/labs/diagrams/SkeletonDiagram.tsx",
+      "lines": 82
+    },
+    {
+      "file": "frontend/src/components/labs/GuidedLabAuthor.tsx",
+      "lines": 394
+    },
+    {
+      "file": "frontend/src/components/labs/GuidedLabPlayer.tsx",
+      "lines": 298
+    },
+    {
+      "file": "frontend/src/components/labs/LearningPreferences.tsx",
+      "lines": 101
+    },
+    {
+      "file": "frontend/src/components/labs/native/chemistry.ts",
+      "lines": 81
+    },
+    {
+      "file": "frontend/src/components/labs/native/IdentifyLab.tsx",
+      "lines": 145
+    },
+    {
+      "file": "frontend/src/components/labs/native/ReactionLab.tsx",
+      "lines": 195
+    },
+    {
+      "file": "frontend/src/components/labs/NativeLabPlayer.tsx",
+      "lines": 83
+    },
+    {
+      "file": "frontend/src/components/labs/SuppliedLabPack.tsx",
+      "lines": 179
+    },
+    {
+      "file": "frontend/src/components/labs/VirtualLabEmbed.tsx",
+      "lines": 24
+    },
+    {
+      "file": "frontend/src/components/labs/VirtualLabPicker.tsx",
+      "lines": 125
+    },
+    {
+      "file": "frontend/src/components/labs/VirtualLabPlayer.tsx",
+      "lines": 108
+    },
+    {
+      "file": "frontend/src/components/layout/admin/admin-layout.tsx",
+      "lines": 26
+    },
+    {
+      "file": "frontend/src/components/layout/admin/superadmin-layout.tsx",
+      "lines": 25
+    },
+    {
+      "file": "frontend/src/components/layout/auth-layout.tsx",
+      "lines": 40
+    },
+    {
+      "file": "frontend/src/components/layout/footer.tsx",
+      "lines": 231
+    },
+    {
+      "file": "frontend/src/components/layout/header.tsx",
+      "lines": 350
+    },
+    {
+      "file": "frontend/src/components/layout/main-layout.tsx",
+      "lines": 27
+    },
+    {
+      "file": "frontend/src/components/live/AttendancePanel.tsx",
+      "lines": 82
+    },
+    {
+      "file": "frontend/src/components/live/ClassCountdown.tsx",
+      "lines": 112
+    },
+    {
+      "file": "frontend/src/components/live/ClassReportModal.tsx",
+      "lines": 190
+    },
+    {
+      "file": "frontend/src/components/live/DevicePrecheck.tsx",
+      "lines": 188
+    },
+    {
+      "file": "frontend/src/components/live/InstructorDock.tsx",
+      "lines": 234
+    },
+    {
+      "file": "frontend/src/components/live/JitsiStage.tsx",
+      "lines": 284
+    },
+    {
+      "file": "frontend/src/components/live/joinButtonState.ts",
+      "lines": 76
+    },
+    {
+      "file": "frontend/src/components/live/LiveStatusBadge.tsx",
+      "lines": 30
+    },
+    {
+      "file": "frontend/src/components/live/PollPanel.tsx",
+      "lines": 329
+    },
+    {
+      "file": "frontend/src/components/live/RaiseHandList.tsx",
+      "lines": 47
+    },
+    {
+      "file": "frontend/src/components/live/RecordingBadge.tsx",
+      "lines": 23
+    },
+    {
+      "file": "frontend/src/components/live/RecordingTranscript.tsx",
+      "lines": 45
+    },
+    {
+      "file": "frontend/src/components/live/StudentLiveClasses.tsx",
+      "lines": 68
+    },
+    {
+      "file": "frontend/src/components/notifications/NotificationBell.tsx",
+      "lines": 82
+    },
+    {
+      "file": "frontend/src/components/promotional/independence-day.css",
+      "lines": 403
+    },
+    {
+      "file": "frontend/src/components/promotional/IndependenceDayPopup.tsx",
+      "lines": 314
+    },
+    {
+      "file": "frontend/src/components/promotional/offer-timer.css",
+      "lines": 226
+    },
+    {
+      "file": "frontend/src/components/promotional/OfferTimerWidget.tsx",
+      "lines": 102
+    },
+    {
+      "file": "frontend/src/components/public/PageHeader.module.css",
+      "lines": 59
+    },
+    {
+      "file": "frontend/src/components/public/PageHeader.tsx",
+      "lines": 33
+    },
+    {
+      "file": "frontend/src/components/public/PublicFooter.module.css",
+      "lines": 142
+    },
+    {
+      "file": "frontend/src/components/public/PublicFooter.tsx",
+      "lines": 156
+    },
+    {
+      "file": "frontend/src/components/public/PublicHeader.module.css",
+      "lines": 529
+    },
+    {
+      "file": "frontend/src/components/public/PublicHeader.tsx",
+      "lines": 215
+    },
+    {
+      "file": "frontend/src/components/routing/lazy-page.tsx",
+      "lines": 23
+    },
+    {
+      "file": "frontend/src/components/routing/page-guides.ts",
+      "lines": 441
+    },
+    {
+      "file": "frontend/src/components/routing/PageBackButton.tsx",
+      "lines": 22
+    },
+    {
+      "file": "frontend/src/components/routing/PageGuide.tsx",
+      "lines": 34
+    },
+    {
+      "file": "frontend/src/components/routing/protected-route.tsx",
+      "lines": 162
+    },
+    {
+      "file": "frontend/src/components/signals/AdaptivePractice.tsx",
+      "lines": 131
+    },
+    {
+      "file": "frontend/src/components/signals/LessonStruggleMap.tsx",
+      "lines": 112
+    },
+    {
+      "file": "frontend/src/components/signals/StruggleProfile.tsx",
+      "lines": 87
+    },
+    {
+      "file": "frontend/src/components/SortableLecture.tsx",
+      "lines": 32
+    },
+    {
+      "file": "frontend/src/components/spoc/CohortMasteryPanel.tsx",
+      "lines": 67
+    },
+    {
+      "file": "frontend/src/components/spoc/ViewAsSpocBanner.tsx",
+      "lines": 86
+    },
+    {
+      "file": "frontend/src/components/streak/streak-card.tsx",
+      "lines": 2
+    },
+    {
+      "file": "frontend/src/components/studio/GuardianVisibility.tsx",
+      "lines": 43
+    },
+    {
+      "file": "frontend/src/components/studio/RewardDesigner.tsx",
+      "lines": 99
+    },
+    {
+      "file": "frontend/src/components/studio/ScheduleBuilder.tsx",
+      "lines": 80
+    },
+    {
+      "file": "frontend/src/components/studio/StudioFace.tsx",
+      "lines": 125
+    },
+    {
+      "file": "frontend/src/components/studio/TierPreview.tsx",
+      "lines": 85
+    },
+    {
+      "file": "frontend/src/components/three-d/DeferredThreeD.tsx",
+      "lines": 57
+    },
+    {
+      "file": "frontend/src/components/three-d/load-glb.ts",
+      "lines": 36
+    },
+    {
+      "file": "frontend/src/components/three-d/tasks/ThreeDTaskPlayer.tsx",
+      "lines": 380
+    },
+    {
+      "file": "frontend/src/components/three-d/ThreeDCheckYourself.tsx",
+      "lines": 33
+    },
+    {
+      "file": "frontend/src/components/three-d/ThreeDModelPicker.tsx",
+      "lines": 178
+    },
+    {
+      "file": "frontend/src/components/three-d/ThreeDTeachingKit.tsx",
+      "lines": 69
+    },
+    {
+      "file": "frontend/src/components/three-d/ThreeDViewer.tsx",
+      "lines": 621
+    },
+    {
+      "file": "frontend/src/components/three-d/xr-session.ts",
+      "lines": 183
+    },
+    {
+      "file": "frontend/src/components/ui/avatar.tsx",
+      "lines": 59
+    },
+    {
+      "file": "frontend/src/components/ui/badge.tsx",
+      "lines": 45
+    },
+    {
+      "file": "frontend/src/components/ui/button.tsx",
+      "lines": 115
+    },
+    {
+      "file": "frontend/src/components/ui/card.tsx",
+      "lines": 91
+    },
+    {
+      "file": "frontend/src/components/ui/confirm.tsx",
+      "lines": 128
+    },
+    {
+      "file": "frontend/src/components/ui/dialog.tsx",
+      "lines": 134
+    },
+    {
+      "file": "frontend/src/components/ui/input.tsx",
+      "lines": 66
+    },
+    {
+      "file": "frontend/src/components/ui/logo.tsx",
+      "lines": 116
+    },
+    {
+      "file": "frontend/src/components/ui/pagination.tsx",
+      "lines": 170
+    },
+    {
+      "file": "frontend/src/components/ui/progress.tsx",
+      "lines": 59
+    },
+    {
+      "file": "frontend/src/components/ui/share-button.tsx",
+      "lines": 219
+    },
+    {
+      "file": "frontend/src/components/ui/star-rating.tsx",
+      "lines": 121
+    },
+    {
+      "file": "frontend/src/components/upload/document-upload.tsx",
+      "lines": 196
+    },
+    {
+      "file": "frontend/src/components/upload/image-upload.tsx",
+      "lines": 225
+    },
+    {
+      "file": "frontend/src/components/upload/index.ts",
+      "lines": 3
+    },
+    {
+      "file": "frontend/src/components/upload/video-upload.tsx",
+      "lines": 145
+    },
+    {
+      "file": "frontend/src/components/verticals/BusinessVerticalPage.tsx",
+      "lines": 184
+    },
+    {
+      "file": "frontend/src/components/verticals/SubdomainHome.tsx",
+      "lines": 9
+    },
+    {
+      "file": "frontend/src/components/video/AudioOnlyToggle.tsx",
+      "lines": 42
+    },
+    {
+      "file": "frontend/src/components/video/native-video-player.tsx",
+      "lines": 360
+    },
+    {
+      "file": "frontend/src/components/video/react-player.tsx",
+      "lines": 81
+    },
+    {
+      "file": "frontend/src/components/video/react-video-player.tsx",
+      "lines": 165
+    },
+    {
+      "file": "frontend/src/components/video/SashaPlayer.jsx",
+      "lines": 161
+    },
+    {
+      "file": "frontend/src/components/video/video-player.tsx",
+      "lines": 126
+    },
+    {
+      "file": "frontend/src/components/video/youtube-extracted-player.tsx",
+      "lines": 331
+    },
+    {
+      "file": "frontend/src/components/video/youtube-player.tsx",
+      "lines": 100
+    },
+    {
+      "file": "frontend/src/config/businessVerticals.ts",
+      "lines": 158
+    },
+    {
+      "file": "frontend/src/config/courseTypes.ts",
+      "lines": 102
+    },
+    {
+      "file": "frontend/src/config/urls.ts",
+      "lines": 77
+    },
+    {
+      "file": "frontend/src/contexts/CartContext.tsx",
+      "lines": 217
+    },
+    {
+      "file": "frontend/src/contexts/theme-context.tsx",
+      "lines": 197
+    },
+    {
+      "file": "frontend/src/css-modules.d.ts",
+      "lines": 14
+    },
+    {
+      "file": "frontend/src/hooks/use-auth.tsx",
+      "lines": 241
+    },
+    {
+      "file": "frontend/src/hooks/use-debounced-value.ts",
+      "lines": 16
+    },
+    {
+      "file": "frontend/src/hooks/use-google-oauth.tsx",
+      "lines": 273
+    },
+    {
+      "file": "frontend/src/hooks/use-page-view-tracker.tsx",
+      "lines": 101
+    },
+    {
+      "file": "frontend/src/hooks/use-seo.tsx",
+      "lines": 207
+    },
+    {
+      "file": "frontend/src/hooks/useNavBadges.ts",
+      "lines": 33
+    },
+    {
+      "file": "frontend/src/hooks/useVideoPlayer.js",
+      "lines": 126
+    },
+    {
+      "file": "frontend/src/lib/certificateAssetSrc.ts",
+      "lines": 79
+    },
+    {
+      "file": "frontend/src/lib/certificateDesignerTypes.ts",
+      "lines": 142
+    },
+    {
+      "file": "frontend/src/lib/certificateTemplatePicker.ts",
+      "lines": 104
+    },
+    {
+      "file": "frontend/src/lib/curatedFonts.ts",
+      "lines": 81
+    },
+    {
+      "file": "frontend/src/lib/designerDraftStorage.ts",
+      "lines": 59
+    },
+    {
+      "file": "frontend/src/lib/designerHistory.ts",
+      "lines": 75
+    },
+    {
+      "file": "frontend/src/lib/designerSerialize.ts",
+      "lines": 53
+    },
+    {
+      "file": "frontend/src/lib/designerSnap.ts",
+      "lines": 60
+    },
+    {
+      "file": "frontend/src/lib/firebase.ts",
+      "lines": 73
+    },
+    {
+      "file": "frontend/src/lib/gradebook.ts",
+      "lines": 115
+    },
+    {
+      "file": "frontend/src/lib/lessonContentSync.ts",
+      "lines": 91
+    },
+    {
+      "file": "frontend/src/lib/razorpayCheckout.ts",
+      "lines": 59
+    },
+    {
+      "file": "frontend/src/main.tsx",
+      "lines": 56
+    },
+    {
+      "file": "frontend/src/offline/learning.ts",
+      "lines": 110
+    },
+    {
+      "file": "frontend/src/offline/main.tsx",
+      "lines": 312
+    },
+    {
+      "file": "frontend/src/offline/OfflineSyncBridge.tsx",
+      "lines": 24
+    },
+    {
+      "file": "frontend/src/offline/storage.ts",
+      "lines": 117
+    },
+    {
+      "file": "frontend/src/pages/About.tsx",
+      "lines": 22
+    },
+    {
+      "file": "frontend/src/pages/admin/analytics.tsx",
+      "lines": 462
+    },
+    {
+      "file": "frontend/src/pages/admin/approvals.tsx",
+      "lines": 174
+    },
+    {
+      "file": "frontend/src/pages/admin/blog-templates.tsx",
+      "lines": 12
+    },
+    {
+      "file": "frontend/src/pages/admin/blogs.tsx",
+      "lines": 557
+    },
+    {
+      "file": "frontend/src/pages/admin/bundles.tsx",
+      "lines": 545
+    },
+    {
+      "file": "frontend/src/pages/admin/categories.tsx",
+      "lines": 364
+    },
+    {
+      "file": "frontend/src/pages/admin/certificates.tsx",
+      "lines": 523
+    },
+    {
+      "file": "frontend/src/pages/admin/cohorts.tsx",
+      "lines": 712
+    },
+    {
+      "file": "frontend/src/pages/admin/colleges.tsx",
+      "lines": 264
+    },
+    {
+      "file": "frontend/src/pages/admin/communications.tsx",
+      "lines": 546
+    },
+    {
+      "file": "frontend/src/pages/admin/companies.tsx",
+      "lines": 884
+    },
+    {
+      "file": "frontend/src/pages/admin/company-invoices.tsx",
+      "lines": 794
+    },
+    {
+      "file": "frontend/src/pages/admin/content-libraries.tsx",
+      "lines": 934
+    },
+    {
+      "file": "frontend/src/pages/admin/coupons.tsx",
+      "lines": 802
+    },
+    {
+      "file": "frontend/src/pages/admin/courses.tsx",
+      "lines": 821
+    },
+    {
+      "file": "frontend/src/pages/admin/dashboard.tsx",
+      "lines": 521
+    },
+    {
+      "file": "frontend/src/pages/admin/enrollments.tsx",
+      "lines": 524
+    },
+    {
+      "file": "frontend/src/pages/admin/exam-pricing.tsx",
+      "lines": 235
+    },
+    {
+      "file": "frontend/src/pages/admin/hall-of-fame.tsx",
+      "lines": 518
+    },
+    {
+      "file": "frontend/src/pages/admin/instructors.tsx",
+      "lines": 538
+    },
+    {
+      "file": "frontend/src/pages/admin/internship-requests.tsx",
+      "lines": 646
+    },
+    {
+      "file": "frontend/src/pages/admin/internships.tsx",
+      "lines": 1414
+    },
+    {
+      "file": "frontend/src/pages/admin/lessons.tsx",
+      "lines": 295
+    },
+    {
+      "file": "frontend/src/pages/admin/manage.tsx",
+      "lines": 436
+    },
+    {
+      "file": "frontend/src/pages/admin/memberships.tsx",
+      "lines": 723
+    },
+    {
+      "file": "frontend/src/pages/admin/messages.tsx",
+      "lines": 358
+    },
+    {
+      "file": "frontend/src/pages/admin/new-course.tsx",
+      "lines": 478
+    },
+    {
+      "file": "frontend/src/pages/admin/operations.tsx",
+      "lines": 689
+    },
+    {
+      "file": "frontend/src/pages/admin/orders.tsx",
+      "lines": 664
+    },
+    {
+      "file": "frontend/src/pages/admin/quizzes.tsx",
+      "lines": 309
+    },
+    {
+      "file": "frontend/src/pages/admin/reviews.tsx",
+      "lines": 184
+    },
+    {
+      "file": "frontend/src/pages/admin/settings.tsx",
+      "lines": 956
+    },
+    {
+      "file": "frontend/src/pages/admin/spocs.tsx",
+      "lines": 427
+    },
+    {
+      "file": "frontend/src/pages/admin/student-activity.tsx",
+      "lines": 619
+    },
+    {
+      "file": "frontend/src/pages/admin/students.tsx",
+      "lines": 601
+    },
+    {
+      "file": "frontend/src/pages/admin/tags.tsx",
+      "lines": 360
+    },
+    {
+      "file": "frontend/src/pages/assignment-submission.tsx",
+      "lines": 718
+    },
+    {
+      "file": "frontend/src/pages/auth/forgot-password.tsx",
+      "lines": 123
+    },
+    {
+      "file": "frontend/src/pages/auth/linkedin-callback.tsx",
+      "lines": 53
+    },
+    {
+      "file": "frontend/src/pages/auth/login.tsx",
+      "lines": 5
+    },
+    {
+      "file": "frontend/src/pages/auth/register.tsx",
+      "lines": 9
+    },
+    {
+      "file": "frontend/src/pages/auth/reset-password.tsx",
+      "lines": 143
+    },
+    {
+      "file": "frontend/src/pages/auth/verify-email.tsx",
+      "lines": 191
+    },
+    {
+      "file": "frontend/src/pages/blog-detail.tsx",
+      "lines": 541
+    },
+    {
+      "file": "frontend/src/pages/blog.tsx",
+      "lines": 421
+    },
+    {
+      "file": "frontend/src/pages/bundle-detail.tsx",
+      "lines": 288
+    },
+    {
+      "file": "frontend/src/pages/bundles.tsx",
+      "lines": 111
+    },
+    {
+      "file": "frontend/src/pages/campus-for-institutions.tsx",
+      "lines": 228
+    },
+    {
+      "file": "frontend/src/pages/cart.tsx",
+      "lines": 314
+    },
+    {
+      "file": "frontend/src/pages/categories.tsx",
+      "lines": 187
+    },
+    {
+      "file": "frontend/src/pages/category-meiporul.tsx",
+      "lines": 7
+    },
+    {
+      "file": "frontend/src/pages/category-seyappaduporul.tsx",
+      "lines": 7
+    },
+    {
+      "file": "frontend/src/pages/category-utporul.tsx",
+      "lines": 7
+    },
+    {
+      "file": "frontend/src/pages/certificate.tsx",
+      "lines": 303
+    },
+    {
+      "file": "frontend/src/pages/checkout.tsx",
+      "lines": 770
+    },
+    {
+      "file": "frontend/src/pages/communication-preferences.tsx",
+      "lines": 332
+    },
+    {
+      "file": "frontend/src/pages/company/dashboard.tsx",
+      "lines": 3026
+    },
+    {
+      "file": "frontend/src/pages/Contact.tsx",
+      "lines": 18
+    },
+    {
+      "file": "frontend/src/pages/course-detail.tsx",
+      "lines": 1574
+    },
+    {
+      "file": "frontend/src/pages/courses.tsx",
+      "lines": 794
+    },
+    {
+      "file": "frontend/src/pages/dashboard/analytics-print.css",
+      "lines": 55
+    },
+    {
+      "file": "frontend/src/pages/dashboard/analytics.tsx",
+      "lines": 653
+    },
+    {
+      "file": "frontend/src/pages/dashboard/internship-inbox.tsx",
+      "lines": 138
+    },
+    {
+      "file": "frontend/src/pages/dashboard/internship-profile.tsx",
+      "lines": 438
+    },
+    {
+      "file": "frontend/src/pages/dashboard/messages.tsx",
+      "lines": 96
+    },
+    {
+      "file": "frontend/src/pages/dashboard/my-internship-detail.tsx",
+      "lines": 198
+    },
+    {
+      "file": "frontend/src/pages/dashboard/my-internships.tsx",
+      "lines": 260
+    },
+    {
+      "file": "frontend/src/pages/dashboard/my-vouchers.tsx",
+      "lines": 185
+    },
+    {
+      "file": "frontend/src/pages/dashboard.tsx",
+      "lines": 439
+    },
+    {
+      "file": "frontend/src/pages/exam-papers.tsx",
+      "lines": 441
+    },
+    {
+      "file": "frontend/src/pages/for-companies/signup.tsx",
+      "lines": 239
+    },
+    {
+      "file": "frontend/src/pages/for-companies.tsx",
+      "lines": 74
+    },
+    {
+      "file": "frontend/src/pages/game-play.tsx",
+      "lines": 121
+    },
+    {
+      "file": "frontend/src/pages/hall-of-fame.tsx",
+      "lines": 412
+    },
+    {
+      "file": "frontend/src/pages/help.tsx",
+      "lines": 76
+    },
+    {
+      "file": "frontend/src/pages/home.css",
+      "lines": 724
+    },
+    {
+      "file": "frontend/src/pages/Home.tsx",
+      "lines": 911
+    },
+    {
+      "file": "frontend/src/pages/institutions.tsx",
+      "lines": 1414
+    },
+    {
+      "file": "frontend/src/pages/instructor/analytics.tsx",
+      "lines": 243
+    },
+    {
+      "file": "frontend/src/pages/instructor/assessment-studio.tsx",
+      "lines": 924
+    },
+    {
+      "file": "frontend/src/pages/instructor/assignment-builder.tsx",
+      "lines": 960
+    },
+    {
+      "file": "frontend/src/pages/instructor/assignment-grading.tsx",
+      "lines": 750
+    },
+    {
+      "file": "frontend/src/pages/instructor/blog-editor.tsx",
+      "lines": 830
+    },
+    {
+      "file": "frontend/src/pages/instructor/blog.tsx",
+      "lines": 322
+    },
+    {
+      "file": "frontend/src/pages/instructor/certificate-designer.tsx",
+      "lines": 105
+    },
+    {
+      "file": "frontend/src/pages/instructor/course-coverage.tsx",
+      "lines": 384
+    },
+    {
+      "file": "frontend/src/pages/instructor/course-packages.tsx",
+      "lines": 404
+    },
+    {
+      "file": "frontend/src/pages/instructor/course-start.tsx",
+      "lines": 176
+    },
+    {
+      "file": "frontend/src/pages/instructor/courses.tsx",
+      "lines": 672
+    },
+    {
+      "file": "frontend/src/pages/instructor/create-course.tsx",
+      "lines": 2602
+    },
+    {
+      "file": "frontend/src/pages/instructor/dashboard.tsx",
+      "lines": 516
+    },
+    {
+      "file": "frontend/src/pages/instructor/ebooks.tsx",
+      "lines": 660
+    },
+    {
+      "file": "frontend/src/pages/instructor/edit-course.tsx",
+      "lines": 2922
+    },
+    {
+      "file": "frontend/src/pages/instructor/game-builder.tsx",
+      "lines": 1136
+    },
+    {
+      "file": "frontend/src/pages/instructor/games.tsx",
+      "lines": 649
+    },
+    {
+      "file": "frontend/src/pages/instructor/gradebook.tsx",
+      "lines": 227
+    },
+    {
+      "file": "frontend/src/pages/instructor/grading-queue.tsx",
+      "lines": 431
+    },
+    {
+      "file": "frontend/src/pages/instructor/grading.tsx",
+      "lines": 125
+    },
+    {
+      "file": "frontend/src/pages/instructor/h5p-library.tsx",
+      "lines": 402
+    },
+    {
+      "file": "frontend/src/pages/instructor/insights.tsx",
+      "lines": 399
+    },
+    {
+      "file": "frontend/src/pages/instructor/interventions.tsx",
+      "lines": 258
+    },
+    {
+      "file": "frontend/src/pages/instructor/lab-studio.tsx",
+      "lines": 527
+    },
+    {
+      "file": "frontend/src/pages/instructor/live-class-console.tsx",
+      "lines": 169
+    },
+    {
+      "file": "frontend/src/pages/instructor/live-class-new.tsx",
+      "lines": 526
+    },
+    {
+      "file": "frontend/src/pages/instructor/live-class-report.tsx",
+      "lines": 372
+    },
+    {
+      "file": "frontend/src/pages/instructor/live-classes.tsx",
+      "lines": 634
+    },
+    {
+      "file": "frontend/src/pages/instructor/past-classes.tsx",
+      "lines": 196
+    },
+    {
+      "file": "frontend/src/pages/instructor/quiz-builder.tsx",
+      "lines": 1397
+    },
+    {
+      "file": "frontend/src/pages/instructor/quizBuilderValidation.ts",
+      "lines": 220
+    },
+    {
+      "file": "frontend/src/pages/instructor/recording-lessons.tsx",
+      "lines": 590
+    },
+    {
+      "file": "frontend/src/pages/instructor/review-queue.tsx",
+      "lines": 458
+    },
+    {
+      "file": "frontend/src/pages/instructor/students.tsx",
+      "lines": 572
+    },
+    {
+      "file": "frontend/src/pages/instructor/three-d-tasks.tsx",
+      "lines": 1465
+    },
+    {
+      "file": "frontend/src/pages/instructor-profile.tsx",
+      "lines": 503
+    },
+    {
+      "file": "frontend/src/pages/internship-detail.tsx",
+      "lines": 252
+    },
+    {
+      "file": "frontend/src/pages/internships.tsx",
+      "lines": 117
+    },
+    {
+      "file": "frontend/src/pages/lab-workspace.tsx",
+      "lines": 213
+    },
+    {
+      "file": "frontend/src/pages/labs.tsx",
+      "lines": 329
+    },
+    {
+      "file": "frontend/src/pages/leaderboard.tsx",
+      "lines": 114
+    },
+    {
+      "file": "frontend/src/pages/lesson-redesigned.tsx",
+      "lines": 2765
+    },
+    {
+      "file": "frontend/src/pages/library-detail.tsx",
+      "lines": 159
+    },
+    {
+      "file": "frontend/src/pages/library.tsx",
+      "lines": 187
+    },
+    {
+      "file": "frontend/src/pages/meiporul-ar.tsx",
+      "lines": 529
+    },
+    {
+      "file": "frontend/src/pages/membership.tsx",
+      "lines": 267
+    },
+    {
+      "file": "frontend/src/pages/my-courses.tsx",
+      "lines": 257
+    },
+    {
+      "file": "frontend/src/pages/my-library.tsx",
+      "lines": 107
+    },
+    {
+      "file": "frontend/src/pages/not-found.tsx",
+      "lines": 126
+    },
+    {
+      "file": "frontend/src/pages/parent/dashboard.tsx",
+      "lines": 359
+    },
+    {
+      "file": "frontend/src/pages/privacy.tsx",
+      "lines": 637
+    },
+    {
+      "file": "frontend/src/pages/profile.tsx",
+      "lines": 1071
+    },
+    {
+      "file": "frontend/src/pages/public-profile.tsx",
+      "lines": 278
+    },
+    {
+      "file": "frontend/src/pages/quiz-taking.tsx",
+      "lines": 1173
+    },
+    {
+      "file": "frontend/src/pages/quiz.tsx",
+      "lines": 571
+    },
+    {
+      "file": "frontend/src/pages/recording-lesson.tsx",
+      "lines": 69
+    },
+    {
+      "file": "frontend/src/pages/refund-policy.tsx",
+      "lines": 246
+    },
+    {
+      "file": "frontend/src/pages/search.tsx",
+      "lines": 363
+    },
+    {
+      "file": "frontend/src/pages/server-down.tsx",
+      "lines": 276
+    },
+    {
+      "file": "frontend/src/pages/settings.tsx",
+      "lines": 330
+    },
+    {
+      "file": "frontend/src/pages/shipping.tsx",
+      "lines": 330
+    },
+    {
+      "file": "frontend/src/pages/spoc/blog.tsx",
+      "lines": 367
+    },
+    {
+      "file": "frontend/src/pages/spoc/cohort.tsx",
+      "lines": 645
+    },
+    {
+      "file": "frontend/src/pages/spoc/dashboard.tsx",
+      "lines": 328
+    },
+    {
+      "file": "frontend/src/pages/spoc/internship.tsx",
+      "lines": 219
+    },
+    {
+      "file": "frontend/src/pages/spoc/profile.tsx",
+      "lines": 339
+    },
+    {
+      "file": "frontend/src/pages/student/blog-create.tsx",
+      "lines": 12
+    },
+    {
+      "file": "frontend/src/pages/student/learning-plan.tsx",
+      "lines": 689
+    },
+    {
+      "file": "frontend/src/pages/student/live-class-join.tsx",
+      "lines": 112
+    },
+    {
+      "file": "frontend/src/pages/student/live-class-recording.tsx",
+      "lines": 108
+    },
+    {
+      "file": "frontend/src/pages/student/live-classes.tsx",
+      "lines": 207
+    },
+    {
+      "file": "frontend/src/pages/student/my-grades.tsx",
+      "lines": 197
+    },
+    {
+      "file": "frontend/src/pages/student/my-mastery.tsx",
+      "lines": 333
+    },
+    {
+      "file": "frontend/src/pages/superadmin/admins.tsx",
+      "lines": 219
+    },
+    {
+      "file": "frontend/src/pages/superadmin/audit.tsx",
+      "lines": 247
+    },
+    {
+      "file": "frontend/src/pages/superadmin/dashboard.tsx",
+      "lines": 417
+    },
+    {
+      "file": "frontend/src/pages/superadmin/instructors.tsx",
+      "lines": 230
+    },
+    {
+      "file": "frontend/src/pages/superadmin/students.tsx",
+      "lines": 235
+    },
+    {
+      "file": "frontend/src/pages/superadmin/use-impersonate.ts",
+      "lines": 114
+    },
+    {
+      "file": "frontend/src/pages/terms.tsx",
+      "lines": 335
+    },
+    {
+      "file": "frontend/src/pages/verify-certificate.tsx",
+      "lines": 695
+    },
+    {
+      "file": "frontend/src/pages/wishlist.tsx",
+      "lines": 234
+    },
+    {
+      "file": "frontend/src/Sasha Certificate (Standalone).html",
+      "lines": 185
+    },
+    {
+      "file": "frontend/src/store/auth.ts",
+      "lines": 724
+    },
+    {
+      "file": "frontend/src/store/cartStore.ts",
+      "lines": 179
+    },
+    {
+      "file": "frontend/src/store/course.ts",
+      "lines": 311
+    },
+    {
+      "file": "frontend/src/store/liveClassStore.ts",
+      "lines": 110
+    },
+    {
+      "file": "frontend/src/store/quiz.ts",
+      "lines": 419
+    },
+    {
+      "file": "frontend/src/styles/astra-glass.css",
+      "lines": 1249
+    },
+    {
+      "file": "frontend/src/styles/astra-tokens.css",
+      "lines": 41
+    },
+    {
+      "file": "frontend/src/styles/campus-glass.css",
+      "lines": 691
+    },
+    {
+      "file": "frontend/src/styles/campus-growth.css",
+      "lines": 87
+    },
+    {
+      "file": "frontend/src/styles/campus-os.css",
+      "lines": 462
+    },
+    {
+      "file": "frontend/src/styles/category-page.module.css",
+      "lines": 445
+    },
+    {
+      "file": "frontend/src/styles/globals.css",
+      "lines": 1249
+    },
+    {
+      "file": "frontend/src/styles/home.css",
+      "lines": 73
+    },
+    {
+      "file": "frontend/src/styles/page-redesign.css",
+      "lines": 1514
+    },
+    {
+      "file": "frontend/src/styles/sasha-design.css",
+      "lines": 801
+    },
+    {
+      "file": "frontend/src/styles/sunrise.css",
+      "lines": 401
+    },
+    {
+      "file": "frontend/src/test-setup.ts",
+      "lines": 1
+    },
+    {
+      "file": "frontend/src/types/index.ts",
+      "lines": 637
+    },
+    {
+      "file": "frontend/src/utils/animations.ts",
+      "lines": 123
+    },
+    {
+      "file": "frontend/src/utils/auth-helper.ts",
+      "lines": 27
+    },
+    {
+      "file": "frontend/src/utils/brand-artwork.ts",
+      "lines": 153
+    },
+    {
+      "file": "frontend/src/utils/certificate-share.ts",
+      "lines": 112
+    },
+    {
+      "file": "frontend/src/utils/cn.ts",
+      "lines": 6
+    },
+    {
+      "file": "frontend/src/utils/media.ts",
+      "lines": 96
+    },
+    {
+      "file": "frontend/src/utils/phone.ts",
+      "lines": 24
+    },
+    {
+      "file": "frontend/src/utils/role-routing.ts",
+      "lines": 35
+    },
+    {
+      "file": "frontend/src/utils/sanitize.ts",
+      "lines": 11
+    },
+    {
+      "file": "frontend/src/utils/slug.ts",
+      "lines": 26
+    },
+    {
+      "file": "frontend/src/vite-env.d.ts",
+      "lines": 23
+    },
+    {
+      "file": "frontend/labs/runtime/concept-engine.js",
+      "lines": 62
+    },
+    {
+      "file": "frontend/labs/runtime/concept.html",
+      "lines": 4
+    },
+    {
+      "file": "frontend/labs/runtime/curriculum.js",
+      "lines": 319
+    },
+    {
+      "file": "frontend/labs/runtime/lab3d.js",
+      "lines": 191
+    },
+    {
+      "file": "frontend/labs/runtime/labkit.css",
+      "lines": 130
+    },
+    {
+      "file": "frontend/labs/runtime/labkit.js",
+      "lines": 197
+    },
+    {
+      "file": "frontend/labs/runtime/spatial-bridge.js",
+      "lines": 182
+    },
+    {
+      "file": "frontend/labs/runtime/spatial-only.css",
+      "lines": 20
+    },
+    {
+      "file": "frontend/labs/runtime/xrkit.js",
+      "lines": 162
+    },
+    {
+      "file": "frontend/labs/simulations/biology/biotech-pcr-lab/simulation.js",
+      "lines": 139
+    },
+    {
+      "file": "frontend/labs/simulations/biology/biotech-pcr-lab/view.html",
+      "lines": 48
+    },
+    {
+      "file": "frontend/labs/simulations/biology/dna-helix-3d/simulation.js",
+      "lines": 149
+    },
+    {
+      "file": "frontend/labs/simulations/biology/dna-helix-3d/view.html",
+      "lines": 52
+    },
+    {
+      "file": "frontend/labs/simulations/biology/genetics-punnett/simulation.js",
+      "lines": 68
+    },
+    {
+      "file": "frontend/labs/simulations/biology/genetics-punnett/styles.css",
+      "lines": 9
+    },
+    {
+      "file": "frontend/labs/simulations/biology/genetics-punnett/view.html",
+      "lines": 69
+    },
+    {
+      "file": "frontend/labs/simulations/biology/heart-circulation-lab/simulation.js",
+      "lines": 128
+    },
+    {
+      "file": "frontend/labs/simulations/biology/heart-circulation-lab/view.html",
+      "lines": 50
+    },
+    {
+      "file": "frontend/labs/simulations/biology/photosynthesis-lab/simulation.js",
+      "lines": 117
+    },
+    {
+      "file": "frontend/labs/simulations/biology/photosynthesis-lab/view.html",
+      "lines": 49
+    },
+    {
+      "file": "frontend/labs/simulations/chemistry/ideal-gas-lab/simulation.js",
+      "lines": 132
+    },
+    {
+      "file": "frontend/labs/simulations/chemistry/ideal-gas-lab/view.html",
+      "lines": 53
+    },
+    {
+      "file": "frontend/labs/simulations/chemistry/kinetics-lab/simulation.js",
+      "lines": 138
+    },
+    {
+      "file": "frontend/labs/simulations/chemistry/kinetics-lab/view.html",
+      "lines": 53
+    },
+    {
+      "file": "frontend/labs/simulations/chemistry/molecule-viewer-3d/simulation.js",
+      "lines": 117
+    },
+    {
+      "file": "frontend/labs/simulations/chemistry/molecule-viewer-3d/view.html",
+      "lines": 55
+    },
+    {
+      "file": "frontend/labs/simulations/chemistry/periodic-table-lab/simulation.js",
+      "lines": 110
+    },
+    {
+      "file": "frontend/labs/simulations/chemistry/periodic-table-lab/styles.css",
+      "lines": 12
+    },
+    {
+      "file": "frontend/labs/simulations/chemistry/periodic-table-lab/view.html",
+      "lines": 56
+    },
+    {
+      "file": "frontend/labs/simulations/chemistry/titration-lab/simulation.js",
+      "lines": 147
+    },
+    {
+      "file": "frontend/labs/simulations/chemistry/titration-lab/view.html",
+      "lines": 56
+    },
+    {
+      "file": "frontend/labs/simulations/math/circles-lab/simulation.js",
+      "lines": 95
+    },
+    {
+      "file": "frontend/labs/simulations/math/circles-lab/view.html",
+      "lines": 51
+    },
+    {
+      "file": "frontend/labs/simulations/math/conic-sections-3d/simulation.js",
+      "lines": 113
+    },
+    {
+      "file": "frontend/labs/simulations/math/conic-sections-3d/view.html",
+      "lines": 55
+    },
+    {
+      "file": "frontend/labs/simulations/math/fractions-explorer/simulation.js",
+      "lines": 61
+    },
+    {
+      "file": "frontend/labs/simulations/math/fractions-explorer/view.html",
+      "lines": 52
+    },
+    {
+      "file": "frontend/labs/simulations/math/limits-lab/simulation.js",
+      "lines": 101
+    },
+    {
+      "file": "frontend/labs/simulations/math/limits-lab/view.html",
+      "lines": 51
+    },
+    {
+      "file": "frontend/labs/simulations/math/line-explorer/simulation.js",
+      "lines": 424
+    },
+    {
+      "file": "frontend/labs/simulations/math/line-explorer/styles.css",
+      "lines": 126
+    },
+    {
+      "file": "frontend/labs/simulations/math/line-explorer/view.html",
+      "lines": 130
+    },
+    {
+      "file": "frontend/labs/simulations/math/matrix-lab/simulation.js",
+      "lines": 130
+    },
+    {
+      "file": "frontend/labs/simulations/math/matrix-lab/view.html",
+      "lines": 55
+    },
+    {
+      "file": "frontend/labs/simulations/math/number-lab/simulation.js",
+      "lines": 65
+    },
+    {
+      "file": "frontend/labs/simulations/math/number-lab/view.html",
+      "lines": 49
+    },
+    {
+      "file": "frontend/labs/simulations/math/probability-lab/simulation.js",
+      "lines": 104
+    },
+    {
+      "file": "frontend/labs/simulations/math/probability-lab/view.html",
+      "lines": 60
+    },
+    {
+      "file": "frontend/labs/simulations/math/progressions-lab/simulation.js",
+      "lines": 66
+    },
+    {
+      "file": "frontend/labs/simulations/math/progressions-lab/view.html",
+      "lines": 48
+    },
+    {
+      "file": "frontend/labs/simulations/math/pythagoras-explorer/simulation.js",
+      "lines": 117
+    },
+    {
+      "file": "frontend/labs/simulations/math/pythagoras-explorer/view.html",
+      "lines": 47
+    },
+    {
+      "file": "frontend/labs/simulations/math/quadratic-explorer/simulation.js",
+      "lines": 103
+    },
+    {
+      "file": "frontend/labs/simulations/math/quadratic-explorer/view.html",
+      "lines": 53
+    },
+    {
+      "file": "frontend/labs/simulations/math/solids-3d/simulation.js",
+      "lines": 91
+    },
+    {
+      "file": "frontend/labs/simulations/math/solids-3d/view.html",
+      "lines": 60
+    },
+    {
+      "file": "frontend/labs/simulations/math/statistics-lab/simulation.js",
+      "lines": 144
+    },
+    {
+      "file": "frontend/labs/simulations/math/statistics-lab/view.html",
+      "lines": 53
+    },
+    {
+      "file": "frontend/labs/simulations/math/symmetry-3d/simulation.js",
+      "lines": 124
+    },
+    {
+      "file": "frontend/labs/simulations/math/symmetry-3d/view.html",
+      "lines": 59
+    },
+    {
+      "file": "frontend/labs/simulations/math/triangles-lab/simulation.js",
+      "lines": 116
+    },
+    {
+      "file": "frontend/labs/simulations/math/triangles-lab/view.html",
+      "lines": 51
+    },
+    {
+      "file": "frontend/labs/simulations/math/trigonometry-explorer/simulation.js",
+      "lines": 103
+    },
+    {
+      "file": "frontend/labs/simulations/math/trigonometry-explorer/view.html",
+      "lines": 53
+    },
+    {
+      "file": "frontend/labs/simulations/math/unit-circle-lab/simulation.js",
+      "lines": 139
+    },
+    {
+      "file": "frontend/labs/simulations/math/unit-circle-lab/view.html",
+      "lines": 50
+    },
+    {
+      "file": "frontend/labs/simulations/math/venn-sets-lab/simulation.js",
+      "lines": 103
+    },
+    {
+      "file": "frontend/labs/simulations/math/venn-sets-lab/view.html",
+      "lines": 53
+    },
+    {
+      "file": "frontend/labs/simulations/physics/electrostatics-lab/simulation.js",
+      "lines": 126
+    },
+    {
+      "file": "frontend/labs/simulations/physics/electrostatics-lab/view.html",
+      "lines": 48
+    },
+    {
+      "file": "frontend/labs/simulations/physics/faraday-lab/simulation.js",
+      "lines": 172
+    },
+    {
+      "file": "frontend/labs/simulations/physics/faraday-lab/view.html",
+      "lines": 49
+    },
+    {
+      "file": "frontend/labs/simulations/physics/photoelectric-lab/simulation.js",
+      "lines": 131
+    },
+    {
+      "file": "frontend/labs/simulations/physics/photoelectric-lab/view.html",
+      "lines": 55
+    },
+    {
+      "file": "frontend/labs/simulations/physics/projectile-motion/simulation.js",
+      "lines": 129
+    },
+    {
+      "file": "frontend/labs/simulations/physics/projectile-motion/view.html",
+      "lines": 59
+    },
+    {
+      "file": "frontend/labs/simulations/physics/radioactivity-lab/simulation.js",
+      "lines": 95
+    },
+    {
+      "file": "frontend/labs/simulations/physics/radioactivity-lab/view.html",
+      "lines": 50
+    },
+    {
+      "file": "frontend/labs/simulations/physics/simple-pendulum/simulation.js",
+      "lines": 108
+    },
+    {
+      "file": "frontend/labs/simulations/physics/simple-pendulum/view.html",
+      "lines": 57
+    },
+    {
+      "file": "frontend/labs/simulations/physics/wave-motion/simulation.js",
+      "lines": 86
+    },
+    {
+      "file": "frontend/labs/simulations/physics/wave-motion/view.html",
+      "lines": 50
+    },
+    {
+      "file": "frontend/labs/simulations/science/acids-bases-ph/simulation.js",
+      "lines": 112
+    },
+    {
+      "file": "frontend/labs/simulations/science/acids-bases-ph/view.html",
+      "lines": 63
+    },
+    {
+      "file": "frontend/labs/simulations/science/atom-builder-3d/simulation.js",
+      "lines": 134
+    },
+    {
+      "file": "frontend/labs/simulations/science/atom-builder-3d/view.html",
+      "lines": 51
+    },
+    {
+      "file": "frontend/labs/simulations/science/balance-equations/simulation.js",
+      "lines": 159
+    },
+    {
+      "file": "frontend/labs/simulations/science/balance-equations/styles.css",
+      "lines": 13
+    },
+    {
+      "file": "frontend/labs/simulations/science/balance-equations/view.html",
+      "lines": 64
+    },
+    {
+      "file": "frontend/labs/simulations/science/earth-moon-sun-3d/simulation.js",
+      "lines": 131
+    },
+    {
+      "file": "frontend/labs/simulations/science/earth-moon-sun-3d/view.html",
+      "lines": 58
+    },
+    {
+      "file": "frontend/labs/simulations/science/electric-circuits/simulation.js",
+      "lines": 190
+    },
+    {
+      "file": "frontend/labs/simulations/science/electric-circuits/view.html",
+      "lines": 56
+    },
+    {
+      "file": "frontend/labs/simulations/science/force-pressure-friction/simulation.js",
+      "lines": 156
+    },
+    {
+      "file": "frontend/labs/simulations/science/force-pressure-friction/view.html",
+      "lines": 65
+    },
+    {
+      "file": "frontend/labs/simulations/science/heat-transfer-lab/simulation.js",
+      "lines": 201
+    },
+    {
+      "file": "frontend/labs/simulations/science/heat-transfer-lab/view.html",
+      "lines": 66
+    },
+    {
+      "file": "frontend/labs/simulations/science/human-eye-lab/simulation.js",
+      "lines": 134
+    },
+    {
+      "file": "frontend/labs/simulations/science/human-eye-lab/view.html",
+      "lines": 52
+    },
+    {
+      "file": "frontend/labs/simulations/science/light-optics/simulation.js",
+      "lines": 139
+    },
+    {
+      "file": "frontend/labs/simulations/science/light-optics/view.html",
+      "lines": 54
+    },
+    {
+      "file": "frontend/labs/simulations/science/magnet-lab/simulation.js",
+      "lines": 182
+    },
+    {
+      "file": "frontend/labs/simulations/science/magnet-lab/view.html",
+      "lines": 51
+    },
+    {
+      "file": "frontend/labs/simulations/science/magnetism-current/simulation.js",
+      "lines": 164
+    },
+    {
+      "file": "frontend/labs/simulations/science/magnetism-current/view.html",
+      "lines": 50
+    },
+    {
+      "file": "frontend/labs/simulations/science/motion-graphs/simulation.js",
+      "lines": 122
+    },
+    {
+      "file": "frontend/labs/simulations/science/motion-graphs/view.html",
+      "lines": 51
+    },
+    {
+      "file": "frontend/labs/simulations/science/neuron-reflex-lab/simulation.js",
+      "lines": 188
+    },
+    {
+      "file": "frontend/labs/simulations/science/neuron-reflex-lab/view.html",
+      "lines": 52
+    },
+    {
+      "file": "frontend/labs/simulations/science/plant-animal-cell/simulation.js",
+      "lines": 67
+    },
+    {
+      "file": "frontend/labs/simulations/science/plant-animal-cell/styles.css",
+      "lines": 9
+    },
+    {
+      "file": "frontend/labs/simulations/science/plant-animal-cell/view.html",
+      "lines": 150
+    },
+    {
+      "file": "frontend/labs/simulations/science/predator-prey/simulation.js",
+      "lines": 96
+    },
+    {
+      "file": "frontend/labs/simulations/science/predator-prey/view.html",
+      "lines": 56
+    },
+    {
+      "file": "frontend/labs/simulations/science/reactivity-series/simulation.js",
+      "lines": 143
+    },
+    {
+      "file": "frontend/labs/simulations/science/reactivity-series/styles.css",
+      "lines": 14
+    },
+    {
+      "file": "frontend/labs/simulations/science/reactivity-series/view.html",
+      "lines": 53
+    },
+    {
+      "file": "frontend/labs/simulations/science/reproduction-lab/simulation.js",
+      "lines": 139
+    },
+    {
+      "file": "frontend/labs/simulations/science/reproduction-lab/view.html",
+      "lines": 48
+    },
+    {
+      "file": "frontend/labs/simulations/science/separation-lab/simulation.js",
+      "lines": 176
+    },
+    {
+      "file": "frontend/labs/simulations/science/separation-lab/view.html",
+      "lines": 49
+    },
+    {
+      "file": "frontend/labs/simulations/science/solar-system-3d/simulation.js",
+      "lines": 140
+    },
+    {
+      "file": "frontend/labs/simulations/science/solar-system-3d/view.html",
+      "lines": 55
+    },
+    {
+      "file": "frontend/labs/simulations/science/sundial-3d/simulation.js",
+      "lines": 111
+    },
+    {
+      "file": "frontend/labs/simulations/science/sundial-3d/view.html",
+      "lines": 54
+    },
+    {
+      "file": "frontend/labs/simulations/science/water-states-3d/simulation.js",
+      "lines": 114
+    },
+    {
+      "file": "frontend/labs/simulations/science/water-states-3d/view.html",
+      "lines": 55
+    },
+    {
+      "file": "frontend/labs/simulations/science/wind-pressure-lab/simulation.js",
+      "lines": 164
+    },
+    {
+      "file": "frontend/labs/simulations/science/wind-pressure-lab/view.html",
+      "lines": 50
+    },
+    {
+      "file": "frontend/labs/simulations/xr/molecule-viewer-xr/simulation.js",
+      "lines": 130
+    },
+    {
+      "file": "frontend/labs/simulations/xr/molecule-viewer-xr/view.html",
+      "lines": 65
+    },
+    {
+      "file": "frontend/labs/simulations/xr/solar-system-xr/simulation.js",
+      "lines": 151
+    },
+    {
+      "file": "frontend/labs/simulations/xr/solar-system-xr/view.html",
+      "lines": 54
+    },
+    {
+      "file": "frontend/scripts/build-labs.mjs",
+      "lines": 117
+    },
+    {
+      "file": "flutter_app/lib/config/app_config.dart",
+      "lines": 78
+    },
+    {
+      "file": "flutter_app/lib/config/design_tokens.dart",
+      "lines": 157
+    },
+    {
+      "file": "flutter_app/lib/config/routes.dart",
+      "lines": 316
+    },
+    {
+      "file": "flutter_app/lib/config/theme.dart",
+      "lines": 365
+    },
+    {
+      "file": "flutter_app/lib/config/theme_mode_provider.dart",
+      "lines": 49
+    },
+    {
+      "file": "flutter_app/lib/core/auth/session_events.dart",
+      "lines": 14
+    },
+    {
+      "file": "flutter_app/lib/core/constants/api_endpoints.dart",
+      "lines": 174
+    },
+    {
+      "file": "flutter_app/lib/core/constants/assets.dart",
+      "lines": 52
+    },
+    {
+      "file": "flutter_app/lib/core/constants/storage_keys.dart",
+      "lines": 51
+    },
+    {
+      "file": "flutter_app/lib/core/errors/exceptions.dart",
+      "lines": 104
+    },
+    {
+      "file": "flutter_app/lib/core/errors/failures.dart",
+      "lines": 40
+    },
+    {
+      "file": "flutter_app/lib/core/errors/failures.freezed.dart",
+      "lines": 1645
+    },
+    {
+      "file": "flutter_app/lib/core/network/api_client.dart",
+      "lines": 154
+    },
+    {
+      "file": "flutter_app/lib/core/network/cache_interceptor.dart",
+      "lines": 72
+    },
+    {
+      "file": "flutter_app/lib/core/network/interceptors.dart",
+      "lines": 256
+    },
+    {
+      "file": "flutter_app/lib/core/network/network_provider.dart",
+      "lines": 53
+    },
+    {
+      "file": "flutter_app/lib/core/network/network_provider.g.dart",
+      "lines": 60
+    },
+    {
+      "file": "flutter_app/lib/core/network/retry_interceptor.dart",
+      "lines": 59
+    },
+    {
+      "file": "flutter_app/lib/core/services/content_sync.dart",
+      "lines": 65
+    },
+    {
+      "file": "flutter_app/lib/core/services/deep_link_service.dart",
+      "lines": 35
+    },
+    {
+      "file": "flutter_app/lib/core/services/firebase_messaging_service.dart",
+      "lines": 162
+    },
+    {
+      "file": "flutter_app/lib/core/services/initialization_service.dart",
+      "lines": 49
+    },
+    {
+      "file": "flutter_app/lib/core/storage/cache_storage.dart",
+      "lines": 66
+    },
+    {
+      "file": "flutter_app/lib/core/storage/prefs_storage.dart",
+      "lines": 72
+    },
+    {
+      "file": "flutter_app/lib/core/storage/secure_storage.dart",
+      "lines": 87
+    },
+    {
+      "file": "flutter_app/lib/core/utils/bunny_video.dart",
+      "lines": 55
+    },
+    {
+      "file": "flutter_app/lib/core/utils/failure_logger.dart",
+      "lines": 56
+    },
+    {
+      "file": "flutter_app/lib/features/about/presentation/pages/about_page.dart",
+      "lines": 271
+    },
+    {
+      "file": "flutter_app/lib/features/admin/data/datasources/admin_remote_datasource.dart",
+      "lines": 166
+    },
+    {
+      "file": "flutter_app/lib/features/admin/data/repositories/admin_repository_impl.dart",
+      "lines": 191
+    },
+    {
+      "file": "flutter_app/lib/features/admin/domain/repositories/admin_repository.dart",
+      "lines": 49
+    },
+    {
+      "file": "flutter_app/lib/features/admin/presentation/pages/admin_courses_page.dart",
+      "lines": 328
+    },
+    {
+      "file": "flutter_app/lib/features/admin/presentation/pages/admin_dashboard_page.dart",
+      "lines": 313
+    },
+    {
+      "file": "flutter_app/lib/features/admin/presentation/pages/admin_orders_page.dart",
+      "lines": 203
+    },
+    {
+      "file": "flutter_app/lib/features/admin/presentation/pages/admin_scaffold.dart",
+      "lines": 89
+    },
+    {
+      "file": "flutter_app/lib/features/admin/presentation/pages/admin_staff_page.dart",
+      "lines": 410
+    },
+    {
+      "file": "flutter_app/lib/features/admin/presentation/pages/admin_students_page.dart",
+      "lines": 395
+    },
+    {
+      "file": "flutter_app/lib/features/admin/presentation/providers/admin_provider.dart",
+      "lines": 135
+    },
+    {
+      "file": "flutter_app/lib/features/admin/presentation/providers/admin_provider.g.dart",
+      "lines": 967
+    },
+    {
+      "file": "flutter_app/lib/features/admin/presentation/widgets/admin_filter_chips.dart",
+      "lines": 63
+    },
+    {
+      "file": "flutter_app/lib/features/admin/presentation/widgets/admin_search_bar.dart",
+      "lines": 74
+    },
+    {
+      "file": "flutter_app/lib/features/admin/presentation/widgets/admin_stat_card.dart",
+      "lines": 84
+    },
+    {
+      "file": "flutter_app/lib/features/admin/presentation/widgets/admin_status_chip.dart",
+      "lines": 64
+    },
+    {
+      "file": "flutter_app/lib/features/admin/presentation/widgets/admin_user_list_tile.dart",
+      "lines": 164
+    },
+    {
+      "file": "flutter_app/lib/features/ar_gallery/presentation/pages/ar_gallery_page.dart",
+      "lines": 537
+    },
+    {
+      "file": "flutter_app/lib/features/ar_gallery/presentation/pages/model_viewer_page.dart",
+      "lines": 305
+    },
+    {
+      "file": "flutter_app/lib/features/assignments/data/datasources/assignment_remote_datasource.dart",
+      "lines": 65
+    },
+    {
+      "file": "flutter_app/lib/features/assignments/data/models/assignment_model.dart",
+      "lines": 69
+    },
+    {
+      "file": "flutter_app/lib/features/assignments/data/models/assignment_model.freezed.dart",
+      "lines": 668
+    },
+    {
+      "file": "flutter_app/lib/features/assignments/data/models/assignment_model.g.dart",
+      "lines": 62
+    },
+    {
+      "file": "flutter_app/lib/features/assignments/data/repositories/assignment_repository_impl.dart",
+      "lines": 45
+    },
+    {
+      "file": "flutter_app/lib/features/assignments/domain/entities/assignment.dart",
+      "lines": 31
+    },
+    {
+      "file": "flutter_app/lib/features/assignments/domain/entities/assignment.freezed.dart",
+      "lines": 592
+    },
+    {
+      "file": "flutter_app/lib/features/assignments/domain/repositories/assignment_repository.dart",
+      "lines": 13
+    },
+    {
+      "file": "flutter_app/lib/features/assignments/presentation/pages/assignment_page.dart",
+      "lines": 137
+    },
+    {
+      "file": "flutter_app/lib/features/assignments/presentation/providers/assignment_provider.dart",
+      "lines": 59
+    },
+    {
+      "file": "flutter_app/lib/features/assignments/presentation/providers/assignment_provider.g.dart",
+      "lines": 199
+    },
+    {
+      "file": "flutter_app/lib/features/auth/data/datasources/auth_remote_datasource.dart",
+      "lines": 220
+    },
+    {
+      "file": "flutter_app/lib/features/auth/data/models/user_model.dart",
+      "lines": 71
+    },
+    {
+      "file": "flutter_app/lib/features/auth/data/models/user_model.freezed.dart",
+      "lines": 362
+    },
+    {
+      "file": "flutter_app/lib/features/auth/data/models/user_model.g.dart",
+      "lines": 33
+    },
+    {
+      "file": "flutter_app/lib/features/auth/data/repositories/auth_repository_impl.dart",
+      "lines": 421
+    },
+    {
+      "file": "flutter_app/lib/features/auth/data/services/google_signin_service.dart",
+      "lines": 31
+    },
+    {
+      "file": "flutter_app/lib/features/auth/domain/entities/google_auth_result.dart",
+      "lines": 18
+    },
+    {
+      "file": "flutter_app/lib/features/auth/domain/entities/google_auth_result.freezed.dart",
+      "lines": 425
+    },
+    {
+      "file": "flutter_app/lib/features/auth/domain/entities/user.dart",
+      "lines": 28
+    },
+    {
+      "file": "flutter_app/lib/features/auth/domain/entities/user.freezed.dart",
+      "lines": 311
+    },
+    {
+      "file": "flutter_app/lib/features/auth/domain/repositories/auth_repository.dart",
+      "lines": 42
+    },
+    {
+      "file": "flutter_app/lib/features/auth/domain/usecases/login_usecase.dart",
+      "lines": 17
+    },
+    {
+      "file": "flutter_app/lib/features/auth/domain/usecases/logout_usecase.dart",
+      "lines": 13
+    },
+    {
+      "file": "flutter_app/lib/features/auth/domain/usecases/register_usecase.dart",
+      "lines": 28
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/pages/forgot_password_page.dart",
+      "lines": 188
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/pages/get_started_page.dart",
+      "lines": 242
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/pages/login_page.dart",
+      "lines": 207
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/pages/register_page.dart",
+      "lines": 171
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/pages/reset_password_page.dart",
+      "lines": 219
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/pages/role_selection_page.dart",
+      "lines": 161
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/pages/splash_page.dart",
+      "lines": 119
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/pages/verify_email_page.dart",
+      "lines": 197
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/providers/auth_provider.dart",
+      "lines": 379
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/providers/auth_provider.g.dart",
+      "lines": 129
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/providers/auth_state.dart",
+      "lines": 35
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/providers/auth_state.freezed.dart",
+      "lines": 1339
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/providers/email_verification_provider.dart",
+      "lines": 64
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/providers/email_verification_provider.g.dart",
+      "lines": 31
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/providers/onboarding_provider.dart",
+      "lines": 34
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/providers/password_reset_provider.dart",
+      "lines": 71
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/providers/password_reset_provider.g.dart",
+      "lines": 30
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/providers/pending_role_selection.dart",
+      "lines": 28
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/providers/pending_role_selection.g.dart",
+      "lines": 27
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/utils/auth_error_text.dart",
+      "lines": 42
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/widgets/login_form.dart",
+      "lines": 169
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/widgets/login_hero.dart",
+      "lines": 132
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/widgets/register_form.dart",
+      "lines": 688
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/widgets/role_selection_sheet.dart",
+      "lines": 179
+    },
+    {
+      "file": "flutter_app/lib/features/auth/presentation/widgets/social_login_buttons.dart",
+      "lines": 143
+    },
+    {
+      "file": "flutter_app/lib/features/blog/presentation/pages/blog_detail_page.dart",
+      "lines": 293
+    },
+    {
+      "file": "flutter_app/lib/features/blog/presentation/pages/blog_list_page.dart",
+      "lines": 148
+    },
+    {
+      "file": "flutter_app/lib/features/cart/presentation/pages/cart_page.dart",
+      "lines": 166
+    },
+    {
+      "file": "flutter_app/lib/features/cart/presentation/providers/cart_provider.dart",
+      "lines": 26
+    },
+    {
+      "file": "flutter_app/lib/features/certificates/presentation/pages/verify_certificate_page.dart",
+      "lines": 219
+    },
+    {
+      "file": "flutter_app/lib/features/companies/presentation/pages/company_signup_page.dart",
+      "lines": 324
+    },
+    {
+      "file": "flutter_app/lib/features/companies/presentation/pages/for_companies_page.dart",
+      "lines": 172
+    },
+    {
+      "file": "flutter_app/lib/features/courses/data/datasources/course_remote_datasource.dart",
+      "lines": 302
+    },
+    {
+      "file": "flutter_app/lib/features/courses/data/models/course_model.dart",
+      "lines": 141
+    },
+    {
+      "file": "flutter_app/lib/features/courses/data/models/course_model.freezed.dart",
+      "lines": 1588
+    },
+    {
+      "file": "flutter_app/lib/features/courses/data/models/course_model.g.dart",
+      "lines": 156
+    },
+    {
+      "file": "flutter_app/lib/features/courses/data/models/lesson_model.dart",
+      "lines": 87
+    },
+    {
+      "file": "flutter_app/lib/features/courses/data/models/lesson_model.freezed.dart",
+      "lines": 798
+    },
+    {
+      "file": "flutter_app/lib/features/courses/data/models/lesson_model.g.dart",
+      "lines": 67
+    },
+    {
+      "file": "flutter_app/lib/features/courses/data/repositories/course_repository_impl.dart",
+      "lines": 206
+    },
+    {
+      "file": "flutter_app/lib/features/courses/domain/entities/certificate.dart",
+      "lines": 15
+    },
+    {
+      "file": "flutter_app/lib/features/courses/domain/entities/certificate.freezed.dart",
+      "lines": 252
+    },
+    {
+      "file": "flutter_app/lib/features/courses/domain/entities/course.dart",
+      "lines": 74
+    },
+    {
+      "file": "flutter_app/lib/features/courses/domain/entities/course.freezed.dart",
+      "lines": 1199
+    },
+    {
+      "file": "flutter_app/lib/features/courses/domain/entities/lesson.dart",
+      "lines": 38
+    },
+    {
+      "file": "flutter_app/lib/features/courses/domain/entities/lesson.freezed.dart",
+      "lines": 681
+    },
+    {
+      "file": "flutter_app/lib/features/courses/domain/repositories/course_repository.dart",
+      "lines": 43
+    },
+    {
+      "file": "flutter_app/lib/features/courses/domain/usecases/course_usecases.dart",
+      "lines": 79
+    },
+    {
+      "file": "flutter_app/lib/features/courses/presentation/pages/all_courses_page.dart",
+      "lines": 467
+    },
+    {
+      "file": "flutter_app/lib/features/courses/presentation/pages/course_detail_page.dart",
+      "lines": 1874
+    },
+    {
+      "file": "flutter_app/lib/features/courses/presentation/pages/lesson_page.dart",
+      "lines": 208
+    },
+    {
+      "file": "flutter_app/lib/features/courses/presentation/providers/course_catalog_provider.dart",
+      "lines": 198
+    },
+    {
+      "file": "flutter_app/lib/features/courses/presentation/providers/course_filter_providers.dart",
+      "lines": 22
+    },
+    {
+      "file": "flutter_app/lib/features/courses/presentation/providers/course_provider.dart",
+      "lines": 153
+    },
+    {
+      "file": "flutter_app/lib/features/courses/presentation/providers/course_provider.g.dart",
+      "lines": 882
+    },
+    {
+      "file": "flutter_app/lib/features/courses/presentation/providers/video_playback_provider.dart",
+      "lines": 50
+    },
+    {
+      "file": "flutter_app/lib/features/courses/presentation/widgets/course_card.dart",
+      "lines": 326
+    },
+    {
+      "file": "flutter_app/lib/features/courses/presentation/widgets/next_lesson_card.dart",
+      "lines": 109
+    },
+    {
+      "file": "flutter_app/lib/features/dashboard/data/datasources/dashboard_remote_datasource.dart",
+      "lines": 70
+    },
+    {
+      "file": "flutter_app/lib/features/dashboard/data/models/dashboard_model.dart",
+      "lines": 177
+    },
+    {
+      "file": "flutter_app/lib/features/dashboard/data/models/dashboard_model.freezed.dart",
+      "lines": 1772
+    },
+    {
+      "file": "flutter_app/lib/features/dashboard/data/models/dashboard_model.g.dart",
+      "lines": 154
+    },
+    {
+      "file": "flutter_app/lib/features/dashboard/data/repositories/dashboard_repository_impl.dart",
+      "lines": 56
+    },
+    {
+      "file": "flutter_app/lib/features/dashboard/domain/entities/dashboard_data.dart",
+      "lines": 77
+    },
+    {
+      "file": "flutter_app/lib/features/dashboard/domain/entities/dashboard_data.freezed.dart",
+      "lines": 1553
+    },
+    {
+      "file": "flutter_app/lib/features/dashboard/domain/entities/monthly_revenue.dart",
+      "lines": 96
+    },
+    {
+      "file": "flutter_app/lib/features/dashboard/domain/repositories/dashboard_repository.dart",
+      "lines": 9
+    },
+    {
+      "file": "flutter_app/lib/features/dashboard/presentation/pages/continue_learning_page.dart",
+      "lines": 287
+    },
+    {
+      "file": "flutter_app/lib/features/dashboard/presentation/pages/dashboard_page.dart",
+      "lines": 1694
+    },
+    {
+      "file": "flutter_app/lib/features/dashboard/presentation/pages/student_report_page.dart",
+      "lines": 612
+    },
+    {
+      "file": "flutter_app/lib/features/dashboard/presentation/providers/dashboard_provider.dart",
+      "lines": 64
+    },
+    {
+      "file": "flutter_app/lib/features/dashboard/presentation/providers/dashboard_provider.g.dart",
+      "lines": 105
+    },
+    {
+      "file": "flutter_app/lib/features/dashboard/presentation/providers/monthly_revenue_provider.dart",
+      "lines": 52
+    },
+    {
+      "file": "flutter_app/lib/features/dashboard/presentation/widgets/admin_dashboard_view.dart",
+      "lines": 108
+    },
+    {
+      "file": "flutter_app/lib/features/dashboard/presentation/widgets/admin_monthly_revenue_section.dart",
+      "lines": 476
+    },
+    {
+      "file": "flutter_app/lib/features/dashboard/presentation/widgets/instructor_dashboard_view.dart",
+      "lines": 114
+    },
+    {
+      "file": "flutter_app/lib/features/dashboard/presentation/widgets/role_dashboard_common.dart",
+      "lines": 218
+    },
+    {
+      "file": "flutter_app/lib/features/home/presentation/pages/home_page.dart",
+      "lines": 1134
+    },
+    {
+      "file": "flutter_app/lib/features/home/presentation/pages/main_scaffold.dart",
+      "lines": 65
+    },
+    {
+      "file": "flutter_app/lib/features/home/presentation/providers/home_instructors_provider.dart",
+      "lines": 25
+    },
+    {
+      "file": "flutter_app/lib/features/home/presentation/widgets/instructor_card.dart",
+      "lines": 87
+    },
+    {
+      "file": "flutter_app/lib/features/home/presentation/widgets/stagger_testimonials_hero.dart",
+      "lines": 461
+    },
+    {
+      "file": "flutter_app/lib/features/internships/presentation/pages/internship_detail_page.dart",
+      "lines": 290
+    },
+    {
+      "file": "flutter_app/lib/features/internships/presentation/pages/internships_page.dart",
+      "lines": 161
+    },
+    {
+      "file": "flutter_app/lib/features/learning/learning_api.dart",
+      "lines": 49
+    },
+    {
+      "file": "flutter_app/lib/features/learning/learning_workspace.dart",
+      "lines": 635
+    },
+    {
+      "file": "flutter_app/lib/features/learning/recording_reader.dart",
+      "lines": 102
+    },
+    {
+      "file": "flutter_app/lib/features/live_classes/data/live_class_api.dart",
+      "lines": 139
+    },
+    {
+      "file": "flutter_app/lib/features/live_classes/data/live_class_repository.dart",
+      "lines": 116
+    },
+    {
+      "file": "flutter_app/lib/features/live_classes/data/models/live_class_model.dart",
+      "lines": 184
+    },
+    {
+      "file": "flutter_app/lib/features/live_classes/data/models/live_class_model.freezed.dart",
+      "lines": 1480
+    },
+    {
+      "file": "flutter_app/lib/features/live_classes/data/models/live_class_model.g.dart",
+      "lines": 125
+    },
+    {
+      "file": "flutter_app/lib/features/live_classes/domain/entities/live_class.dart",
+      "lines": 76
+    },
+    {
+      "file": "flutter_app/lib/features/live_classes/domain/entities/live_class.freezed.dart",
+      "lines": 1061
+    },
+    {
+      "file": "flutter_app/lib/features/live_classes/domain/repositories/live_class_repository.dart",
+      "lines": 38
+    },
+    {
+      "file": "flutter_app/lib/features/live_classes/presentation/join_live_class_screen.dart",
+      "lines": 295
+    },
+    {
+      "file": "flutter_app/lib/features/live_classes/presentation/live_class_detail_screen.dart",
+      "lines": 138
+    },
+    {
+      "file": "flutter_app/lib/features/live_classes/presentation/live_class_list_screen.dart",
+      "lines": 196
+    },
+    {
+      "file": "flutter_app/lib/features/live_classes/presentation/providers.dart",
+      "lines": 71
+    },
+    {
+      "file": "flutter_app/lib/features/live_classes/presentation/providers.g.dart",
+      "lines": 654
+    },
+    {
+      "file": "flutter_app/lib/features/profile/data/datasources/profile_remote_datasource.dart",
+      "lines": 119
+    },
+    {
+      "file": "flutter_app/lib/features/profile/data/repositories/profile_repository_impl.dart",
+      "lines": 54
+    },
+    {
+      "file": "flutter_app/lib/features/profile/domain/repositories/profile_repository.dart",
+      "lines": 9
+    },
+    {
+      "file": "flutter_app/lib/features/profile/presentation/pages/profile_page.dart",
+      "lines": 1810
+    },
+    {
+      "file": "flutter_app/lib/features/profile/presentation/pages/public_profile_page.dart",
+      "lines": 495
+    },
+    {
+      "file": "flutter_app/lib/features/profile/presentation/pages/settings_page.dart",
+      "lines": 446
+    },
+    {
+      "file": "flutter_app/lib/features/profile/presentation/providers/profile_provider.dart",
+      "lines": 26
+    },
+    {
+      "file": "flutter_app/lib/features/quizzes/data/datasources/quiz_remote_datasource.dart",
+      "lines": 110
+    },
+    {
+      "file": "flutter_app/lib/features/quizzes/data/models/quiz_model.dart",
+      "lines": 87
+    },
+    {
+      "file": "flutter_app/lib/features/quizzes/data/models/quiz_model.freezed.dart",
+      "lines": 931
+    },
+    {
+      "file": "flutter_app/lib/features/quizzes/data/models/quiz_model.g.dart",
+      "lines": 86
+    },
+    {
+      "file": "flutter_app/lib/features/quizzes/data/repositories/quiz_repository_impl.dart",
+      "lines": 84
+    },
+    {
+      "file": "flutter_app/lib/features/quizzes/domain/entities/quiz.dart",
+      "lines": 53
+    },
+    {
+      "file": "flutter_app/lib/features/quizzes/domain/entities/quiz.freezed.dart",
+      "lines": 1017
+    },
+    {
+      "file": "flutter_app/lib/features/quizzes/domain/repositories/quiz_repository.dart",
+      "lines": 23
+    },
+    {
+      "file": "flutter_app/lib/features/quizzes/domain/usecases/quiz_usecases.dart",
+      "lines": 43
+    },
+    {
+      "file": "flutter_app/lib/features/quizzes/presentation/pages/quiz_taking_page.dart",
+      "lines": 289
+    },
+    {
+      "file": "flutter_app/lib/features/quizzes/presentation/providers/quiz_provider.dart",
+      "lines": 51
+    },
+    {
+      "file": "flutter_app/lib/features/quizzes/presentation/providers/quiz_provider.g.dart",
+      "lines": 267
+    },
+    {
+      "file": "flutter_app/lib/features/wishlist/presentation/pages/wishlist_page.dart",
+      "lines": 80
+    },
+    {
+      "file": "flutter_app/lib/main.dart",
+      "lines": 123
+    },
+    {
+      "file": "flutter_app/lib/shared/widgets/common/app_button.dart",
+      "lines": 234
+    },
+    {
+      "file": "flutter_app/lib/shared/widgets/common/app_card.dart",
+      "lines": 78
+    },
+    {
+      "file": "flutter_app/lib/shared/widgets/common/app_input.dart",
+      "lines": 153
+    },
+    {
+      "file": "flutter_app/lib/shared/widgets/common/app_loader.dart",
+      "lines": 162
+    },
+    {
+      "file": "flutter_app/lib/shared/widgets/common/app_snackbar.dart",
+      "lines": 75
+    },
+    {
+      "file": "flutter_app/lib/shared/widgets/common/error_display.dart",
+      "lines": 102
+    },
+    {
+      "file": "flutter_app/lib/shared/widgets/common/gradient_header.dart",
+      "lines": 80
+    },
+    {
+      "file": "flutter_app/lib/shared/widgets/common/launching_soon.dart",
+      "lines": 48
+    },
+    {
+      "file": "flutter_app/lib/shared/widgets/common/safe_model_viewer.dart",
+      "lines": 93
+    },
+    {
+      "file": "flutter_app/lib/shared/widgets/common/section_header.dart",
+      "lines": 79
+    },
+    {
+      "file": "flutter_app/lib/shared/widgets/common/skeleton_loader.dart",
+      "lines": 147
+    },
+    {
+      "file": "flutter_app/lib/shared/widgets/common/user_menu.dart",
+      "lines": 506
+    },
+    {
+      "file": "flutter_app/lib/shared/widgets/common/warm_glow_background.dart",
+      "lines": 54
+    },
+    {
+      "file": "flutter_app/lib/shared/widgets/video/bunny_video_player_widget.dart",
+      "lines": 194
+    },
+    {
+      "file": "flutter_app/lib/shared/widgets/video/video_player_widget.dart",
+      "lines": 508
+    },
+    {
+      "file": "streaming-service/video_streaming.py",
+      "lines": 279
+    },
+    {
+      "file": "nginx/cache.conf",
+      "lines": 5
+    },
+    {
+      "file": "nginx/conf.d/aapanel.conf",
+      "lines": 23
+    },
+    {
+      "file": "nginx/conf.d/default.conf",
+      "lines": 554
+    },
+    {
+      "file": "nginx/conf.d/default.production.conf",
+      "lines": 225
+    },
+    {
+      "file": "nginx/conf.d/map_crawler.conf",
+      "lines": 18
+    },
+    {
+      "file": "nginx/conf.d.local/default.conf",
+      "lines": 158
+    },
+    {
+      "file": "nginx/nginx-entrypoint.sh",
+      "lines": 9
+    },
+    {
+      "file": "nginx/nginx.conf",
+      "lines": 53
+    },
+    {
+      "file": "scripts/apply_integrated_migration.py",
+      "lines": 20
+    },
+    {
+      "file": "scripts/backup-db.sh",
+      "lines": 56
+    },
+    {
+      "file": "scripts/build_architecture_inventory.py",
+      "lines": 51
+    },
+    {
+      "file": "scripts/campus_release_check.py",
+      "lines": 103
+    },
+    {
+      "file": "scripts/check_local_release.py",
+      "lines": 31
+    },
+    {
+      "file": "scripts/export_project_content.py",
+      "lines": 72
+    },
+    {
+      "file": "scripts/export_release.py",
+      "lines": 89
+    },
+    {
+      "file": "scripts/ids_watch.py",
+      "lines": 412
+    },
+    {
+      "file": "scripts/preview_campus.py",
+      "lines": 579
+    },
+    {
+      "file": "scripts/preview_labs.py",
+      "lines": 31
+    },
+    {
+      "file": "scripts/purge-cloudflare-cache.sh",
+      "lines": 34
+    },
+    {
+      "file": "scripts/render_architecture_pdf.py",
+      "lines": 123
+    },
+    {
+      "file": "scripts/scrub-secrets.sh",
+      "lines": 66
+    },
+    {
+      "file": "scripts/setup.sh",
+      "lines": 82
+    },
+    {
+      "file": "scripts/smoke.sh",
+      "lines": 56
+    },
+    {
+      "file": "scripts/start-recording-worker.ps1",
+      "lines": 12
+    },
+    {
+      "file": "scripts/verify-lab-assets.cjs",
+      "lines": 67
+    },
+    {
+      "file": "scripts/verify-model-assets.cjs",
+      "lines": 72
+    },
+    {
+      "file": "scripts/verify-nginx-whatsapp-webhook.cjs",
+      "lines": 94
+    },
+    {
+      "file": "scripts/verify_content_restore.py",
+      "lines": 74
+    }
+  ]
+}

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SashaInfinity — Certificate of Achievement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+<script src="/certificate-files/assets/qrcode.min.js"></script>
+<style>
+  *,::before,::after{ box-sizing:border-box; margin:0; padding:0;
+    -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+
+  :root{
+    --orange:#f97316; --orange-l:#fb923c; --orange-d:#ea580c; --orange-xl:#fdba74;
+    --peach:#fff3e8; --peach-2:#ffe6d2; --cream:#fdfaf5;
+    --navy:#0b2444; --ink:#3b2a1c; --muted:#8a7360;
+    --band:linear-gradient(118deg,#fdba74 0%,#fb923c 30%,#f97316 60%,#ea580c 100%);
+    --soft:linear-gradient(160deg,#fffaf3 0%,#fff1e2 60%,#ffe7cf 100%);
+    --name-grad:linear-gradient(105deg,#fb923c,#f97316 45%,#ea580c);
+    --line:linear-gradient(90deg,transparent,var(--orange),transparent);
+  }
+
+  html,body{ height:100%; }
+  body{ font-family:'Poppins',sans-serif; color:var(--ink);
+    background:radial-gradient(circle at 50% -8%, #ffd9b0, #f4a26a 60%, #d97a3d 100%);
+    min-height:100vh; display:flex; flex-direction:column; align-items:center;
+    padding:26px 16px 60px; -webkit-font-smoothing:antialiased; }
+
+  /* toolbar (screen only) */
+  .toolbar{ width:1200px; max-width:100%; display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:20px; color:#4a2f16; }
+  .toolbar .brand{ display:flex; align-items:center; gap:10px; margin-right:auto; }
+  .toolbar .brand img{ height:26px; }
+  .toolbar .brand b{ font-weight:600; letter-spacing:.5px; font-size:14px; }
+  .toolbar .hint{ font-size:12.5px; color:#7a5230; font-weight:300; }
+  .btn{ font-family:'Poppins',sans-serif; font-size:13px; font-weight:500; color:#fff;
+    background:linear-gradient(135deg,#fb923c,#ea580c); border:none; border-radius:8px; padding:9px 16px;
+    cursor:pointer; letter-spacing:.3px; box-shadow:0 3px 10px rgba(214,110,40,.4); transition:transform .12s, filter .12s; }
+  .btn:hover{ filter:brightness(1.06); transform:translateY(-1px); }
+  .btn.alt{ background:linear-gradient(135deg,#f6b26b,#e58a3c); }
+  .btn.ghost{ background:#fff; color:#b45309; border:1px solid #f4c99a; box-shadow:none; }
+
+  /* stage / certificate */
+  .stage{ width:1200px; height:850px; flex:0 0 auto; }
+  .cert{ font-family:'Poppins',sans-serif; width:1200px; height:850px; color:var(--ink);
+    position:relative; overflow:hidden; box-shadow:0 30px 80px rgba(120,60,20,.45);
+    border:13px solid transparent; background:var(--soft) padding-box, var(--band) border-box; }
+
+  /* guilloché + soft blobs */
+  .cert::before{ content:''; position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.55;
+    background:
+      repeating-radial-gradient(circle at 30% 46%, transparent 0 32px, rgba(249,115,22,.045) 32px 33px),
+      radial-gradient(circle at 88% 12%, rgba(251,146,60,.14), transparent 42%),
+      radial-gradient(circle at 96% 92%, rgba(234,88,12,.10), transparent 38%); }
+
+  .keyline{ position:absolute; inset:20px; z-index:1; border:1.5px solid rgba(234,88,12,.34); pointer-events:none; }
+  .keyline::after{ content:''; position:absolute; inset:6px; border:.8px solid rgba(234,88,12,.18); }
+  .dia{ position:absolute; width:12px; height:12px; background:var(--band); transform:rotate(45deg); z-index:3; box-shadow:0 1px 3px rgba(0,0,0,.18); }
+  .dia.tl{ top:30px; left:30px; } .dia.tr{ top:30px; right:30px; }
+  .dia.bl{ bottom:30px; left:30px; } .dia.br{ bottom:30px; right:30px; }
+
+  /* ===== LEFT SHOWCASE (3D Sasha) ===== */
+  .showcase{ position:absolute; left:0; top:0; bottom:0; width:452px; z-index:2;
+    background:
+      radial-gradient(120% 80% at 30% 28%, rgba(255,255,255,.75), transparent 60%),
+      linear-gradient(150deg,#fff4e8 0%,#ffe4c9 55%,#ffd3ac 100%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    border-right:2px solid rgba(234,88,12,.16); overflow:hidden; }
+  .showcase::before{ content:''; position:absolute; inset:0; pointer-events:none;
+    background:repeating-conic-gradient(from 0deg at 50% 44%, rgba(234,88,12,.05) 0deg 3deg, transparent 3deg 8deg); opacity:.5; }
+  .glow{ position:absolute; top:50%; left:50%; width:420px; height:420px; transform:translate(-50%,-56%);
+    background:radial-gradient(circle, rgba(255,196,140,.9), rgba(255,196,140,0) 66%); filter:blur(4px); z-index:0; }
+  .sasha{ position:relative; z-index:2; width:346px; height:auto; filter:drop-shadow(0 26px 30px rgba(150,70,20,.34)); }
+  .ground{ position:absolute; z-index:1; bottom:150px; left:50%; transform:translateX(-50%);
+    width:250px; height:40px; background:radial-gradient(ellipse, rgba(120,55,15,.28), transparent 70%); filter:blur(3px); }
+  .spark{ position:absolute; z-index:3; color:#fff; opacity:.9; filter:drop-shadow(0 0 6px rgba(255,180,110,.9)); }
+  .spark.s1{ top:96px; left:70px; font-size:22px; } .spark.s2{ top:150px; right:64px; font-size:15px; color:#ffe0bd; }
+  .spark.s3{ bottom:250px; left:56px; font-size:13px; color:#ffd9b0; } .spark.s4{ top:230px; left:120px; font-size:11px; }
+  .show-cap{ position:absolute; bottom:52px; left:0; right:0; z-index:3; text-align:center;
+    font-family:'Great Vibes',cursive; font-size:33px; color:#b4551b; line-height:1; }
+  .show-cap small{ display:block; font-family:'Poppins',sans-serif; font-size:10px; font-weight:600;
+    letter-spacing:3px; text-transform:uppercase; color:#c2662a; margin-top:6px; }
+
+  /* ===== RIGHT CONTENT ===== */
+  .panel{ position:absolute; left:452px; right:0; top:0; bottom:0; z-index:2;
+    display:flex; flex-direction:column; padding:46px 62px 0; }
+
+  .p-head{ display:flex; align-items:flex-start; justify-content:space-between; }
+  .p-head img{ height:62px; }
+  .cid{ text-align:right; font-size:10.5px; letter-spacing:.5px; color:var(--muted); }
+  .cid b{ display:block; font-weight:600; color:var(--orange-d); letter-spacing:1px; margin-top:2px; font-size:11.5px; }
+
+  .title{ font-family:'Playfair Display',serif; font-weight:900; font-size:41px; letter-spacing:1px;
+    text-transform:uppercase; color:var(--navy); line-height:1.04; margin-top:34px; position:relative; display:inline-block; }
+  .title span{ color:var(--orange-d); }
+  .title::after{ content:''; position:absolute; left:0; bottom:-12px; width:150px; height:3px; background:var(--line); }
+  .subtitle{ font-size:12.5px; font-weight:300; letter-spacing:4px; text-transform:uppercase; color:var(--muted); margin-top:30px; }
+
+  .recipient-name{ font-family:'Playfair Display',serif; font-weight:700; font-size:52px;
+    background:var(--name-grad); -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; color:var(--orange-d); display:inline-block; text-transform:capitalize; line-height:1.1; margin-top:12px; }
+  .rule{ width:340px; max-width:100%; height:2px; background:var(--line); margin-top:12px; }
+
+  .course{ margin-top:20px; font-size:14px; color:var(--muted); line-height:1.7; max-width:520px; }
+  .course-name{ display:block; font-family:'Playfair Display',serif; font-size:22px; font-weight:600; color:var(--navy); margin-top:5px; letter-spacing:.2px; text-transform:capitalize; }
+
+  .foot{ margin-top:auto; display:flex; align-items:flex-end; justify-content:space-between; gap:20px; padding-bottom:150px; }
+  .sig{ text-align:left; min-width:190px; }
+  .sig-name{ font-family:'Great Vibes',cursive; font-size:34px; line-height:.85; color:var(--navy); }
+  .sig-line{ height:2px; width:200px; background:var(--line); margin-top:6px; }
+  .sig-role{ font-size:10.5px; font-weight:600; text-transform:uppercase; letter-spacing:1.4px; color:var(--muted); margin-top:8px; }
+  .sig-date{ font-size:11px; color:var(--muted); margin-top:2px; }
+  .seal{ text-align:center; }
+  .seal img{ width:104px; height:104px; object-fit:contain; filter:drop-shadow(0 8px 16px rgba(180,85,25,.3)); }
+  .seal .seal-cap{ margin-top:3px; font-size:9px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--orange-d); }
+
+  /* verify + qr (bottom of right panel) */
+  .verify-text{ position:absolute; left:514px; bottom:70px; z-index:4; text-align:left; max-width:230px; }
+  .verify-text .vt-label{ font-size:10px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--orange-d); }
+  .verify-text .vt-url{ font-size:11px; color:var(--muted); margin-top:3px; font-weight:500; }
+  .verify-text .vt-code{ font-size:10px; color:var(--muted); margin-top:5px; letter-spacing:.4px; word-break:break-all; }
+  .qr-card{ position:absolute; right:56px; bottom:56px; z-index:4; background:#fff; border:2px solid var(--orange); border-radius:12px; padding:9px; box-shadow:0 8px 20px rgba(180,85,25,.22); cursor:pointer; }
+  #qrcode{ width:92px; height:92px; }
+  #qrcode img,#qrcode canvas{ width:92px !important; height:92px !important; display:block; }
+  .qr-card .qr-cap{ font-size:9px; font-weight:600; color:var(--orange-d); margin-top:5px; letter-spacing:.5px; text-align:center; }
+
+  .company{ position:absolute; left:0; bottom:0; width:100%; z-index:3; background:var(--band);
+    color:#fff; text-align:center; font-size:13px; font-weight:600; letter-spacing:3px; text-transform:uppercase; padding:12px 0; }
+
+  /* ===== VERIFICATION OVERLAY ===== */
+  .overlay{ position:fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center;
+    background:rgba(60,30,10,.6); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); padding:24px; }
+  .overlay.show{ display:flex; }
+  .vmodal{ width:560px; max-width:100%; background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 40px 120px rgba(0,0,0,.45); }
+  .vm-top{ background:var(--band); padding:28px 30px 24px; text-align:center; color:#fff; position:relative; }
+  .vm-close{ position:absolute; top:14px; right:16px; width:30px; height:30px; border-radius:50%; border:none; cursor:pointer; background:rgba(255,255,255,.22); color:#fff; font-size:17px; }
+  .vchk{ width:60px; height:60px; display:block; margin:0 auto 10px; }
+  .vchk .ring{ fill:#1eb877; } .vchk circle{ fill:none; stroke:#fff; stroke-width:3; }
+  .vchk path{ fill:none; stroke:#fff; stroke-width:4; stroke-linecap:round; stroke-linejoin:round; }
+  .vm-top h3{ font-family:'Playfair Display',serif; font-size:24px; font-weight:700; }
+  .vm-sub{ font-size:12.5px; opacity:.92; margin-top:5px; font-weight:300; }
+  .vm-pill{ display:inline-flex; align-items:center; gap:6px; margin-top:12px; background:rgba(255,255,255,.2); padding:5px 14px; border-radius:999px; font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; }
+  .vm-pill::before{ content:''; width:7px; height:7px; border-radius:50%; background:#9dffce; box-shadow:0 0 8px #9dffce; }
+  .vm-body{ padding:20px 30px 8px; }
+  .vrow{ display:flex; justify-content:space-between; gap:18px; padding:11px 0; border-bottom:1px solid #f0e6da; }
+  .vrow:last-child{ border-bottom:none; }
+  .vrow .k{ font-size:12px; color:#a0876c; font-weight:500; letter-spacing:.4px; text-transform:uppercase; }
+  .vrow .v{ font-size:14px; color:var(--navy); font-weight:600; text-align:right; }
+  .vm-foot{ display:flex; align-items:center; gap:16px; padding:18px 30px 24px; background:#fbf6ef; border-top:1px solid #f0e6da; }
+  .vm-qr{ width:82px; height:82px; border:1px solid #eeddc9; border-radius:8px; padding:6px; background:#fff; flex:0 0 auto; }
+  .vm-qr img,.vm-qr canvas{ width:70px !important; height:70px !important; }
+  .vm-note{ font-size:11.5px; color:#8a7360; line-height:1.5; }
+  .vm-note b{ color:#138a5a; }
+  .vm-note a{ color:var(--orange-d); text-decoration:none; font-weight:600; }
+
+  /* ===== PRINT ===== */
+  @media print{
+    @page{ size:A4 landscape; margin:0; }
+    html,body{ width:297mm; height:210mm; background:#fff; }
+    body{ padding:0; display:block; }
+    .toolbar,.overlay{ display:none !important; }
+    .stage{ width:297mm; height:210mm; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .cert{ transform:scale(0.929); transform-origin:center center; box-shadow:none; }
+  }
+</style>
+</head>
+<body>
+  <div class="toolbar">
+    <div class="brand"><img src="/certificate-files/assets/logo.png" alt="SashaInfinity"><b>Certificate Studio</b></div>
+    <span class="hint">QR opens verification</span>
+    <button class="btn alt" id="verifyBtn">Verify Credential</button>
+    <button class="btn" id="printBtn">Download / Print</button>
+  </div>
+
+  <div class="stage">
+  <div class="cert" id="cert">
+    <div class="keyline"></div>
+    <span class="dia tl"></span><span class="dia tr"></span><span class="dia bl"></span><span class="dia br"></span>
+
+    <!-- LEFT: 3D Sasha showcase -->
+    <div class="showcase">
+      <div class="glow"></div>
+      <div class="ground"></div>
+      <img class="sasha" src="/certificate-files/assets/sasha-3d.png" alt="Sasha">
+      <span class="spark s1">✦</span><span class="spark s2">✦</span><span class="spark s3">✦</span><span class="spark s4">✦</span>
+      <div class="show-cap">Learn with Sasha<small>Democratize Education</small></div>
+    </div>
+
+    <!-- RIGHT: content -->
+    <div class="panel">
+      <div class="p-head">
+        <img src="/certificate-files/assets/logo.png" alt="SashaInfinity">
+        <div class="cid">Certificate ID<b data-field="certId">CERT-2026-000142</b></div>
+      </div>
+
+      <div class="title">Certificate of <span>Achievement</span></div>
+      <div class="subtitle">This is proudly presented to</div>
+
+      <span class="recipient-name" data-field="name">Logadheenan V M</span>
+      <div class="rule"></div>
+
+      <div class="course">
+        For successfully completing the comprehensive program in
+        <span class="course-name" data-field="course">Full-Stack Web Development</span>
+      </div>
+
+      <div class="foot">
+        <div class="sig">
+          <div class="sig-name" data-field="instructor">Gayathri Devi</div>
+          <div class="sig-line"></div>
+          <div class="sig-role">Course Instructor</div>
+          <div class="sig-date" data-field="date1">June 02, 2026</div>
+        </div>
+        <div class="seal">
+          <img src="/certificate-files/assets/seal.png" alt="Official Seal">
+          <div class="seal-cap">Official Seal</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="verify-text">
+      <div class="vt-label">Verified Credential</div>
+      <div class="vt-url">sashainfinity.com/verify</div>
+      <div class="vt-code" id="vtCode">ID: CERT-2026-000142</div>
+    </div>
+    <div class="qr-card" id="qrCard" title="Open verification">
+      <div id="qrcode"></div>
+      <div class="qr-cap">Scan to Verify</div>
+    </div>
+
+    <div class="company">SashaInfinity Private Limited&nbsp;·&nbsp;Democratize Education</div>
+  </div>
+  </div>
+
+  <!-- verification overlay -->
+  <div class="overlay" id="overlay">
+    <div class="vmodal" role="dialog" aria-modal="true" aria-label="Credential verification">
+      <div class="vm-top">
+        <button class="vm-close" id="vmClose" aria-label="Close">×</button>
+        <svg class="vchk" viewBox="0 0 52 52"><circle class="ring" cx="26" cy="26" r="24" stroke="none"></circle><circle cx="26" cy="26" r="24"></circle><path d="M15 27 l8 8 l15 -16"></path></svg>
+        <h3>Credential Verified</h3>
+        <div class="vm-sub">This certificate is authentic and on record with SashaInfinity</div>
+        <span class="vm-pill">Valid</span>
+      </div>
+      <div class="vm-body">
+        <div class="vrow"><span class="k">Holder</span><span class="v" id="vHolder">—</span></div>
+        <div class="vrow"><span class="k">Programme</span><span class="v" id="vCourse">—</span></div>
+        <div class="vrow"><span class="k">Issued on</span><span class="v" id="vDate">—</span></div>
+        <div class="vrow"><span class="k">Credential ID</span><span class="v" id="vId">—</span></div>
+        <div class="vrow"><span class="k">Issued by</span><span class="v">SashaInfinity Pvt. Ltd.</span></div>
+      </div>
+      <div class="vm-foot">
+        <div class="vm-qr" id="vmQr"></div>
+        <div class="vm-note">Status: <b>Authentic &amp; unrevoked</b><br>Verify independently at <a href="#" id="vLink">sashainfinity.com/verify</a></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  function certId(){ var el=document.querySelector('[data-field="certId"]'); return el?el.textContent.trim():'CERT-2026-000142'; }
+  function verifyUrl(){ return 'https://sashainfinity.com/verify/' + encodeURIComponent(certId()); }
+
+  // Standalone QR builder. In the LMS the server replaces the `generateQR();`
+  // call site below with its own QR + print injection script; this definition
+  // is the fallback when the file is opened directly.
+  function generateQR(){
+    var el=document.getElementById('qrcode'); if(!el) return; el.innerHTML='';
+    if(window.QRCode){ new QRCode(el,{ text:verifyUrl(), width:92, height:92, colorDark:'#0b2444', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.M }); }
+    var vt=document.getElementById('vtCode'); if(vt) vt.textContent='ID: '+certId();
+  }
+
+  (function(){
+    var overlay=document.getElementById('overlay'), vmQr=document.getElementById('vmQr');
+    function open(){
+      document.getElementById('vHolder').textContent=document.querySelector('[data-field="name"]').textContent.trim();
+      document.getElementById('vCourse').textContent=document.querySelector('[data-field="course"]').textContent.trim();
+      document.getElementById('vDate').textContent=document.querySelector('[data-field="date1"]').textContent.trim();
+      document.getElementById('vId').textContent=certId();
+      var l=document.getElementById('vLink'); if(l){ l.textContent='sashainfinity.com/verify/'+certId(); }
+      vmQr.innerHTML=''; if(window.QRCode){ new QRCode(vmQr,{ text:verifyUrl(), width:70, height:70, colorDark:'#138a5a', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.M }); }
+      overlay.classList.add('show');
+    }
+    function close(){ overlay.classList.remove('show'); }
+    var vb=document.getElementById('verifyBtn'); if(vb) vb.addEventListener('click', open);
+    var qc=document.getElementById('qrCard'); if(qc) qc.addEventListener('click', open);
+    var cl=document.getElementById('vmClose'); if(cl) cl.addEventListener('click', close);
+    overlay.addEventListener('click', function(e){ if(e.target===overlay) close(); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+  })();
+
+  var pb=document.getElementById('printBtn'); if(pb) pb.addEventListener('click', function(){ window.print(); });
+
+  generateQR();
+</script>
+</body>
+</html>

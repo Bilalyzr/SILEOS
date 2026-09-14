@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Life Continues — Reproduction — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>How Life Continues<span class="lk-tag">Class 9–10 · Science/Biology</span></h1>
+    <div class="lk-meta">How do Organisms Reproduce? — fission, budding, spores, flowers</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Mode of reproduction</h2>
+      <div class="lk-seg" id="modeSeg" style="flex-wrap:wrap;">
+        <button class="active">Binary fission</button><button>Budding</button><button>Spores</button><button>Flower</button>
+      </div>
+      <div class="lk-row"><label class="lk-name">Progress</label><input type="range" id="prog" min="0" max="100" step="1" value="0"><span class="lk-val" id="progv">0%</span></div>
+      <button class="lk-btn" id="playBtn">▶ Play cycle</button>
+    </div>
+    <div class="lk-card">
+      <h2>What's happening</h2>
+      <div class="lk-readout" id="explain"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint">Asexual modes copy one parent <b>exactly</b> — fast but no variety.
+      Sexual reproduction mixes two genomes — slower, but variety is evolution's raw
+      material. Slide the progress bar to scrub through each life cycle like a film.</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./reproduction-lab/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

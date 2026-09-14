@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SashaInfinity — Certificate of Completion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<script src="/certificate-files/assets/qrcode.min.js"></script>
+<style>
+  *,::before,::after{ box-sizing:border-box; margin:0; padding:0;
+    -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+  :root{
+    --orange:#f97316; --orange-d:#ea580c; --orange-l:#fb923c;
+    --ink:#141b26; --ink-2:#3a4453; --muted:#8b95a4; --hair:#e7e9ee;
+    --paper:#ffffff; --paper-2:#fbfaf8;
+    --accent-band:linear-gradient(180deg,#fb923c,#f97316 50%,#ea580c);
+    --name-grad:linear-gradient(100deg,#141b26,#3a4453);
+  }
+  html,body{ height:100%; }
+  body{ font-family:'Poppins',sans-serif; color:var(--ink);
+    background:linear-gradient(160deg,#f3f4f6,#e7e9ee 70%,#dfe3ea);
+    min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:26px 16px 60px; -webkit-font-smoothing:antialiased; }
+
+  .toolbar{ width:1200px; max-width:100%; display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:20px; color:#3a4453; }
+  .toolbar .brand{ display:flex; align-items:center; gap:10px; margin-right:auto; }
+  .toolbar .brand img{ height:24px; }
+  .toolbar .brand b{ font-weight:600; letter-spacing:.5px; font-size:14px; }
+  .toolbar .hint{ font-size:12.5px; color:#8b95a4; font-weight:300; }
+  .btn{ font-family:'Poppins',sans-serif; font-size:13px; font-weight:500; color:#fff; background:linear-gradient(135deg,#fb923c,#ea580c); border:none; border-radius:8px; padding:9px 16px; cursor:pointer; letter-spacing:.3px; box-shadow:0 3px 10px rgba(0,0,0,.14); }
+  .btn.alt{ background:#141b26; }
+
+  .stage{ width:1200px; height:850px; flex:0 0 auto; }
+  .cert{ font-family:'Poppins',sans-serif; width:1200px; height:850px; color:var(--ink);
+    position:relative; overflow:hidden; background:var(--paper); box-shadow:0 26px 70px rgba(20,27,38,.22); }
+
+  /* left accent bar + faint mega numeral */
+  .accent{ position:absolute; left:0; top:0; bottom:0; width:16px; background:var(--accent-band); z-index:3; }
+  .cert::before{ content:''; position:absolute; right:-120px; top:-120px; width:520px; height:520px; z-index:0; border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, rgba(249,115,22,.10), transparent 60%); pointer-events:none; }
+  .mark{ position:absolute; right:56px; bottom:40px; z-index:0; font-family:'Space Grotesk',sans-serif; font-weight:700;
+    font-size:280px; line-height:.7; color:rgba(20,27,38,.035); letter-spacing:-10px; pointer-events:none; user-select:none; }
+
+  .wrap{ position:absolute; inset:0; z-index:2; padding:64px 88px 0 96px; display:flex; flex-direction:column; }
+  .top{ display:flex; align-items:center; justify-content:space-between; }
+  .top img{ height:46px; }
+  .cid{ text-align:right; font-family:'Space Grotesk',sans-serif; font-size:11px; letter-spacing:.6px; color:var(--muted); }
+  .cid b{ display:block; font-weight:600; color:var(--ink); letter-spacing:1px; margin-top:2px; }
+
+  .kicker{ margin-top:56px; display:flex; align-items:center; gap:14px; font-size:11.5px; font-weight:600; letter-spacing:5px; text-transform:uppercase; color:var(--orange-d); }
+  .kicker::before{ content:''; width:44px; height:2px; background:var(--orange); }
+  .title{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:56px; letter-spacing:-1px; color:var(--ink); line-height:1.02; margin-top:14px; }
+  .title em{ font-style:normal; color:var(--orange-d); }
+
+  .subtitle{ margin-top:40px; font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); font-weight:500; }
+  .recipient-name{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:60px; color:var(--ink); line-height:1.06; margin-top:8px; text-transform:capitalize; letter-spacing:-.5px; display:inline-block; }
+  .u-line{ width:96px; height:4px; background:var(--orange); border-radius:3px; margin-top:16px; }
+
+  .course{ margin-top:26px; font-size:14.5px; color:var(--ink-2); line-height:1.7; max-width:640px; }
+  .course-name{ font-family:'Space Grotesk',sans-serif; font-weight:600; color:var(--ink); }
+
+  .foot{ margin-top:auto; display:flex; align-items:flex-end; gap:56px; padding-bottom:112px; }
+  .sig{ min-width:200px; }
+  .sig-name{ font-family:'Great Vibes',cursive; font-size:32px; line-height:.8; color:var(--ink); }
+  .sig-line{ height:1.5px; width:210px; background:var(--hair); margin-top:8px; }
+  .sig-role{ font-size:10.5px; font-weight:600; text-transform:uppercase; letter-spacing:1.4px; color:var(--muted); margin-top:8px; }
+  .sig-date{ font-size:11px; color:var(--muted); margin-top:2px; }
+  .meta{ font-size:10.5px; letter-spacing:1.2px; text-transform:uppercase; color:var(--muted); }
+  .meta b{ display:block; font-family:'Space Grotesk',sans-serif; font-size:15px; letter-spacing:.2px; text-transform:none; color:var(--ink); margin-top:4px; font-weight:600; }
+
+  /* footer hairline row */
+  .barfoot{ position:absolute; left:16px; right:0; bottom:0; z-index:2; border-top:1.5px solid var(--hair); padding:16px 88px 16px 96px; display:flex; align-items:center; justify-content:space-between; background:var(--paper-2); }
+  .barfoot .co{ font-size:11.5px; font-weight:600; letter-spacing:2.5px; text-transform:uppercase; color:var(--ink-2); }
+  .barfoot .co span{ color:var(--orange-d); }
+
+  .verify-text{ position:absolute; right:172px; bottom:150px; z-index:4; text-align:right; max-width:220px; }
+  .vt-label{ font-size:10px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--orange-d); }
+  .vt-url{ font-size:11px; color:var(--muted); margin-top:3px; font-weight:500; }
+  .vt-code{ font-size:10px; color:var(--muted); margin-top:5px; word-break:break-all; }
+  .qr-card{ position:absolute; right:64px; bottom:132px; z-index:4; background:#fff; border:1.5px solid var(--hair); border-radius:12px; padding:9px; box-shadow:0 6px 18px rgba(20,27,38,.1); cursor:pointer; }
+  #qrcode{ width:90px; height:90px; } #qrcode img,#qrcode canvas{ width:90px !important; height:90px !important; display:block; }
+  .qr-cap{ font-size:9px; font-weight:600; color:var(--ink-2); margin-top:5px; letter-spacing:.5px; text-align:center; }
+
+  /* overlay */
+  .overlay{ position:fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center; background:rgba(20,27,38,.55); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); padding:24px; }
+  .overlay.show{ display:flex; }
+  .vmodal{ width:560px; max-width:100%; background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 40px 120px rgba(0,0,0,.4); }
+  .vm-top{ background:var(--accent-band); padding:28px 30px 24px; text-align:center; color:#fff; position:relative; }
+  .vm-close{ position:absolute; top:14px; right:16px; width:30px; height:30px; border-radius:50%; border:none; cursor:pointer; background:rgba(255,255,255,.22); color:#fff; font-size:17px; }
+  .vchk{ width:60px; height:60px; display:block; margin:0 auto 10px; }
+  .vchk .ring{ fill:#1eb877; } .vchk circle{ fill:none; stroke:#fff; stroke-width:3; }
+  .vchk path{ fill:none; stroke:#fff; stroke-width:4; stroke-linecap:round; stroke-linejoin:round; }
+  .vm-top h3{ font-family:'Space Grotesk',sans-serif; font-size:23px; font-weight:700; }
+  .vm-sub{ font-size:12.5px; opacity:.94; margin-top:5px; font-weight:300; }
+  .vm-pill{ display:inline-flex; align-items:center; gap:6px; margin-top:12px; background:rgba(255,255,255,.2); padding:5px 14px; border-radius:999px; font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; }
+  .vm-pill::before{ content:''; width:7px; height:7px; border-radius:50%; background:#c9ffe4; box-shadow:0 0 8px #c9ffe4; }
+  .vm-body{ padding:20px 30px 8px; }
+  .vrow{ display:flex; justify-content:space-between; gap:18px; padding:11px 0; border-bottom:1px solid var(--hair); }
+  .vrow:last-child{ border-bottom:none; }
+  .vrow .k{ font-size:12px; color:var(--muted); font-weight:500; letter-spacing:.4px; text-transform:uppercase; }
+  .vrow .v{ font-size:14px; color:var(--ink); font-weight:600; text-align:right; }
+  .vm-foot{ display:flex; align-items:center; gap:16px; padding:18px 30px 24px; background:var(--paper-2); border-top:1px solid var(--hair); }
+  .vm-qr{ width:82px; height:82px; border:1px solid var(--hair); border-radius:8px; padding:6px; background:#fff; flex:0 0 auto; }
+  .vm-qr img,.vm-qr canvas{ width:70px !important; height:70px !important; }
+  .vm-note{ font-size:11.5px; color:var(--muted); line-height:1.5; } .vm-note b{ color:#138a5a; } .vm-note a{ color:var(--orange-d); text-decoration:none; font-weight:600; }
+
+  @media print{
+    @page{ size:A4 landscape; margin:0; }
+    html,body{ width:297mm; height:210mm; background:#fff; }
+    body{ padding:0; display:block; }
+    .toolbar,.overlay{ display:none !important; }
+    .stage{ width:297mm; height:210mm; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .cert{ transform:scale(0.929); transform-origin:center center; box-shadow:none; }
+  }
+</style>
+</head>
+<body>
+  <div class="toolbar">
+    <div class="brand"><img src="/certificate-files/assets/logo.png" alt="SashaInfinity"><b>Certificate Studio</b></div>
+    <span class="hint">QR opens verification</span>
+    <button class="btn alt" id="verifyBtn">Verify Credential</button>
+    <button class="btn" id="printBtn">Download / Print</button>
+  </div>
+
+  <div class="stage">
+  <div class="cert" id="cert">
+    <div class="accent"></div>
+    <div class="mark">✦</div>
+
+    <div class="wrap">
+      <div class="top">
+        <img src="/certificate-files/assets/logo.png" alt="SashaInfinity">
+        <div class="cid">Certificate ID<b data-field="certId">CERT-2026-000142</b></div>
+      </div>
+
+      <div class="kicker">Certificate of Completion</div>
+      <div class="title">Awarded for <em>Excellence</em><br>in Learning</div>
+
+      <div class="subtitle">Presented to</div>
+      <span class="recipient-name" data-field="name">Logadheenan V M</span>
+      <div class="u-line"></div>
+
+      <div class="course">
+        For successfully completing the program in
+        <span class="course-name" data-field="course">Full-Stack Web Development</span> on the SashaInfinity learning platform.
+      </div>
+
+      <div class="foot">
+        <div class="sig">
+          <div class="sig-name" data-field="instructor">Gayathri Devi</div>
+          <div class="sig-line"></div>
+          <div class="sig-role">Course Instructor</div>
+        </div>
+        <div class="meta">Date of Issue<b data-field="date1">June 02, 2026</b></div>
+      </div>
+    </div>
+
+    <div class="verify-text">
+      <div class="vt-label">Verified Credential</div>
+      <div class="vt-url">sashainfinity.com/verify</div>
+      <div class="vt-code" id="vtCode">ID: CERT-2026-000142</div>
+    </div>
+    <div class="qr-card" id="qrCard" title="Open verification">
+      <div id="qrcode"></div>
+      <div class="qr-cap">Scan to Verify</div>
+    </div>
+
+    <div class="barfoot">
+      <div class="co">SashaInfinity Private Limited&nbsp;·&nbsp;<span>Democratize Education</span></div>
+    </div>
+  </div>
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="vmodal" role="dialog" aria-modal="true" aria-label="Credential verification">
+      <div class="vm-top">
+        <button class="vm-close" id="vmClose" aria-label="Close">×</button>
+        <svg class="vchk" viewBox="0 0 52 52"><circle class="ring" cx="26" cy="26" r="24" stroke="none"></circle><circle cx="26" cy="26" r="24"></circle><path d="M15 27 l8 8 l15 -16"></path></svg>
+        <h3>Credential Verified</h3>
+        <div class="vm-sub">This certificate is authentic and on record with SashaInfinity</div>
+        <span class="vm-pill">Valid</span>
+      </div>
+      <div class="vm-body">
+        <div class="vrow"><span class="k">Holder</span><span class="v" id="vHolder">—</span></div>
+        <div class="vrow"><span class="k">Programme</span><span class="v" id="vCourse">—</span></div>
+        <div class="vrow"><span class="k">Issued on</span><span class="v" id="vDate">—</span></div>
+        <div class="vrow"><span class="k">Credential ID</span><span class="v" id="vId">—</span></div>
+        <div class="vrow"><span class="k">Issued by</span><span class="v">SashaInfinity Pvt. Ltd.</span></div>
+      </div>
+      <div class="vm-foot">
+        <div class="vm-qr" id="vmQr"></div>
+        <div class="vm-note">Status: <b>Authentic &amp; unrevoked</b><br>Verify independently at <a href="#" id="vLink">sashainfinity.com/verify</a></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  function certId(){ var el=document.querySelector('[data-field="certId"]'); return el?el.textContent.trim():'CERT-2026-000142'; }
+  function verifyUrl(){ return 'https://sashainfinity.com/verify/' + encodeURIComponent(certId()); }
+  function generateQR(){
+    var el=document.getElementById('qrcode'); if(!el) return; el.innerHTML='';
+    if(window.QRCode){ new QRCode(el,{ text:verifyUrl(), width:90, height:90, colorDark:'#141b26', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.M }); }
+    var vt=document.getElementById('vtCode'); if(vt) vt.textContent='ID: '+certId();
+  }
+  (function(){
+    var overlay=document.getElementById('overlay'), vmQr=document.getElementById('vmQr');
+    function open(){
+      document.getElementById('vHolder').textContent=document.querySelector('[data-field="name"]').textContent.trim();
+      document.getElementById('vCourse').textContent=document.querySelector('[data-field="course"]').textContent.trim();
+      document.getElementById('vDate').textContent=document.querySelector('[data-field="date1"]').textContent.trim();
+      document.getElementById('vId').textContent=certId();
+      var l=document.getElementById('vLink'); if(l){ l.textContent='sashainfinity.com/verify/'+certId(); }
+      vmQr.innerHTML=''; if(window.QRCode){ new QRCode(vmQr,{ text:verifyUrl(), width:70, height:70, colorDark:'#138a5a', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.M }); }
+      overlay.classList.add('show');
+    }
+    function close(){ overlay.classList.remove('show'); }
+    var vb=document.getElementById('verifyBtn'); if(vb) vb.addEventListener('click', open);
+    var qc=document.getElementById('qrCard'); if(qc) qc.addEventListener('click', open);
+    var cl=document.getElementById('vmClose'); if(cl) cl.addEventListener('click', close);
+    overlay.addEventListener('click', function(e){ if(e.target===overlay) close(); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+  })();
+  var pb=document.getElementById('printBtn'); if(pb) pb.addEventListener('click', function(){ window.print(); });
+  generateQR();
+</script>
+</body>
+</html>

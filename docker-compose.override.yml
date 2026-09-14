@@ -1,0 +1,40 @@
+# Local-dev override. Used automatically by `docker-compose up`.
+# Exposes the frontend port for direct browser access during local development.
+
+services:
+  frontend:
+    ports:
+      - "3000:3000"
+
+  # Vars the app reads via plain os.getenv()/config but the base compose file
+  # never passes into the container (the root .env is only used for compose
+  # substitution, it is not mounted into /app). VIDEO_SECRET is boot-critical
+  # in ENVIRONMENT=production — player.py refuses to start without it.
+  backend:
+    environment:
+      - VIDEO_SECRET=${VIDEO_SECRET}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - JITSI_JWT_SECRET=${JITSI_JWT_SECRET}
+      - INTERNAL_TOKEN=${INTERNAL_TOKEN}
+      - JITSI_PUBLIC_URL=${JITSI_PUBLIC_URL:-}
+
+  runtime-worker:
+    environment:
+      - VIDEO_SECRET=${VIDEO_SECRET}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - JITSI_JWT_SECRET=${JITSI_JWT_SECRET}
+      - INTERNAL_TOKEN=${INTERNAL_TOKEN}
+      - JITSI_PUBLIC_URL=${JITSI_PUBLIC_URL:-}
+
+  # The production nginx/conf.d has `listen 443 ssl` blocks pointing at aaPanel
+  # cert paths (/etc/panel-ssl/...) that don't exist on a dev box, which makes
+  # nginx refuse to start. For local runs we swap in a plain-HTTP config dir
+  # that serves the app on container :80 (published as :3100). This overrides
+  # the base service's conf.d bind mount by targeting the same mount path.
+  nginx:
+    volumes:
+      - ./nginx/conf.d.local:/etc/nginx/conf.d
+      - ./deploy/nginx/maintenance:/etc/nginx/maintenance:ro
+      - ./uploads:/var/www/uploads
+      - ./certificates:/var/www/certificates
+      - ./models:/var/www/models

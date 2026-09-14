@@ -1,0 +1,1866 @@
+[
+  {
+    "id": "6-science-1",
+    "grade": 6,
+    "subject": "science",
+    "title": "Components of Food",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "6-science-2",
+    "grade": 6,
+    "subject": "science",
+    "title": "Sorting Materials into Groups",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "6-science-3",
+    "grade": 6,
+    "subject": "science",
+    "title": "Separation of Substances",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "6-science-4",
+    "grade": 6,
+    "subject": "science",
+    "title": "Getting to Know Plants",
+    "difficulty": 1,
+    "lab_slug": "cbse-photosynthesis-lab"
+  },
+  {
+    "id": "6-science-5",
+    "grade": 6,
+    "subject": "science",
+    "title": "Body Movements",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "6-science-6",
+    "grade": 6,
+    "subject": "science",
+    "title": "The Living Organisms and Their Surroundings",
+    "difficulty": 1,
+    "lab_slug": "cbse-predator-prey"
+  },
+  {
+    "id": "6-science-7",
+    "grade": 6,
+    "subject": "science",
+    "title": "Motion and Measurement of Distances",
+    "difficulty": 1,
+    "lab_slug": "cbse-motion-graphs"
+  },
+  {
+    "id": "6-science-8",
+    "grade": 6,
+    "subject": "science",
+    "title": "Light, Shadows and Reflections",
+    "difficulty": 1,
+    "lab_slug": "cbse-light-optics"
+  },
+  {
+    "id": "6-science-9",
+    "grade": 6,
+    "subject": "science",
+    "title": "Electricity and Circuits",
+    "difficulty": 2,
+    "lab_slug": "cbse-electric-circuits"
+  },
+  {
+    "id": "6-science-10",
+    "grade": 6,
+    "subject": "science",
+    "title": "Fun with Magnets",
+    "difficulty": 1,
+    "lab_slug": "cbse-magnet-lab"
+  },
+  {
+    "id": "6-science-11",
+    "grade": 6,
+    "subject": "science",
+    "title": "Water & Air Around Us",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "6-science-12",
+    "grade": 6,
+    "subject": "science",
+    "title": "Beyond Earth (sky & solar system)",
+    "difficulty": 2,
+    "lab_slug": "cbse-solar-system-3d"
+  },
+  {
+    "id": "6-mathematics-1",
+    "grade": 6,
+    "subject": "mathematics",
+    "title": "Knowing Our Numbers",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "6-mathematics-2",
+    "grade": 6,
+    "subject": "mathematics",
+    "title": "Whole Numbers",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "6-mathematics-3",
+    "grade": 6,
+    "subject": "mathematics",
+    "title": "Playing with Numbers",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "6-mathematics-4",
+    "grade": 6,
+    "subject": "mathematics",
+    "title": "Basic Geometrical Ideas",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "6-mathematics-5",
+    "grade": 6,
+    "subject": "mathematics",
+    "title": "Understanding Elementary Shapes",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "6-mathematics-6",
+    "grade": 6,
+    "subject": "mathematics",
+    "title": "Integers",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "6-mathematics-7",
+    "grade": 6,
+    "subject": "mathematics",
+    "title": "Fractions",
+    "difficulty": 2,
+    "lab_slug": "cbse-fractions-explorer"
+  },
+  {
+    "id": "6-mathematics-8",
+    "grade": 6,
+    "subject": "mathematics",
+    "title": "Decimals",
+    "difficulty": 2,
+    "lab_slug": "cbse-fractions-explorer"
+  },
+  {
+    "id": "6-mathematics-9",
+    "grade": 6,
+    "subject": "mathematics",
+    "title": "Data Handling",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "6-mathematics-10",
+    "grade": 6,
+    "subject": "mathematics",
+    "title": "Mensuration",
+    "difficulty": 2,
+    "lab_slug": "cbse-solids-3d"
+  },
+  {
+    "id": "6-mathematics-11",
+    "grade": 6,
+    "subject": "mathematics",
+    "title": "Algebra",
+    "difficulty": 2,
+    "lab_slug": "cbse-line-explorer"
+  },
+  {
+    "id": "6-mathematics-12",
+    "grade": 6,
+    "subject": "mathematics",
+    "title": "Ratio and Proportion",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "6-mathematics-13",
+    "grade": 6,
+    "subject": "mathematics",
+    "title": "Symmetry",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "7-science-1",
+    "grade": 7,
+    "subject": "science",
+    "title": "Nutrition in Plants",
+    "difficulty": 1,
+    "lab_slug": "cbse-photosynthesis-lab"
+  },
+  {
+    "id": "7-science-2",
+    "grade": 7,
+    "subject": "science",
+    "title": "Nutrition in Animals",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "7-science-3",
+    "grade": 7,
+    "subject": "science",
+    "title": "Heat",
+    "difficulty": 2,
+    "lab_slug": "cbse-heat-transfer-lab"
+  },
+  {
+    "id": "7-science-4",
+    "grade": 7,
+    "subject": "science",
+    "title": "Acids, Bases and Salts",
+    "difficulty": 2,
+    "lab_slug": "cbse-acids-bases-ph"
+  },
+  {
+    "id": "7-science-5",
+    "grade": 7,
+    "subject": "science",
+    "title": "Physical and Chemical Changes",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "7-science-6",
+    "grade": 7,
+    "subject": "science",
+    "title": "Respiration in Organisms",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "7-science-7",
+    "grade": 7,
+    "subject": "science",
+    "title": "Transportation in Animals and Plants",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "7-science-8",
+    "grade": 7,
+    "subject": "science",
+    "title": "Reproduction in Plants",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "7-science-9",
+    "grade": 7,
+    "subject": "science",
+    "title": "Motion and Time",
+    "difficulty": 2,
+    "lab_slug": "cbse-motion-graphs"
+  },
+  {
+    "id": "7-science-10",
+    "grade": 7,
+    "subject": "science",
+    "title": "Electric Current and its Effects",
+    "difficulty": 2,
+    "lab_slug": "cbse-electric-circuits"
+  },
+  {
+    "id": "7-science-11",
+    "grade": 7,
+    "subject": "science",
+    "title": "Light",
+    "difficulty": 2,
+    "lab_slug": "cbse-light-optics"
+  },
+  {
+    "id": "7-science-12",
+    "grade": 7,
+    "subject": "science",
+    "title": "Forests: Our Lifeline",
+    "difficulty": 1,
+    "lab_slug": "cbse-predator-prey"
+  },
+  {
+    "id": "7-mathematics-1",
+    "grade": 7,
+    "subject": "mathematics",
+    "title": "Integers",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "7-mathematics-2",
+    "grade": 7,
+    "subject": "mathematics",
+    "title": "Fractions and Decimals",
+    "difficulty": 2,
+    "lab_slug": "cbse-fractions-explorer"
+  },
+  {
+    "id": "7-mathematics-3",
+    "grade": 7,
+    "subject": "mathematics",
+    "title": "Data Handling",
+    "difficulty": 1,
+    "lab_slug": "cbse-probability-lab"
+  },
+  {
+    "id": "7-mathematics-4",
+    "grade": 7,
+    "subject": "mathematics",
+    "title": "Simple Equations",
+    "difficulty": 2,
+    "lab_slug": "cbse-line-explorer"
+  },
+  {
+    "id": "7-mathematics-5",
+    "grade": 7,
+    "subject": "mathematics",
+    "title": "Lines and Angles",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "7-mathematics-6",
+    "grade": 7,
+    "subject": "mathematics",
+    "title": "The Triangle and its Properties",
+    "difficulty": 2,
+    "lab_slug": "cbse-pythagoras-explorer"
+  },
+  {
+    "id": "7-mathematics-7",
+    "grade": 7,
+    "subject": "mathematics",
+    "title": "Comparing Quantities",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "7-mathematics-8",
+    "grade": 7,
+    "subject": "mathematics",
+    "title": "Rational Numbers",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "7-mathematics-9",
+    "grade": 7,
+    "subject": "mathematics",
+    "title": "Perimeter and Area",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "7-mathematics-10",
+    "grade": 7,
+    "subject": "mathematics",
+    "title": "Algebraic Expressions",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "7-mathematics-11",
+    "grade": 7,
+    "subject": "mathematics",
+    "title": "Exponents and Powers",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "7-mathematics-12",
+    "grade": 7,
+    "subject": "mathematics",
+    "title": "Symmetry",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "7-mathematics-13",
+    "grade": 7,
+    "subject": "mathematics",
+    "title": "Visualising Solid Shapes",
+    "difficulty": 2,
+    "lab_slug": "cbse-solids-3d"
+  },
+  {
+    "id": "8-science-1",
+    "grade": 8,
+    "subject": "science",
+    "title": "Crop Production and Management",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "8-science-2",
+    "grade": 8,
+    "subject": "science",
+    "title": "Microorganisms: Friend and Foe",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "8-science-3",
+    "grade": 8,
+    "subject": "science",
+    "title": "Coal and Petroleum",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "8-science-4",
+    "grade": 8,
+    "subject": "science",
+    "title": "Combustion and Flame",
+    "difficulty": 2,
+    "lab_slug": "cbse-ideal-gas-lab"
+  },
+  {
+    "id": "8-science-5",
+    "grade": 8,
+    "subject": "science",
+    "title": "Conservation of Plants and Animals",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "8-science-6",
+    "grade": 8,
+    "subject": "science",
+    "title": "Reproduction in Animals",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "8-science-7",
+    "grade": 8,
+    "subject": "science",
+    "title": "Reaching the Age of Adolescence",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "8-science-8",
+    "grade": 8,
+    "subject": "science",
+    "title": "Force and Pressure",
+    "difficulty": 2,
+    "lab_slug": "cbse-force-pressure-friction"
+  },
+  {
+    "id": "8-science-9",
+    "grade": 8,
+    "subject": "science",
+    "title": "Friction",
+    "difficulty": 2,
+    "lab_slug": "cbse-force-pressure-friction"
+  },
+  {
+    "id": "8-science-10",
+    "grade": 8,
+    "subject": "science",
+    "title": "Sound",
+    "difficulty": 2,
+    "lab_slug": "cbse-wave-motion"
+  },
+  {
+    "id": "8-science-11",
+    "grade": 8,
+    "subject": "science",
+    "title": "Chemical Effects of Electric Current",
+    "difficulty": 3,
+    "lab_slug": "cbse-electric-circuits"
+  },
+  {
+    "id": "8-science-12",
+    "grade": 8,
+    "subject": "science",
+    "title": "Some Natural Phenomena (lightning, earthquakes)",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "8-science-13",
+    "grade": 8,
+    "subject": "science",
+    "title": "Light",
+    "difficulty": 2,
+    "lab_slug": "cbse-light-optics"
+  },
+  {
+    "id": "8-mathematics-1",
+    "grade": 8,
+    "subject": "mathematics",
+    "title": "Rational Numbers",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "8-mathematics-2",
+    "grade": 8,
+    "subject": "mathematics",
+    "title": "Linear Equations in One Variable",
+    "difficulty": 2,
+    "lab_slug": "cbse-line-explorer"
+  },
+  {
+    "id": "8-mathematics-3",
+    "grade": 8,
+    "subject": "mathematics",
+    "title": "Understanding Quadrilaterals",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "8-mathematics-4",
+    "grade": 8,
+    "subject": "mathematics",
+    "title": "Data Handling",
+    "difficulty": 2,
+    "lab_slug": "cbse-probability-lab"
+  },
+  {
+    "id": "8-mathematics-5",
+    "grade": 8,
+    "subject": "mathematics",
+    "title": "Squares and Square Roots",
+    "difficulty": 2,
+    "lab_slug": "cbse-pythagoras-explorer"
+  },
+  {
+    "id": "8-mathematics-6",
+    "grade": 8,
+    "subject": "mathematics",
+    "title": "Cubes and Cube Roots",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "8-mathematics-7",
+    "grade": 8,
+    "subject": "mathematics",
+    "title": "Comparing Quantities",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "8-mathematics-8",
+    "grade": 8,
+    "subject": "mathematics",
+    "title": "Algebraic Expressions and Identities",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "8-mathematics-9",
+    "grade": 8,
+    "subject": "mathematics",
+    "title": "Mensuration",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "8-mathematics-10",
+    "grade": 8,
+    "subject": "mathematics",
+    "title": "Exponents and Powers",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "8-mathematics-11",
+    "grade": 8,
+    "subject": "mathematics",
+    "title": "Direct and Inverse Proportions",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "8-mathematics-12",
+    "grade": 8,
+    "subject": "mathematics",
+    "title": "Factorisation",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "8-mathematics-13",
+    "grade": 8,
+    "subject": "mathematics",
+    "title": "Introduction to Graphs",
+    "difficulty": 2,
+    "lab_slug": "cbse-line-explorer"
+  },
+  {
+    "id": "9-science-1",
+    "grade": 9,
+    "subject": "science",
+    "title": "Matter in Our Surroundings",
+    "difficulty": 1,
+    "lab_slug": "cbse-ideal-gas-lab"
+  },
+  {
+    "id": "9-science-2",
+    "grade": 9,
+    "subject": "science",
+    "title": "Is Matter Around Us Pure?",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "9-science-3",
+    "grade": 9,
+    "subject": "science",
+    "title": "Atoms and Molecules",
+    "difficulty": 2,
+    "lab_slug": "cbse-molecule-viewer-3d"
+  },
+  {
+    "id": "9-science-4",
+    "grade": 9,
+    "subject": "science",
+    "title": "Structure of the Atom",
+    "difficulty": 3,
+    "lab_slug": "cbse-atom-builder-3d"
+  },
+  {
+    "id": "9-science-5",
+    "grade": 9,
+    "subject": "science",
+    "title": "The Fundamental Unit of Life",
+    "difficulty": 2,
+    "lab_slug": "cbse-plant-animal-cell"
+  },
+  {
+    "id": "9-science-6",
+    "grade": 9,
+    "subject": "science",
+    "title": "Tissues",
+    "difficulty": 2,
+    "lab_slug": "cbse-plant-animal-cell"
+  },
+  {
+    "id": "9-science-7",
+    "grade": 9,
+    "subject": "science",
+    "title": "Motion",
+    "difficulty": 2,
+    "lab_slug": "cbse-motion-graphs"
+  },
+  {
+    "id": "9-science-8",
+    "grade": 9,
+    "subject": "science",
+    "title": "Force and Laws of Motion",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "9-science-9",
+    "grade": 9,
+    "subject": "science",
+    "title": "Gravitation",
+    "difficulty": 3,
+    "lab_slug": "cbse-projectile-motion"
+  },
+  {
+    "id": "9-science-10",
+    "grade": 9,
+    "subject": "science",
+    "title": "Work and Energy",
+    "difficulty": 3,
+    "lab_slug": "cbse-simple-pendulum"
+  },
+  {
+    "id": "9-science-11",
+    "grade": 9,
+    "subject": "science",
+    "title": "Sound",
+    "difficulty": 3,
+    "lab_slug": "cbse-wave-motion"
+  },
+  {
+    "id": "9-science-12",
+    "grade": 9,
+    "subject": "science",
+    "title": "Improvement in Food Resources",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "9-mathematics-1",
+    "grade": 9,
+    "subject": "mathematics",
+    "title": "Number Systems",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "9-mathematics-2",
+    "grade": 9,
+    "subject": "mathematics",
+    "title": "Polynomials",
+    "difficulty": 2,
+    "lab_slug": "cbse-quadratic-explorer"
+  },
+  {
+    "id": "9-mathematics-3",
+    "grade": 9,
+    "subject": "mathematics",
+    "title": "Coordinate Geometry",
+    "difficulty": 2,
+    "lab_slug": "cbse-line-explorer"
+  },
+  {
+    "id": "9-mathematics-4",
+    "grade": 9,
+    "subject": "mathematics",
+    "title": "Linear Equations in Two Variables",
+    "difficulty": 2,
+    "lab_slug": "cbse-line-explorer"
+  },
+  {
+    "id": "9-mathematics-5",
+    "grade": 9,
+    "subject": "mathematics",
+    "title": "Introduction to Euclid’s Geometry",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "9-mathematics-6",
+    "grade": 9,
+    "subject": "mathematics",
+    "title": "Lines and Angles",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "9-mathematics-7",
+    "grade": 9,
+    "subject": "mathematics",
+    "title": "Triangles",
+    "difficulty": 3,
+    "lab_slug": "cbse-pythagoras-explorer"
+  },
+  {
+    "id": "9-mathematics-8",
+    "grade": 9,
+    "subject": "mathematics",
+    "title": "Quadrilaterals",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "9-mathematics-9",
+    "grade": 9,
+    "subject": "mathematics",
+    "title": "Circles",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "9-mathematics-10",
+    "grade": 9,
+    "subject": "mathematics",
+    "title": "Heron’s Formula",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "9-mathematics-11",
+    "grade": 9,
+    "subject": "mathematics",
+    "title": "Surface Areas and Volumes",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "9-mathematics-12",
+    "grade": 9,
+    "subject": "mathematics",
+    "title": "Statistics",
+    "difficulty": 2,
+    "lab_slug": "cbse-statistics-lab"
+  },
+  {
+    "id": "10-science-1",
+    "grade": 10,
+    "subject": "science",
+    "title": "Chemical Reactions and Equations",
+    "difficulty": 2,
+    "lab_slug": "cbse-balance-equations"
+  },
+  {
+    "id": "10-science-2",
+    "grade": 10,
+    "subject": "science",
+    "title": "Acids, Bases and Salts",
+    "difficulty": 2,
+    "lab_slug": "cbse-acids-bases-ph"
+  },
+  {
+    "id": "10-science-3",
+    "grade": 10,
+    "subject": "science",
+    "title": "Metals and Non-metals",
+    "difficulty": 2,
+    "lab_slug": "cbse-reactivity-series"
+  },
+  {
+    "id": "10-science-4",
+    "grade": 10,
+    "subject": "science",
+    "title": "Carbon and its Compounds",
+    "difficulty": 3,
+    "lab_slug": "cbse-molecule-viewer-3d"
+  },
+  {
+    "id": "10-science-5",
+    "grade": 10,
+    "subject": "science",
+    "title": "Life Processes",
+    "difficulty": 3,
+    "lab_slug": "cbse-photosynthesis-lab"
+  },
+  {
+    "id": "10-science-6",
+    "grade": 10,
+    "subject": "science",
+    "title": "Control and Coordination",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "10-science-7",
+    "grade": 10,
+    "subject": "science",
+    "title": "How do Organisms Reproduce?",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "10-science-8",
+    "grade": 10,
+    "subject": "science",
+    "title": "Heredity",
+    "difficulty": 3,
+    "lab_slug": "cbse-genetics-punnett"
+  },
+  {
+    "id": "10-science-9",
+    "grade": 10,
+    "subject": "science",
+    "title": "Light — Reflection and Refraction",
+    "difficulty": 3,
+    "lab_slug": "cbse-light-optics"
+  },
+  {
+    "id": "10-science-10",
+    "grade": 10,
+    "subject": "science",
+    "title": "The Human Eye and the Colourful World",
+    "difficulty": 3,
+    "lab_slug": "cbse-human-eye-lab"
+  },
+  {
+    "id": "10-science-11",
+    "grade": 10,
+    "subject": "science",
+    "title": "Electricity",
+    "difficulty": 3,
+    "lab_slug": "cbse-electric-circuits"
+  },
+  {
+    "id": "10-science-12",
+    "grade": 10,
+    "subject": "science",
+    "title": "Magnetic Effects of Electric Current",
+    "difficulty": 3,
+    "lab_slug": "cbse-magnetism-current"
+  },
+  {
+    "id": "10-science-13",
+    "grade": 10,
+    "subject": "science",
+    "title": "Our Environment",
+    "difficulty": 1,
+    "lab_slug": "cbse-predator-prey"
+  },
+  {
+    "id": "10-mathematics-1",
+    "grade": 10,
+    "subject": "mathematics",
+    "title": "Real Numbers",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "10-mathematics-2",
+    "grade": 10,
+    "subject": "mathematics",
+    "title": "Polynomials",
+    "difficulty": 2,
+    "lab_slug": "cbse-quadratic-explorer"
+  },
+  {
+    "id": "10-mathematics-3",
+    "grade": 10,
+    "subject": "mathematics",
+    "title": "Pair of Linear Equations in Two Variables",
+    "difficulty": 3,
+    "lab_slug": "cbse-line-explorer"
+  },
+  {
+    "id": "10-mathematics-4",
+    "grade": 10,
+    "subject": "mathematics",
+    "title": "Quadratic Equations",
+    "difficulty": 3,
+    "lab_slug": "cbse-quadratic-explorer"
+  },
+  {
+    "id": "10-mathematics-5",
+    "grade": 10,
+    "subject": "mathematics",
+    "title": "Arithmetic Progressions",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "10-mathematics-6",
+    "grade": 10,
+    "subject": "mathematics",
+    "title": "Triangles",
+    "difficulty": 3,
+    "lab_slug": "cbse-pythagoras-explorer"
+  },
+  {
+    "id": "10-mathematics-7",
+    "grade": 10,
+    "subject": "mathematics",
+    "title": "Coordinate Geometry",
+    "difficulty": 2,
+    "lab_slug": "cbse-line-explorer"
+  },
+  {
+    "id": "10-mathematics-8",
+    "grade": 10,
+    "subject": "mathematics",
+    "title": "Introduction to Trigonometry",
+    "difficulty": 3,
+    "lab_slug": "cbse-trigonometry-explorer"
+  },
+  {
+    "id": "10-mathematics-9",
+    "grade": 10,
+    "subject": "mathematics",
+    "title": "Some Applications of Trigonometry",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "10-mathematics-10",
+    "grade": 10,
+    "subject": "mathematics",
+    "title": "Circles",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "10-mathematics-11",
+    "grade": 10,
+    "subject": "mathematics",
+    "title": "Areas Related to Circles",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "10-mathematics-12",
+    "grade": 10,
+    "subject": "mathematics",
+    "title": "Surface Areas and Volumes",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "10-mathematics-13",
+    "grade": 10,
+    "subject": "mathematics",
+    "title": "Statistics",
+    "difficulty": 2,
+    "lab_slug": "cbse-probability-lab"
+  },
+  {
+    "id": "10-mathematics-14",
+    "grade": 10,
+    "subject": "mathematics",
+    "title": "Probability",
+    "difficulty": 2,
+    "lab_slug": "cbse-probability-lab"
+  },
+  {
+    "id": "11-physics-1",
+    "grade": 11,
+    "subject": "physics",
+    "title": "Units and Measurement",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "11-physics-2",
+    "grade": 11,
+    "subject": "physics",
+    "title": "Motion in a Straight Line",
+    "difficulty": 2,
+    "lab_slug": "cbse-motion-graphs"
+  },
+  {
+    "id": "11-physics-3",
+    "grade": 11,
+    "subject": "physics",
+    "title": "Motion in a Plane",
+    "difficulty": 3,
+    "lab_slug": "cbse-projectile-motion"
+  },
+  {
+    "id": "11-physics-4",
+    "grade": 11,
+    "subject": "physics",
+    "title": "Laws of Motion",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "11-physics-5",
+    "grade": 11,
+    "subject": "physics",
+    "title": "Work, Energy and Power",
+    "difficulty": 3,
+    "lab_slug": "cbse-simple-pendulum"
+  },
+  {
+    "id": "11-physics-6",
+    "grade": 11,
+    "subject": "physics",
+    "title": "System of Particles and Rotational Motion",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "11-physics-7",
+    "grade": 11,
+    "subject": "physics",
+    "title": "Gravitation",
+    "difficulty": 3,
+    "lab_slug": "cbse-projectile-motion"
+  },
+  {
+    "id": "11-physics-8",
+    "grade": 11,
+    "subject": "physics",
+    "title": "Mechanical Properties of Solids",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "11-physics-9",
+    "grade": 11,
+    "subject": "physics",
+    "title": "Mechanical Properties of Fluids",
+    "difficulty": 3,
+    "lab_slug": "cbse-ideal-gas-lab"
+  },
+  {
+    "id": "11-physics-10",
+    "grade": 11,
+    "subject": "physics",
+    "title": "Thermal Properties of Matter",
+    "difficulty": 2,
+    "lab_slug": "cbse-ideal-gas-lab"
+  },
+  {
+    "id": "11-physics-11",
+    "grade": 11,
+    "subject": "physics",
+    "title": "Thermodynamics",
+    "difficulty": 3,
+    "lab_slug": "cbse-ideal-gas-lab"
+  },
+  {
+    "id": "11-physics-12",
+    "grade": 11,
+    "subject": "physics",
+    "title": "Kinetic Theory",
+    "difficulty": 3,
+    "lab_slug": "cbse-ideal-gas-lab"
+  },
+  {
+    "id": "11-physics-13",
+    "grade": 11,
+    "subject": "physics",
+    "title": "Oscillations",
+    "difficulty": 3,
+    "lab_slug": "cbse-simple-pendulum"
+  },
+  {
+    "id": "11-physics-14",
+    "grade": 11,
+    "subject": "physics",
+    "title": "Waves",
+    "difficulty": 3,
+    "lab_slug": "cbse-wave-motion"
+  },
+  {
+    "id": "11-chemistry-1",
+    "grade": 11,
+    "subject": "chemistry",
+    "title": "Some Basic Concepts of Chemistry",
+    "difficulty": 2,
+    "lab_slug": "cbse-titration-lab"
+  },
+  {
+    "id": "11-chemistry-2",
+    "grade": 11,
+    "subject": "chemistry",
+    "title": "Structure of Atom",
+    "difficulty": 3,
+    "lab_slug": "cbse-atom-builder-3d"
+  },
+  {
+    "id": "11-chemistry-3",
+    "grade": 11,
+    "subject": "chemistry",
+    "title": "Classification of Elements and Periodicity",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "11-chemistry-4",
+    "grade": 11,
+    "subject": "chemistry",
+    "title": "Chemical Bonding and Molecular Structure",
+    "difficulty": 3,
+    "lab_slug": "cbse-molecule-viewer-3d"
+  },
+  {
+    "id": "11-chemistry-5",
+    "grade": 11,
+    "subject": "chemistry",
+    "title": "Thermodynamics",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "11-chemistry-6",
+    "grade": 11,
+    "subject": "chemistry",
+    "title": "Equilibrium",
+    "difficulty": 3,
+    "lab_slug": "cbse-titration-lab"
+  },
+  {
+    "id": "11-chemistry-7",
+    "grade": 11,
+    "subject": "chemistry",
+    "title": "Redox Reactions",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "11-chemistry-8",
+    "grade": 11,
+    "subject": "chemistry",
+    "title": "Organic Chemistry: Basic Principles",
+    "difficulty": 3,
+    "lab_slug": "cbse-molecule-viewer-3d"
+  },
+  {
+    "id": "11-chemistry-9",
+    "grade": 11,
+    "subject": "chemistry",
+    "title": "Hydrocarbons",
+    "difficulty": 3,
+    "lab_slug": "cbse-molecule-viewer-3d"
+  },
+  {
+    "id": "11-mathematics-1",
+    "grade": 11,
+    "subject": "mathematics",
+    "title": "Sets",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "11-mathematics-2",
+    "grade": 11,
+    "subject": "mathematics",
+    "title": "Relations and Functions",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "11-mathematics-3",
+    "grade": 11,
+    "subject": "mathematics",
+    "title": "Trigonometric Functions",
+    "difficulty": 3,
+    "lab_slug": "cbse-unit-circle-lab"
+  },
+  {
+    "id": "11-mathematics-4",
+    "grade": 11,
+    "subject": "mathematics",
+    "title": "Complex Numbers and Quadratic Equations",
+    "difficulty": 3,
+    "lab_slug": "cbse-quadratic-explorer"
+  },
+  {
+    "id": "11-mathematics-5",
+    "grade": 11,
+    "subject": "mathematics",
+    "title": "Linear Inequalities",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "11-mathematics-6",
+    "grade": 11,
+    "subject": "mathematics",
+    "title": "Permutations and Combinations",
+    "difficulty": 3,
+    "lab_slug": "cbse-probability-lab"
+  },
+  {
+    "id": "11-mathematics-7",
+    "grade": 11,
+    "subject": "mathematics",
+    "title": "Binomial Theorem",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "11-mathematics-8",
+    "grade": 11,
+    "subject": "mathematics",
+    "title": "Sequences and Series",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "11-mathematics-9",
+    "grade": 11,
+    "subject": "mathematics",
+    "title": "Straight Lines",
+    "difficulty": 2,
+    "lab_slug": "cbse-line-explorer"
+  },
+  {
+    "id": "11-mathematics-10",
+    "grade": 11,
+    "subject": "mathematics",
+    "title": "Conic Sections",
+    "difficulty": 3,
+    "lab_slug": "cbse-conic-sections-3d"
+  },
+  {
+    "id": "11-mathematics-11",
+    "grade": 11,
+    "subject": "mathematics",
+    "title": "Introduction to Three-Dimensional Geometry",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "11-mathematics-12",
+    "grade": 11,
+    "subject": "mathematics",
+    "title": "Limits and Derivatives",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "11-mathematics-13",
+    "grade": 11,
+    "subject": "mathematics",
+    "title": "Statistics",
+    "difficulty": 2,
+    "lab_slug": "cbse-probability-lab"
+  },
+  {
+    "id": "11-mathematics-14",
+    "grade": 11,
+    "subject": "mathematics",
+    "title": "Probability",
+    "difficulty": 3,
+    "lab_slug": "cbse-probability-lab"
+  },
+  {
+    "id": "11-biology-1",
+    "grade": 11,
+    "subject": "biology",
+    "title": "The Living World",
+    "difficulty": 1,
+    "lab_slug": null
+  },
+  {
+    "id": "11-biology-2",
+    "grade": 11,
+    "subject": "biology",
+    "title": "Biological Classification",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "11-biology-3",
+    "grade": 11,
+    "subject": "biology",
+    "title": "Plant Kingdom",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "11-biology-4",
+    "grade": 11,
+    "subject": "biology",
+    "title": "Animal Kingdom",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "11-biology-5",
+    "grade": 11,
+    "subject": "biology",
+    "title": "Morphology of Flowering Plants",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "11-biology-6",
+    "grade": 11,
+    "subject": "biology",
+    "title": "Anatomy of Flowering Plants",
+    "difficulty": 2,
+    "lab_slug": "cbse-plant-animal-cell"
+  },
+  {
+    "id": "11-biology-7",
+    "grade": 11,
+    "subject": "biology",
+    "title": "Structural Organisation in Animals",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "11-biology-8",
+    "grade": 11,
+    "subject": "biology",
+    "title": "Cell: The Unit of Life",
+    "difficulty": 2,
+    "lab_slug": "cbse-plant-animal-cell"
+  },
+  {
+    "id": "11-biology-9",
+    "grade": 11,
+    "subject": "biology",
+    "title": "Biomolecules",
+    "difficulty": 3,
+    "lab_slug": "cbse-molecule-viewer-3d"
+  },
+  {
+    "id": "11-biology-10",
+    "grade": 11,
+    "subject": "biology",
+    "title": "Cell Cycle and Cell Division",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "11-biology-11",
+    "grade": 11,
+    "subject": "biology",
+    "title": "Photosynthesis in Higher Plants",
+    "difficulty": 3,
+    "lab_slug": "cbse-photosynthesis-lab"
+  },
+  {
+    "id": "11-biology-12",
+    "grade": 11,
+    "subject": "biology",
+    "title": "Respiration in Plants",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "11-biology-13",
+    "grade": 11,
+    "subject": "biology",
+    "title": "Plant Growth and Development",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "11-biology-14",
+    "grade": 11,
+    "subject": "biology",
+    "title": "Breathing and Exchange of Gases",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "11-biology-15",
+    "grade": 11,
+    "subject": "biology",
+    "title": "Body Fluids and Circulation",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "11-biology-16",
+    "grade": 11,
+    "subject": "biology",
+    "title": "Excretory Products and Elimination",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "11-biology-17",
+    "grade": 11,
+    "subject": "biology",
+    "title": "Locomotion and Movement",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "11-biology-18",
+    "grade": 11,
+    "subject": "biology",
+    "title": "Neural Control and Coordination",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "11-biology-19",
+    "grade": 11,
+    "subject": "biology",
+    "title": "Chemical Coordination and Integration",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-physics-1",
+    "grade": 12,
+    "subject": "physics",
+    "title": "Electric Charges and Fields",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-physics-2",
+    "grade": 12,
+    "subject": "physics",
+    "title": "Electrostatic Potential and Capacitance",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-physics-3",
+    "grade": 12,
+    "subject": "physics",
+    "title": "Current Electricity",
+    "difficulty": 3,
+    "lab_slug": "cbse-electric-circuits"
+  },
+  {
+    "id": "12-physics-4",
+    "grade": 12,
+    "subject": "physics",
+    "title": "Moving Charges and Magnetism",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-physics-5",
+    "grade": 12,
+    "subject": "physics",
+    "title": "Magnetism and Matter",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "12-physics-6",
+    "grade": 12,
+    "subject": "physics",
+    "title": "Electromagnetic Induction",
+    "difficulty": 3,
+    "lab_slug": "cbse-faraday-lab"
+  },
+  {
+    "id": "12-physics-7",
+    "grade": 12,
+    "subject": "physics",
+    "title": "Alternating Current",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-physics-8",
+    "grade": 12,
+    "subject": "physics",
+    "title": "Electromagnetic Waves",
+    "difficulty": 2,
+    "lab_slug": "cbse-wave-motion"
+  },
+  {
+    "id": "12-physics-9",
+    "grade": 12,
+    "subject": "physics",
+    "title": "Ray Optics and Optical Instruments",
+    "difficulty": 3,
+    "lab_slug": "cbse-light-optics"
+  },
+  {
+    "id": "12-physics-10",
+    "grade": 12,
+    "subject": "physics",
+    "title": "Wave Optics",
+    "difficulty": 3,
+    "lab_slug": "cbse-wave-motion"
+  },
+  {
+    "id": "12-physics-11",
+    "grade": 12,
+    "subject": "physics",
+    "title": "Dual Nature of Radiation and Matter",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-physics-12",
+    "grade": 12,
+    "subject": "physics",
+    "title": "Atoms",
+    "difficulty": 3,
+    "lab_slug": "cbse-atom-builder-3d"
+  },
+  {
+    "id": "12-physics-13",
+    "grade": 12,
+    "subject": "physics",
+    "title": "Nuclei",
+    "difficulty": 3,
+    "lab_slug": "cbse-atom-builder-3d"
+  },
+  {
+    "id": "12-physics-14",
+    "grade": 12,
+    "subject": "physics",
+    "title": "Semiconductor Electronics",
+    "difficulty": 3,
+    "lab_slug": "cbse-electric-circuits"
+  },
+  {
+    "id": "12-chemistry-1",
+    "grade": 12,
+    "subject": "chemistry",
+    "title": "Solutions",
+    "difficulty": 3,
+    "lab_slug": "cbse-titration-lab"
+  },
+  {
+    "id": "12-chemistry-2",
+    "grade": 12,
+    "subject": "chemistry",
+    "title": "Electrochemistry",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-chemistry-3",
+    "grade": 12,
+    "subject": "chemistry",
+    "title": "Chemical Kinetics",
+    "difficulty": 3,
+    "lab_slug": "cbse-kinetics-lab"
+  },
+  {
+    "id": "12-chemistry-4",
+    "grade": 12,
+    "subject": "chemistry",
+    "title": "The d- and f-Block Elements",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-chemistry-5",
+    "grade": 12,
+    "subject": "chemistry",
+    "title": "Coordination Compounds",
+    "difficulty": 3,
+    "lab_slug": "cbse-molecule-viewer-3d"
+  },
+  {
+    "id": "12-chemistry-6",
+    "grade": 12,
+    "subject": "chemistry",
+    "title": "Haloalkanes and Haloarenes",
+    "difficulty": 3,
+    "lab_slug": "cbse-molecule-viewer-3d"
+  },
+  {
+    "id": "12-chemistry-7",
+    "grade": 12,
+    "subject": "chemistry",
+    "title": "Alcohols, Phenols and Ethers",
+    "difficulty": 3,
+    "lab_slug": "cbse-molecule-viewer-3d"
+  },
+  {
+    "id": "12-chemistry-8",
+    "grade": 12,
+    "subject": "chemistry",
+    "title": "Aldehydes, Ketones and Carboxylic Acids",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-chemistry-9",
+    "grade": 12,
+    "subject": "chemistry",
+    "title": "Amines",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-chemistry-10",
+    "grade": 12,
+    "subject": "chemistry",
+    "title": "Biomolecules",
+    "difficulty": 2,
+    "lab_slug": "cbse-molecule-viewer-3d"
+  },
+  {
+    "id": "12-mathematics-1",
+    "grade": 12,
+    "subject": "mathematics",
+    "title": "Relations and Functions",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "12-mathematics-2",
+    "grade": 12,
+    "subject": "mathematics",
+    "title": "Inverse Trigonometric Functions",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-mathematics-3",
+    "grade": 12,
+    "subject": "mathematics",
+    "title": "Matrices",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "12-mathematics-4",
+    "grade": 12,
+    "subject": "mathematics",
+    "title": "Determinants",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-mathematics-5",
+    "grade": 12,
+    "subject": "mathematics",
+    "title": "Continuity and Differentiability",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-mathematics-6",
+    "grade": 12,
+    "subject": "mathematics",
+    "title": "Application of Derivatives",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-mathematics-7",
+    "grade": 12,
+    "subject": "mathematics",
+    "title": "Integrals",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-mathematics-8",
+    "grade": 12,
+    "subject": "mathematics",
+    "title": "Application of Integrals",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-mathematics-9",
+    "grade": 12,
+    "subject": "mathematics",
+    "title": "Differential Equations",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-mathematics-10",
+    "grade": 12,
+    "subject": "mathematics",
+    "title": "Vector Algebra",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "12-mathematics-11",
+    "grade": 12,
+    "subject": "mathematics",
+    "title": "Three-Dimensional Geometry",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-mathematics-12",
+    "grade": 12,
+    "subject": "mathematics",
+    "title": "Linear Programming",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "12-mathematics-13",
+    "grade": 12,
+    "subject": "mathematics",
+    "title": "Probability",
+    "difficulty": 3,
+    "lab_slug": "cbse-probability-lab"
+  },
+  {
+    "id": "12-biology-1",
+    "grade": 12,
+    "subject": "biology",
+    "title": "Sexual Reproduction in Flowering Plants",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-biology-2",
+    "grade": 12,
+    "subject": "biology",
+    "title": "Human Reproduction",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-biology-3",
+    "grade": 12,
+    "subject": "biology",
+    "title": "Reproductive Health",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "12-biology-4",
+    "grade": 12,
+    "subject": "biology",
+    "title": "Principles of Inheritance and Variation",
+    "difficulty": 3,
+    "lab_slug": "cbse-genetics-punnett"
+  },
+  {
+    "id": "12-biology-5",
+    "grade": 12,
+    "subject": "biology",
+    "title": "Molecular Basis of Inheritance",
+    "difficulty": 3,
+    "lab_slug": "cbse-dna-helix-3d"
+  },
+  {
+    "id": "12-biology-6",
+    "grade": 12,
+    "subject": "biology",
+    "title": "Evolution",
+    "difficulty": 3,
+    "lab_slug": "cbse-predator-prey"
+  },
+  {
+    "id": "12-biology-7",
+    "grade": 12,
+    "subject": "biology",
+    "title": "Human Health and Disease",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "12-biology-8",
+    "grade": 12,
+    "subject": "biology",
+    "title": "Microbes in Human Welfare",
+    "difficulty": 2,
+    "lab_slug": null
+  },
+  {
+    "id": "12-biology-9",
+    "grade": 12,
+    "subject": "biology",
+    "title": "Biotechnology: Principles and Processes",
+    "difficulty": 3,
+    "lab_slug": "cbse-dna-helix-3d"
+  },
+  {
+    "id": "12-biology-10",
+    "grade": 12,
+    "subject": "biology",
+    "title": "Biotechnology and its Applications",
+    "difficulty": 3,
+    "lab_slug": null
+  },
+  {
+    "id": "12-biology-11",
+    "grade": 12,
+    "subject": "biology",
+    "title": "Organisms and Populations",
+    "difficulty": 2,
+    "lab_slug": "cbse-predator-prey"
+  },
+  {
+    "id": "12-biology-12",
+    "grade": 12,
+    "subject": "biology",
+    "title": "Ecosystem",
+    "difficulty": 2,
+    "lab_slug": "cbse-predator-prey"
+  },
+  {
+    "id": "12-biology-13",
+    "grade": 12,
+    "subject": "biology",
+    "title": "Biodiversity and Conservation",
+    "difficulty": 2,
+    "lab_slug": null
+  }
+]

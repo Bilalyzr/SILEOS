@@ -1,0 +1,55 @@
+/**
+ * Print styles for the student Analytics Report.
+ *
+ * Scoped to `body.printing-report`, a class the page adds just before calling
+ * window.print() and drops on afterprint — so these rules can never leak into
+ * printing some other page that happens to have loaded this chunk.
+ */
+
+@media print {
+  body.printing-report {
+    background: #fff !important;
+  }
+
+  /* Drop the workspace chrome: sidebar, decorative blobs, action buttons. */
+  body.printing-report aside,
+  body.printing-report .dash-bg-shape,
+  body.printing-report .no-print {
+    display: none !important;
+  }
+
+  /* The sidebar offset is an inline style on <main> — override it. */
+  body.printing-report main {
+    padding-left: 0 !important;
+  }
+
+  body.printing-report .dash-bg {
+    background: #fff !important;
+  }
+
+  /* Keep a card and its chart on the same sheet where possible. */
+  body.printing-report .analytics-report .dash-card,
+  body.printing-report .analytics-report section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    box-shadow: none !important;
+    border: 1px solid #e2e8f0 !important;
+  }
+
+  body.printing-report .analytics-report table {
+    font-size: 11px;
+  }
+
+  /* Tables scroll horizontally on screen; on paper they must lay flat. */
+  body.printing-report .analytics-report .overflow-x-auto {
+    overflow: visible !important;
+  }
+
+  body.printing-report .analytics-report table.min-w-\[720px\] {
+    min-width: 0 !important;
+  }
+
+  @page {
+    margin: 12mm;
+  }
+}

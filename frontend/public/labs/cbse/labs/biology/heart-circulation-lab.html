@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-size=1">
+<title>Heart &amp; Circulation — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Heart &amp; Circulation<span class="lk-tag">Class 11 · Biology</span></h1>
+    <div class="lk-meta">Body Fluids and Circulation — double circulation, valves, heartbeat</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Heart rate</h2>
+      <div class="lk-row"><label class="lk-name">BPM</label><input type="range" id="bpm" min="45" max="180" step="5" value="72"><span class="lk-val" id="bpmv">72</span></div>
+      <div class="lk-seg" id="modeSeg">
+        <button class="active">Resting</button><button>Walking</button><button>Running</button>
+      </div>
+    </div>
+    <div class="lk-card">
+      <h2>Live readings</h2>
+      <div class="lk-readout" id="phase"></div>
+      <div class="lk-readout" id="flow"></div>
+      <div class="lk-readout" id="pumpOut"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint">Trace the journey: body → <b>right</b> atrium → right ventricle →
+      lungs (pick up O₂) → <b>left</b> atrium → left ventricle → body. Blood passes the
+      heart <b>twice</b> per loop — double circulation! Why is the left ventricle wall
+      thicker? It must push blood to the <b>whole body</b>, not just next door to the lungs.</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./heart-circulation-lab/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

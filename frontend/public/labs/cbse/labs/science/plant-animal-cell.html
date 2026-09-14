@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plant &amp; Animal Cell — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="./plant-animal-cell/styles.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Plant &amp; Animal Cell<span class="lk-tag">Class 8–9 · Science (Biology)</span></h1>
+    <div class="lk-meta">CBSE: Cell — Structure and Functions — organelles and their jobs</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><div class="cell-stage" id="stage">
+
+    <!-- ============ PLANT CELL ============ -->
+    <svg id="plantSvg" viewBox="0 0 560 400" role="img" aria-label="Plant cell diagram">
+      <rect class="org" data-org="cellwall" x="16" y="16" width="528" height="368" rx="30" fill="#dcfce7" stroke="#166534" stroke-width="8"/>
+      <rect class="org" data-org="membrane" x="36" y="36" width="488" height="328" rx="24" fill="#ecfdf5" stroke="#059669" stroke-width="3"/>
+      <ellipse class="org" data-org="cytoplasm" cx="280" cy="200" rx="238" ry="156" fill="#f0fdf4"/>
+      <ellipse class="org" data-org="vacuole" cx="335" cy="205" rx="140" ry="100" fill="#dbeafe" stroke="#60a5fa" stroke-width="3"/>
+      <text class="orglabel" x="300" y="205">central vacuole</text>
+      <circle class="org" data-org="nucleus" cx="140" cy="140" r="50" fill="#ede9fe" stroke="#7c3aed" stroke-width="3.5"/>
+      <circle data-org="nucleolus" class="org" cx="140" cy="140" r="16" fill="#a78bfa"/>
+      <text class="orglabel" x="112" y="210">nucleus</text>
+      <g class="org" data-org="chloroplast">
+        <ellipse cx="110" cy="300" rx="34" ry="17" fill="#22c55e" stroke="#15803d" stroke-width="2.5"/>
+        <ellipse cx="205" cy="330" rx="34" ry="17" fill="#22c55e" stroke="#15803d" stroke-width="2.5"/>
+        <ellipse cx="455" cy="90" rx="34" ry="17" fill="#22c55e" stroke="#15803d" stroke-width="2.5"/>
+        <ellipse cx="480" cy="300" rx="34" ry="17" fill="#22c55e" stroke="#15803d" stroke-width="2.5"/>
+        <line x1="92" y1="300" x2="128" y2="300" stroke="#15803d" stroke-width="2"/>
+        <line x1="187" y1="330" x2="223" y2="330" stroke="#15803d" stroke-width="2"/>
+        <line x1="437" y1="90" x2="473" y2="90" stroke="#15803d" stroke-width="2"/>
+      </g>
+      <text class="orglabel" x="84" y="340">chloroplasts</text>
+      <g class="org" data-org="mitochondria">
+        <ellipse cx="250" cy="82" rx="33" ry="16" fill="#fdba74" stroke="#c2410c" stroke-width="2.5"/>
+        <path d="M225,82 q12,-9 25,0 q12,9 25,0" fill="none" stroke="#c2410c" stroke-width="2.5"/>
+      </g>
+      <text class="orglabel" x="222" y="62">mitochondrion</text>
+      <g class="org" data-org="er">
+        <path d="M195,155 C235,135 225,205 265,185" fill="none" stroke="#8b5cf6" stroke-width="4.5"/>
+        <path d="M200,170 C240,150 230,220 270,200" fill="none" stroke="#8b5cf6" stroke-width="4.5"/>
+      </g>
+      <text class="orglabel" x="238" y="165">ER</text>
+      <g class="org" data-org="golgi">
+        <path d="M420,320 q30,-14 60,0" fill="none" stroke="#f43f5e" stroke-width="4.5"/>
+        <path d="M425,335 q27,-12 54,0" fill="none" stroke="#f43f5e" stroke-width="4.5"/>
+        <path d="M430,350 q24,-10 48,0" fill="none" stroke="#f43f5e" stroke-width="4.5"/>
+      </g>
+      <text class="orglabel" x="428" y="372">Golgi</text>
+      <g class="org" data-org="ribosome">
+        <circle cx="320" cy="70" r="5" fill="#334155"/><circle cx="342" cy="84" r="5" fill="#334155"/>
+        <circle cx="302" cy="88" r="5" fill="#334155"/><circle cx="325" cy="98" r="5" fill="#334155"/>
+      </g>
+      <text class="orglabel" x="296" y="120">ribosomes</text>
+    </svg>
+
+    <!-- ============ ANIMAL CELL ============ -->
+    <svg id="animalSvg" viewBox="0 0 560 400" role="img" aria-label="Animal cell diagram" class="hidden">
+      <ellipse class="org" data-org="membrane" cx="280" cy="200" rx="258" ry="178" fill="#fdf4ff" stroke="#a21caf" stroke-width="5"/>
+      <ellipse class="org" data-org="cytoplasm" cx="280" cy="200" rx="240" ry="160" fill="#fdf4ff"/>
+      <circle class="org" data-org="nucleus" cx="160" cy="140" r="52" fill="#ede9fe" stroke="#7c3aed" stroke-width="3.5"/>
+      <circle class="org" data-org="nucleolus" cx="160" cy="140" r="16" fill="#a78bfa"/>
+      <text class="orglabel" x="130" y="212">nucleus</text>
+      <g class="org" data-org="mitochondria">
+        <ellipse cx="300" cy="80" rx="33" ry="16" fill="#fdba74" stroke="#c2410c" stroke-width="2.5"/>
+        <path d="M275,80 q12,-9 25,0 q12,9 25,0" fill="none" stroke="#c2410c" stroke-width="2.5"/>
+        <ellipse cx="420" cy="130" rx="30" ry="15" fill="#fdba74" stroke="#c2410c" stroke-width="2.5"/>
+        <path d="M398,130 q11,-8 22,0 q11,8 22,0" fill="none" stroke="#c2410c" stroke-width="2.5"/>
+        <ellipse cx="420" cy="290" rx="30" ry="15" fill="#fdba74" stroke="#c2410c" stroke-width="2.5"/>
+      </g>
+      <text class="orglabel" x="272" y="52">mitochondria</text>
+      <g class="org" data-org="vacuole">
+        <circle cx="330" cy="250" r="16" fill="#dbeafe" stroke="#60a5fa" stroke-width="2.5"/>
+        <circle cx="360" cy="290" r="11" fill="#dbeafe" stroke="#60a5fa" stroke-width="2.5"/>
+      </g>
+      <text class="orglabel" x="308" y="280">small vacuoles</text>
+      <g class="org" data-org="lysosome">
+        <circle cx="300" cy="150" r="12" fill="#fca5a5" stroke="#b91c1c" stroke-width="2.5"/>
+        <circle cx="465" cy="210" r="12" fill="#fca5a5" stroke="#b91c1c" stroke-width="2.5"/>
+        <circle cx="120" cy="280" r="12" fill="#fca5a5" stroke="#b91c1c" stroke-width="2.5"/>
+      </g>
+      <text class="orglabel" x="278" y="122">lysosome</text>
+      <g class="org" data-org="er">
+        <path d="M225,155 C265,135 255,205 295,185" fill="none" stroke="#8b5cf6" stroke-width="4.5"/>
+        <path d="M230,170 C270,150 260,220 300,200" fill="none" stroke="#8b5cf6" stroke-width="4.5"/>
+      </g>
+      <text class="orglabel" x="268" y="165">ER</text>
+      <g class="org" data-org="golgi">
+        <path d="M120,340 q30,-14 60,0" fill="none" stroke="#f43f5e" stroke-width="4.5"/>
+        <path d="M125,355 q27,-12 54,0" fill="none" stroke="#f43f5e" stroke-width="4.5"/>
+      </g>
+      <text class="orglabel" x="118" y="374">Golgi</text>
+      <g class="org" data-org="ribosome">
+        <circle cx="370" cy="70" r="5" fill="#334155"/><circle cx="392" cy="84" r="5" fill="#334155"/>
+        <circle cx="352" cy="88" r="5" fill="#334155"/><circle cx="230" cy="230" r="5" fill="#334155"/>
+        <circle cx="250" cy="245" r="5" fill="#334155"/>
+      </g>
+      <text class="orglabel" x="346" y="52">ribosomes</text>
+      <g class="org" data-org="centriole">
+        <rect x="395" y="330" width="26" height="9" rx="3" fill="#0f172a" transform="rotate(20 395 330)"/>
+        <rect x="400" y="345" width="26" height="9" rx="3" fill="#0f172a" transform="rotate(65 400 345)"/>
+      </g>
+      <text class="orglabel" x="385" y="375">centrioles</text>
+    </svg>
+  </div></div>
+
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Cell type</h2>
+      <div class="lk-seg" id="modeSeg">
+        <button class="active">🌱 Plant cell</button>
+        <button>🐾 Animal cell</button>
+      </div>
+    </div>
+    <div class="lk-card">
+      <h2>Organelle info</h2>
+      <div id="infoCard">
+        <p class="lk-hint">Click any part of the cell (or a chip below) to learn what it does.</p>
+      </div>
+    </div>
+    <div class="lk-card">
+      <h2>Organelles</h2>
+      <div id="chipBox"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint">Switch between the two cells. Which parts does the <b>plant cell
+      have that the animal cell lacks</b>? (Hint: look for green and for the big blue
+      sac.) Why would a stiff wall and solar panels be useful for something that
+      can't move?</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./plant-animal-cell/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/html2canvas.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

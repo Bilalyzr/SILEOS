@@ -1,0 +1,44 @@
+# =============================================================================
+# docker-compose.backup.yml — nightly DB backup scheduler
+# =============================================================================
+# The host has NO cron daemon, so the schedule runs as a tiny always-on
+# container (postgres:15-alpine ships busybox crond + a matching pg_dump).
+# Password comes from .env — this stack never hardcodes credentials.
+#
+#   docker compose -f docker-compose.backup.yml up -d      # start
+#   docker compose -f docker-compose.backup.yml logs -f    # observe
+#   docker exec sasha-backup-cron /scripts/backup-db.sh    # run now
+#
+# Backups land in database/backups/nightly (14 days) and /weekly (8 weeks).
+# =============================================================================
+services:
+  backup-cron:
+    image: postgres:15-alpine
+    container_name: sasha-backup-cron
+    restart: unless-stopped
+    environment:
+      - PGHOST=${BACKUP_PGHOST:-sasha-postgres}
+      - PGUSER=tutor
+      - PGDATABASE=tutor_lms
+      - PGPASSWORD=${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      - BACKUP_DIR=/backups
+      - TZ=${TZ:-Asia/Kolkata}
+    volumes:
+      - ./scripts/backup-db.sh:/scripts/backup-db.sh:ro
+      - ./database/backups:/backups
+      - ./logs:/var/log/sasha
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        # 02:30 every night; busybox crond in foreground
+        echo "30 2 * * * /scripts/backup-db.sh >> /var/log/sasha/backup.log 2>&1" | crontab -
+        echo "[backup-cron] scheduler up — nightly dump at 02:30 ${TZ:-UTC}"
+        exec crond -f -l 8
+    networks:
+      - sasha-net
+
+networks:
+  sasha-net:
+    name: ${BACKUP_NETWORK:-sasha-net}
+    external: true

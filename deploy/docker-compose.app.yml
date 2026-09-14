@@ -1,0 +1,349 @@
+# =============================================================================
+# App tier — one colour (blue OR green)
+# =============================================================================
+# This file describes ONE deployment slot. It is instantiated twice, once per
+# colour, using a different compose project name so both can run side by side:
+#
+#   COLOR=blue  docker compose -p sasha-blue  -f deploy/docker-compose.app.yml up -d
+#   COLOR=green docker compose -p sasha-green -f deploy/docker-compose.app.yml up -d
+#
+# Never invoke this directly in production — deploy/scripts/deploy.sh picks the
+# idle colour, health-gates it and switches traffic for you.
+#
+# HOW THE EDGE FINDS A COLOUR
+# Each container gets an explicit network alias suffixed with its colour
+# (backend-blue, frontend-green, ...). deploy/nginx/active/active.conf names one
+# set of those aliases, and switch.sh rewrites that file + reloads nginx. The
+# containers themselves are never reconfigured during a switch.
+#
+# Note: compose also adds the bare service name ("backend") as an alias, so
+# while both colours are up, "backend" resolves round-robin to both. Nothing in
+# the edge config uses the bare name — always use the colour-qualified alias.
+#
+# DIFFERENCES FROM THE ROOT docker-compose.yml (deliberate)
+#  * No ./backend:/app bind mount. A release must be exactly the image that CI
+#    built and tested; mounting host source over /app would make the deployed
+#    code depend on whatever is checked out on the server.
+#  * No --reload. The reloader watches the filesystem, costs memory and restarts
+#    workers under load — it has no place in production.
+#  * No PUBLIC host port publishing. Only the edge container is reachable from
+#    outside; the app tier is reachable from the internet solely over the shared
+#    docker network, through the edge. The one exception is the LOOPBACK-ONLY
+#    bind added for the recordings finalize worker — see "WORKER LOOPBACK PORT"
+#    on the backend service below.
+# =============================================================================
+
+x-logging: &default_logging
+  driver: json-file
+  options:
+    max-size: "20m"
+    max-file: "5"
+    tag: "{{.Name}}"
+
+services:
+  # ---------------------------------------------------------------------------
+  # FastAPI backend
+  # ---------------------------------------------------------------------------
+  backend:
+    image: ${REGISTRY:-local}/${IMAGE_PREFIX:-sasha-lms}-backend:${RELEASE_TAG:?RELEASE_TAG must be set}
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: sasha-backend-${COLOR:?COLOR must be set (blue|green)}
+    # tini as PID 1 so the zombie children left behind by headless Chrome
+    # (certificate HTML->PDF rendering) get reaped. Without it uvicorn is PID 1,
+    # never reaps them, and the process table fills until fork() fails.
+    init: true
+    # mail.sashainfinity.com is orange-clouded in Cloudflare, and Cloudflare
+    # only proxies HTTP(S) — SMTP to it lands on Cloudflare IPs and dies with
+    # "Network is unreachable" (app emails silently failed until 2026-08-29).
+    # Pin it to the origin IP so the app talks to the host's Postfix directly.
+    extra_hosts:
+      - "mail.sashainfinity.com:178.236.185.167"
+    environment: &app-environment
+      # --- release identity (surfaced by /health/version) ---
+      - RELEASE_TAG=${RELEASE_TAG}
+      - DEPLOY_COLOR=${COLOR}
+      # --- data tier ---
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-tutor}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-tutor_lms}
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
+      # --- secrets ---
+      - SECRET_KEY=${SECRET_KEY}
+      - AI_CREDENTIAL_ENCRYPTION_KEY=${AI_CREDENTIAL_ENCRYPTION_KEY:?Set a stable AI credential encryption key}
+      - VIDEO_SECRET=${VIDEO_SECRET:?Set VIDEO_SECRET in .env}
+      - JWT_SECRET=${JWT_SECRET}
+      - RAZORPAY_KEY=${RAZORPAY_KEY}
+      - RAZORPAY_SECRET=${RAZORPAY_SECRET}
+      - RAZORPAY_KEY_ID=${RAZORPAY_KEY_ID}
+      - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET}
+      - RAZORPAY_WEBHOOK_SECRET=${RAZORPAY_WEBHOOK_SECRET:-}
+      # --- application ---
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      - BACKGROUND_TASK_MODE=worker
+      - OBSERVABILITY_TOKEN=${OBSERVABILITY_TOKEN:-}
+      - SENTRY_DSN=${SENTRY_DSN:-}
+      - DEBUG=${DEBUG:-false}
+      - AUTO_VERIFY_EMAIL=${AUTO_VERIFY_EMAIL:-false}
+      - PYTHONIOENCODING=utf-8
+      - PYTHONUTF8=1
+      - FRONTEND_URL=${FRONTEND_URL:-https://lms.sashainfinity.com}
+      - BACKEND_URL=${BACKEND_URL:-https://backend.sashainfinity.com}
+      - DOMAIN=${DOMAIN:-sashainfinity.com}
+      - CORS_ORIGINS=${CORS_ORIGINS:-["https://lms.sashainfinity.com", "https://backend.sashainfinity.com"]}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-["lms.sashainfinity.com", "backend.sashainfinity.com", "localhost", "127.0.0.1"]}
+      # --- admin bootstrap ---
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-admin@sashainfinity.com}
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-sashainfinity_admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - ADMIN_FIRST_NAME=${ADMIN_FIRST_NAME:-SashaInfinity}
+      - ADMIN_LAST_NAME=${ADMIN_LAST_NAME:-Administrator}
+      - MIN_WITHDRAWAL_INR=${MIN_WITHDRAWAL_INR:-500}
+      # --- security ---
+      - ENABLE_API_RATE_LIMITING=${ENABLE_API_RATE_LIMITING:-true}
+      - ENABLE_REQUEST_LOGGING=${ENABLE_REQUEST_LOGGING:-true}
+      - ENABLE_SECURITY_HEADERS=${ENABLE_SECURITY_HEADERS:-true}
+      - RATE_LIMIT_REQUESTS_PER_MINUTE=${RATE_LIMIT_REQUESTS_PER_MINUTE:-60}
+      - RATE_LIMIT_REQUESTS_PER_HOUR=${RATE_LIMIT_REQUESTS_PER_HOUR:-1000}
+      - RATE_LIMIT_LOGIN_ATTEMPTS=${RATE_LIMIT_LOGIN_ATTEMPTS:-5}
+      - MAX_LOGIN_ATTEMPTS=${MAX_LOGIN_ATTEMPTS:-5}
+      - LOCKOUT_DURATION_MINUTES=${LOCKOUT_DURATION_MINUTES:-15}
+      - MIN_PASSWORD_LENGTH=${MIN_PASSWORD_LENGTH:-12}
+      - SESSION_TIMEOUT_MINUTES=${SESSION_TIMEOUT_MINUTES:-30}
+      - MAX_CONCURRENT_SESSIONS=${MAX_CONCURRENT_SESSIONS:-3}
+      - MAX_FILE_SIZE=${MAX_FILE_SIZE:-10485760}
+      - SCAN_UPLOADED_FILES=${SCAN_UPLOADED_FILES:-true}
+      - QUARANTINE_INFECTED_FILES=${QUARANTINE_INFECTED_FILES:-true}
+      - ENABLE_SECURITY_MONITORING=${ENABLE_SECURITY_MONITORING:-true}
+      - LOG_FAILED_LOGIN_ATTEMPTS=${LOG_FAILED_LOGIN_ATTEMPTS:-true}
+      - LOG_SUSPICIOUS_ACTIVITIES=${LOG_SUSPICIOUS_ACTIVITIES:-true}
+      - ALERT_ON_SECURITY_EVENTS=${ALERT_ON_SECURITY_EVENTS:-true}
+      - SECURITY_ALERT_EMAIL=${SECURITY_ALERT_EMAIL:-admin@sashainfinity.com}
+      - SECURITY_ENABLE_CSP=${SECURITY_ENABLE_CSP:-true}
+      - SECURITY_ENABLE_HSTS=${SECURITY_ENABLE_HSTS:-true}
+      - SECURITY_FRAME_OPTIONS=${SECURITY_FRAME_OPTIONS:-DENY}
+      - SECURITY_CONTENT_TYPE_NOSNIFF=${SECURITY_CONTENT_TYPE_NOSNIFF:-true}
+      - SECURITY_XSS_PROTECTION=${SECURITY_XSS_PROTECTION:-true}
+      - ENABLE_IP_WHITELISTING=${ENABLE_IP_WHITELISTING:-false}
+      # --- logging ---
+      - LOG_LEVEL=${LOG_LEVEL:-WARNING}
+      - SECURITY_LOG_LEVEL=${SECURITY_LOG_LEVEL:-INFO}
+      - LOG_FILE_PATH=${LOG_FILE_PATH:-/var/log/sasha_lms}
+      # --- email ---
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - EMAIL_FROM=${EMAIL_FROM:-noreply@sashainfinity.com}
+      # --- firebase (google sign-in) ---
+      - FIREBASE_API_KEY=${FIREBASE_API_KEY}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID:-sashainfinity-720cb}
+      # Path inside the container. deploy/secrets/ is mounted at /run/secrets
+      # (see volumes below); drop firebase-service-account.json in there.
+      - FIREBASE_CREDENTIALS_PATH=${FIREBASE_CREDENTIALS_PATH:-/run/secrets/firebase-service-account.json}
+      # --- bunny.net CDN (course video) ---
+      - BUNNY_LIBRARY_ID=${BUNNY_LIBRARY_ID:-618286}
+      - BUNNY_API_KEY=${BUNNY_API_KEY}
+      - BUNNY_CDN_HOSTNAME=${BUNNY_CDN_HOSTNAME:-vz-60dda74a-f32.b-cdn.net}
+      - BUNNY_TOKEN_AUTH_KEY=${BUNNY_TOKEN_AUTH_KEY:-}
+      - BUNNY_SIGNED_URL_TTL=${BUNNY_SIGNED_URL_TTL:-3600}
+      # --- Edgyy payment proxy ---
+      - EDGYY_SECRET_TOKEN=${EDGYY_SECRET_TOKEN}
+      - EDGYY_WEBHOOK_URL=${EDGYY_WEBHOOK_URL:-https://edgyy.in/api/v1/payments/webhook/}
+      - EDGYY_WEBHOOK_SECRET=${EDGYY_WEBHOOK_SECRET}
+      # --- live classes (Jitsi) ---
+      # The backend's env is an explicit allowlist, so every var app/core/
+      # config.py reads for live classes has to be named here or the container
+      # gets the code default instead of the deployment's value. JITSI_JWT_SECRET
+      # and INTERNAL_TOKEN have no default on purpose: app/main.py fails fast at
+      # startup when either is blank under ENVIRONMENT=production.
+      - JITSI_PUBLIC_URL=${JITSI_PUBLIC_URL:-https://live.sashainfinity.com}
+      - JITSI_JWT_APP_ID=${JITSI_JWT_APP_ID:-sashainfinity}
+      - JITSI_JWT_SECRET=${JITSI_JWT_SECRET}
+      # Path INSIDE the container — the recordings bind-mount below puts the
+      # Jibri output dir at /app/recordings_live. The host-side path lives in
+      # deploy/.env.live as JITSI_RECORDINGS_DIR for the finalize worker, which
+      # runs on the host and therefore sees a different path for the same files.
+      - JITSI_RECORDINGS_DIR=${BACKEND_JITSI_RECORDINGS_DIR:-/app/recordings_live}
+      - INTERNAL_TOKEN=${INTERNAL_TOKEN}
+      - DEFAULT_TIMEZONE=${DEFAULT_TIMEZONE:-Asia/Kolkata}
+    volumes: &app-volumes
+      # Shared mutable state — both colours mount the same host dirs so uploads
+      # and generated certificates survive a colour switch. Source code is NOT
+      # mounted; it comes from the image.
+      - ../uploads:/app/uploads
+      - ../certificates:/app/certificates
+      # Invoice PDFs are legal documents and must survive a colour switch /
+      # redeploy. invoice_pdf.py writes them CWD-relative and the backend
+      # image's WORKDIR is /app, so they land in /app/invoices.
+      - ../invoices:/app/invoices
+      - ../logs:/var/log/sasha_lms
+      # Secrets directory (Firebase service-account JSON, etc). Mounted as a
+      # DIRECTORY rather than a single file on purpose: docker silently creates a
+      # directory in place of a missing bind-mount source file, which would leave
+      # FIREBASE_CREDENTIALS_PATH pointing at a directory and fail confusingly.
+      - ./secrets:/run/secrets:ro
+      # Jibri's recording output. Same host directory compose.live.yml
+      # bind-mounts into jibri at /config/recordings (there as `./recordings`,
+      # this file resolves relative paths against deploy/ too). Read-only here:
+      # the backend only ever READS a finished .mp4 to upload it to Bunny or
+      # copy it to the local fallback — it must never write into, or delete
+      # from, Jibri's output directory. Without this mount the internal ingest
+      # endpoint's path-containment check passes but the subsequent open()
+      # fails, which is exactly how the ingest chain was silently broken.
+      - ./recordings:/app/recordings_live:ro
+    # -------------------------------------------------------------------------
+    # WORKER LOOPBACK PORT — 127.0.0.1 only, never 0.0.0.0.
+    # -------------------------------------------------------------------------
+    # The recordings finalize worker (deploy/scripts/finalize_recordings.sh, run
+    # from cron) executes on the HOST, outside docker, so it cannot resolve
+    # backend-blue/backend-green on the internal network. It needs some route to
+    # POST /api/v1/internal/live/recordings, and this is the simplest reliable
+    # one.
+    #
+    # This does NOT reopen the spoofing hole the uvicorn comment below warns
+    # about. That warning is about exposing the app tier to UNTRUSTED clients
+    # while --forwarded-allow-ips is "*": anyone who can open a socket to it can
+    # then forge X-Forwarded-For and defeat rate limiting and IP logging. A
+    # 127.0.0.1-bound publish is reachable only from processes already running on
+    # the VPS itself — a trust boundary that is strictly inside the one docker's
+    # own network already grants. Docker publishes this through its userland
+    # proxy/NAT rules on the loopback interface only; it is not routable from
+    # outside the host and does not appear on the public interface.
+    #
+    # blue -> 8010, green -> 8011, so both colours can be up simultaneously
+    # without a port collision. deploy/scripts/lib.sh:backend_loopback_port()
+    # exports BACKEND_LOOPBACK_PORT per colour; the default here keeps a manual
+    # `COLOR=blue docker compose -f ... up` from failing on an unset variable.
+    #
+    # The internal endpoint is defended independently of this port: nginx
+    # returns 404 for /api/v1/internal/ and never proxies it (see
+    # deploy/nginx/conf.d/10-app.conf), and the endpoint itself refuses any
+    # request that carries X-Forwarded-For/X-Forwarded-Host — i.e. anything that
+    # came through the edge — on top of the constant-time X-Internal-Token check.
+    ports:
+      - "127.0.0.1:${BACKEND_LOOPBACK_PORT:-8010}:8000"
+    # --proxy-headers + --forwarded-allow-ips "*" makes uvicorn honour the
+    # X-Forwarded-Proto/For that the edge sets, so the app sees the real client IP
+    # and scheme instead of the proxy's. The wildcard is acceptable here because
+    # the only routes to this container are (a) the internal docker network, via
+    # the edge, and (b) the 127.0.0.1-bound port above, reachable only from the
+    # trusted host itself. Do not publish this service on 0.0.0.0 without
+    # narrowing the wildcard — spoofable forwarded headers would then defeat rate
+    # limiting and IP logging.
+    command:
+      - uvicorn
+      - app.main:app
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
+      - --workers
+      - "${UVICORN_WORKERS:-2}"
+      - --proxy-headers
+      - --forwarded-allow-ips
+      - "*"
+    networks:
+      sasha-net:
+        aliases:
+          - backend-${COLOR}
+    restart: unless-stopped
+    healthcheck:
+      # Liveness only — the deploy gate calls /health/ready separately, because
+      # a container that cannot reach Postgres must be reported unhealthy to the
+      # deploy while still being allowed to boot and retry.
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8000/health >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 45s
+    logging: *default_logging
+
+  # ---------------------------------------------------------------------------
+  # React frontend (static build served by `serve`)
+  # ---------------------------------------------------------------------------
+  runtime-worker:
+    container_name: sasha-runtime-${COLOR:?COLOR must be set (blue|green)}
+    image: ${REGISTRY:-local}/${IMAGE_PREFIX:-sasha-lms}-backend:${RELEASE_TAG}
+    environment: *app-environment
+    volumes: *app-volumes
+    init: true
+    command: ["python", "-m", "app.workers.runtime"]
+    networks: [sasha-net]
+    restart: unless-stopped
+    stop_grace_period: 120s
+    healthcheck:
+      test: ["CMD", "python", "-m", "app.workers.runtime", "--health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
+    logging: *default_logging
+
+  frontend:
+    image: ${REGISTRY:-local}/${IMAGE_PREFIX:-sasha-lms}-frontend:${RELEASE_TAG}
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+      # Vite inlines import.meta.env.* at BUILD time, so every VITE_* value has
+      # to be a build arg. Setting them as runtime env does nothing.
+      args:
+        VITE_API_URL: ${VITE_API_URL:-https://backend.sashainfinity.com/api/v1}
+        VITE_BACKEND_URL: ${VITE_BACKEND_URL:-https://backend.sashainfinity.com}
+        VITE_FRONTEND_URL: ${VITE_FRONTEND_URL:-https://lms.sashainfinity.com}
+        VITE_RAZORPAY_KEY: ${RAZORPAY_KEY}
+        VITE_FIREBASE_API_KEY: ${VITE_FIREBASE_API_KEY}
+        VITE_FIREBASE_AUTH_DOMAIN: ${VITE_FIREBASE_AUTH_DOMAIN:-sashainfinity-720cb.firebaseapp.com}
+        VITE_FIREBASE_PROJECT_ID: ${VITE_FIREBASE_PROJECT_ID:-sashainfinity-720cb}
+        VITE_FIREBASE_STORAGE_BUCKET: ${VITE_FIREBASE_STORAGE_BUCKET:-sashainfinity-720cb.firebasestorage.app}
+        VITE_FIREBASE_MESSAGING_SENDER_ID: ${VITE_FIREBASE_MESSAGING_SENDER_ID:-519644662244}
+        VITE_FIREBASE_APP_ID: ${VITE_FIREBASE_APP_ID}
+    container_name: sasha-frontend-${COLOR}
+    networks:
+      sasha-net:
+        aliases:
+          - frontend-${COLOR}
+    restart: unless-stopped
+    healthcheck:
+      # node:18-alpine has busybox wget, not curl.
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:3000/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    logging: *default_logging
+
+  # ---------------------------------------------------------------------------
+  # yt-dlp YouTube streaming proxy
+  # ---------------------------------------------------------------------------
+  streaming:
+    image: ${REGISTRY:-local}/${IMAGE_PREFIX:-sasha-lms}-streaming:${RELEASE_TAG}
+    build:
+      context: ../streaming-service
+      dockerfile: Dockerfile
+    container_name: sasha-streaming-${COLOR}
+    environment:
+      - RELEASE_TAG=${RELEASE_TAG}
+      - DEPLOY_COLOR=${COLOR}
+      - PYTHONIOENCODING=utf-8
+      - PYTHONUTF8=1
+    volumes:
+      # yt-dlp cache is shared between colours on purpose: a fresh colour starts
+      # warm instead of re-resolving every video URL after each deploy.
+      - ../streaming-service/yt_dlp_cache:/app/yt_dlp_cache
+    networks:
+      sasha-net:
+        aliases:
+          - streaming-${COLOR}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8001/health >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    logging: *default_logging
+
+networks:
+  sasha-net:
+    name: ${DOCKER_NETWORK:-sasha-net}
+    external: true

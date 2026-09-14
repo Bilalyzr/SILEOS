@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-size=1">
+<title>PCR &amp; Biotechnology — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>PCR Machine 🧬<span class="lk-tag">Class 12 · Biology</span></h1>
+    <div class="lk-meta">Biotechnology: Principles and Processes — DNA copying in a tube</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Thermal cycler</h2>
+      <div class="lk-row"><label class="lk-name">Cycles</label><input type="range" id="cycles" min="0" max="8" step="1" value="0"><span class="lk-val" id="cyclesv">0</span></div>
+      <div class="lk-row"><label class="lk-name">Speed</label><input type="range" id="spd" min="1" max="3" step="0.5" value="1.5"><span class="lk-val" id="spdv">1.5×</span></div>
+      <button class="lk-btn" id="runBtn">▶ Run PCR</button>
+    </div>
+    <div class="lk-card">
+      <h2>Stage</h2>
+      <div class="lk-readout" id="stage"></div>
+      <div class="lk-readout" id="copies"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint">Three temperatures, repeat forever: <b>95°C</b> unzips DNA,
+      <b>55°C</b> lets primers stick, <b>72°C</b> lets polymerase copy. Each cycle
+      <b>doubles</b> the DNA: 30 cycles = 2³⁰ ≈ <b>a billion copies</b> from one strand!
+      That exponential amplification is why forensics can profile a single hair.</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./biotech-pcr-lab/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

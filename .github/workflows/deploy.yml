@@ -1,0 +1,387 @@
+# =============================================================================
+# CI/CD — self-hosted pipeline: test, build, deploy, verify
+# =============================================================================
+# Pipeline shape:
+#
+#   quality ──> build (3 images, local) ──> deploy (blue-safe recreate) ──> verify
+#   (lint, pytest,                                                      (public URL,
+#    shellcheck)                                                        from GitHub)
+#
+# RUNNER MODEL — fully free, zero quotas:
+#   quality/build/deploy run on the SELF-HOSTED runner installed on the
+#   production VPS (label: self-hosted — see deploy/ci/bootstrap-runner.sh).
+#   The repo is PRIVATE, so GitHub-hosted minutes are quota-limited (2,000/mo)
+#   and GHCR private storage (500 MB) cannot hold these images — the runner
+#   sidesteps both: unlimited minutes, images built locally, no registry.
+#   verify stays on ubuntu-latest so the public URL is checked from OUTSIDE
+#   the server (~1 min per deploy, negligible quota).
+#
+# TRIGGERS
+#   push to main       — full pipeline, auto-deploys
+#   pull_request       — quality + build only, never deploys
+#   workflow_dispatch  — manual, with a tag to deploy and a rollback switch
+#
+# NO SECRETS REQUIRED. The runner is already on the production host: deploys
+# run deploy/ci/ci-deploy.sh against the LIVE compose stack at DEPLOY_PATH,
+# with the server's own .env files providing every credential.
+#
+# OPTIONAL VARIABLES
+#   PUBLIC_URL            Base URL for the verify job (default
+#                         https://sashainfinity.com).
+#
+# ROLLBACK
+#   ci-deploy.sh tags the running images as :ci-prev before every deploy and
+#   auto-restores them if the health gate fails. The workflow_dispatch
+#   "rollback" input restores the last :ci-prev set manually.
+# =============================================================================
+
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Release tag to deploy (default: commit SHA)"
+        required: false
+        type: string
+      rollback:
+        description: "Roll back production to the previous release instead of deploying"
+        required: false
+        default: false
+        type: boolean
+      skip_migrations:
+        description: "Skip the database migration step"
+        required: false
+        default: false
+        type: boolean
+
+# One deployment at a time. `cancel-in-progress: false` is deliberate: cancelling
+# a half-finished deploy would leave the stack mid-recreate with no script
+# running to roll it back.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+env:
+  DEPLOY_PATH: /www/wwwroot/sasha_lms/sasha_lms/sasha_lms
+
+permissions:
+  contents: read
+
+jobs:
+  # ===========================================================================
+  # 1. QUALITY — lint, tests, shellcheck (on the VPS runner)
+  # ===========================================================================
+  quality:
+    name: Lint & test
+    runs-on: self-hosted
+    if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.rollback) }}
+    outputs:
+      release_tag: ${{ steps.tag.outputs.release_tag }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compute release tag
+        id: tag
+        run: |
+          if [ -n "${{ inputs.release_tag }}" ]; then
+            TAG="${{ inputs.release_tag }}"
+          else
+            TAG="$(git rev-parse --short HEAD)"
+          fi
+          echo "release_tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "Release tag: $TAG" >> "$GITHUB_STEP_SUMMARY"
+
+      # `npm ci` installs exactly the lockfile (host npm cache makes repeats
+      # fast). --legacy-peer-deps is required: @react-three/drei@^10 declares
+      # React 19 while this project is on React 18.
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci --legacy-peer-deps --no-audit --no-fund
+
+      # Lint and type-check are required release gates.
+      - name: ESLint
+        id: lint
+        continue-on-error: false
+        working-directory: frontend
+        run: npm run lint
+
+      - name: TypeScript type-check
+        id: typecheck
+        continue-on-error: false
+        working-directory: frontend
+        run: npm run type-check
+
+      # Require the real frontend suite; an empty suite is a release failure.
+      - name: Frontend tests
+        working-directory: frontend
+        run: npx vitest run --reporter=default
+
+      # ---------------------------------------------------------------------
+      # Backend tests — real pytest run against the SQLite-based suite in
+      # backend/tests/ (no Postgres needed; conftest isolates every test).
+      # The venv is created once and reused across runs; this step heals it
+      # if it is missing or requirements changed.
+      # ---------------------------------------------------------------------
+      - name: Backend tests (pytest)
+        working-directory: backend
+        run: |
+          set -euo pipefail
+          VENV=/opt/sasha-ci/venv
+          if [ ! -x "$VENV/bin/python" ] || [ requirements.txt -nt "$VENV/.built" ]; then
+            echo "(re)building test venv at $VENV"
+            python3 -m venv "$VENV"
+            "$VENV/bin/pip" install --quiet --upgrade pip
+            # setuptools<81: py3.12 venvs don't bundle it, and >=81 removed
+            # pkg_resources entirely (razorpay imports it at runtime).
+            "$VENV/bin/pip" install --quiet "setuptools<81"
+            "$VENV/bin/pip" install --quiet -r requirements.txt
+            "$VENV/bin/pip" install --quiet pytest pytest-asyncio httpx
+            touch "$VENV/.built"
+          fi
+          "$VENV/bin/python" -m pytest -q
+
+      - name: Backend syntax check (streaming service)
+        run: python3 -m compileall -q streaming-service
+
+      - name: Backend lint (advisory)
+        continue-on-error: true
+        run: |
+          pip install --quiet flake8 2>/dev/null || python3 -m pip install --quiet flake8
+          # Only errors that genuinely break at runtime: syntax errors and
+          # undefined names. Style is not worth failing a deploy over.
+          flake8 backend/app streaming-service \
+            --count --select=E9,F63,F7,F82 --show-source --statistics
+
+      # Shell scripts are the deployment mechanism; a typo in them is a production
+      # incident. shellcheck is cheap, so this one IS blocking.
+      - name: Shellcheck deployment scripts
+        run: |
+          command -v shellcheck >/dev/null || { apt-get update -qq && apt-get install -y -qq shellcheck; }
+          # Blocking at error severity only: those are the findings that mean the
+          # script genuinely does not do what it reads as (bad redirects, broken
+          # quoting of arrays). Style-level findings are reported below without
+          # holding up a release.
+          shellcheck -x -e SC1091 --severity=error deploy/scripts/*.sh deploy/ci/*.sh scripts/*.sh
+
+      - name: Shellcheck full report (advisory)
+        continue-on-error: true
+        run: shellcheck -x -e SC1091 deploy/scripts/*.sh deploy/ci/*.sh scripts/*.sh
+
+      # ---------------------------------------------------------------------
+      # Secret scanning — gitleaks, run entirely OFFLINE via the dockerized
+      # CLI (zricethezav/gitleaks:latest) rather than gitleaks/gitleaks-action,
+      # which calls out to the GitHub API for PR comments/licensing checks.
+      # This runner has no such dependency: it scans the checked-out worktree
+      # on disk (`--no-git` — content scan, not history scan, since a full
+      # history scan of this repo's age is a separate one-off exercise, not a
+      # per-push CI cost) and needs nothing but the local docker daemon
+      # already used by the build job below.
+      #
+      # ADVISORY (continue-on-error) for this first run: the full tree has
+      # not yet been triaged for pre-existing false positives (fixture
+      # tokens, example secrets in docs, historical placeholder values), so
+      # a hard failure here today would block every deploy on unreviewed
+      # findings. Once a first pass has been triaged (add a `.gitleaks.toml`
+      # allowlist for confirmed non-secrets), flip `continue-on-error` to
+      # `false` so this becomes a real gate.
+      # ---------------------------------------------------------------------
+      - name: Secret scan (gitleaks, advisory)
+        id: gitleaks
+        continue-on-error: true
+        run: |
+          docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:latest \
+            detect --no-git -s /repo -v --redact
+
+      - name: Report gitleaks outcome
+        if: always()
+        run: |
+          {
+            echo "### Secret scan (gitleaks, advisory)"
+            echo ""
+            echo "Result: \`${{ steps.gitleaks.outcome }}\`"
+            echo ""
+            echo "This step is advisory (continue-on-error) until the tree has"
+            echo "had a first triage pass for false positives. Once triaged,"
+            echo "flip \`continue-on-error\` to \`false\` in .github/workflows/deploy.yml"
+            echo "so leaked secrets block deployment."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # ===========================================================================
+  # 2. BUILD — one job per image, in parallel (local images on the VPS)
+  # ===========================================================================
+  # Loads images into the VPS docker daemon with the same names the deploy
+  # uses. The authoritative build happens again inside ci-deploy.sh with the
+  # server's env files — this job's value is validating that all three images
+  # build on every PR, and warming the docker layer cache so deploys are fast.
+  build:
+    name: Build ${{ matrix.service }}
+    runs-on: self-hosted
+    needs: quality
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - service: backend
+            context: ./backend
+          - service: frontend
+            context: ./frontend
+          - service: streaming
+            context: ./streaming-service
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build (local image)
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          push: false
+          load: true
+          # Mirrors the live stack's image names (docker-compose project
+          # "sasha_lms" + service) so cache layers are shared with the deploy.
+          tags: |
+            sasha_lms-${{ matrix.service }}:ci-${{ needs.quality.outputs.release_tag }}
+          cache-from: type=local,src=/opt/sasha-ci/buildcache/${{ matrix.service }}
+          cache-to: type=local,dest=/opt/sasha-ci/buildcache/${{ matrix.service }},mode=max
+          provenance: false
+
+  # ===========================================================================
+  # 3. DEPLOY — recreate the live stack's app services (on the VPS runner)
+  # ===========================================================================
+  deploy:
+    name: Deploy to production
+    runs-on: self-hosted
+    needs: [quality, build]
+    # Never from a PR, and only from main (or an explicit manual run). The
+    # rollback dispatch is handled by its own job below — it must not depend on
+    # quality/build, which are skipped in that case.
+    if: >-
+      ${{ !(github.event_name == 'workflow_dispatch' && inputs.rollback)
+          && (github.event_name == 'push' && github.ref == 'refs/heads/main'
+              || github.event_name == 'workflow_dispatch') }}
+    environment:
+      name: production
+      url: https://sashainfinity.com
+    steps:
+      - name: Deploy (blue-safe recreate with auto-rollback)
+        env:
+          RELEASE_TAG: ${{ needs.quality.outputs.release_tag }}
+          COMMIT_SHA: ${{ github.sha }}
+          DEPLOY_PATH: ${{ env.DEPLOY_PATH }}
+          # Lets the source sync below authenticate with the run's ephemeral
+          # token instead of whatever credential is stored in the checkout.
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cd "$DEPLOY_PATH"
+
+          echo "--- Syncing source ---"
+          # The server checkout carries runtime dirt (regenerated certificates,
+          # build artifacts) — force checkout keeps deploys deterministic.
+          # Fetch through the ephemeral GITHUB_TOKEN: the checkout's stored
+          # credentials can go stale (403 "Write access to repository not
+          # granted"), and `--all` would also drag in personal remotes the
+          # token cannot see. actions/checkout in the build jobs proves this
+          # token can read the repo.
+          REPO_URL="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch --prune "$REPO_URL" "+refs/heads/*:refs/remotes/origin/*"
+          git fetch "$REPO_URL" "$COMMIT_SHA"
+          git checkout -f --detach "$COMMIT_SHA"
+
+          # inputs.skip_migrations arrives as the STRING "false" when unset, which
+          # is truthy to the shell — so it is compared explicitly.
+          MIGRATE_FLAG=""
+          if [ "${{ inputs.skip_migrations }}" = "true" ]; then
+            MIGRATE_FLAG="--skip-migrate"
+          fi
+
+          echo "--- Deploying $RELEASE_TAG ---"
+          deploy/ci/ci-deploy.sh --tag "$RELEASE_TAG" $MIGRATE_FLAG
+
+      # Always runs, including after a failed deploy — that is exactly when the
+      # log matters. ci-deploy.sh has already rolled back by this point; this
+      # step retrieves the evidence.
+      - name: Collect deployment log
+        if: always()
+        run: |
+          mkdir -p artifacts
+          latest="$(ls -t "$DEPLOY_PATH"/logs/deploy/deploy-*.log 2>/dev/null | head -n1)" || true
+          # ci-deploy logs to stdout (captured by Actions); keep the artifact
+          # for the migration ledger logs it writes alongside.
+          ls -t "$DEPLOY_PATH"/logs/deploy/migrate-*.log 2>/dev/null | head -n3 > artifacts/log-list.txt || true
+          [ -n "${latest:-}" ] && tail -n 60 "$latest" > artifacts/deploy.log || echo "no deploy log found" > artifacts/deploy.log
+          # The migrate log holds the actual psql errors behind a FAILED
+          # migration — without it, failures are undiagnosable from CI.
+          mlatest="$(ls -t "$DEPLOY_PATH"/logs/deploy/migrate-*.log 2>/dev/null | head -n1)" || true
+          [ -n "${mlatest:-}" ] && tail -n 120 "$mlatest" > artifacts/migrate.log || true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: deploy-log-${{ github.run_id }}
+          path: artifacts/
+          retention-days: 30
+
+  # ===========================================================================
+  # 3b. ROLLBACK — manual revert, independent of quality/build
+  # ===========================================================================
+  # A separate job because during an incident the last thing you want is for
+  # recovery to be blocked behind a lint job or an image build. It needs
+  # neither: the previous images are already tagged :ci-prev on the server.
+  rollback:
+    name: Roll back production
+    runs-on: self-hosted
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.rollback }}
+    environment:
+      name: production
+      url: https://sashainfinity.com
+    steps:
+      - name: Roll back
+        env:
+          DEPLOY_PATH: ${{ env.DEPLOY_PATH }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          cd "$DEPLOY_PATH"
+          deploy/ci/ci-deploy.sh --rollback
+
+  # ===========================================================================
+  # 4. VERIFY — check the public URL, from OUTSIDE the server
+  # ===========================================================================
+  # ci-deploy.sh already verified locally. This checks the public hostname from
+  # GitHub's infrastructure, which additionally covers DNS, Cloudflare, TLS
+  # termination and the host proxy — the parts of the chain a server-local
+  # probe cannot see. (~1 min of GitHub-hosted quota per deploy.)
+  verify:
+    name: Verify public site
+    runs-on: ubuntu-latest
+    needs: [deploy, rollback]
+    if: ${{ always() && (needs.deploy.result == 'success' || needs.rollback.result == 'success') }}
+    steps:
+      - name: Probe public health endpoint
+        env:
+          PUBLIC_URL: ${{ vars.PUBLIC_URL || 'https://sashainfinity.com' }}
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3 4 5 6; do
+            if body="$(curl -fsS --max-time 15 "$PUBLIC_URL/health")"; then
+              echo "Public health OK: $body"
+              echo "### Public site healthy" >> "$GITHUB_STEP_SUMMARY"
+              echo '```json' >> "$GITHUB_STEP_SUMMARY"
+              echo "$body" >> "$GITHUB_STEP_SUMMARY"
+              echo '```' >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            echo "attempt $attempt failed, retrying in 10s"
+            sleep 10
+          done
+          echo "::error::public health check failed at $PUBLIC_URL/health"
+          echo "Production may still be serving the previous release correctly —"
+          echo "check containers on the server before rolling back."
+          exit 1

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  RELEASE network policy. Cleartext (HTTP) is denied app-wide so a downgrade /
+  MITM cannot strip TLS — production talks to https://sashainfinity.com only.
+  Localhost is exempted for the rare on-device local backend case.
+
+  Debug and profile builds override this file via res overlays in
+  src/debug/res/xml and src/profile/res/xml (cleartext permitted for LAN dev).
+
+  Certificate pinning: add a <pin-set> under the sashainfinity.com domain-config
+  once the cert's SHA-256 SPKI pin is known. Get it with:
+    openssl s_client -servername sashainfinity.com -connect sashainfinity.com:443 </dev/null 2>/dev/null \
+      | openssl x509 -pubkey -noout \
+      | openssl pkey -pubin -outform der \
+      | openssl dgst -sha256 -binary | openssl enc -base64
+  Pin the leaf AND a backup (intermediate/next cert) to avoid lockout on rotation.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+    </domain-config>
+</network-security-config>

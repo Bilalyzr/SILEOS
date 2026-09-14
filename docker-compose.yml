@@ -1,0 +1,344 @@
+# Docker Compose for SashaInfinity LMS
+
+services:
+  # React Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      # Vite inlines import.meta.env.* at BUILD time, so these must be passed as
+      # build args (the `environment:` block below only applies at runtime and
+      # never reaches `npm run build`). Without this the bundle fell back to the
+      # relative `/api/v1`, which the static `serve` host can't proxy.
+      args:
+        VITE_API_URL: ${VITE_API_URL:-https://backend.sashainfinity.com/api/v1}
+        VITE_BACKEND_URL: ${VITE_BACKEND_URL:-https://backend.sashainfinity.com}
+        VITE_FRONTEND_URL: ${VITE_FRONTEND_URL:-https://lms.sashainfinity.com}
+        VITE_RAZORPAY_KEY: ${RAZORPAY_KEY}
+        VITE_FIREBASE_API_KEY: ${VITE_FIREBASE_API_KEY:-}
+        VITE_FIREBASE_AUTH_DOMAIN: ${VITE_FIREBASE_AUTH_DOMAIN:-sashainfinity-720cb.firebaseapp.com}
+        VITE_FIREBASE_PROJECT_ID: ${VITE_FIREBASE_PROJECT_ID:-sashainfinity-720cb}
+        VITE_FIREBASE_STORAGE_BUCKET: ${VITE_FIREBASE_STORAGE_BUCKET:-sashainfinity-720cb.firebasestorage.app}
+        VITE_FIREBASE_MESSAGING_SENDER_ID: ${VITE_FIREBASE_MESSAGING_SENDER_ID:-519644662244}
+        VITE_FIREBASE_APP_ID: ${VITE_FIREBASE_APP_ID:-1:519644662244:web:34158dd62545859122dff1}
+    environment:
+      - VITE_RAZORPAY_KEY=${RAZORPAY_KEY}
+      - VITE_API_URL=${VITE_API_URL:-https://backend.sashainfinity.com/api/v1}
+      - VITE_BACKEND_URL=${VITE_BACKEND_URL:-https://backend.sashainfinity.com}
+      - VITE_FRONTEND_URL=${VITE_FRONTEND_URL:-https://lms.sashainfinity.com}
+      # Firebase configuration for Google OAuth
+      - VITE_FIREBASE_API_KEY=${VITE_FIREBASE_API_KEY:-}
+      - VITE_FIREBASE_AUTH_DOMAIN=${VITE_FIREBASE_AUTH_DOMAIN:-sashainfinity-720cb.firebaseapp.com}
+      - VITE_FIREBASE_PROJECT_ID=${VITE_FIREBASE_PROJECT_ID:-sashainfinity-720cb}
+      - VITE_FIREBASE_STORAGE_BUCKET=${VITE_FIREBASE_STORAGE_BUCKET:-sashainfinity-720cb.firebasestorage.app}
+      - VITE_FIREBASE_MESSAGING_SENDER_ID=${VITE_FIREBASE_MESSAGING_SENDER_ID:-519644662244}
+      - VITE_FIREBASE_APP_ID=${VITE_FIREBASE_APP_ID:-1:519644662244:web:34158dd62545859122dff1}
+    depends_on:
+      - backend
+    networks:
+      - tutor-network
+    restart: unless-stopped
+
+  # Python Backend (FastAPI)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    # Run with an init (tini) as PID 1 so zombie/defunct child processes left
+    # behind by headless Chrome (certificate HTML-to-PDF rendering) get reaped.
+    # Without this, uvicorn runs as PID 1, never reaps them, and the process
+    # table fills up until the backend can't fork -> nginx 502s.
+    init: true
+    ports:
+      # Bind to loopback only. Inter-container traffic uses the docker network
+      # (service DNS: backend:8000) and the host's system nginx reaches it via
+      # 127.0.0.1, so nothing legitimate needs this on 0.0.0.0. Publishing it on
+      # all interfaces exposed the API directly, bypassing nginx CORS/rate-limit.
+      - "127.0.0.1:8000:8000"
+    environment: &base-backend-environment
+      - DATABASE_URL=postgresql://tutor:${POSTGRES_PASSWORD}@postgres:5432/tutor_lms
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
+      - SECRET_KEY=${SECRET_KEY}
+      - AI_CREDENTIAL_ENCRYPTION_KEY=${AI_CREDENTIAL_ENCRYPTION_KEY:-}
+      - JWT_SECRET=${JWT_SECRET}
+      - RAZORPAY_KEY=${RAZORPAY_KEY}
+      - RAZORPAY_SECRET=${RAZORPAY_SECRET}
+      - RAZORPAY_KEY_ID=${RAZORPAY_KEY_ID}
+      - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET}
+      # Required by /api/v1/payments/proxy/webhook; unset means every webhook 500s
+      - RAZORPAY_WEBHOOK_SECRET=${RAZORPAY_WEBHOOK_SECRET:-}
+      # Meta WhatsApp Cloud API. All values remain server-side.
+      - WHATSAPP_PHONE_NUMBER_ID=${WHATSAPP_PHONE_NUMBER_ID:-}
+      - WHATSAPP_BUSINESS_ACCOUNT_ID=${WHATSAPP_BUSINESS_ACCOUNT_ID:-}
+      - WHATSAPP_BUSINESS_PHONE=${WHATSAPP_BUSINESS_PHONE:-}
+      - WHATSAPP_ACCESS_TOKEN=${WHATSAPP_ACCESS_TOKEN:-}
+      - WHATSAPP_APP_SECRET=${WHATSAPP_APP_SECRET:-}
+      - WHATSAPP_VERIFY_TOKEN=${WHATSAPP_VERIFY_TOKEN:-}
+      - WHATSAPP_API_VERSION=${WHATSAPP_API_VERSION:-v23.0}
+      - WHATSAPP_APPROVED_TEMPLATES=${WHATSAPP_APPROVED_TEMPLATES:-}
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      - BACKGROUND_TASK_MODE=worker
+      - OBSERVABILITY_TOKEN=${OBSERVABILITY_TOKEN:-}
+      - SENTRY_DSN=${SENTRY_DSN:-}
+      - DEBUG=${DEBUG:-false}
+      - AUTO_VERIFY_EMAIL=${AUTO_VERIFY_EMAIL:-false}
+      - PYTHONIOENCODING=utf-8
+      - PYTHONUTF8=1
+      - FRONTEND_URL=${FRONTEND_URL:-https://lms.sashainfinity.com}
+      - BACKEND_URL=${BACKEND_URL:-https://backend.sashainfinity.com}
+      - DOMAIN=${DOMAIN:-sashainfinity.com}
+      - CORS_ORIGINS=${CORS_ORIGINS:-["https://lms.sashainfinity.com", "https://backend.sashainfinity.com", "https://meiporul.sashainfinity.com", "https://seyappaduporul.sashainfinity.com", "https://utporul.sashainfinity.com"]}
+      # 10.1.40.64 = dev PC LAN IP so a physical phone on the same Wi-Fi can hit the API.
+      # Update / add your machine's IP here if the network changes.
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-["lms.sashainfinity.com", "backend.sashainfinity.com", "meiporul.sashainfinity.com", "seyappaduporul.sashainfinity.com", "utporul.sashainfinity.com", "localhost", "127.0.0.1", "10.1.40.64"]}
+      # Admin Configuration
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-admin@sashainfinity.com}
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-sashainfinity_admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - ADMIN_FIRST_NAME=${ADMIN_FIRST_NAME:-SashaInfinity}
+      - ADMIN_LAST_NAME=${ADMIN_LAST_NAME:-Administrator}
+      - MIN_WITHDRAWAL_INR=${MIN_WITHDRAWAL_INR:-500}
+      # Security Configuration
+      - ENABLE_API_RATE_LIMITING=${ENABLE_API_RATE_LIMITING:-true}
+      - ENABLE_REQUEST_LOGGING=${ENABLE_REQUEST_LOGGING:-true}
+      - ENABLE_SECURITY_HEADERS=${ENABLE_SECURITY_HEADERS:-true}
+      - RATE_LIMIT_REQUESTS_PER_MINUTE=${RATE_LIMIT_REQUESTS_PER_MINUTE:-60}
+      - RATE_LIMIT_REQUESTS_PER_HOUR=${RATE_LIMIT_REQUESTS_PER_HOUR:-1000}
+      - RATE_LIMIT_LOGIN_ATTEMPTS=${RATE_LIMIT_LOGIN_ATTEMPTS:-5}
+      - MAX_LOGIN_ATTEMPTS=${MAX_LOGIN_ATTEMPTS:-5}
+      - LOCKOUT_DURATION_MINUTES=${LOCKOUT_DURATION_MINUTES:-15}
+      - MIN_PASSWORD_LENGTH=${MIN_PASSWORD_LENGTH:-12}
+      - SESSION_TIMEOUT_MINUTES=${SESSION_TIMEOUT_MINUTES:-30}
+      - MAX_CONCURRENT_SESSIONS=${MAX_CONCURRENT_SESSIONS:-3}
+      - MAX_FILE_SIZE=${MAX_FILE_SIZE:-10485760}
+      - UPLOAD_DIR=/app/uploads
+      - SCAN_UPLOADED_FILES=${SCAN_UPLOADED_FILES:-true}
+      - QUARANTINE_INFECTED_FILES=${QUARANTINE_INFECTED_FILES:-true}
+      - ENABLE_SECURITY_MONITORING=${ENABLE_SECURITY_MONITORING:-true}
+      - LOG_FAILED_LOGIN_ATTEMPTS=${LOG_FAILED_LOGIN_ATTEMPTS:-true}
+      - LOG_SUSPICIOUS_ACTIVITIES=${LOG_SUSPICIOUS_ACTIVITIES:-true}
+      - ALERT_ON_SECURITY_EVENTS=${ALERT_ON_SECURITY_EVENTS:-true}
+      - SECURITY_ALERT_EMAIL=${SECURITY_ALERT_EMAIL:-admin@sashainfinity.com}
+      - SECURITY_ENABLE_CSP=${SECURITY_ENABLE_CSP:-true}
+      - SECURITY_ENABLE_HSTS=${SECURITY_ENABLE_HSTS:-true}
+      - SECURITY_FRAME_OPTIONS=${SECURITY_FRAME_OPTIONS:-DENY}
+      - SECURITY_CONTENT_TYPE_NOSNIFF=${SECURITY_CONTENT_TYPE_NOSNIFF:-true}
+      - SECURITY_XSS_PROTECTION=${SECURITY_XSS_PROTECTION:-true}
+      - ENABLE_IP_WHITELISTING=${ENABLE_IP_WHITELISTING:-false}
+      - LOG_LEVEL=${LOG_LEVEL:-WARNING}
+      - SECURITY_LOG_LEVEL=${SECURITY_LOG_LEVEL:-INFO}
+      - LOG_FILE_PATH=${LOG_FILE_PATH:-/var/log/sasha_lms}
+      # Email Configuration
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - EMAIL_FROM=${EMAIL_FROM}
+      # Firebase Configuration
+      - FIREBASE_API_KEY=${FIREBASE_API_KEY:-}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID:-sashainfinity-720cb}
+      # Path INSIDE the container. The ./backend:/app bind mount below means a
+      # service-account JSON placed at backend/firebase-service-account.json is
+      # available here. Override via .env if you mount it elsewhere.
+      - FIREBASE_CREDENTIALS_PATH=${FIREBASE_CREDENTIALS_PATH:-/app/firebase-service-account.json}
+      # Bunny.net CDN (course video streaming). bunny.py reads these via
+      # os.getenv(), so they MUST be present in the container environment — the
+      # repo-root .env is NOT mounted into /app, so without these lines the API
+      # key is empty inside the container and uploads/status calls fail.
+      - BUNNY_LIBRARY_ID=${BUNNY_LIBRARY_ID:-618286}
+      - BUNNY_API_KEY=${BUNNY_API_KEY}
+      - BUNNY_CDN_HOSTNAME=${BUNNY_CDN_HOSTNAME:-vz-60dda74a-f32.b-cdn.net}
+      - BUNNY_TOKEN_AUTH_KEY=${BUNNY_TOKEN_AUTH_KEY:-}
+      - BUNNY_SIGNED_URL_TTL=${BUNNY_SIGNED_URL_TTL:-3600}
+      # Edgyy Payment Proxy - Server-to-server payment gateway for edgyy.in
+      - EDGYY_SECRET_TOKEN=${EDGYY_SECRET_TOKEN}
+      - EDGYY_WEBHOOK_URL=${EDGYY_WEBHOOK_URL:-https://edgyy.in/api/v1/payments/webhook/}
+      - EDGYY_WEBHOOK_SECRET=${EDGYY_WEBHOOK_SECRET}
+      # Dedicated token for the isolated Utporul code-judge worker.
+      - CODE_RUNNER_TOKEN=${CODE_RUNNER_TOKEN:-}
+    volumes: &base-backend-volumes
+      - ./backend:/app
+      - ./uploads:/app/uploads
+      - ./certificates:/app/certificates
+      - ./logs:/var/log/sasha_lms
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tutor-network
+    restart: unless-stopped
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=5)"]
+      interval: 15s
+      timeout: 8s
+      retries: 8
+      start_period: 60s
+
+  # YouTube Streaming Service (New Method)
+  runtime-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment: *base-backend-environment
+    volumes: *base-backend-volumes
+    command: ["python", "-m", "app.workers.runtime"]
+    init: true
+    depends_on:
+      backend:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks: [tutor-network]
+    restart: unless-stopped
+    stop_grace_period: 120s
+    healthcheck:
+      test: ["CMD", "python", "-m", "app.workers.runtime", "--health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
+
+  streaming-service:
+    build:
+      context: ./streaming-service
+      dockerfile: Dockerfile
+    ports:
+      # Loopback only — same reasoning as backend. The docker nginx reaches the
+      # streaming service via the docker network; the host's system nginx (if it
+      # proxies video) reaches it on 127.0.0.1. Not for direct public access.
+      - "127.0.0.1:8001:8001"
+    environment:
+      - PYTHONIOENCODING=utf-8
+      - PYTHONUTF8=1
+    volumes:
+      - ./streaming-service/yt_dlp_cache:/app/yt_dlp_cache
+    networks:
+      - tutor-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Opt-in Utporul coding worker. Learner source is forwarded to Judge0 and
+  # is never executed in this container or in the LMS backend.
+  code-judge-worker:
+    profiles: ["coding"]
+    build:
+      context: ./code-judge-worker
+      dockerfile: Dockerfile
+    environment:
+      - BACKEND_INTERNAL_URL=http://backend:8000/api/v1
+      - CODE_RUNNER_TOKEN=${CODE_RUNNER_TOKEN:-}
+      - CODE_RUNNER_VERSION=${CODE_RUNNER_VERSION:-judge0-worker-1.0}
+      - CODE_RUNNER_POLL_SECONDS=${CODE_RUNNER_POLL_SECONDS:-1}
+      - JUDGE0_URL=${JUDGE0_URL:-}
+      - JUDGE0_AUTH_TOKEN=${JUDGE0_AUTH_TOKEN:-}
+    depends_on:
+      - backend
+    networks:
+      - tutor-network
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m,noexec,nosuid,nodev
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 256m
+    cpus: 0.50
+    restart: unless-stopped
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=tutor_lms
+      - POSTGRES_USER=tutor
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8
+    ports:
+      # Publish to localhost only so host services
+      # can reach this DB. Bound to 127.0.0.1 so it
+      # is NOT exposed to the public internet.
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./database/schemas:/docker-entrypoint-initdb.d/schemas
+    networks:
+      - tutor-network
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U tutor -d tutor_lms" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Redis Cache & Sessions
+  redis:
+    image: redis:7-alpine
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+    networks:
+      - tutor-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "3100:3100"   # keep for direct-IP fallback
+    environment:
+      - PRERENDER_TOKEN=${PRERENDER_TOKEN:-}
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/nginx-entrypoint.sh:/docker-entrypoint.d/10-prerender.sh:ro
+      # "We're updating…" page + the ON flag that toggles it. Shared with the
+      # blue-green edge stack (deploy/docker-compose.edge.yml) so both serve the
+      # same page and both respond to deploy/scripts/maintenance-{on,off}.sh.
+      # :ro is fine — the scripts write the flag on the host, and a bind mount
+      # reflects host writes immediately regardless of the container's ro flag.
+      - ./deploy/nginx/maintenance:/etc/nginx/maintenance:ro
+      - ./uploads:/var/www/uploads
+      - ./certificates:/var/www/certificates
+      - ./models:/var/www/models
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /www/server/panel/vhost/ssl:/etc/panel-ssl:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - tutor-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  tutor-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16

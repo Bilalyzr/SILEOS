@@ -1,0 +1,250 @@
+# =============================================================================
+# Live Classes — self-hosted Jitsi stack (docker-jitsi-meet)
+# =============================================================================
+# A stateful, SINGLE instance on the data-tier side: it is NOT colour-duplicated
+# and NOT part of the blue/green app-tier switch (see docker-compose.app.yml).
+# It joins the same external `sasha-net` network as everything else so the edge
+# container and the FastAPI backend can reach it by service name.
+#
+#   docker compose -f deploy/compose.live.yml --env-file deploy/.env.live up -d
+#   docker compose -f deploy/compose.live.yml --env-file deploy/.env.live --profile recording up -d
+#   docker compose -f deploy/compose.live.yml --env-file deploy/.env.live --profile turn up -d
+#
+# Only jitsi-web publishes a host port (127.0.0.1:8080), and only for local
+# health checks / smoke tests — the edge nginx vhost (20-live.conf) reaches it
+# over sasha-net by container name, never through that loopback port. coturn
+# (profile "turn") is the only other service that ever needs a public port,
+# and only when NAT traversal requires a real TURN relay instead of the
+# Cloudflare-fronted edge.
+#
+# Config volumes under ./jitsi/{web,prosody,jicofo,jvb,jibri} are host bind
+# mounts so docker-jitsi-meet's first-boot config generation (certs, XMPP
+# passwords baked into local config) persists across `up`/`down` cycles.
+# Recordings land in ./recordings, bind-mounted into jibri at
+# /config/recordings — Task 7's finalize worker reads this same host path.
+# =============================================================================
+
+x-logging: &default_logging
+  driver: json-file
+  options:
+    max-size: "20m"
+    max-file: "5"
+    tag: "{{.Name}}"
+
+services:
+  # ---------------------------------------------------------------------------
+  # Web UI + WebSocket signalling front (also serves external_api.js)
+  # ---------------------------------------------------------------------------
+  jitsi-web:
+    image: jitsi/web:stable
+    container_name: sasha-jitsi-web
+    restart: unless-stopped
+    env_file: .env.live
+    ports:
+      # Loopback only — used by health_jitsi.sh / smoke_jitsi.sh from this host.
+      # Real traffic reaches this container over sasha-net via the edge vhost
+      # (deploy/nginx/conf.d/20-live.conf), never through this published port.
+      # Container-side port is 8000, NOT 80 — verified against upstream
+      # docker-jitsi-meet (web/Dockerfile EXPOSE 8000 8443; the official
+      # docker-compose.yml maps "${HTTP_PORT}:8000"). The host side (8080)
+      # is our own choice and stays as-is.
+      - "127.0.0.1:8080:8000"
+    volumes:
+      - ./jitsi/web:/config
+      - ./jitsi/web/crontabs:/var/spool/cron/crontabs:Z
+    environment:
+      - JICOFO_AUTH_USER=focus
+      - PROSODY_HOST=prosody
+    depends_on:
+      - prosody
+    networks:
+      - sasha-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:8000 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    logging: *default_logging
+
+  # ---------------------------------------------------------------------------
+  # XMPP server — session signalling, JWT auth (AUTH_TYPE=jwt)
+  # ---------------------------------------------------------------------------
+  prosody:
+    image: jitsi/prosody:stable
+    container_name: sasha-jitsi-prosody
+    restart: unless-stopped
+    env_file: .env.live
+    volumes:
+      - ./jitsi/prosody/config:/config
+      - ./jitsi/prosody/plugins-custom:/prosody-plugins-custom
+    environment:
+      - JICOFO_COMPONENT_SECRET=${JICOFO_COMPONENT_SECRET}
+      - JICOFO_AUTH_USER=focus
+      - JICOFO_AUTH_PASSWORD=${JICOFO_AUTH_PASSWORD}
+      - JVB_AUTH_USER=jvb
+      - JVB_AUTH_PASSWORD=${JVB_AUTH_PASSWORD}
+      - JIBRI_XMPP_USER=jibri
+      - JIBRI_XMPP_PASSWORD=${JIBRI_XMPP_PASSWORD}
+      - JIBRI_RECORDER_USER=recorder
+      - JIBRI_RECORDER_PASSWORD=${JIBRI_RECORDER_PASSWORD}
+    networks:
+      - sasha-net
+    healthcheck:
+      # docker-jitsi-meet convention: prosodyctl status proves the process is
+      # alive and its config parsed, without needing a port probe.
+      #
+      # NOT a plain `grep -q running`: prosodyctl's own "not running" output
+      # contains the substring "running" too, so that pattern false-positives
+      # on a DEAD server. Anchor on the actual positive-status line prosodyctl
+      # prints ("Prosody is running") instead.
+      test: ["CMD-SHELL", "prosodyctl status | grep -qE '^Prosody is running' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    logging: *default_logging
+
+  # ---------------------------------------------------------------------------
+  # Conference focus component — creates/manages Jitsi conferences
+  # ---------------------------------------------------------------------------
+  jicofo:
+    image: jitsi/jicofo:stable
+    container_name: sasha-jitsi-jicofo
+    restart: unless-stopped
+    env_file: .env.live
+    volumes:
+      - ./jitsi/jicofo:/config
+    environment:
+      - JICOFO_COMPONENT_SECRET=${JICOFO_COMPONENT_SECRET}
+      - JICOFO_AUTH_USER=focus
+      - JICOFO_AUTH_PASSWORD=${JICOFO_AUTH_PASSWORD}
+      - XMPP_SERVER=prosody
+    depends_on:
+      - prosody
+    networks:
+      - sasha-net
+    healthcheck:
+      # jicofo ships no HTTP endpoint by default in the stable image; a live
+      # java process is the process-level signal docker-jitsi-meet itself uses.
+      test: ["CMD-SHELL", "pgrep -f org.jitsi.jicofo.main.Main >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    logging: *default_logging
+
+  # ---------------------------------------------------------------------------
+  # Videobridge — routes the actual media (UDP 10000 published for WebRTC)
+  # ---------------------------------------------------------------------------
+  jvb:
+    image: jitsi/jvb:stable
+    container_name: sasha-jitsi-jvb
+    restart: unless-stopped
+    env_file: .env.live
+    ports:
+      - "10000:10000/udp"
+    volumes:
+      - ./jitsi/jvb:/config
+    environment:
+      - JVB_AUTH_USER=jvb
+      - JVB_AUTH_PASSWORD=${JVB_AUTH_PASSWORD}
+      - JICOFO_AUTH_USER=focus
+      - JVB_BREWERY_MUC=jvbbrewery
+      - XMPP_SERVER=prosody
+      - JVB_PORT=10000
+      # JVB sits behind the docker bridge network, so by default it
+      # advertises its private container IP in ICE candidates — remote
+      # participants outside the host then can't reach it for media even
+      # though signalling works fine. JVB_ADVERTISE_IPS (not the older
+      # DOCKER_HOST_ADDRESS, which it supersedes) fixes that. Uncomment and
+      # set to the server's public IP if remote participants report audio/
+      # video not connecting (join succeeds, no media flows).
+      # - JVB_ADVERTISE_IPS=<public-ip>
+    depends_on:
+      - prosody
+    networks:
+      - sasha-net
+    healthcheck:
+      # JVB exposes a local health endpoint on 8080 inside the container
+      # (the docker-jitsi-meet convention) — separate from jitsi-web's 8080,
+      # which is only reachable on jitsi-web's own network namespace.
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/about/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    logging: *default_logging
+
+  # ---------------------------------------------------------------------------
+  # Recording (Jibri) — profile-gated: only started when recording is needed
+  # ---------------------------------------------------------------------------
+  jibri:
+    image: jitsi/jibri:stable
+    container_name: sasha-jitsi-jibri
+    restart: unless-stopped
+    profiles:
+      - recording
+    env_file: .env.live
+    privileged: false
+    # Current stable jibri images still drive PulseAudio + Chromium for
+    # capture, which needs SYS_ADMIN (unshare/user-namespace access) to set
+    # up its sandboxed audio/video capture pipeline. Keep it for the
+    # `stable` tag pinned above; if a future jibri image tag drops the
+    # PulseAudio-based capture path, re-check whether this is still needed
+    # before removing it — the requirement is tag-sensitive, not permanent.
+    cap_add:
+      - SYS_ADMIN
+    shm_size: 2gb
+    volumes:
+      - ./jitsi/jibri:/config
+      # Host path referenced by Task 7's finalize worker as deploy/recordings/.
+      - ./recordings:/config/recordings
+    environment:
+      - XMPP_SERVER=prosody
+      - JIBRI_XMPP_USER=jibri
+      - JIBRI_XMPP_PASSWORD=${JIBRI_XMPP_PASSWORD}
+      - JIBRI_RECORDER_USER=recorder
+      - JIBRI_RECORDER_PASSWORD=${JIBRI_RECORDER_PASSWORD}
+      - JICOFO_AUTH_USER=focus
+      - JIBRI_BREWERY_MUC=jibribrewery
+      - JIBRI_RECORDING_DIR=/config/recordings
+      - JIBRI_FINALIZE_RECORDING_SCRIPT_PATH=
+    depends_on:
+      - prosody
+    networks:
+      - sasha-net
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f org.jitsi.jibri.Main >/dev/null || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    logging: *default_logging
+
+  # ---------------------------------------------------------------------------
+  # Optional TURN relay — profile-gated, only needed for clients behind NAT
+  # that restrictive networks prevent from reaching the JVB directly.
+  # ---------------------------------------------------------------------------
+  coturn:
+    image: coturn/coturn:latest
+    container_name: sasha-jitsi-coturn
+    restart: unless-stopped
+    profiles:
+      - turn
+    env_file: .env.live
+    ports:
+      - "3478:3478"
+      - "3478:3478/udp"
+      - "5349:5349"
+      - "5349:5349/udp"
+    volumes:
+      - ./jitsi/coturn:/etc/coturn
+    networks:
+      - sasha-net
+    logging: *default_logging
+
+networks:
+  sasha-net:
+    name: ${DOCKER_NETWORK:-sasha-net}
+    external: true

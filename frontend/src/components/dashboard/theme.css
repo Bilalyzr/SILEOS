@@ -1,0 +1,274 @@
+/**
+ * Dashboard theme — extracted from the public hero section so every role
+ * dashboard feels part of the same product.
+ *
+ * Key palette:
+ *   navy   #20345b — headings, primary text
+ *   orange #f97316 — accent, CTA, highlights (Tailwind primary-500)
+ *   sky    #e7effc — page backdrop
+ *   chip   #f0f4f8 — subtle surface
+ *
+ * Shadows + decorative shapes lifted from HeroSection.module.css.
+ */
+
+.dash-bg {
+  /* soft sky-to-white gradient like the public hero */
+  background:
+    radial-gradient(circle at 0% 0%, rgba(249, 115, 22, 0.06), transparent 40%),
+    radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.10), transparent 50%),
+    linear-gradient(180deg, #e7effc 0%, #ffffff 80%);
+  min-height: 100vh;
+}
+
+.dash-bg-shape {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.55;
+  filter: blur(40px);
+  z-index: 0;
+}
+
+.dash-bg-shape-1 {
+  top: -80px; left: -80px;
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.55), transparent 60%);
+}
+
+.dash-bg-shape-2 {
+  top: 30%; right: -60px;
+  width: 280px; height: 280px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.55), transparent 60%);
+}
+
+.dash-bg-shape-3 {
+  bottom: 10%; left: 30%;
+  width: 240px; height: 240px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.35), transparent 60%);
+}
+
+/* Card surface — frosted glass like the hero infoCard */
+.dash-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 10px 30px rgba(8, 23, 58, 0.08);
+  transition:
+    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Opaque variant for forms, tables, or anywhere full legibility matters */
+.dash-card-solid {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid rgba(226, 232, 240, 0.7);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 10px 30px rgba(8, 23, 58, 0.08);
+  transition:
+    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Glass utility — apply just the frosted background (sidebars, popovers) */
+.dash-glass {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Stronger glass — more opaque & more blur for areas needing higher legibility */
+.dash-glass-strong {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.dash-card-hoverable:hover {
+  transform: translateY(-2px);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 18px 40px rgba(8, 23, 58, 0.14);
+}
+
+/* Hero-style sub-title chip */
+.dash-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: #f0f4f8;
+  color: #20345b;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+/* Orange CTA mirroring hero primaryButton */
+.dash-cta {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  color: white;
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(245, 141, 30, 0.3);
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.dash-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transition: left 0.5s;
+}
+
+.dash-cta:hover::before { left: 100%; }
+.dash-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 141, 30, 0.45);
+}
+
+.dash-cta-ghost {
+  background: white;
+  color: #20345b;
+  border: 1px solid rgba(32, 52, 91, 0.15);
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.dash-cta-ghost:hover {
+  border-color: rgba(32, 52, 91, 0.3);
+  box-shadow: 0 4px 15px rgba(8, 23, 58, 0.06);
+}
+
+/* Section title h2 with navy + orange underline like hero highlight */
+.dash-h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #20345b;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.dash-h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #20345b;
+}
+
+/* Numerical accent — used for big stat values */
+.dash-stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #20345b;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Mobile: scale down the large hero type so headings + stat values don't
+   dominate the narrow viewport (keeps cards compact and readable on phones). */
+@media (max-width: 640px) {
+  .dash-h1 { font-size: 22px; }
+  .dash-h2 { font-size: 16px; }
+  .dash-stat-value { font-size: 24px; }
+  .dash-cta,
+  .dash-cta-ghost { padding-left: 16px; padding-right: 16px; }
+}
+
+/* Stat label */
+.dash-stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Subtle ghost bg for grouped sections */
+.dash-soft {
+  background: rgba(240, 244, 248, 0.6);
+  border-radius: 12px;
+}
+
+/* Skeleton pulse — matches our shadow tone */
+@keyframes dash-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.dash-skeleton {
+  animation: dash-pulse 1.6s ease-in-out infinite;
+  background: linear-gradient(90deg, #eef2f7 0%, #f6f8fb 50%, #eef2f7 100%);
+  background-size: 200% 100%;
+  border-radius: 8px;
+}
+
+/* Tooltip + axis tick base for recharts */
+.recharts-tooltip-wrapper {
+  z-index: 50;
+}
+.dash-chart-tooltip {
+  background: white;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #20345b;
+  box-shadow: 0 10px 30px rgba(8, 23, 58, 0.12);
+}
+
+/* Animated underline (hero highlight) */
+.dash-underline {
+  position: relative;
+  display: inline-block;
+  color: #f97316;
+}
+.dash-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background-image: url("data:image/svg+xml,%3csvg width='100' height='10' viewBox='0 0 100 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M2 8C27.3889 4.05263 68.3972 2.23684 98 4' stroke='%23F58D1E' stroke-width='3' stroke-linecap='round'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+/* Print fallback — frosted glass doesn't render to paper */
+@media print {
+  .dash-card,
+  .dash-glass,
+  .dash-glass-strong {
+    background: white !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}

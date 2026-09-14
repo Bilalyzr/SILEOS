@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-size=1">
+<title>Congruence &amp; Similarity — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Congruence &amp; Similarity<span class="lk-tag">Class 7–10 · Mathematics</span></h1>
+    <div class="lk-meta">Geometric Twins / Triangles — SSS SAS ASA rules, similarity ratio</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Triangle B (transform)</h2>
+      <div class="lk-row"><label class="lk-name">Scale factor</label><input type="range" id="k" min="0.5" max="2" step="0.1" value="1"><span class="lk-val" id="kv">1.0×</span></div>
+      <div class="lk-row"><label class="lk-name">Rotate</label><input type="range" id="rot" min="0" max="180" step="5" value="20"><span class="lk-val" id="rotv">20°</span></div>
+      <div class="lk-seg" id="modeSeg">
+        <button class="active">Free shape</button><button>Equilateral</button><button>Right</button>
+      </div>
+    </div>
+    <div class="lk-card">
+      <h2>Measurements</h2>
+      <div class="lk-readout" id="sides"></div>
+      <div class="lk-readout" id="angles"></div>
+      <div class="lk-readout" id="verdict"></div>
+    </div>
+    <div class="lk-card">
+      <h2>How to play</h2>
+      <p class="lk-hint"><b>Drag the orange dots</b> of triangle A. B copies it with your scale
+      and rotation. Same shape + same size = <b>congruent</b> (k = 1). Same shape, different
+      size = <b>similar</b> (any k). Similar triangles keep <b>equal angles</b> and sides in a
+      <b>constant ratio</b> — that's the base of heights-and-distances problems!</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./triangles-lab/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

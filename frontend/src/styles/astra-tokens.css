@@ -1,0 +1,41 @@
+:root{
+  /* ink */
+  --ink:        #17233a;   /* headings, primary body */
+  --ink-2:      #3d4c68;   /* secondary body */
+  --ink-3:      #5b6a86;   /* labels, captions (min 12px) */
+  --ink-inv:    #ffffff;
+
+  /* brand */
+  --accent:      #ff751f;  /* primary orange — fills, not text */
+  --accent-deep: #b23c05;  /* orange for TEXT and button bg under white text */
+  --accent-2:    #fbbf24;
+  --violet: #6d4aff;
+  --teal:   #0d8f9e;
+  --blue:   #2159d8;
+  --pink:   #d81e63;
+  --navy:   #0b2540;
+
+  /* status (all AA on glass) */
+  --ok:#047a5b; --warn:#a4620a; --bad:#c62525; --info:#0b6fa8;
+
+  /* glass tiers */
+  --glass-1: rgba(255,255,255,.52);   /* ambient   */
+  --glass-2: rgba(255,255,255,.70);   /* content   */
+  --glass-3: rgba(255,255,255,.88);   /* work      */
+  --glass-edge: rgba(255,255,255,.85);
+  --hairline:  rgba(23,35,58,.10);
+
+  --blur-1: blur(18px) saturate(160%);
+  --blur-2: blur(24px) saturate(168%);
+  --blur-3: blur(30px) saturate(175%);
+
+  /* elevation */
+  --shadow-1: 0 2px 8px rgba(18,28,48,.05);
+  --shadow-2: 0 12px 32px rgba(18,28,48,.09);
+  --shadow-3: 0 24px 60px rgba(18,28,48,.13);
+  --lift: inset 0 1px 0 rgba(255,255,255,.75);
+
+  /* radii + rhythm */
+  --r-s:12px; --r-m:20px; --r-l:28px; --r-pill:999px;
+  --sp:4px;  /* all spacing = multiples of 4 */
+}

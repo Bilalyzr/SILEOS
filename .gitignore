@@ -1,0 +1,282 @@
+# Environment variables
+.env
+.env.local
+.env.production
+# Stray dotless env file (holds secrets — must never be committed)
+/env
+
+# Firebase service-account credentials (never commit secrets)
+firebase-service-account.json
+**/firebase-service-account.json
+*serviceAccount*.json
+*firebase-adminsdk*.json
+
+# Signing secrets + session cookies — must never be committed. These were
+# tracked historically; rotate the real credentials and purge from history.
+.jwt_secret
+.secret_key
+backend/youtube_cookies.txt
+**/youtube_cookies.txt
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependencies
+node_modules/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+/lib/
+/lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Docker ignore files are source and must ship with builds.
+
+# Database
+*.db
+*.sqlite3
+database/backups/*.sql
+
+# Uploads
+uploads/*
+!uploads/.gitkeep
+certificates/generated/*
+!certificates/generated/.gitkeep
+# Generated designer-template thumbnails from seed_designer_templates.py's
+# best-effort Chrome render (app/routers/certificate_designer.py surfaces
+# these to the frontend at runtime via a file-existence check — see
+# designer_thumbnail_url() — so they never need to be committed). Scoped to
+# the designer-{id}.png filename pattern so any future hand-curated legacy
+# slug thumbnails placed in the same certificates/thumbnails/ directory
+# (see certificates.py's _thumb()) are unaffected.
+backend/certificates/thumbnails/designer-*.png
+# Generated invoice PDFs (backend/invoices/ when run from backend cwd locally;
+# ./invoices/ is the host bind-mount source for the production compose stacks)
+backend/invoices/*
+!backend/invoices/.gitkeep
+/invoices/*
+!/invoices/.gitkeep
+# Private ebook library files (backend/ebooks/ — EBOOKS_ROOT default; never
+# under uploads/, which nginx serves publicly). Same pattern as invoices/.
+backend/ebooks/*
+!backend/ebooks/.gitkeep
+/ebooks/*
+!/ebooks/.gitkeep
+# Generated certificate render cache (HTML→PDF downloads + preview images)
+certificates/cert_html_*.pdf
+certificates/cert_img_*.png
+
+# Build outputs
+frontend/dist/
+frontend/build/
+*.tgz
+*.tar.gz
+
+# Test coverage
+coverage/
+.nyc_output/
+htmlcov/
+.coverage
+.pytest_cache/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# SSL certificates
+*.pem
+*.crt
+*.key
+
+# Backup files
+*.bak
+*.backup
+
+# Cache
+.cache/
+redis-data/
+postgres-data/
+
+# Local brainstorming / visual-companion workspace
+.superpowers/
+*.glb
+!backend/seed_packs/models/*.glb
+backend/three_d/
+
+# Local .env backups (may contain real credentials)
+.env.bak*
+.env.*.bak
+
+# =============================================================================
+# Blue-green deployment (deploy/)
+# =============================================================================
+# Machine-local deployment state: which colour is live, which release each slot
+# runs, the deploy history and the lock. Committing it would mean one server's
+# state overwriting another's on the next pull.
+deploy/state/
+
+# Deployment config — contains registry paths and host-specific ports.
+deploy/.env.deploy
+
+# Live Classes — Jitsi stack secrets (JWT/component passwords). Committed
+# example is deploy/.env.live.example; this real file is host-specific and
+# must never be committed.
+deploy/.env.live
+
+# Live Classes — Jitsi bind-mounted config volumes. docker-jitsi-meet
+# POPULATES these with generated XMPP credentials and certs on first boot
+# (see compose.live.yml's ./jitsi/{web,prosody,jicofo,jvb,jibri} volumes) —
+# a `git add -A` on the VPS after `up` would otherwise commit live secrets.
+deploy/jitsi/
+
+# Live Classes — Jibri recording output + finalize-worker sidecar files
+# (bind-mounted at /config/recordings; see compose.live.yml + Task 6/7's
+# finalize worker). Never committed: these are large media files, not code.
+deploy/recordings/
+
+# Runtime secrets mounted into containers (Firebase service-account JSON, etc).
+deploy/secrets/*
+!deploy/secrets/.gitkeep
+
+# Maintenance-mode flag: enabling maintenance is an operational action on one
+# host, never a commit.
+deploy/nginx/maintenance/ON
+
+# Per-run deploy logs and edge nginx access/error logs.
+logs/deploy/
+logs/edge-nginx/
+
+# Live blue/green pointer, rewritten by deploy/scripts/switch.sh on every
+# switch. Same reasoning as deploy/state/: it is one server's runtime state, so
+# committing it would let one host's colour overwrite another's on the next
+# pull. Bootstrap a fresh checkout by copying active.conf.example over it.
+deploy/nginx/active/active.conf
+
+# Certificate preview images generated at render time.
+certificates/cert_img_*.webp
+
+# Local 2FA setup artifacts — contain LIVE TOTP secrets, never commit
+backend/_totp_*.png
+backend/_totp_code.py
+
+# Database backup artifacts — contain real user data, never commit
+database/backups/*.sql.gz
+database/backups/nightly/
+database/backups/weekly/
+database/backups/volume-snapshots/
+database/backups/pgdata_recovered/
+
+# IDS runtime artifacts — deny-lists and ban state are managed by sasha-ids
+nginx/conf.d.local/99-ids-deny.conf
+deploy/nginx/conf.d/99-ids-deny.conf
+deploy/nginx/ids/
+
+# Generated per-deploy by deploy-blue-green.sh (pins a per-build image tag)
+docker-compose.green.yml
+.venv/
+.worktrees/
+
+# Local ASR runtime, models and private audio
+.transcription-venv/
+backend/transcription_models/
+backend/recordings_live/
+backend/*_before_0023.sqlite
+
+backend/recording-smoke.wav
+backend/transcription-smoke.json
+backend/transcription-smoke-error.log
+
+backend/course_transfers/
+backend/uploads/course-restores/
+backend/operations_before_0024.sqlite
+.toolchains/
+backend/.astra-tools/
+backend/operations_before_0025.sqlite
+backend/operations_before_0026.sqlite
+backend/*.pid
+flutter_app/screenshots/
+certificates/certificate_*.pdf
+
+# Local lab validation database snapshot
+backend/labs_before_0027.sqlite
+
+# Portable release: private runtime data and local agent configuration
+*.sqlite
+backend/uploads/
+/sasha_db_*.sql
+/.claude/launch.json
+/.claude/settings.local.json
+/.zcode/
+/2025-12-*.txt
+/dec_2_changes.txt
+/claude_code_zai_env.sh
+
+# Release archives are built from the reviewed Git tree, never nested in it
+/output/releases/
+/output/video/*.zip
+/output/video/SILeos/product-captures/*-raw.webm
+/videos/sileos-launch/audio_sources.json
+/videos/sileos-launch/.hyperframes/
+/videos/sileos-launch/.thumbnails/
+/videos/sileos-launch/.waveform-cache/
+/videos/sileos-launch/capture/
+/videos/sileos-launch/renders/
+/videos/sileos-launch/snapshots/
+/certificates/certificate_*
+/backend/certificates/certificate_*
+/.local/
+/frontend/.npm-cache/
+/deliverables/release-source/
+/deliverables/*.zip
+/deliverables/*.sha256
+/deploy/transcription_models/

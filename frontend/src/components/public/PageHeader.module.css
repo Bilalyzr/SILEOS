@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300;400;500;600;700;800;900&display=swap');
+
+.pageHeader {
+  background-color: rgba(10, 16, 47, 0.85);
+  backdrop-filter: blur(2px);
+  color: white;
+  padding: 80px 0;
+  text-align: center;
+  background-image: url('/assets/images/cta_bg.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.title {
+  /* Match the About section's heading style (Lexend Deca) across all page headers. */
+  font-family: 'Lexend Deca', 'Inter', sans-serif;
+  font-size: 48px;
+  color: white;
+  margin: 0 0 15px 0;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.breadcrumbs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.crumbLink {
+  color: #f97316;
+  font-weight: 500;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+  text-decoration: none;
+}
+
+.crumbLink:hover {
+  opacity: 1;
+}
+
+.separator {
+  color: #f97316;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pageHeader {
+    padding: 60px 0;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+}

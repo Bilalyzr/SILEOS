@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sequences &amp; Progressions — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Sequences &amp; Progressions<span class="lk-tag">Class 9–12 · Mathematics</span></h1>
+    <div class="lk-meta">Arithmetic Progressions / Sequences &amp; Series — aₙ, Sₙ, patterns</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Build a pattern</h2>
+      <div class="lk-row"><label class="lk-name">First term a</label><input type="range" id="a0" min="1" max="10" step="1" value="2"><span class="lk-val" id="a0v">2</span></div>
+      <div class="lk-row"><label class="lk-name">Common diff d</label><input type="range" id="d0" min="-3" max="5" step="1" value="3"><span class="lk-val" id="d0v">3</span></div>
+      <div class="lk-row"><label class="lk-name">Terms n</label><input type="range" id="n0" min="4" max="12" step="1" value="8"><span class="lk-val" id="n0v">8</span></div>
+    </div>
+    <div class="lk-card">
+      <h2>Formulas live</h2>
+      <div class="lk-readout" id="nth"></div>
+      <div class="lk-readout" id="sum"></div>
+      <div class="lk-readout" id="seqRead"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint">Watch the <b>staircase</b>: each step rises by the same <b>d</b> — that's
+      what makes it arithmetic. The bars show the terms; the dotted staircase shows how the
+      <b>sum Sₙ</b> piles up. A negative d makes a downhill — what happens to the sum then?</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./progressions-lab/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

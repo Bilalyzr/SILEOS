@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  DEBUG override: cleartext permitted everywhere so the app can hit a LAN dev
+  backend over HTTP (e.g. http://10.249.55.38:8000). This overlay only applies
+  to debug builds; release uses the strict src/main config.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

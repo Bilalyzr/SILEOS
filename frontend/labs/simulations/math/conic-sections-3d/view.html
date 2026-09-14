@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-size=1">
+<title>Conic Sections 3D — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Conic Sections 3D ✦<span class="lk-tag">Class 11 · Mathematics</span></h1>
+    <div class="lk-meta">CBSE: Conic Sections — slice a double cone: circle, ellipse, parabola, hyperbola</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Cutting plane angle</h2>
+      <div class="lk-row"><label class="lk-name">Plane tilt</label><input type="range" id="tilt" min="0" max="100" step="1" value="10"><span class="lk-val" id="tiltv">10</span></div>
+      <div class="lk-seg" id="quickSeg">
+        <button>Circle</button>
+        <button>Ellipse</button>
+        <button>Parabola</button>
+        <button>Hyperbola</button>
+      </div>
+    </div>
+    <div class="lk-card">
+      <h2>The section you cut</h2>
+      <div class="lk-big" id="cName">Circle</div>
+      <div class="lk-readout" id="cInfo"></div>
+      <div class="lk-readout" id="cEq"></div>
+    </div>
+    <div class="lk-card">
+      <h2>How to play</h2>
+      <p class="lk-hint"><b>Drag</b> to orbit the double cone. Slide the plane's tilt:
+      at 0° the slice is a <b>circle</b>; tilt more for an <b>ellipse</b>; when the
+      plane turns exactly parallel to the cone's side, the curve opens into a
+      <b>parabola</b>; steeper still, the plane cuts <b>both cones</b> giving a
+      <b>hyperbola</b>. The Greeks discovered all four shapes in this one object!</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/lab3d.js"></script>
+<script src="../../assets/labkit.js"></script>
+<script src="./conic-sections-3d/simulation.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

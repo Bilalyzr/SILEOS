@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Photosynthesis Lab — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Photosynthesis Lab<span class="lk-tag">Class 7, 10 &amp; 11 · Biology</span></h1>
+    <div class="lk-meta">CBSE: Nutrition in Plants / Life Processes — rate of photosynthesis, limiting factors</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Conditions</h2>
+      <div class="lk-row"><label class="lk-name">☀️ Light</label><input type="range" id="light" min="0" max="100" step="5" value="60"><span class="lk-val" id="lightv">60%</span></div>
+      <div class="lk-row"><label class="lk-name">💨 CO₂</label><input type="range" id="co2" min="0" max="100" step="5" value="60"><span class="lk-val" id="co2v">60%</span></div>
+      <div class="lk-row"><label class="lk-name">🌡️ Temp</label><input type="range" id="temp" min="5" max="45" step="1" value="30"><span class="lk-val" id="tempv">30°C</span></div>
+    </div>
+    <div class="lk-card">
+      <h2>Gas exchange</h2>
+      <div class="lk-big" id="rateBig">0 bubbles/min</div>
+      <div class="lk-readout" id="status"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Limiting factors</h2>
+      <p class="lk-hint">The rate is decided by the <b> scarcest ingredient</b>:
+      no light means no photosynthesis at all (only respiration — watch the count go
+      negative!). Push light to 100% and the CO₂ becomes the bottleneck. Too hot
+      (above ~35°C) and the enzymes start to fail. This is the <b>law of limiting
+      factors</b>.</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./photosynthesis-lab/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

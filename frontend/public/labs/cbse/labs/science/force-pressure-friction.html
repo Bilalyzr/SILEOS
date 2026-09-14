@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Force, Pressure &amp; Friction — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Force, Pressure &amp; Friction<span class="lk-tag">Class 8 · Science</span></h1>
+    <div class="lk-meta">CBSE: Force and Pressure / Friction — P = F/A, sliding vs static friction</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Experiment</h2>
+      <div class="lk-seg" id="modeSeg">
+        <button class="active">🐘 Pressure</button>
+        <button>🧱 Friction</button>
+      </div>
+    </div>
+    <div class="lk-card" id="pCard">
+      <h2>Pressure = Force ÷ Area</h2>
+      <div class="lk-row"><label class="lk-name">Weight</label><input type="range" id="wt" min="200" max="800" step="50" value="500"><span class="lk-val" id="wtv">500 N</span></div>
+      <div class="lk-seg" id="footSeg">
+        <button class="active">Elephant foot</button>
+        <button>Ski</button>
+        <button>Stiletto heel</button>
+      </div>
+      <div class="lk-readout" id="pRead"></div>
+    </div>
+    <div class="lk-card hidden" id="fCard">
+      <h2>Sliding a block</h2>
+      <div class="lk-row"><label class="lk-name">Push force</label><input type="range" id="push" min="0" max="40" step="1" value="0"><span class="lk-val" id="pushv">0 N</span></div>
+      <div class="lk-seg" id="surfSeg">
+        <button class="active">🧊 Ice</button>
+        <button>🪵 Wood</button>
+        <button>🧶 Carpet</button>
+      </div>
+      <div class="lk-readout" id="fRead"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint"><b>Pressure</b>: same weight, smaller area → deeper sink. That's
+      why camel feet are wide and nails are pointed!<br>
+      <b>Friction</b>: the surface tugs back up to a limit (<b>static</b> friction), then
+      the block slides with constant <b>kinetic</b> friction. Ball bearings and oil
+      reduce it; treaded tyres increase it.</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./force-pressure-friction/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

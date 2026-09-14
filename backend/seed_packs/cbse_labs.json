@@ -1,0 +1,1169 @@
+[
+  {
+    "slug": "cbse-fractions-explorer",
+    "title": "Fractions Explorer",
+    "subject": "mathematics",
+    "description": "Fractions — comparing, equivalents, fraction ↔ decimal ↔ percent",
+    "grades": [
+      6,
+      7
+    ],
+    "file": "labs/math/fractions-explorer.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/math/fractions-explorer.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-pythagoras-explorer",
+    "title": "Pythagoras Explorer",
+    "subject": "mathematics",
+    "description": "Triangles — Pythagoras theorem with visual area squares",
+    "grades": [
+      7,
+      8,
+      9,
+      10
+    ],
+    "file": "labs/math/pythagoras-explorer.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/math/pythagoras-explorer.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-line-explorer",
+    "title": "Line Explorer",
+    "subject": "mathematics",
+    "description": "Linear Equations — y = mx + b, slope & intercept, challenge mode",
+    "grades": [
+      8,
+      9,
+      10
+    ],
+    "file": "labs/math/line-explorer.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/math/line-explorer.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-quadratic-explorer",
+    "title": "Quadratic Explorer",
+    "subject": "mathematics",
+    "description": "Quadratic Equations — roots, discriminant, vertex, parabola shapes",
+    "grades": [
+      10
+    ],
+    "file": "labs/math/quadratic-explorer.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/math/quadratic-explorer.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-probability-lab",
+    "title": "Probability Lab",
+    "subject": "mathematics",
+    "description": "Probability — coins & dice, experimental vs theoretical",
+    "grades": [
+      9,
+      10
+    ],
+    "file": "labs/math/probability-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/math/probability-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-plant-animal-cell",
+    "title": "Plant & Animal Cell",
+    "subject": "science",
+    "description": "Cell — Structure and Functions — clickable organelles",
+    "grades": [
+      8,
+      9
+    ],
+    "file": "labs/science/plant-animal-cell.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/plant-animal-cell.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-electric-circuits",
+    "title": "Electric Circuits",
+    "subject": "science",
+    "description": "Electricity & Circuits — series vs parallel, Ohm’s law V = IR",
+    "grades": [
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "file": "labs/science/electric-circuits.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/electric-circuits.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-acids-bases-ph",
+    "title": "Acids, Bases & pH",
+    "subject": "science",
+    "description": "Acids, Bases and Salts — pH scale, indicators, litmus tests",
+    "grades": [
+      7,
+      10
+    ],
+    "file": "labs/science/acids-bases-ph.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/acids-bases-ph.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-light-optics",
+    "title": "Light: Reflection & Refraction",
+    "subject": "science",
+    "description": "Light — laws of reflection, Snell’s law, refractive index",
+    "grades": [
+      8,
+      10
+    ],
+    "file": "labs/science/light-optics.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/light-optics.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-motion-graphs",
+    "title": "Distance–Time Graphs",
+    "subject": "science",
+    "description": "Motion — record motion, read graphs, speed vs velocity",
+    "grades": [
+      9
+    ],
+    "file": "labs/science/motion-graphs.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/motion-graphs.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-predator-prey",
+    "title": "Predator–Prey Ecosystem",
+    "subject": "science",
+    "description": "Our Environment / Ecosystem — population cycles & balance",
+    "grades": [
+      10,
+      12
+    ],
+    "file": "labs/science/predator-prey.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/predator-prey.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-projectile-motion",
+    "title": "Projectile Motion",
+    "subject": "physics",
+    "description": "Motion in a Plane — range, flight time, g on Moon & Mars",
+    "grades": [
+      11
+    ],
+    "file": "labs/physics/projectile-motion.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/physics/projectile-motion.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-simple-pendulum",
+    "title": "Simple Pendulum",
+    "subject": "physics",
+    "description": "Oscillations — SHM, T = 2π√(L/g), stopwatch measurements",
+    "grades": [
+      11
+    ],
+    "file": "labs/physics/simple-pendulum.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/physics/simple-pendulum.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-wave-motion",
+    "title": "Wave Motion",
+    "subject": "physics",
+    "description": "Waves — transverse waves, v = fλ, crest speed demonstration",
+    "grades": [
+      11
+    ],
+    "file": "labs/physics/wave-motion.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/physics/wave-motion.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-titration-lab",
+    "title": "Acid–Base Titration",
+    "subject": "chemistry",
+    "description": "Equilibrium — pH curves, equivalence point, indicators",
+    "grades": [
+      10,
+      11,
+      12
+    ],
+    "file": "labs/chemistry/titration-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/chemistry/titration-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-ideal-gas-lab",
+    "title": "Ideal Gas Lab",
+    "subject": "chemistry",
+    "description": "States of Matter / Kinetic Theory — PV = nRT particle model",
+    "grades": [
+      11
+    ],
+    "file": "labs/chemistry/ideal-gas-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/chemistry/ideal-gas-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-genetics-punnett",
+    "title": "Genetics: Punnett Squares",
+    "subject": "biology",
+    "description": "Heredity & Evolution — Mendel’s ratios, genotype vs phenotype",
+    "grades": [
+      10,
+      12
+    ],
+    "file": "labs/biology/genetics-punnett.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/biology/genetics-punnett.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-photosynthesis-lab",
+    "title": "Photosynthesis Lab",
+    "subject": "biology",
+    "description": "Nutrition in Plants / Life Processes — limiting factors, gas exchange",
+    "grades": [
+      7,
+      10,
+      11
+    ],
+    "file": "labs/biology/photosynthesis-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/biology/photosynthesis-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-solar-system-3d",
+    "title": "Solar System 3D ✦",
+    "subject": "science",
+    "description": "Beyond Earth — orbit the 8 planets in 3D, years, moons & Saturn’s rings",
+    "grades": [
+      6,
+      7,
+      8
+    ],
+    "file": "labs/science/solar-system-3d.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "scene",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/solar-system-3d.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-atom-builder-3d",
+    "title": "Atom Builder 3D ✦",
+    "subject": "science",
+    "description": "Structure of the Atom — protons, neutrons, electron shells K L M N",
+    "grades": [
+      9,
+      11
+    ],
+    "file": "labs/science/atom-builder-3d.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "scene",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/atom-builder-3d.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-dna-helix-3d",
+    "title": "DNA Double Helix 3D ✦",
+    "subject": "biology",
+    "description": "Molecular Basis of Inheritance — Watson–Crick model, unzip to replicate",
+    "grades": [
+      12
+    ],
+    "file": "labs/biology/dna-helix-3d.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "scene",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/biology/dna-helix-3d.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-molecule-viewer-3d",
+    "title": "Molecule Viewer 3D ✦",
+    "subject": "chemistry",
+    "description": "Atoms & Molecules / Bonding — ball-and-stick models with true bond angles",
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "file": "labs/chemistry/molecule-viewer-3d.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "scene",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/chemistry/molecule-viewer-3d.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-magnet-lab",
+    "title": "Magnet Lab",
+    "subject": "science",
+    "description": "Fun with Magnets — field lines, poles, attraction & repulsion",
+    "grades": [
+      6
+    ],
+    "file": "labs/science/magnet-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/magnet-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-heat-transfer-lab",
+    "title": "Heat Transfer Lab",
+    "subject": "science",
+    "description": "Heat — conduction, convection currents & radiation through vacuum",
+    "grades": [
+      7
+    ],
+    "file": "labs/science/heat-transfer-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/heat-transfer-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-force-pressure-friction",
+    "title": "Force, Pressure & Friction",
+    "subject": "science",
+    "description": "Force and Pressure / Friction — P = F/A, static vs kinetic friction",
+    "grades": [
+      8
+    ],
+    "file": "labs/science/force-pressure-friction.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/force-pressure-friction.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-solids-3d",
+    "title": "3D Solids Explorer ✦",
+    "subject": "mathematics",
+    "description": "Mensuration / Solid Shapes — cube to sphere with live SA & volume formulas",
+    "grades": [
+      6,
+      7,
+      8
+    ],
+    "file": "labs/math/solids-3d.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "scene",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/math/solids-3d.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-balance-equations",
+    "title": "Balance Equations",
+    "subject": "science",
+    "description": "Chemical Reactions — balance 8 classic equations, atom inventory, hints",
+    "grades": [
+      10
+    ],
+    "file": "labs/science/balance-equations.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/balance-equations.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-reactivity-series",
+    "title": "Reactivity Series",
+    "subject": "science",
+    "description": "Metals & Non-metals — displacement reactions in salt solutions",
+    "grades": [
+      10
+    ],
+    "file": "labs/science/reactivity-series.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/reactivity-series.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-human-eye-lab",
+    "title": "Human Eye & Lenses",
+    "subject": "science",
+    "description": "Human Eye — myopia & hypermetropia ray diagrams with corrective lenses",
+    "grades": [
+      10
+    ],
+    "file": "labs/science/human-eye-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/human-eye-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-magnetism-current",
+    "title": "Current & Magnetism",
+    "subject": "science",
+    "description": "Magnetic Effects of Current — wire fields, right-hand rule, solenoid",
+    "grades": [
+      10
+    ],
+    "file": "labs/science/magnetism-current.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/magnetism-current.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-trigonometry-explorer",
+    "title": "Trigonometry Explorer",
+    "subject": "mathematics",
+    "description": "Trigonometry — sin/cos/tan live, unit circle, heights & distances",
+    "grades": [
+      10
+    ],
+    "file": "labs/math/trigonometry-explorer.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/math/trigonometry-explorer.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-statistics-lab",
+    "title": "Statistics Lab",
+    "subject": "mathematics",
+    "description": "Statistics — histogram, mean/median/mode, outlier robustness demo",
+    "grades": [
+      9,
+      10
+    ],
+    "file": "labs/math/statistics-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/math/statistics-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-unit-circle-lab",
+    "title": "Unit Circle & Waves",
+    "subject": "mathematics",
+    "description": "Trigonometric Functions — circular motion traces sine & cosine, radians",
+    "grades": [
+      11
+    ],
+    "file": "labs/math/unit-circle-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/math/unit-circle-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-conic-sections-3d",
+    "title": "Conic Sections 3D ✦",
+    "subject": "mathematics",
+    "description": "Conic Sections — slice a double cone: circle → ellipse → parabola → hyperbola",
+    "grades": [
+      11
+    ],
+    "file": "labs/math/conic-sections-3d.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "scene",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/math/conic-sections-3d.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-faraday-lab",
+    "title": "Electromagnetic Induction",
+    "subject": "physics",
+    "description": "Faraday’s law — drag a magnet through a coil, galvanometer & Lenz’s law",
+    "grades": [
+      12
+    ],
+    "file": "labs/physics/faraday-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/physics/faraday-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-kinetics-lab",
+    "title": "Chemical Kinetics",
+    "subject": "chemistry",
+    "description": "Rate laws — concentration-time curves, half-life, Arrhenius temperature",
+    "grades": [
+      12
+    ],
+    "file": "labs/chemistry/kinetics-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/chemistry/kinetics-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-water-states-3d",
+    "title": "States of Water 3D",
+    "subject": "science",
+    "description": "Ch 8 · A Journey through States of Water — ice lattice, liquid flow, steam (VR)",
+    "grades": [
+      6
+    ],
+    "file": "labs/science/water-states-3d.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "scene",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/water-states-3d.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-earth-moon-sun-3d",
+    "title": "Earth, Moon & Sun 3D",
+    "subject": "science",
+    "description": "Ch 12 · Earth, Moon, and the Sun — moon phases, eclipses, day & night (VR)",
+    "grades": [
+      7
+    ],
+    "file": "labs/science/earth-moon-sun-3d.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "scene",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/earth-moon-sun-3d.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-symmetry-3d",
+    "title": "Symmetry Studio 3D",
+    "subject": "mathematics",
+    "description": "Ch 9 · Symmetry — rotational order with live self-match glow (VR)",
+    "grades": [
+      6,
+      7
+    ],
+    "file": "labs/math/symmetry-3d.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "scene",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/math/symmetry-3d.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-sundial-3d",
+    "title": "Sky Clock: Sundial 3D",
+    "subject": "science",
+    "description": "Ch 11 · Keeping Time with the Skies — gnomon shadow, seasons, day arc (VR)",
+    "grades": [
+      8
+    ],
+    "file": "labs/science/sundial-3d.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "scene",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/sundial-3d.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-wind-pressure-lab",
+    "title": "Pressure, Winds & Cyclones",
+    "subject": "science",
+    "description": "Ch 6 · Pressure, Winds, Storms & Cyclones — sea breeze, land breeze, cyclone spiral",
+    "grades": [
+      8
+    ],
+    "file": "labs/science/wind-pressure-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/wind-pressure-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-number-lab",
+    "title": "Primes, HCF & LCM",
+    "subject": "mathematics",
+    "description": "Prime Time / Real Numbers — animated factor trees, HCF × LCM = A × B",
+    "grades": [
+      6,
+      7,
+      8,
+      10
+    ],
+    "file": "labs/math/number-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/math/number-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-progressions-lab",
+    "title": "Sequences & Progressions",
+    "subject": "mathematics",
+    "description": "AP / Sequences — term bars + sum staircase, aₙ and Sₙ live",
+    "grades": [
+      9,
+      10,
+      11
+    ],
+    "file": "labs/math/progressions-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/math/progressions-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-triangles-lab",
+    "title": "Congruence & Similarity",
+    "subject": "mathematics",
+    "description": "Geometric Twins / Triangles — drag vertices, watch ratios & angles hold",
+    "grades": [
+      7,
+      10
+    ],
+    "file": "labs/math/triangles-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/math/triangles-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-circles-lab",
+    "title": "Circles: Theorems & Areas",
+    "subject": "mathematics",
+    "description": "Circles / Areas — chord bisection, tangent ⊥ radius, sector & arc formulas",
+    "grades": [
+      10
+    ],
+    "file": "labs/math/circles-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/math/circles-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-venn-sets-lab",
+    "title": "Sets & Venn Diagrams",
+    "subject": "mathematics",
+    "description": "Sets — union, intersection, complement with live member highlighting",
+    "grades": [
+      11
+    ],
+    "file": "labs/math/venn-sets-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/math/venn-sets-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-limits-lab",
+    "title": "Limits & Derivatives",
+    "subject": "mathematics",
+    "description": "Secant → tangent as h → 0 — the derivative as a limit, 3 functions",
+    "grades": [
+      11,
+      12
+    ],
+    "file": "labs/math/limits-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/math/limits-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-matrix-lab",
+    "title": "Matrix Transform Studio",
+    "subject": "mathematics",
+    "description": "Matrices / Determinants — a 2×2 matrix rotates, shears & scales a smiley",
+    "grades": [
+      12
+    ],
+    "file": "labs/math/matrix-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/math/matrix-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-neuron-reflex-lab",
+    "title": "Neuron & Reflex Arc",
+    "subject": "science",
+    "description": "Control & Coordination — fire a signal, then race the reflex arc",
+    "grades": [
+      10,
+      11
+    ],
+    "file": "labs/science/neuron-reflex-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/neuron-reflex-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-reproduction-lab",
+    "title": "How Life Continues",
+    "subject": "science",
+    "description": "Reproduction — scrub through fission, budding, spores & flower cycles",
+    "grades": [
+      9,
+      10
+    ],
+    "file": "labs/science/reproduction-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/reproduction-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-separation-lab",
+    "title": "Separation of Mixtures",
+    "subject": "science",
+    "description": "Filtration, evaporation, winnowing, magnetic & chromatography animated",
+    "grades": [
+      6,
+      9
+    ],
+    "file": "labs/science/separation-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/science/separation-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-periodic-table-lab",
+    "title": "Periodic Table Explorer",
+    "subject": "chemistry",
+    "description": "Interactive table — colour by group, radius or reactivity; element facts",
+    "grades": [
+      8,
+      11
+    ],
+    "file": "labs/chemistry/periodic-table-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/chemistry/periodic-table-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-electrostatics-lab",
+    "title": "Charges & Fields",
+    "subject": "physics",
+    "description": "Electrostatics — draggable charges, live field lines, Coulomb force arrows",
+    "grades": [
+      12
+    ],
+    "file": "labs/physics/electrostatics-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/physics/electrostatics-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-photoelectric-lab",
+    "title": "Photoelectric Effect",
+    "subject": "physics",
+    "description": "Dual Nature — photon energy vs work function; colour matters, intensity doesn’t",
+    "grades": [
+      12
+    ],
+    "file": "labs/physics/photoelectric-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/physics/photoelectric-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-radioactivity-lab",
+    "title": "Radioactive Decay",
+    "subject": "physics",
+    "description": "Nuclei / Atoms — 400 atoms decaying, half-life curve, real isotopes",
+    "grades": [
+      12
+    ],
+    "file": "labs/physics/radioactivity-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/physics/radioactivity-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-heart-circulation-lab",
+    "title": "Heart & Circulation",
+    "subject": "biology",
+    "description": "Double circulation — blood particles loop heart→lungs→body, systole/diastole",
+    "grades": [
+      11
+    ],
+    "file": "labs/biology/heart-circulation-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/biology/heart-circulation-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-biotech-pcr-lab",
+    "title": "PCR Machine",
+    "subject": "biology",
+    "description": "Biotechnology — run the thermal cycler, DNA doubles exponentially",
+    "grades": [
+      12
+    ],
+    "file": "labs/biology/biotech-pcr-lab.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "panel",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/biology/biotech-pcr-lab.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-solar-system-xr",
+    "title": "Solar System XR 🥽",
+    "subject": "xr",
+    "description": "VR: stand on the Sun — planets orbit around you, trigger for fact cards (Quest/headset)",
+    "grades": [
+      6,
+      7,
+      8
+    ],
+    "file": "labs/xr/solar-system-xr.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "scene",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/xr/solar-system-xr.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  },
+  {
+    "slug": "cbse-molecule-viewer-xr",
+    "title": "Molecule XR 🥽",
+    "subject": "xr",
+    "description": "VR + AR: walk around giant molecules or place them on your desk, trigger to cycle",
+    "grades": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "file": "labs/xr/molecule-viewer-xr.html",
+    "modes": [
+      "screen",
+      "ar",
+      "vr"
+    ],
+    "spatial": "scene",
+    "provider": "embed",
+    "embed_url": "/labs/cbse/labs/xr/molecule-viewer-xr.html",
+    "attribution": "User-authored CBSE Virtual Labs · locally hosted"
+  }
+]

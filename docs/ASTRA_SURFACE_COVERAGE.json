@@ -1,0 +1,334 @@
+[
+  {
+    "page": "pages\\admin\\analytics.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\admin\\approvals.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\admin\\blogs.tsx",
+    "surfaces": 7
+  },
+  {
+    "page": "pages\\admin\\bundles.tsx",
+    "surfaces": 6
+  },
+  {
+    "page": "pages\\admin\\categories.tsx",
+    "surfaces": 6
+  },
+  {
+    "page": "pages\\admin\\certificates.tsx",
+    "surfaces": 7
+  },
+  {
+    "page": "pages\\admin\\cohorts.tsx",
+    "surfaces": 3
+  },
+  {
+    "page": "pages\\admin\\colleges.tsx",
+    "surfaces": 2
+  },
+  {
+    "page": "pages\\admin\\companies.tsx",
+    "surfaces": 5
+  },
+  {
+    "page": "pages\\admin\\company-invoices.tsx",
+    "surfaces": 3
+  },
+  {
+    "page": "pages\\admin\\content-libraries.tsx",
+    "surfaces": 8
+  },
+  {
+    "page": "pages\\admin\\coupons.tsx",
+    "surfaces": 7
+  },
+  {
+    "page": "pages\\admin\\courses.tsx",
+    "surfaces": 2
+  },
+  {
+    "page": "pages\\admin\\enrollments.tsx",
+    "surfaces": 6
+  },
+  {
+    "page": "pages\\admin\\hall-of-fame.tsx",
+    "surfaces": 2
+  },
+  {
+    "page": "pages\\admin\\instructors.tsx",
+    "surfaces": 8
+  },
+  {
+    "page": "pages\\admin\\internship-requests.tsx",
+    "surfaces": 7
+  },
+  {
+    "page": "pages\\admin\\internships.tsx",
+    "surfaces": 2
+  },
+  {
+    "page": "pages\\admin\\lessons.tsx",
+    "surfaces": 6
+  },
+  {
+    "page": "pages\\admin\\manage.tsx",
+    "surfaces": 2
+  },
+  {
+    "page": "pages\\admin\\memberships.tsx",
+    "surfaces": 7
+  },
+  {
+    "page": "pages\\admin\\messages.tsx",
+    "surfaces": 3
+  },
+  {
+    "page": "pages\\admin\\new-course.tsx",
+    "surfaces": 3
+  },
+  {
+    "page": "pages\\admin\\orders.tsx",
+    "surfaces": 9
+  },
+  {
+    "page": "pages\\admin\\quizzes.tsx",
+    "surfaces": 6
+  },
+  {
+    "page": "pages\\admin\\reviews.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\admin\\settings.tsx",
+    "surfaces": 2
+  },
+  {
+    "page": "pages\\admin\\spocs.tsx",
+    "surfaces": 3
+  },
+  {
+    "page": "pages\\admin\\student-activity.tsx",
+    "surfaces": 8
+  },
+  {
+    "page": "pages\\admin\\students.tsx",
+    "surfaces": 8
+  },
+  {
+    "page": "pages\\admin\\tags.tsx",
+    "surfaces": 6
+  },
+  {
+    "page": "pages\\assignment-submission.tsx",
+    "surfaces": 9
+  },
+  {
+    "page": "pages\\blog-detail.tsx",
+    "surfaces": 3
+  },
+  {
+    "page": "pages\\blog.tsx",
+    "surfaces": 3
+  },
+  {
+    "page": "pages\\categories.tsx",
+    "surfaces": 3
+  },
+  {
+    "page": "pages\\certificate.tsx",
+    "surfaces": 2
+  },
+  {
+    "page": "pages\\company\\dashboard.tsx",
+    "surfaces": 7
+  },
+  {
+    "page": "pages\\course-detail.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\courses.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\dashboard\\internship-inbox.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\dashboard\\messages.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\dashboard\\my-internship-detail.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\dashboard\\my-vouchers.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\for-companies.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\hall-of-fame.tsx",
+    "surfaces": 2
+  },
+  {
+    "page": "pages\\instructor\\assignment-builder.tsx",
+    "surfaces": 5
+  },
+  {
+    "page": "pages\\instructor\\assignment-grading.tsx",
+    "surfaces": 3
+  },
+  {
+    "page": "pages\\instructor\\blog-editor.tsx",
+    "surfaces": 2
+  },
+  {
+    "page": "pages\\instructor\\blog.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\instructor\\course-coverage.tsx",
+    "surfaces": 4
+  },
+  {
+    "page": "pages\\instructor\\course-packages.tsx",
+    "surfaces": 4
+  },
+  {
+    "page": "pages\\instructor\\courses.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\instructor\\create-course.tsx",
+    "surfaces": 2
+  },
+  {
+    "page": "pages\\instructor\\dashboard.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\instructor\\edit-course.tsx",
+    "surfaces": 2
+  },
+  {
+    "page": "pages\\instructor\\games.tsx",
+    "surfaces": 2
+  },
+  {
+    "page": "pages\\instructor\\h5p-library.tsx",
+    "surfaces": 2
+  },
+  {
+    "page": "pages\\instructor\\insights.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\instructor\\live-classes.tsx",
+    "surfaces": 2
+  },
+  {
+    "page": "pages\\instructor\\quiz-builder.tsx",
+    "surfaces": 4
+  },
+  {
+    "page": "pages\\instructor\\recording-lessons.tsx",
+    "surfaces": 5
+  },
+  {
+    "page": "pages\\instructor\\review-queue.tsx",
+    "surfaces": 5
+  },
+  {
+    "page": "pages\\instructor\\three-d-tasks.tsx",
+    "surfaces": 6
+  },
+  {
+    "page": "pages\\parent\\dashboard.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\privacy.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\quiz-taking.tsx",
+    "surfaces": 4
+  },
+  {
+    "page": "pages\\recording-lesson.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\refund-policy.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\search.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\server-down.tsx",
+    "surfaces": 2
+  },
+  {
+    "page": "pages\\shipping.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\spoc\\blog.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\spoc\\cohort.tsx",
+    "surfaces": 6
+  },
+  {
+    "page": "pages\\spoc\\dashboard.tsx",
+    "surfaces": 3
+  },
+  {
+    "page": "pages\\spoc\\internship.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\student\\learning-plan.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\student\\my-mastery.tsx",
+    "surfaces": 2
+  },
+  {
+    "page": "pages\\superadmin\\admins.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\superadmin\\audit.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\superadmin\\instructors.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\superadmin\\students.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\terms.tsx",
+    "surfaces": 1
+  },
+  {
+    "page": "pages\\verify-certificate.tsx",
+    "surfaces": 4
+  }
+]

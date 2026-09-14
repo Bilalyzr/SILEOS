@@ -1,0 +1,1236 @@
+{
+  "format": "sasha-concept-labs",
+  "version": 1,
+  "labs": [
+    {
+      "title": "Surface Areas and Volumes — concept investigation",
+      "subject": "mathematics",
+      "description": "Distinguish surface area and volume units.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish surface area and volume units.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish surface area and volume units.",
+        "chapter_ids": [
+          "10-mathematics-12"
+        ],
+        "cards": [
+          {
+            "label": "cm²",
+            "group": "Surface area",
+            "explanation": "Surface area is measured in square units."
+          },
+          {
+            "label": "m²",
+            "group": "Surface area",
+            "explanation": "Surface area is measured in square units."
+          },
+          {
+            "label": "cm³",
+            "group": "Volume",
+            "explanation": "Volume is measured in cubic units."
+          },
+          {
+            "label": "m³",
+            "group": "Volume",
+            "explanation": "Volume is measured in cubic units."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Units and Measurement — concept investigation",
+      "subject": "physics",
+      "description": "Separate SI base units from derived units.",
+      "config": {
+        "engine": "classification",
+        "objective": "Separate SI base units from derived units.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Separate SI base units from derived units.",
+        "chapter_ids": [
+          "11-physics-1"
+        ],
+        "cards": [
+          {
+            "label": "metre",
+            "group": "SI base unit",
+            "explanation": "This unit is one of the seven independent SI base units."
+          },
+          {
+            "label": "second",
+            "group": "SI base unit",
+            "explanation": "This unit is one of the seven independent SI base units."
+          },
+          {
+            "label": "newton",
+            "group": "SI derived unit",
+            "explanation": "This unit is expressed using base units."
+          },
+          {
+            "label": "pascal",
+            "group": "SI derived unit",
+            "explanation": "This unit is expressed using base units."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Laws of Motion — concept investigation",
+      "subject": "physics",
+      "description": "Identify whether the net force is zero.",
+      "config": {
+        "engine": "classification",
+        "objective": "Identify whether the net force is zero.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Identify whether the net force is zero.",
+        "chapter_ids": [
+          "11-physics-4"
+        ],
+        "cards": [
+          {
+            "label": "An object at rest with balanced forces",
+            "group": "Zero net force",
+            "explanation": "In an inertial frame, zero acceleration means zero net force."
+          },
+          {
+            "label": "An object moving at constant velocity",
+            "group": "Zero net force",
+            "explanation": "In an inertial frame, zero acceleration means zero net force."
+          },
+          {
+            "label": "A car speeding up in a straight line",
+            "group": "Nonzero net force",
+            "explanation": "Acceleration requires a nonzero vector sum of forces."
+          },
+          {
+            "label": "An object moving at constant speed in a circle",
+            "group": "Nonzero net force",
+            "explanation": "Acceleration requires a nonzero vector sum of forces."
+          }
+        ]
+      }
+    },
+    {
+      "title": "System of Particles and Rotational Motion — concept investigation",
+      "subject": "physics",
+      "description": "Distinguish translational and rotational dynamics in the highlighted relation.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish translational and rotational dynamics in the highlighted relation.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish translational and rotational dynamics in the highlighted relation.",
+        "chapter_ids": [
+          "11-physics-6"
+        ],
+        "cards": [
+          {
+            "label": "F = ma",
+            "group": "Translational",
+            "explanation": "The relation concerns linear motion of a particle or centre of mass."
+          },
+          {
+            "label": "p = mv",
+            "group": "Translational",
+            "explanation": "The relation concerns linear motion of a particle or centre of mass."
+          },
+          {
+            "label": "τ = Iα for a fixed axis",
+            "group": "Rotational",
+            "explanation": "The relation concerns angular motion about a specified axis."
+          },
+          {
+            "label": "L = Iω for rotation about a principal axis",
+            "group": "Rotational",
+            "explanation": "The relation concerns angular motion about a specified axis."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Mechanical Properties of Solids — concept investigation",
+      "subject": "physics",
+      "description": "Distinguish stress from strain.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish stress from strain.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish stress from strain.",
+        "chapter_ids": [
+          "11-physics-8"
+        ],
+        "cards": [
+          {
+            "label": "F/A",
+            "group": "Stress",
+            "explanation": "Stress is force divided by area and has pressure units."
+          },
+          {
+            "label": "A quantity measured in pascals",
+            "group": "Stress",
+            "explanation": "Stress is force divided by area and has pressure units."
+          },
+          {
+            "label": "ΔL/L",
+            "group": "Strain",
+            "explanation": "Strain is a dimensionless ratio of deformation to original size."
+          },
+          {
+            "label": "Fractional extension",
+            "group": "Strain",
+            "explanation": "Strain is a dimensionless ratio of deformation to original size."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Classification of Elements and Periodicity — concept investigation",
+      "subject": "chemistry",
+      "description": "Compare positions in the periodic table.",
+      "config": {
+        "engine": "classification",
+        "objective": "Compare positions in the periodic table.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Compare positions in the periodic table.",
+        "chapter_ids": [
+          "11-chemistry-3"
+        ],
+        "cards": [
+          {
+            "label": "Li and Na",
+            "group": "Same group",
+            "explanation": "The elements lie in the same vertical column."
+          },
+          {
+            "label": "F and Cl",
+            "group": "Same group",
+            "explanation": "The elements lie in the same vertical column."
+          },
+          {
+            "label": "Na and Mg",
+            "group": "Same period",
+            "explanation": "The elements lie in the same horizontal row."
+          },
+          {
+            "label": "C and O",
+            "group": "Same period",
+            "explanation": "The elements lie in the same horizontal row."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Thermodynamics — concept investigation",
+      "subject": "chemistry",
+      "description": "Distinguish intensive and extensive properties.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish intensive and extensive properties.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish intensive and extensive properties.",
+        "chapter_ids": [
+          "11-chemistry-5"
+        ],
+        "cards": [
+          {
+            "label": "Temperature",
+            "group": "Intensive",
+            "explanation": "The value does not scale simply with the amount of material."
+          },
+          {
+            "label": "Pressure",
+            "group": "Intensive",
+            "explanation": "The value does not scale simply with the amount of material."
+          },
+          {
+            "label": "Volume",
+            "group": "Extensive",
+            "explanation": "For equivalent systems, the value scales with system size."
+          },
+          {
+            "label": "Internal energy",
+            "group": "Extensive",
+            "explanation": "For equivalent systems, the value scales with system size."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Redox Reactions — concept investigation",
+      "subject": "chemistry",
+      "description": "Track electron transfer in a redox process.",
+      "config": {
+        "engine": "classification",
+        "objective": "Track electron transfer in a redox process.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Track electron transfer in a redox process.",
+        "chapter_ids": [
+          "11-chemistry-7"
+        ],
+        "cards": [
+          {
+            "label": "Zn → Zn²⁺ + 2e⁻",
+            "group": "Oxidation",
+            "explanation": "The species loses electrons and its oxidation number increases."
+          },
+          {
+            "label": "Fe²⁺ → Fe³⁺ + e⁻",
+            "group": "Oxidation",
+            "explanation": "The species loses electrons and its oxidation number increases."
+          },
+          {
+            "label": "Cu²⁺ + 2e⁻ → Cu",
+            "group": "Reduction",
+            "explanation": "The species gains electrons and its oxidation number decreases."
+          },
+          {
+            "label": "Cl₂ + 2e⁻ → 2Cl⁻",
+            "group": "Reduction",
+            "explanation": "The species gains electrons and its oxidation number decreases."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Sets — concept investigation",
+      "subject": "mathematics",
+      "description": "Classify collections by whether membership is well-defined.",
+      "config": {
+        "engine": "classification",
+        "objective": "Classify collections by whether membership is well-defined.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Classify collections by whether membership is well-defined.",
+        "chapter_ids": [
+          "11-mathematics-1"
+        ],
+        "cards": [
+          {
+            "label": "Even positive integers less than 10",
+            "group": "Well-defined set",
+            "explanation": "Membership can be decided using an explicit rule."
+          },
+          {
+            "label": "Vowels in the English alphabet",
+            "group": "Well-defined set",
+            "explanation": "Membership can be decided using an explicit rule."
+          },
+          {
+            "label": "The nicest flowers",
+            "group": "Not well-defined as stated",
+            "explanation": "Membership depends on an unspecified subjective judgement."
+          },
+          {
+            "label": "The most interesting numbers",
+            "group": "Not well-defined as stated",
+            "explanation": "Membership depends on an unspecified subjective judgement."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Relations and Functions — concept investigation",
+      "subject": "mathematics",
+      "description": "Test whether a relation assigns exactly one output to each input in its stated domain.",
+      "config": {
+        "engine": "classification",
+        "objective": "Test whether a relation assigns exactly one output to each input in its stated domain.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Test whether a relation assigns exactly one output to each input in its stated domain.",
+        "chapter_ids": [
+          "11-mathematics-2"
+        ],
+        "cards": [
+          {
+            "label": "{(1,2),(2,3)} on domain {1,2}",
+            "group": "Function",
+            "explanation": "Each input has exactly one output."
+          },
+          {
+            "label": "y = x² for real x",
+            "group": "Function",
+            "explanation": "Each input has exactly one output."
+          },
+          {
+            "label": "{(1,2),(1,3)} on domain {1}",
+            "group": "Not a function",
+            "explanation": "At least one input has more than one output."
+          },
+          {
+            "label": "y² = x considered as y depending on x for x > 0",
+            "group": "Not a function",
+            "explanation": "At least one input has more than one output."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Linear Inequalities — concept investigation",
+      "subject": "mathematics",
+      "description": "Test candidate solutions of 2x + 1 < 7.",
+      "config": {
+        "engine": "classification",
+        "objective": "Test candidate solutions of 2x + 1 < 7.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Test candidate solutions of 2x + 1 < 7.",
+        "chapter_ids": [
+          "11-mathematics-5"
+        ],
+        "cards": [
+          {
+            "label": "x = 0",
+            "group": "Satisfies inequality",
+            "explanation": "Rearranging gives x < 3."
+          },
+          {
+            "label": "x = 2",
+            "group": "Satisfies inequality",
+            "explanation": "Rearranging gives x < 3."
+          },
+          {
+            "label": "x = 3",
+            "group": "Does not satisfy",
+            "explanation": "Values at or above 3 fail the strict inequality."
+          },
+          {
+            "label": "x = 4",
+            "group": "Does not satisfy",
+            "explanation": "Values at or above 3 fail the strict inequality."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Binomial Theorem — concept investigation",
+      "subject": "mathematics",
+      "description": "Check coefficients in the expansion of (a+b)³.",
+      "config": {
+        "engine": "classification",
+        "objective": "Check coefficients in the expansion of (a+b)³.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Check coefficients in the expansion of (a+b)³.",
+        "chapter_ids": [
+          "11-mathematics-7"
+        ],
+        "cards": [
+          {
+            "label": "a³",
+            "group": "Present with stated coefficient",
+            "explanation": "The coefficients in order are 1, 3, 3, 1."
+          },
+          {
+            "label": "3a²b",
+            "group": "Present with stated coefficient",
+            "explanation": "The coefficients in order are 1, 3, 3, 1."
+          },
+          {
+            "label": "2ab²",
+            "group": "Not present with stated coefficient",
+            "explanation": "The proposed term or coefficient disagrees with the expansion."
+          },
+          {
+            "label": "4b³",
+            "group": "Not present with stated coefficient",
+            "explanation": "The proposed term or coefficient disagrees with the expansion."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Sequences and Series — concept investigation",
+      "subject": "mathematics",
+      "description": "Test for a constant difference between consecutive terms.",
+      "config": {
+        "engine": "classification",
+        "objective": "Test for a constant difference between consecutive terms.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Test for a constant difference between consecutive terms.",
+        "chapter_ids": [
+          "11-mathematics-8"
+        ],
+        "cards": [
+          {
+            "label": "2, 5, 8, 11",
+            "group": "Arithmetic progression",
+            "explanation": "The difference between consecutive terms is constant."
+          },
+          {
+            "label": "10, 7, 4, 1",
+            "group": "Arithmetic progression",
+            "explanation": "The difference between consecutive terms is constant."
+          },
+          {
+            "label": "1, 2, 4, 8",
+            "group": "Not an arithmetic progression",
+            "explanation": "The differences are not constant."
+          },
+          {
+            "label": "1, 4, 9, 16",
+            "group": "Not an arithmetic progression",
+            "explanation": "The differences are not constant."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Introduction to Three-Dimensional Geometry — concept investigation",
+      "subject": "mathematics",
+      "description": "Locate points relative to the xy-plane.",
+      "config": {
+        "engine": "classification",
+        "objective": "Locate points relative to the xy-plane.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Locate points relative to the xy-plane.",
+        "chapter_ids": [
+          "11-mathematics-11"
+        ],
+        "cards": [
+          {
+            "label": "(2,3,0)",
+            "group": "On the xy-plane",
+            "explanation": "The z-coordinate is zero."
+          },
+          {
+            "label": "(−1,4,0)",
+            "group": "On the xy-plane",
+            "explanation": "The z-coordinate is zero."
+          },
+          {
+            "label": "(2,3,1)",
+            "group": "Off the xy-plane",
+            "explanation": "The z-coordinate is nonzero."
+          },
+          {
+            "label": "(0,0,−2)",
+            "group": "Off the xy-plane",
+            "explanation": "The z-coordinate is nonzero."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Limits and Derivatives — concept investigation",
+      "subject": "mathematics",
+      "description": "Classify local rates of change by derivative sign.",
+      "config": {
+        "engine": "classification",
+        "objective": "Classify local rates of change by derivative sign.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Classify local rates of change by derivative sign.",
+        "chapter_ids": [
+          "11-mathematics-12"
+        ],
+        "cards": [
+          {
+            "label": "f(x)=x² at x=2",
+            "group": "Increasing locally",
+            "explanation": "A positive derivative indicates local increase."
+          },
+          {
+            "label": "f(x)=3x at x=0",
+            "group": "Increasing locally",
+            "explanation": "A positive derivative indicates local increase."
+          },
+          {
+            "label": "f(x)=x² at x=−2",
+            "group": "Decreasing locally",
+            "explanation": "A negative derivative indicates local decrease."
+          },
+          {
+            "label": "f(x)=−3x at x=0",
+            "group": "Decreasing locally",
+            "explanation": "A negative derivative indicates local decrease."
+          }
+        ]
+      }
+    },
+    {
+      "title": "The Living World — concept investigation",
+      "subject": "biology",
+      "description": "Distinguish taxonomic rank from a named taxon.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish taxonomic rank from a named taxon.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish taxonomic rank from a named taxon.",
+        "chapter_ids": [
+          "11-biology-1"
+        ],
+        "cards": [
+          {
+            "label": "Genus",
+            "group": "Taxonomic rank",
+            "explanation": "A rank is a level in the classification hierarchy."
+          },
+          {
+            "label": "Family",
+            "group": "Taxonomic rank",
+            "explanation": "A rank is a level in the classification hierarchy."
+          },
+          {
+            "label": "Homo",
+            "group": "Named taxon",
+            "explanation": "A taxon is a named group at a particular rank."
+          },
+          {
+            "label": "Felidae",
+            "group": "Named taxon",
+            "explanation": "A taxon is a named group at a particular rank."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Biological Classification — concept investigation",
+      "subject": "biology",
+      "description": "Compare prokaryotic and eukaryotic cellular organisation.",
+      "config": {
+        "engine": "classification",
+        "objective": "Compare prokaryotic and eukaryotic cellular organisation.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Compare prokaryotic and eukaryotic cellular organisation.",
+        "chapter_ids": [
+          "11-biology-2"
+        ],
+        "cards": [
+          {
+            "label": "Bacteria",
+            "group": "Prokaryotic",
+            "explanation": "Cells lack a membrane-bound nucleus."
+          },
+          {
+            "label": "Archaea",
+            "group": "Prokaryotic",
+            "explanation": "Cells lack a membrane-bound nucleus."
+          },
+          {
+            "label": "Fungi",
+            "group": "Eukaryotic",
+            "explanation": "Cells have a membrane-bound nucleus."
+          },
+          {
+            "label": "Animals",
+            "group": "Eukaryotic",
+            "explanation": "Cells have a membrane-bound nucleus."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Plant Kingdom — concept investigation",
+      "subject": "biology",
+      "description": "Distinguish seed-producing plant groups.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish seed-producing plant groups.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish seed-producing plant groups.",
+        "chapter_ids": [
+          "11-biology-3"
+        ],
+        "cards": [
+          {
+            "label": "Gymnosperms",
+            "group": "Seed plants",
+            "explanation": "These groups reproduce using seeds."
+          },
+          {
+            "label": "Angiosperms",
+            "group": "Seed plants",
+            "explanation": "These groups reproduce using seeds."
+          },
+          {
+            "label": "Bryophytes",
+            "group": "Seedless plants",
+            "explanation": "These groups do not produce seeds."
+          },
+          {
+            "label": "Pteridophytes",
+            "group": "Seedless plants",
+            "explanation": "These groups do not produce seeds."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Animal Kingdom — concept investigation",
+      "subject": "biology",
+      "description": "Use the presence of a vertebral column to classify animals.",
+      "config": {
+        "engine": "classification",
+        "objective": "Use the presence of a vertebral column to classify animals.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Use the presence of a vertebral column to classify animals.",
+        "chapter_ids": [
+          "11-biology-4"
+        ],
+        "cards": [
+          {
+            "label": "Frog",
+            "group": "Vertebrate",
+            "explanation": "The animal has a vertebral column."
+          },
+          {
+            "label": "Lizard",
+            "group": "Vertebrate",
+            "explanation": "The animal has a vertebral column."
+          },
+          {
+            "label": "Earthworm",
+            "group": "Invertebrate",
+            "explanation": "The animal lacks a vertebral column."
+          },
+          {
+            "label": "Butterfly",
+            "group": "Invertebrate",
+            "explanation": "The animal lacks a vertebral column."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Morphology of Flowering Plants — concept investigation",
+      "subject": "biology",
+      "description": "Distinguish vegetative and reproductive organs of a flowering plant.",
+      "config": {
+        "engine": "classification",
+        "objective": "Distinguish vegetative and reproductive organs of a flowering plant.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Distinguish vegetative and reproductive organs of a flowering plant.",
+        "chapter_ids": [
+          "11-biology-5"
+        ],
+        "cards": [
+          {
+            "label": "Root",
+            "group": "Vegetative organ",
+            "explanation": "The organ primarily supports growth, transport or photosynthesis."
+          },
+          {
+            "label": "Leaf",
+            "group": "Vegetative organ",
+            "explanation": "The organ primarily supports growth, transport or photosynthesis."
+          },
+          {
+            "label": "Flower",
+            "group": "Reproductive structure",
+            "explanation": "The structure participates in sexual reproduction or seed dispersal."
+          },
+          {
+            "label": "Fruit",
+            "group": "Reproductive structure",
+            "explanation": "The structure participates in sexual reproduction or seed dispersal."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Structural Organisation in Animals — concept investigation",
+      "subject": "biology",
+      "description": "Identify the main tissue function in the example.",
+      "config": {
+        "engine": "classification",
+        "objective": "Identify the main tissue function in the example.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Identify the main tissue function in the example.",
+        "chapter_ids": [
+          "11-biology-7"
+        ],
+        "cards": [
+          {
+            "label": "Skin epidermis",
+            "group": "Epithelial tissue",
+            "explanation": "Closely arranged cells line or cover surfaces."
+          },
+          {
+            "label": "Intestinal lining",
+            "group": "Epithelial tissue",
+            "explanation": "Closely arranged cells line or cover surfaces."
+          },
+          {
+            "label": "Bone",
+            "group": "Connective tissue",
+            "explanation": "Cells and matrix support, bind or transport."
+          },
+          {
+            "label": "Blood",
+            "group": "Connective tissue",
+            "explanation": "Cells and matrix support, bind or transport."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Cell Cycle and Cell Division — concept investigation",
+      "subject": "biology",
+      "description": "Compare chromosome behaviour in mitosis and meiosis.",
+      "config": {
+        "engine": "classification",
+        "objective": "Compare chromosome behaviour in mitosis and meiosis.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Compare chromosome behaviour in mitosis and meiosis.",
+        "chapter_ids": [
+          "11-biology-10"
+        ],
+        "cards": [
+          {
+            "label": "Sister chromatids separate in a mitotic division",
+            "group": "Mitosis",
+            "explanation": "A division usually preserves chromosome number in daughter cells."
+          },
+          {
+            "label": "Somatic cells divide for growth",
+            "group": "Mitosis",
+            "explanation": "A division usually preserves chromosome number in daughter cells."
+          },
+          {
+            "label": "Homologous chromosomes separate in meiosis I",
+            "group": "Meiosis",
+            "explanation": "Two divisions follow one DNA replication and reduce chromosome number."
+          },
+          {
+            "label": "Haploid products form after meiosis II",
+            "group": "Meiosis",
+            "explanation": "Two divisions follow one DNA replication and reduce chromosome number."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Respiration in Plants — concept investigation",
+      "subject": "biology",
+      "description": "Compare oxygen use in respiration pathways.",
+      "config": {
+        "engine": "classification",
+        "objective": "Compare oxygen use in respiration pathways.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Compare oxygen use in respiration pathways.",
+        "chapter_ids": [
+          "11-biology-12"
+        ],
+        "cards": [
+          {
+            "label": "Aerobic respiration in leaf cells",
+            "group": "Aerobic",
+            "explanation": "Oxygen participates in aerobic energy release."
+          },
+          {
+            "label": "Aerobic respiration in human cells",
+            "group": "Aerobic",
+            "explanation": "Oxygen participates in aerobic energy release."
+          },
+          {
+            "label": "Alcohol fermentation by yeast",
+            "group": "Anaerobic pathway",
+            "explanation": "Energy release can proceed without oxygen in these examples."
+          },
+          {
+            "label": "Lactate formation in oxygen-limited muscle",
+            "group": "Anaerobic pathway",
+            "explanation": "Energy release can proceed without oxygen in these examples."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Plant Growth and Development — concept investigation",
+      "subject": "biology",
+      "description": "Classify plant hormones by the developmental effect highlighted.",
+      "config": {
+        "engine": "classification",
+        "objective": "Classify plant hormones by the developmental effect highlighted.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Classify plant hormones by the developmental effect highlighted.",
+        "chapter_ids": [
+          "11-biology-13"
+        ],
+        "cards": [
+          {
+            "label": "Auxin promoting cell elongation",
+            "group": "Growth promotion example",
+            "explanation": "The stated example promotes extension or division."
+          },
+          {
+            "label": "Cytokinin promoting cell division",
+            "group": "Growth promotion example",
+            "explanation": "The stated example promotes extension or division."
+          },
+          {
+            "label": "Abscisic acid promoting stomatal closure",
+            "group": "Stress or senescence example",
+            "explanation": "The stated example concerns stress response or ageing."
+          },
+          {
+            "label": "Ethylene promoting leaf senescence",
+            "group": "Stress or senescence example",
+            "explanation": "The stated example concerns stress response or ageing."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Breathing and Exchange of Gases — concept investigation",
+      "subject": "biology",
+      "description": "Compare inspiration and expiration during quiet breathing.",
+      "config": {
+        "engine": "classification",
+        "objective": "Compare inspiration and expiration during quiet breathing.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Compare inspiration and expiration during quiet breathing.",
+        "chapter_ids": [
+          "11-biology-14"
+        ],
+        "cards": [
+          {
+            "label": "Diaphragm contracts and flattens",
+            "group": "Inspiration",
+            "explanation": "Thoracic volume increases and air moves into the lungs."
+          },
+          {
+            "label": "Intrapulmonary pressure falls below atmospheric pressure",
+            "group": "Inspiration",
+            "explanation": "Thoracic volume increases and air moves into the lungs."
+          },
+          {
+            "label": "Diaphragm relaxes",
+            "group": "Expiration",
+            "explanation": "Thoracic volume decreases and air moves out during quiet breathing."
+          },
+          {
+            "label": "Intrapulmonary pressure rises above atmospheric pressure",
+            "group": "Expiration",
+            "explanation": "Thoracic volume decreases and air moves out during quiet breathing."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Body Fluids and Circulation — concept investigation",
+      "subject": "biology",
+      "description": "Classify vessels by direction of flow relative to the heart.",
+      "config": {
+        "engine": "classification",
+        "objective": "Classify vessels by direction of flow relative to the heart.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Classify vessels by direction of flow relative to the heart.",
+        "chapter_ids": [
+          "11-biology-15"
+        ],
+        "cards": [
+          {
+            "label": "Aorta",
+            "group": "Artery",
+            "explanation": "Arteries carry blood away from the heart, irrespective of oxygen content."
+          },
+          {
+            "label": "Pulmonary artery",
+            "group": "Artery",
+            "explanation": "Arteries carry blood away from the heart, irrespective of oxygen content."
+          },
+          {
+            "label": "Vena cava",
+            "group": "Vein",
+            "explanation": "Veins carry blood toward the heart."
+          },
+          {
+            "label": "Pulmonary vein",
+            "group": "Vein",
+            "explanation": "Veins carry blood toward the heart."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Excretory Products and Elimination — concept investigation",
+      "subject": "biology",
+      "description": "Separate filtration and selective reabsorption in a nephron.",
+      "config": {
+        "engine": "classification",
+        "objective": "Separate filtration and selective reabsorption in a nephron.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Separate filtration and selective reabsorption in a nephron.",
+        "chapter_ids": [
+          "11-biology-16"
+        ],
+        "cards": [
+          {
+            "label": "Water entering Bowman's capsule",
+            "group": "Filtration",
+            "explanation": "Pressure drives fluid and small solutes from glomerular blood into the capsule."
+          },
+          {
+            "label": "Urea entering glomerular filtrate",
+            "group": "Filtration",
+            "explanation": "Pressure drives fluid and small solutes from glomerular blood into the capsule."
+          },
+          {
+            "label": "Glucose reabsorbed from the tubule",
+            "group": "Reabsorption",
+            "explanation": "Useful substances move from tubular fluid back toward the blood."
+          },
+          {
+            "label": "Water reabsorbed along the nephron",
+            "group": "Reabsorption",
+            "explanation": "Useful substances move from tubular fluid back toward the blood."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Locomotion and Movement — concept investigation",
+      "subject": "biology",
+      "description": "Compare skeletal and smooth muscle in the examples.",
+      "config": {
+        "engine": "classification",
+        "objective": "Compare skeletal and smooth muscle in the examples.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Compare skeletal and smooth muscle in the examples.",
+        "chapter_ids": [
+          "11-biology-17"
+        ],
+        "cards": [
+          {
+            "label": "Biceps",
+            "group": "Skeletal muscle",
+            "explanation": "Usually voluntary, striated muscle moves the skeleton."
+          },
+          {
+            "label": "Quadriceps",
+            "group": "Skeletal muscle",
+            "explanation": "Usually voluntary, striated muscle moves the skeleton."
+          },
+          {
+            "label": "Intestinal wall muscle",
+            "group": "Smooth muscle",
+            "explanation": "Involuntary, non-striated muscle occurs in many organ walls."
+          },
+          {
+            "label": "Blood vessel wall muscle",
+            "group": "Smooth muscle",
+            "explanation": "Involuntary, non-striated muscle occurs in many organ walls."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Neural Control and Coordination — concept investigation",
+      "subject": "biology",
+      "description": "Compare rapid neural signalling and hormonal signalling.",
+      "config": {
+        "engine": "classification",
+        "objective": "Compare rapid neural signalling and hormonal signalling.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Compare rapid neural signalling and hormonal signalling.",
+        "chapter_ids": [
+          "11-biology-18"
+        ],
+        "cards": [
+          {
+            "label": "Withdrawal reflex through a reflex arc",
+            "group": "Neural signalling",
+            "explanation": "Electrical impulses and synapses transmit signals through neurons."
+          },
+          {
+            "label": "Motor neuron signal to a skeletal muscle",
+            "group": "Neural signalling",
+            "explanation": "Electrical impulses and synapses transmit signals through neurons."
+          },
+          {
+            "label": "Insulin signalling to target tissues",
+            "group": "Hormonal signalling",
+            "explanation": "Chemical messengers travel to target cells, often through blood."
+          },
+          {
+            "label": "Thyroxine regulating metabolism",
+            "group": "Hormonal signalling",
+            "explanation": "Chemical messengers travel to target cells, often through blood."
+          }
+        ]
+      }
+    },
+    {
+      "title": "Chemical Coordination and Integration — concept investigation",
+      "subject": "biology",
+      "description": "Match endocrine hormones to their glands.",
+      "config": {
+        "engine": "classification",
+        "objective": "Match endocrine hormones to their glands.",
+        "prediction": "Predict the group for each example before checking. Which feature determines your choice?",
+        "investigation": [
+          "Read the grouping rule and compare the examples.",
+          "Assign each example to a group, then check your classification.",
+          "Explain one corrected decision and propose a new example for each group."
+        ],
+        "explanation": "This focused classification activity explores one distinction in the chapter. It does not replace the complete chapter or a physical experiment. Match endocrine hormones to their glands.",
+        "chapter_ids": [
+          "11-biology-19"
+        ],
+        "cards": [
+          {
+            "label": "Insulin",
+            "group": "Pancreatic hormone",
+            "explanation": "The endocrine pancreas produces this hormone."
+          },
+          {
+            "label": "Glucagon",
+            "group": "Pancreatic hormone",
+            "explanation": "The endocrine pancreas produces this hormone."
+          },
+          {
+            "label": "Thyroxine (T4)",
+            "group": "Thyroid hormone",
+            "explanation": "The thyroid produces these hormones."
+          },
+          {
+            "label": "Triiodothyronine (T3)",
+            "group": "Thyroid hormone",
+            "explanation": "The thyroid produces these hormones."
+          }
+        ]
+      }
+    }
+  ]
+}

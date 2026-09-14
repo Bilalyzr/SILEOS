@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Predator–Prey Ecosystem — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Predator–Prey Ecosystem<span class="lk-tag">Class 10 &amp; 12 · Biology</span></h1>
+    <div class="lk-meta">CBSE: Our Environment / Ecosystem — population balance, food chains, interdependence</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage">
+    <canvas id="cv"></canvas>
+    <div class="lk-banner hidden" id="crashBanner">💀 The ecosystem collapsed — one population died out!</div>
+  </div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Population</h2>
+      <div class="lk-row"><label class="lk-name">🐇 Prey (start)</label><input type="range" id="h0" min="10" max="200" step="5" value="60"><span class="lk-val" id="h0v">60</span></div>
+      <div class="lk-row"><label class="lk-name">🦊 Predators (start)</label><input type="range" id="p0" min="2" max="80" step="2" value="20"><span class="lk-val" id="p0v">20</span></div>
+    </div>
+    <div class="lk-card">
+      <h2>Environment settings</h2>
+      <div class="lk-row"><label class="lk-name">Prey birth rate</label><input type="range" id="alpha" min="0.1" max="1" step="0.05" value="0.6"><span class="lk-val" id="alphav">0.60</span></div>
+      <div class="lk-row"><label class="lk-name">Predation rate</label><input type="range" id="beta" min="0.005" max="0.05" step="0.005" value="0.02"><span class="lk-val" id="betav">0.020</span></div>
+      <div class="lk-row"><label class="lk-name">Predator death</label><input type="range" id="gamma" min="0.1" max="1" step="0.05" value="0.4"><span class="lk-val" id="gammav">0.40</span></div>
+    </div>
+    <div class="lk-card">
+      <h2>Simulation</h2>
+      <button class="lk-btn green" id="replayBtn">▶ Run ecosystem (60 seasons)</button>
+      <div class="lk-readout" id="now" style="margin-top:8px;"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint">Green = prey (rabbits), rose = predators (foxes). More rabbits
+      feed more foxes, but more foxes eat more rabbits — so the two curves chase each
+      other in <b>cycles</b>. Can you find settings where both survive in balance? What
+      happens if predation is too fast?</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./predator-prey/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

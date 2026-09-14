@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SashaInfinity — Certificate of Achievement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<script src="/certificate-files/assets/qrcode.min.js"></script>
+<style>
+  *,::before,::after{ box-sizing:border-box; margin:0; padding:0;
+    -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+  :root{
+    --orange:#f97316; --orange-d:#ea580c; --orange-l:#fb923c; --amber:#f4911a;
+    --navy:#061e43; --navy-2:#0c4a6e; --blue:#0ea5e9;
+    --ink:#0b2444; --muted:#5b6b80; --glass:#ffffff;
+    --hero:linear-gradient(125deg,#f4911a 0%,#f97316 22%,#ea580c 42%,#0c4a6e 74%,#061e43 100%);
+    --name-grad:linear-gradient(100deg,#f97316,#ea580c 44%,#0c4a6e);
+    --line:linear-gradient(90deg,transparent,var(--orange),transparent);
+  }
+  html,body{ height:100%; }
+  body{ font-family:'Poppins',sans-serif; color:var(--ink);
+    background:radial-gradient(circle at 50% -10%, #14304f, #060c16 74%);
+    min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:26px 16px 60px; -webkit-font-smoothing:antialiased; }
+
+  .toolbar{ width:1200px; max-width:100%; display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:20px; color:#e9eef5; }
+  .toolbar .brand{ display:flex; align-items:center; gap:10px; margin-right:auto; }
+  .toolbar .brand img{ height:26px; }
+  .toolbar .brand b{ font-weight:600; letter-spacing:.5px; font-size:14px; }
+  .toolbar .hint{ font-size:12.5px; color:#9fb0c4; font-weight:300; }
+  .btn{ font-family:'Poppins',sans-serif; font-size:13px; font-weight:500; color:#fff; background:linear-gradient(135deg,#f97316,#ea580c); border:none; border-radius:8px; padding:9px 16px; cursor:pointer; letter-spacing:.3px; box-shadow:0 3px 10px rgba(0,0,0,.35); }
+  .btn.alt{ background:linear-gradient(135deg,#0ea5e9,#0c4a6e); }
+
+  .stage{ width:1200px; height:850px; flex:0 0 auto; }
+  .cert{ font-family:'Poppins',sans-serif; width:1200px; height:850px; color:var(--ink);
+    position:relative; overflow:hidden; background:#fff; box-shadow:0 30px 80px rgba(0,0,0,.55); }
+
+  /* aurora hero panel on the left */
+  .hero{ position:absolute; left:0; top:0; bottom:0; width:430px; z-index:2; background:var(--hero); overflow:hidden; }
+  .hero::before{ content:''; position:absolute; inset:0; background:
+      radial-gradient(60% 40% at 24% 18%, rgba(255,255,255,.35), transparent 60%),
+      radial-gradient(50% 40% at 82% 82%, rgba(255,255,255,.12), transparent 60%); }
+  .hero::after{ content:''; position:absolute; inset:0; opacity:.4;
+    background:repeating-conic-gradient(from 0deg at 50% 42%, rgba(255,255,255,.08) 0deg 2deg, transparent 2deg 7deg); }
+  .blob{ position:absolute; border-radius:50%; filter:blur(2px); mix-blend-mode:screen; opacity:.5; }
+  .blob.b1{ width:260px; height:260px; top:-60px; left:-40px; background:radial-gradient(circle,#ffd18a,transparent 66%); }
+  .blob.b2{ width:300px; height:300px; bottom:-80px; right:-70px; background:radial-gradient(circle,#3aa0d8,transparent 66%); }
+
+  .hero-in{ position:absolute; inset:0; z-index:3; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:52px 40px; text-align:center; color:#fff; }
+  .hero-in .h-logo{ height:66px; filter:brightness(0) invert(1) drop-shadow(0 2px 6px rgba(0,0,0,.25)); }
+  .hero-in .h-badge{ margin-top:38px; width:150px; height:150px; border-radius:50%; background:rgba(255,255,255,.14);
+    border:1.5px solid rgba(255,255,255,.5); display:flex; align-items:center; justify-content:center; box-shadow:0 14px 40px rgba(0,0,0,.28), inset 0 0 30px rgba(255,255,255,.12); backdrop-filter:blur(2px); }
+  .hero-in .h-badge img{ width:112px; height:112px; object-fit:contain; }
+  .hero-in .h-tag{ margin-top:26px; font-family:'Great Vibes',cursive; font-size:34px; line-height:1; }
+  .hero-in .h-sub{ margin-top:8px; font-size:10px; font-weight:600; letter-spacing:3.5px; text-transform:uppercase; opacity:.9; }
+  .hero-wave{ position:absolute; top:0; bottom:0; right:-1px; width:60px; z-index:4; background:#fff;
+    clip-path:polygon(100% 0, 100% 100%, 34% 100%, 62% 50%, 34% 0); }
+
+  /* right content */
+  .panel{ position:absolute; left:430px; right:0; top:0; bottom:0; z-index:3; padding:66px 70px 0 78px; display:flex; flex-direction:column; }
+  .cert::after{ content:''; position:absolute; right:-90px; top:-90px; width:360px; height:360px; border-radius:50%; z-index:0;
+    background:radial-gradient(circle at 40% 40%, rgba(249,115,22,.10), transparent 62%); pointer-events:none; }
+
+  .p-top{ display:flex; align-items:flex-start; justify-content:space-between; }
+  .chip{ display:inline-flex; align-items:center; gap:8px; background:#fff4ec; color:var(--orange-d);
+    border:1px solid #ffd9bd; border-radius:999px; padding:7px 16px; font-size:11px; font-weight:600; letter-spacing:2.5px; text-transform:uppercase; }
+  .chip::before{ content:''; width:7px; height:7px; border-radius:50%; background:var(--orange); }
+  .cid{ text-align:right; font-family:'Sora',sans-serif; font-size:11px; letter-spacing:.5px; color:var(--muted); }
+  .cid b{ display:block; font-weight:600; color:var(--orange-d); letter-spacing:1px; margin-top:2px; }
+
+  .title{ font-family:'Sora',sans-serif; font-weight:800; font-size:50px; letter-spacing:-1px; color:var(--navy); line-height:1.02; margin-top:30px; }
+  .title span{ background:var(--name-grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .subtitle{ margin-top:34px; font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); font-weight:500; }
+
+  .recipient-name{ font-family:'Sora',sans-serif; font-weight:700; font-size:56px; line-height:1.06; margin-top:8px; text-transform:capitalize; letter-spacing:-.5px;
+    background:var(--name-grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:var(--orange-d); display:inline-block; }
+  .u-line{ width:150px; height:4px; border-radius:3px; background:var(--hero); margin-top:14px; }
+
+  .course{ margin-top:26px; font-size:14.5px; color:var(--muted); line-height:1.7; max-width:560px; }
+  .course-name{ display:block; font-family:'Sora',sans-serif; font-size:23px; font-weight:600; color:var(--navy); margin-top:5px; text-transform:capitalize; }
+
+  .foot{ margin-top:auto; display:flex; align-items:flex-end; gap:48px; padding-bottom:150px; }
+  .sig{ min-width:200px; }
+  .sig-name{ font-family:'Great Vibes',cursive; font-size:33px; line-height:.8; color:var(--navy); }
+  .sig-line{ height:2px; width:210px; background:var(--line); margin-top:7px; }
+  .sig-role{ font-size:10.5px; font-weight:600; text-transform:uppercase; letter-spacing:1.4px; color:var(--muted); margin-top:8px; }
+  .sig-date{ font-size:11px; color:var(--muted); margin-top:2px; }
+
+  .verify-text{ position:absolute; left:496px; bottom:70px; z-index:5; text-align:left; max-width:230px; }
+  .vt-label{ font-size:10px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--orange-d); }
+  .vt-url{ font-size:11px; color:var(--muted); margin-top:3px; font-weight:500; }
+  .vt-code{ font-size:10px; color:var(--muted); margin-top:5px; word-break:break-all; }
+  .qr-card{ position:absolute; right:56px; bottom:56px; z-index:5; background:#fff; border:2px solid var(--orange); border-radius:12px; padding:9px; box-shadow:0 8px 22px rgba(0,0,0,.16); cursor:pointer; }
+  #qrcode{ width:92px; height:92px; } #qrcode img,#qrcode canvas{ width:92px !important; height:92px !important; display:block; }
+  .qr-cap{ font-size:9px; font-weight:600; color:var(--orange-d); margin-top:5px; letter-spacing:.5px; text-align:center; }
+
+  .company{ position:absolute; left:430px; right:0; bottom:0; z-index:4; background:#0b2444;
+    color:#dfe8f3; text-align:center; font-size:12.5px; font-weight:600; letter-spacing:3px; text-transform:uppercase; padding:12px 0; }
+
+  /* overlay */
+  .overlay{ position:fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center; background:rgba(6,16,31,.64); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); padding:24px; }
+  .overlay.show{ display:flex; }
+  .vmodal{ width:560px; max-width:100%; background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 40px 120px rgba(0,0,0,.5); }
+  .vm-top{ background:var(--hero); padding:28px 30px 24px; text-align:center; color:#fff; position:relative; }
+  .vm-close{ position:absolute; top:14px; right:16px; width:30px; height:30px; border-radius:50%; border:none; cursor:pointer; background:rgba(255,255,255,.2); color:#fff; font-size:17px; }
+  .vchk{ width:60px; height:60px; display:block; margin:0 auto 10px; }
+  .vchk .ring{ fill:#1eb877; } .vchk circle{ fill:none; stroke:#fff; stroke-width:3; }
+  .vchk path{ fill:none; stroke:#fff; stroke-width:4; stroke-linecap:round; stroke-linejoin:round; }
+  .vm-top h3{ font-family:'Sora',sans-serif; font-size:23px; font-weight:700; }
+  .vm-sub{ font-size:12.5px; opacity:.94; margin-top:5px; font-weight:300; }
+  .vm-pill{ display:inline-flex; align-items:center; gap:6px; margin-top:12px; background:rgba(255,255,255,.2); padding:5px 14px; border-radius:999px; font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; }
+  .vm-pill::before{ content:''; width:7px; height:7px; border-radius:50%; background:#9dffce; box-shadow:0 0 8px #9dffce; }
+  .vm-body{ padding:20px 30px 8px; }
+  .vrow{ display:flex; justify-content:space-between; gap:18px; padding:11px 0; border-bottom:1px solid #eef1f5; }
+  .vrow:last-child{ border-bottom:none; }
+  .vrow .k{ font-size:12px; color:#8b95a4; font-weight:500; letter-spacing:.4px; text-transform:uppercase; }
+  .vrow .v{ font-size:14px; color:var(--navy); font-weight:600; text-align:right; }
+  .vm-foot{ display:flex; align-items:center; gap:16px; padding:18px 30px 24px; background:#f7f9fc; border-top:1px solid #eef1f5; }
+  .vm-qr{ width:82px; height:82px; border:1px solid #e6ebf1; border-radius:8px; padding:6px; background:#fff; flex:0 0 auto; }
+  .vm-qr img,.vm-qr canvas{ width:70px !important; height:70px !important; }
+  .vm-note{ font-size:11.5px; color:#77839a; line-height:1.5; } .vm-note b{ color:#138a5a; } .vm-note a{ color:var(--orange-d); text-decoration:none; font-weight:600; }
+
+  @media print{
+    @page{ size:A4 landscape; margin:0; }
+    html,body{ width:297mm; height:210mm; background:#fff; }
+    body{ padding:0; display:block; }
+    .toolbar,.overlay{ display:none !important; }
+    .stage{ width:297mm; height:210mm; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .cert{ transform:scale(0.929); transform-origin:center center; box-shadow:none; }
+  }
+</style>
+</head>
+<body>
+  <div class="toolbar">
+    <div class="brand"><img src="/certificate-files/assets/logo.png" alt="SashaInfinity"><b>Certificate Studio</b></div>
+    <span class="hint">QR opens verification</span>
+    <button class="btn alt" id="verifyBtn">Verify Credential</button>
+    <button class="btn" id="printBtn">Download / Print</button>
+  </div>
+
+  <div class="stage">
+  <div class="cert" id="cert">
+    <!-- aurora hero -->
+    <div class="hero">
+      <span class="blob b1"></span><span class="blob b2"></span>
+      <div class="hero-in">
+        <img class="h-logo" src="/certificate-files/assets/logo.png" alt="SashaInfinity">
+        <div class="h-badge"><img src="/certificate-files/assets/seal.png" alt="Official Seal"></div>
+        <div class="h-tag">Learn with Sasha</div>
+        <div class="h-sub">Democratize Education</div>
+      </div>
+    </div>
+    <div class="hero-wave"></div>
+
+    <!-- content -->
+    <div class="panel">
+      <div class="p-top">
+        <span class="chip">Certificate of Achievement</span>
+        <div class="cid">Certificate ID<b data-field="certId">CERT-2026-000142</b></div>
+      </div>
+
+      <div class="title">This certifies<br><span>your achievement</span></div>
+      <div class="subtitle">Proudly presented to</div>
+
+      <span class="recipient-name" data-field="name">Logadheenan V M</span>
+      <div class="u-line"></div>
+
+      <div class="course">
+        For successfully completing the comprehensive program in
+        <span class="course-name" data-field="course">Full-Stack Web Development</span>
+      </div>
+
+      <div class="foot">
+        <div class="sig">
+          <div class="sig-name" data-field="instructor">Gayathri Devi</div>
+          <div class="sig-line"></div>
+          <div class="sig-role">Course Instructor</div>
+          <div class="sig-date" data-field="date1">June 02, 2026</div>
+        </div>
+        <div class="sig" style="min-width:150px">
+          <div class="sig-name">SashaInfinity</div>
+          <div class="sig-line" style="width:150px"></div>
+          <div class="sig-role">Learning Platform</div>
+          <div class="sig-date" data-field="date2">June 02, 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="verify-text">
+      <div class="vt-label">Verified Credential</div>
+      <div class="vt-url">sashainfinity.com/verify</div>
+      <div class="vt-code" id="vtCode">ID: CERT-2026-000142</div>
+    </div>
+    <div class="qr-card" id="qrCard" title="Open verification">
+      <div id="qrcode"></div>
+      <div class="qr-cap">Scan to Verify</div>
+    </div>
+
+    <div class="company">SashaInfinity Private Limited&nbsp;·&nbsp;Democratize Education</div>
+  </div>
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="vmodal" role="dialog" aria-modal="true" aria-label="Credential verification">
+      <div class="vm-top">
+        <button class="vm-close" id="vmClose" aria-label="Close">×</button>
+        <svg class="vchk" viewBox="0 0 52 52"><circle class="ring" cx="26" cy="26" r="24" stroke="none"></circle><circle cx="26" cy="26" r="24"></circle><path d="M15 27 l8 8 l15 -16"></path></svg>
+        <h3>Credential Verified</h3>
+        <div class="vm-sub">This certificate is authentic and on record with SashaInfinity</div>
+        <span class="vm-pill">Valid</span>
+      </div>
+      <div class="vm-body">
+        <div class="vrow"><span class="k">Holder</span><span class="v" id="vHolder">—</span></div>
+        <div class="vrow"><span class="k">Programme</span><span class="v" id="vCourse">—</span></div>
+        <div class="vrow"><span class="k">Issued on</span><span class="v" id="vDate">—</span></div>
+        <div class="vrow"><span class="k">Credential ID</span><span class="v" id="vId">—</span></div>
+        <div class="vrow"><span class="k">Issued by</span><span class="v">SashaInfinity Pvt. Ltd.</span></div>
+      </div>
+      <div class="vm-foot">
+        <div class="vm-qr" id="vmQr"></div>
+        <div class="vm-note">Status: <b>Authentic &amp; unrevoked</b><br>Verify independently at <a href="#" id="vLink">sashainfinity.com/verify</a></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  function certId(){ var el=document.querySelector('[data-field="certId"]'); return el?el.textContent.trim():'CERT-2026-000142'; }
+  function verifyUrl(){ return 'https://sashainfinity.com/verify/' + encodeURIComponent(certId()); }
+  function generateQR(){
+    var el=document.getElementById('qrcode'); if(!el) return; el.innerHTML='';
+    if(window.QRCode){ new QRCode(el,{ text:verifyUrl(), width:92, height:92, colorDark:'#0b2444', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.M }); }
+    var vt=document.getElementById('vtCode'); if(vt) vt.textContent='ID: '+certId();
+  }
+  (function(){
+    var overlay=document.getElementById('overlay'), vmQr=document.getElementById('vmQr');
+    function open(){
+      document.getElementById('vHolder').textContent=document.querySelector('[data-field="name"]').textContent.trim();
+      document.getElementById('vCourse').textContent=document.querySelector('[data-field="course"]').textContent.trim();
+      document.getElementById('vDate').textContent=document.querySelector('[data-field="date2"]').textContent.trim();
+      document.getElementById('vId').textContent=certId();
+      var l=document.getElementById('vLink'); if(l){ l.textContent='sashainfinity.com/verify/'+certId(); }
+      vmQr.innerHTML=''; if(window.QRCode){ new QRCode(vmQr,{ text:verifyUrl(), width:70, height:70, colorDark:'#138a5a', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.M }); }
+      overlay.classList.add('show');
+    }
+    function close(){ overlay.classList.remove('show'); }
+    var vb=document.getElementById('verifyBtn'); if(vb) vb.addEventListener('click', open);
+    var qc=document.getElementById('qrCard'); if(qc) qc.addEventListener('click', open);
+    var cl=document.getElementById('vmClose'); if(cl) cl.addEventListener('click', close);
+    overlay.addEventListener('click', function(e){ if(e.target===overlay) close(); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+  })();
+  var pb=document.getElementById('printBtn'); if(pb) pb.addEventListener('click', function(){ window.print(); });
+  generateQR();
+</script>
+</body>
+</html>

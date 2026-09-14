@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heat Transfer Lab — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Heat Transfer Lab<span class="lk-tag">Class 7 · Science</span></h1>
+    <div class="lk-meta">CBSE: Heat — conduction, convection, radiation &amp; temperature</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Mode</h2>
+      <div class="lk-seg" id="modeSeg">
+        <button class="active">🥄 Conduction</button>
+        <button>♨️ Convection</button>
+        <button>☀️ Radiation</button>
+      </div>
+    </div>
+    <div class="lk-card" id="condCard">
+      <h2>Conductor material</h2>
+      <div class="lk-seg" id="matSeg">
+        <button class="active">Copper</button>
+        <button>Steel</button>
+        <button>Glass</button>
+        <button>Wood</button>
+      </div>
+      <div class="lk-readout" id="condRead"></div>
+    </div>
+    <div class="lk-card hidden" id="convCard">
+      <h2>Beaker heater</h2>
+      <div class="lk-row"><label class="lk-name">Flame</label><input type="range" id="flame" min="1" max="3" step="1" value="2"><span class="lk-val" id="flamev">medium</span></div>
+      <div class="lk-readout" id="convRead"></div>
+    </div>
+    <div class="lk-card hidden" id="radCard">
+      <h2>Radiation source</h2>
+      <div class="lk-row"><label class="lk-name">Distance</label><input type="range" id="dist" min="60" max="240" step="10" value="120"><span class="lk-val" id="distv">120 Mm</span></div>
+      <label class="lk-check"><input type="checkbox" id="vacChk" checked> Space vacuum (no medium!)</label>
+      <div class="lk-readout" id="radRead"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint"><b>Conduction</b>: heat hops particle-to-particle — metals conduct
+      fast, wood barely. <b>Convection</b>: hot liquid/gas <i>rises</i>, cool sinks — a
+      circulating loop. <b>Radiation</b>: infrared waves need <b>no medium at all</b> —
+      that's how the Sun warms Earth through empty space!</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./heat-transfer-lab/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

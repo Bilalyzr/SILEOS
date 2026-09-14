@@ -1,0 +1,1252 @@
+@import "./astra-tokens.css";
+
+.astra-theme
+  .min-h-screen:is(.bg-gray-50, .bg-slate-50, .bg-neutral-50, .bg-background) {
+  background: transparent !important;
+}
+.astra-theme .sf-card:has(table, form) {
+  --panel-bg: var(--glass-3);
+  --panel-blur: var(--blur-3);
+}
+.astra-theme
+  :is(.rd-managed-course, .rd-course-manage-body, .rd-ebook-list, .rd-stat) {
+  background: var(--glass-3) !important;
+}
+.astra-theme .rd-home-hero {
+  margin-top: 24px;
+}
+.astra-theme .rd-public-header {
+  margin: 12px 16px 0;
+}
+.astra-theme
+  :is(
+    .rd-eyebrow,
+    .sf-eyebrow,
+    .rd-stat-label,
+    .rd-home-guide span,
+    .rd-course-summary small,
+    .rd-course-number small
+  ) {
+  font-size: 11px !important;
+}
+.astra-theme
+  :is(
+    .rd-stat-footer,
+    .rd-home-paths,
+    .rd-text-link,
+    .rd-course-manage > summary,
+    .rd-home-guide a
+  ) {
+  font-size: 12.5px !important;
+}
+
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("/design/fonts/PlusJakartaSans.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/design/fonts/JetBrainsMono.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+/* One fixed field per document. Tokens intentionally supersede earlier themes. */
+body.astra-theme {
+  --sf-ink: var(--ink);
+  --sf-ink-2: var(--ink-2);
+  --sf-muted: var(--ink-3);
+  --sf-bg: transparent;
+  --sf-surface: var(--glass-2);
+  --sf-surface-2: var(--glass-3);
+  --sf-line: var(--hairline);
+  --sf-accent: var(--accent-deep);
+  --sf-tint: rgba(255, 117, 31, 0.14);
+  --sf-radius: var(--r-m);
+  --sf-shadow: var(--shadow-2), var(--lift);
+  --primary-500: var(--accent-deep);
+  --primary-600: var(--accent-deep);
+  --primary-700: var(--accent-deep);
+  --primary-50: rgba(255, 117, 31, 0.08);
+  --primary-100: rgba(255, 117, 31, 0.14);
+  --field-lead: 255, 117, 31;
+  --field-second: 109, 74, 255;
+  margin: 0;
+  color: var(--ink);
+  font:
+    400 15.5px/1.65 "Plus Jakarta Sans",
+    system-ui,
+    sans-serif;
+  background: #f6f8fc;
+  color-scheme: light;
+}
+body.astra-theme[data-page-family="learn"] {
+  --field-lead: 255, 117, 31;
+  --field-second: 33, 89, 216;
+}
+body.astra-theme[data-page-family="catalog"] {
+  --field-lead: 255, 117, 31;
+  --field-second: 109, 74, 255;
+}
+body.astra-theme[data-page-family="admin"] {
+  --field-lead: 255, 117, 31;
+  --field-second: 11, 37, 64;
+}
+body.astra-theme[data-page-family="billing"] {
+  --field-lead: 255, 117, 31;
+  --field-second: 216, 30, 99;
+}
+body.astra-theme::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      60% 55% at 12% 8%,
+      rgba(var(--field-lead), 0.3),
+      transparent 70%
+    ),
+    radial-gradient(
+      55% 50% at 88% 14%,
+      rgba(var(--field-second), 0.26),
+      transparent 72%
+    ),
+    radial-gradient(
+      70% 60% at 70% 92%,
+      rgba(var(--field-lead), 0.24),
+      transparent 74%
+    ),
+    linear-gradient(160deg, #eef3fb, #fdf6f0);
+  filter: saturate(115%);
+}
+.astra-theme #root {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+  font-family: inherit;
+}
+.astra-theme
+  :is(.App, .dash-bg, .rd-workspace, .sf-auth, .sf-auth-content, .sf-app) {
+  background: transparent;
+  color: var(--ink);
+}
+.astra-theme
+  :is(.dash-bg-shape, .si-glass-halo::before, .si-glass-halo::after) {
+  display: none;
+}
+.astra-theme :is(h1, h2, h3, h4, h5, h6) {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--ink);
+}
+.astra-theme :is(p, li, td, label, button, input, textarea, select) {
+  text-wrap: pretty;
+}
+.astra-theme :is(p, li) {
+  line-height: 1.65;
+}
+.astra-theme
+  :is(
+    code,
+    pre,
+    kbd,
+    .font-mono,
+    .tabular-nums,
+    .rd-metrics dd,
+    .dash-stat-value,
+    .sf-stat-grid strong
+  ) {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.astra-theme
+  :is(
+    .text-gray-900,
+    .text-gray-800,
+    .text-neutral-900,
+    .text-neutral-800,
+    .text-secondary-900,
+    .text-slate-900
+  ) {
+  color: var(--ink) !important;
+}
+.astra-theme
+  :is(
+    .text-gray-700,
+    .text-gray-600,
+    .text-neutral-700,
+    .text-neutral-600,
+    .text-slate-600,
+    .text-secondary-700
+  ) {
+  color: var(--ink-2) !important;
+}
+.astra-theme
+  :is(
+    .text-gray-500,
+    .text-gray-400,
+    .text-neutral-500,
+    .text-neutral-400,
+    .text-slate-500,
+    .text-muted-foreground,
+    .sf-muted
+  ) {
+  color: var(--ink-3) !important;
+}
+.astra-theme
+  :is(
+    .text-orange-400,
+    .text-orange-500,
+    .text-orange-600,
+    .text-primary-500,
+    .text-primary-600,
+    .text-primary-700
+  ) {
+  color: var(--accent-deep) !important;
+}
+.astra-theme :is(.bg-clip-text, .text-gradient) {
+  background: none !important;
+  -webkit-text-fill-color: var(--ink);
+  color: var(--ink) !important;
+}
+.astra-theme :is(.rd-eyebrow, .sf-eyebrow, .rd-metrics dt, .dash-label) {
+  font:
+    600 11px/1.65 "Plus Jakarta Sans",
+    sans-serif;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.astra-theme :is(.text-xs, small) {
+  font-size: 12.5px;
+}
+.astra-theme :is(.text-sm, .sf-muted) {
+  font-size: 14px;
+}
+.astra-theme :is(.text-base) {
+  font-size: 15.5px;
+}
+.astra-theme :is(.text-lg) {
+  font-size: 17px;
+}
+.astra-theme :is(.text-xl) {
+  font-size: 21px;
+}
+.astra-theme :is(.text-2xl) {
+  font-size: 27px;
+}
+.astra-theme :is(.text-3xl, .rd-page-heading h1, .dash-h1) {
+  font-size: 34px;
+}
+.astra-theme
+  :is(.text-4xl, .text-5xl, .text-6xl, .rd-home-hero h1, .sf-hero h1) {
+  font-size: clamp(34px, 4vw, 44px);
+}
+
+/* Semantic surfaces plus adapters for the existing live page compositions. */
+.astra-theme
+  :is(
+    [data-glass],
+    .astra-panel,
+    .astra-work,
+    .sf-card,
+    .dash-card,
+    .dash-card-solid,
+    .rd-panel,
+    .sf-surface,
+    .rd-page-heading,
+    .sf-hero,
+    .rd-home-hero,
+    .sf-auth-story,
+    .rd-public-page-header,
+    .lab-card,
+    .lab-chapters article,
+    .rd-catalog-filters,
+    .rd-course-row,
+    .rd-ebook-detail,
+    .rd-ebook-editor,
+    .rd-company-nav,
+    .rd-profile-activity,
+    .sf-empty
+  ) {
+  --panel-bg: var(--glass-2);
+  --panel-blur: var(--blur-2);
+  color: var(--ink);
+  background: var(--panel-bg) !important;
+  background-image: none !important;
+  border: 1px solid var(--hairline) !important;
+  border-radius: var(--r-m) !important;
+  box-shadow: var(--shadow-2), var(--lift) !important;
+  backdrop-filter: var(--panel-blur) !important;
+  -webkit-backdrop-filter: var(--panel-blur) !important;
+}
+.astra-theme
+  :is(
+    [data-glass="work"],
+    .astra-work,
+    .rd-metrics,
+    .sf-stat-grid > div,
+    .rd-ebook-detail,
+    .rd-ebook-editor,
+    .rd-grade-table,
+    .rd-course-management,
+    .sf-studio-editor,
+    .sf-notebook,
+    .sf-auth-content .sf-card
+  ) {
+  --panel-bg: var(--glass-3);
+  --panel-blur: var(--blur-3);
+  background: var(--glass-3) !important;
+  border: 1px solid var(--hairline) !important;
+  border-radius: var(--r-m);
+  box-shadow: var(--shadow-2), var(--lift) !important;
+  backdrop-filter: var(--blur-3) !important;
+  -webkit-backdrop-filter: var(--blur-3) !important;
+}
+.astra-theme
+  :is(
+    [data-glass="ambient"],
+    .rd-sidebar,
+    .rd-section-nav,
+    .rd-filter-tabs,
+    .sf-segment,
+    .rd-public-header,
+    .rd-workspace-header,
+    .dash-glass,
+    .dash-glass-strong
+  ) {
+  background: var(--glass-1) !important;
+  background-image: none !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--hairline) !important;
+  box-shadow: var(--shadow-2), var(--lift) !important;
+  backdrop-filter: var(--blur-1) !important;
+  -webkit-backdrop-filter: var(--blur-1) !important;
+}
+.astra-theme :is(.rd-sidebar, .rd-public-header) {
+  border-radius: var(--r-l);
+}
+.astra-theme .rd-sidebar {
+  top: 12px;
+  bottom: 12px;
+  height: calc(100dvh - 24px);
+  margin-left: 12px;
+}
+.astra-theme :is(.rd-workspace-header, .rd-section-nav) {
+  margin: 12px 24px 0;
+  border-radius: var(--r-m);
+}
+.astra-theme .rd-section-nav {
+  box-shadow: var(--shadow-1), var(--lift) !important;
+}
+.astra-theme :is(.rd-page-heading, .rd-public-page-header) {
+  padding: 24px;
+  align-items: center;
+}
+.astra-theme :is(.rd-page-heading h1, .rd-page-heading h2) {
+  margin: 0;
+}
+.astra-theme .rd-page-heading p {
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.astra-theme
+  :is(
+    .rd-workspace-content,
+    .sf-page,
+    .rd-home-hero,
+    .rd-public-page-header,
+    .container
+  ) {
+  max-width: 1200px;
+}
+.astra-theme :is(.rd-workbench, .sf-studio-grid, .sf-three-columns) {
+  gap: 24px;
+}
+.astra-theme :is(.rd-workspace-content, .sf-page) {
+  padding: 24px 24px 64px;
+}
+.astra-theme .sf-page-contained {
+  padding: 0;
+}
+.astra-theme :is(.rd-panel, .astra-panel) {
+  overflow-wrap: anywhere;
+}
+.astra-theme
+  :is(.rd-panel, .sf-card, .astra-panel, .astra-work, [data-glass])
+  :is(.rd-panel, .sf-card, .astra-panel, .astra-work, [data-glass])
+  :is(.rd-panel, .sf-card, .astra-panel, .astra-work, [data-glass]) {
+  background: #fff !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+/* Scrolling rows are flat; their containing work surface owns the blur. */
+.astra-theme
+  :is(.astra-work, [data-glass="work"], .rd-panel)
+  :is(tr, .rd-course-row, .astra-list-row) {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.astra-theme :is(table, pre) {
+  background: var(--glass-3);
+  border-radius: var(--r-m);
+  color: var(--ink);
+}
+.astra-theme table {
+  width: 100%;
+  border: 1px solid var(--hairline);
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+}
+.astra-theme thead {
+  background: rgba(23, 35, 58, 0.04) !important;
+}
+.astra-theme th {
+  font:
+    600 11px/1.65 "Plus Jakarta Sans",
+    sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--ink-3);
+}
+.astra-theme :is(td, th) {
+  border-color: var(--hairline) !important;
+}
+.astra-theme tbody tr {
+  background: transparent !important;
+}
+.astra-theme
+  :is(
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not(
+        [type="hidden"]
+      ),
+    textarea,
+    select,
+    .sf-input
+  ) {
+  background: var(--glass-3) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--hairline) !important;
+  border-radius: var(--r-s) !important;
+  box-shadow: var(--lift);
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+.astra-theme :is(input, textarea)::placeholder {
+  color: var(--ink-3);
+  opacity: 1;
+}
+.astra-theme
+  :is(button, a, input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 3px solid rgba(255, 117, 31, 0.75) !important;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px rgba(255, 117, 31, 0.28) !important;
+}
+.astra-theme :is(input, textarea, select):focus-visible {
+  border-color: var(--accent-deep) !important;
+}
+.astra-theme
+  :is(
+    .sf-primary,
+    .si-btn-primary,
+    .astra-primary,
+    .sf-button[data-variant="default"],
+    button.bg-gray-900,
+    button.bg-primary-500,
+    a.bg-primary-500
+  ) {
+  background: var(--accent-deep) !important;
+  background-image: none !important;
+  color: #fff !important;
+  border: 0 !important;
+  border-radius: var(--r-pill) !important;
+  padding: 12px 20px;
+  font:
+    600 14px/1 "Plus Jakarta Sans",
+    sans-serif;
+  box-shadow: 0 10px 22px rgba(178, 60, 5, 0.28) !important;
+}
+.astra-theme
+  :is(
+    .sf-secondary,
+    .si-btn-secondary,
+    .sf-button[data-variant="outline"],
+    .sf-button[data-variant="secondary"]
+  ) {
+  background: var(--glass-2) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--hairline) !important;
+  border-radius: var(--r-pill) !important;
+  box-shadow: var(--shadow-1), var(--lift);
+}
+.astra-theme .sf-button[data-variant="destructive"] {
+  background: var(--bad);
+  color: white;
+}
+.astra-theme .sf-button[data-variant="success"] {
+  background: var(--ok);
+  color: white;
+}
+.astra-theme .sf-button[data-variant="warning"] {
+  background: var(--warn);
+  color: white;
+}
+.astra-theme :is(.sf-primary, .si-btn-primary, .astra-primary):hover {
+  filter: brightness(1.08);
+}
+.astra-theme :is(button, .sf-primary, .sf-secondary):active {
+  transform: translateY(1px);
+}
+.astra-theme :is(.sf-chip, .badge, [data-glass="badge"]) {
+  padding: 4px 12px;
+  border-radius: var(--r-pill);
+  color: var(--ink-3);
+  background: var(--glass-1);
+  box-shadow: var(--lift);
+  font-size: 12.5px;
+}
+.astra-theme
+  :is(
+    .rd-sidebar a[aria-current],
+    .rd-sidebar .dash-nav-active,
+    .astra-lane[aria-pressed="true"]
+  ) {
+  background: rgba(255, 117, 31, 0.14) !important;
+  color: var(--accent-deep) !important;
+  box-shadow:
+    inset 3px 0 0 var(--accent),
+    var(--lift) !important;
+}
+.astra-theme :is(.astra-scrim, [data-radix-dialog-overlay]) {
+  background: rgba(11, 37, 64, 0.34) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+}
+.astra-theme
+  :is(.glass-panel, .glass-panel-dark, [role="dialog"] .astra-dialog-panel) {
+  background: var(--glass-3) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--hairline) !important;
+  border-radius: var(--r-l) !important;
+  box-shadow: var(--shadow-3), var(--lift) !important;
+  backdrop-filter: var(--blur-3) !important;
+  -webkit-backdrop-filter: var(--blur-3) !important;
+}
+.astra-theme .si-glass-halo {
+  background: none !important;
+  padding: 0;
+  box-shadow: none;
+}
+.astra-theme .astra-footer {
+  background: var(--glass-3);
+  border-top: 1px solid var(--hairline);
+  box-shadow: var(--lift);
+  backdrop-filter: var(--blur-3);
+  -webkit-backdrop-filter: var(--blur-3);
+}
+.astra-theme .astra-footer :is(a, p, h3) {
+  color: var(--ink-2);
+}
+.astra-theme .astra-footer a:hover {
+  color: var(--accent-deep);
+}
+.astra-theme :is(.btn-primary, .hero-btn-fill, .rd-signup) {
+  background: var(--accent-deep) !important;
+  color: #fff !important;
+  border-radius: var(--r-pill) !important;
+  border: 0 !important;
+  box-shadow: 0 10px 22px rgba(178, 60, 5, 0.28);
+  padding: 12px 20px;
+}
+.astra-theme :is(.hero-btn, .btn) {
+  font:
+    600 14px/1.4 "Plus Jakarta Sans",
+    sans-serif;
+}
+.astra-theme :is(.sasha-container) {
+  max-width: 1200px;
+}
+.astra-theme .sasha-home {
+  --sasha-primary: var(--accent-deep);
+  --sasha-dark: var(--ink);
+  --sasha-gray: var(--ink-2);
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+.astra-theme .sasha-home > section:not(.rd-home-hero) {
+  background: transparent;
+  padding: 32px 24px;
+}
+.astra-theme .sasha-home > section > .sasha-container {
+  background: var(--glass-2);
+  padding: 28px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-l);
+  box-shadow: var(--shadow-2), var(--lift);
+  backdrop-filter: var(--blur-2);
+  -webkit-backdrop-filter: var(--blur-2);
+}
+.astra-theme .sasha-home :is(.section-header h2, .card-swap-content h2) {
+  font-size: 34px;
+}
+.astra-theme .sasha-home :is(.section-label, .card-stat-label) {
+  font-size: 11px;
+  letter-spacing: 0.09em;
+  color: var(--ink-3);
+}
+.astra-theme
+  .sasha-home
+  :is(.cta-box, .newsletter-form, .swap-card-item, .scroll-stack-card-content) {
+  background: var(--glass-3) !important;
+  color: var(--ink);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-m);
+  box-shadow: var(--shadow-1), var(--lift);
+}
+.astra-theme .sasha-home :is(.cta-box, .newsletter-form) :is(h2, p) {
+  color: var(--ink);
+}
+.astra-theme .astra-home-paths {
+  max-width: 1200px;
+  margin: 24px auto;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.astra-theme .astra-home-paths a {
+  padding: 24px;
+  display: grid;
+  gap: 8px;
+  background: var(--glass-3);
+  border-radius: var(--r-m);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--shadow-2), var(--lift);
+}
+.astra-theme .astra-home-paths strong {
+  font-size: 21px;
+  color: var(--ink);
+}
+.astra-theme .astra-home-paths span {
+  color: var(--ink-2);
+  font-size: 14px;
+}
+.astra-theme .astra-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  max-width: 1200px;
+  margin: 24px auto 0;
+}
+.astra-theme .astra-feature-grid .scroll-stack-card-content {
+  padding: 24px;
+  height: auto;
+  display: grid;
+  gap: 16px;
+}
+.astra-theme .astra-feature-grid .card-stats {
+  display: none;
+}
+.astra-theme .astra-feature-grid h3 {
+  font-size: 21px;
+}
+.astra-theme .astra-feature-grid p {
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.astra-theme .card-swap-display {
+  height: auto;
+  display: grid;
+  gap: 16px;
+}
+.astra-theme .swap-card-item {
+  position: static !important;
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+  min-height: 0;
+}
+.astra-theme .sasha-home :is(.section-label, .v-num, .card-stat-num) {
+  -webkit-text-fill-color: currentColor;
+  background-image: none;
+}
+.astra-theme :is(.rd-stat, .rd-stat-card) {
+  background: var(--glass-3) !important;
+  border-radius: var(--r-m);
+  box-shadow: var(--shadow-2), var(--lift);
+}
+.astra-theme .rd-stat-value {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 27px;
+}
+.astra-theme :is(.rd-public-header details > div, .rd-home-guide > div) {
+  background: var(--glass-3) !important;
+  color: var(--ink);
+  border-radius: var(--r-m);
+  box-shadow: var(--shadow-2), var(--lift);
+}
+.astra-theme
+  :is(.text-red-500, .text-red-600, .text-red-700, .text-danger-500) {
+  color: var(--bad) !important;
+}
+.astra-theme
+  :is(.text-green-600, .text-green-700, .text-emerald-600, .text-success-500) {
+  color: var(--ok) !important;
+}
+.astra-theme
+  :is(.text-amber-600, .text-amber-700, .text-amber-800, .text-warning-500) {
+  color: var(--warn) !important;
+}
+.astra-theme :is(.text-blue-600, .text-info-500) {
+  color: var(--info) !important;
+}
+.astra-theme :is(p, label, td, th, h1, h2, h3) {
+  opacity: 1;
+}
+.astra-theme :is(.rd-home-hero, .sf-hero, .sf-auth-story) {
+  border-radius: var(--r-l) !important;
+}
+.astra-theme :is(.rd-home-hero h1 em, .sf-hero h1 em) {
+  color: var(--accent-deep);
+}
+.astra-theme :is(.sf-auth-story p, .rd-home-hero p) {
+  color: var(--ink-2) !important;
+}
+.astra-theme .rd-auth-layout {
+  background: transparent;
+}
+.astra-theme :is(.sf-auth-content, .sf-auth-story) {
+  min-width: 0;
+}
+.astra-theme :is(.sf-auth-content .sf-card) {
+  padding: 24px;
+}
+.astra-theme .astra-review-body {
+  padding: 24px;
+  display: grid;
+  gap: 20px;
+}
+.astra-theme .astra-lanes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px;
+  border-radius: var(--r-m);
+}
+.astra-theme .astra-lane {
+  min-height: 44px;
+  padding: 8px 16px;
+  border-radius: var(--r-pill);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--hairline);
+  color: var(--ink-2);
+}
+.astra-theme .astra-lane span {
+  font-family: "JetBrains Mono", monospace;
+  background: var(--glass-3);
+  border-radius: var(--r-pill);
+  padding: 0 8px;
+}
+.astra-theme :is(button, a, input, textarea, select, .sf-card) {
+  transition-property: opacity, transform;
+  transition-duration: 160ms;
+  transition-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.astra-theme
+  :is(
+    [class*="animate-float"],
+    [class*="animate-shimmer"],
+    [class*="animate-gradient"],
+    .si-page-enter
+  ) {
+  animation: none !important;
+}
+
+/* The same visual shell around local experiments; canvas scientific colors remain intact. */
+body.astra-theme.lk-app {
+  position: relative;
+}
+.astra-theme.lk-app > :not(script) {
+  position: relative;
+}
+.astra-theme :is(.lk-header, .sasha-spatial-bar) {
+  background: var(--glass-1);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--lift);
+  backdrop-filter: var(--blur-1);
+  -webkit-backdrop-filter: var(--blur-1);
+}
+.astra-theme :is(.lk-panel, .lk-card) {
+  background: var(--glass-3);
+  color: var(--ink);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-m);
+  box-shadow: var(--shadow-1), var(--lift);
+}
+.astra-theme .lk-stage {
+  border-radius: var(--r-m);
+  overflow: hidden;
+}
+.astra-theme .lk-btn {
+  border-radius: var(--r-pill);
+  background: var(--accent-deep);
+  color: white;
+}
+.astra-theme.sasha-in-ar::before {
+  display: none;
+}
+
+@supports not (backdrop-filter: blur(2px)) {
+  .astra-theme
+    :is(
+      [data-glass],
+      .astra-panel,
+      .astra-work,
+      .sf-card,
+      .dash-card,
+      .dash-card-solid,
+      .rd-panel,
+      .sf-surface,
+      .rd-page-heading,
+      .sf-hero,
+      .rd-home-hero,
+      .rd-sidebar,
+      .rd-public-header,
+      .rd-workspace-header,
+      .rd-section-nav,
+      .glass-panel,
+      .glass-panel-dark,
+      .sf-auth-story,
+      .rd-public-page-header,
+      .lab-card,
+      .lab-chapters article,
+      .lk-panel,
+      .lk-header
+    ) {
+    background: rgba(255, 255, 255, 0.94) !important;
+  }
+}
+@media (max-width: 900px) {
+  .astra-theme :is(.astra-home-paths, .astra-feature-grid) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .astra-theme :is(.rd-workspace-content, .sf-page) {
+    padding: 20px 16px 48px;
+  }
+  .astra-theme :is(.rd-workspace-header, .rd-section-nav) {
+    margin: 8px 12px 0;
+  }
+  .astra-theme
+    :is(.rd-page-heading, .astra-review-body, .sf-auth-content .sf-card) {
+    padding: 20px;
+  }
+  .astra-theme :is(.rd-page-heading h1, .dash-h1) {
+    font-size: 27px;
+  }
+  .astra-theme
+    :is(
+      button,
+      select,
+      input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+      summary,
+      .sf-primary,
+      .sf-secondary,
+      .rd-sidebar a,
+      .rd-public-header nav a
+    ) {
+    min-height: 44px;
+  }
+  .astra-theme :is(button[aria-label], a[aria-label]) {
+    min-width: 44px;
+  }
+  .astra-theme .rd-workbench {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .astra-theme :is(.rd-page-heading, .rd-toolbar) {
+    gap: 16px;
+  }
+}
+@media (max-width: 1023px) {
+  .astra-theme .rd-sidebar {
+    margin-left: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .astra-theme *,
+  .astra-theme *::before,
+  .astra-theme *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+@media (prefers-contrast: more) {
+  .astra-theme
+    :is(
+      [data-glass],
+      .astra-panel,
+      .astra-work,
+      .sf-card,
+      .rd-panel,
+      .sf-surface,
+      .rd-page-heading,
+      .glass-panel
+    ) {
+    background: #fff !important;
+  }
+}
+/* Final adapters for the public actions and semantic status badges. */
+.astra-theme :is(.rd-home-primary, .rd-public-auth a:last-child) {
+  background: var(--accent-deep) !important;
+  color: #fff !important;
+  border-radius: var(--r-pill) !important;
+  border: 0 !important;
+  padding: 12px 20px;
+  box-shadow: 0 10px 22px rgba(178, 60, 5, 0.28);
+}
+.astra-theme .rd-home-secondary {
+  background: var(--glass-2);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  color: var(--ink);
+}
+.astra-theme .astra-category-icon {
+  background: rgba(var(--field-lead), 0.14);
+  color: var(--ink);
+}
+.astra-theme .astra-badge {
+  background: var(--glass-1);
+  color: var(--ink-3);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  padding: 4px 12px;
+  box-shadow: var(--lift);
+  font:
+    600 12.5px/1.65 "Plus Jakarta Sans",
+    sans-serif;
+}
+.astra-theme .astra-badge[data-status="success"] {
+  background: rgba(4, 122, 91, 0.14);
+  color: var(--ok);
+}
+.astra-theme .astra-badge[data-status="warning"] {
+  background: rgba(164, 98, 10, 0.14);
+  color: var(--warn);
+}
+.astra-theme .astra-badge[data-status="danger"] {
+  background: rgba(198, 37, 37, 0.14);
+  color: var(--bad);
+}
+@media (max-width: 900px) {
+  .astra-theme :is(.rd-home-primary, .rd-home-secondary) {
+    min-height: 44px;
+  }
+}
+.astra-route-page {
+  min-width: 0;
+  width: 100%;
+}
+.astra-course-type-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.astra-course-type-filter button {
+  padding: 10px 16px;
+  min-height: 44px;
+  border: 1px solid var(--hairline, #ddd);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  background: var(--glass-3, #fff);
+}
+.astra-course-type-filter button[aria-pressed="true"] {
+  background: #ea580c;
+  color: #fff;
+  border-color: #ea580c;
+}
+.astra-course-type-filter button:focus-visible {
+  outline: 3px solid #ff751f;
+  outline-offset: 3px;
+}
+.astra-live-notice {
+  border: 1px solid #fdba74;
+  border-left: 4px solid #ea580c;
+  border-radius: 16px;
+  background: var(--glass-3, #fff7ed);
+  padding: 18px;
+  margin: 0 0 20px;
+  color: #172136;
+}
+.astra-live-notice p {
+  font-size: 13px;
+  margin: 8px 0 14px;
+}
+.astra-live-notice a {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.astra-theme .astra-page-guide {
+  margin: 20px clamp(12px, 3vw, 32px) 0;
+  padding: 16px 20px;
+  border: 1px solid var(--hairline);
+  border-left: 3px solid var(--accent, #ff751f);
+  border-radius: var(--r-s, 16px);
+  background: var(--glass-3);
+  color: var(--ink, #172136);
+  box-shadow: var(--lift);
+}
+.astra-guide-top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.astra-guide-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 14px;
+}
+.astra-back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background: var(--glass-2);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+.astra-back-button:hover {
+  background: rgba(255, 117, 31, 0.12);
+}
+.astra-back-button:focus-visible,
+.astra-guide-workflow summary:focus-visible {
+  outline: 3px solid #ff751f;
+  outline-offset: 3px;
+}
+.astra-page-guide > p {
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 8px 0;
+  max-width: 90ch;
+}
+.astra-guide-workflow summary {
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 0;
+  width: fit-content;
+}
+.astra-guide-workflow ol {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.astra-guide-workflow li {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.astra-guide-workflow li span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 23px;
+  height: 23px;
+  border-radius: 50%;
+  background: rgba(255, 117, 31, 0.13);
+  color: #9a3412;
+  font-weight: 700;
+}
+.astra-model-guide {
+  padding: 18px;
+  margin: 16px 0;
+  border: 1px solid var(--hairline, #ddd);
+  border-radius: 16px;
+  background: var(--glass-3, #fff);
+  min-width: 0;
+}
+.astra-model-guide h3 {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.astra-model-guide p {
+  font-size: 13px;
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+.lab-experience {
+  min-width: 0;
+  width: 100%;
+}
+@media (max-width: 640px) {
+  .astra-theme .astra-page-guide {
+    padding: 12px;
+  }
+  .astra-guide-workflow ol {
+    grid-template-columns: 1fr;
+  }
+  .astra-guide-top {
+    gap: 10px;
+  }
+}
+@media print {
+  .astra-page-guide {
+    display: none !important;
+  }
+}
+.astra-theme .astra-inline-icon {
+  display: inline-block;
+  vertical-align: -0.15em;
+  flex-shrink: 0;
+}
+.astra-theme .scroll-stack-header {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+.astra-theme :is(.sf-page > .sf-muted, .sf-page > p) {
+  background: var(--glass-2);
+  padding: 12px 16px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-s);
+  box-shadow: var(--lift);
+}
+/* Long lists keep readable opaque surfaces without per-item GPU blur. */
+.astra-theme
+  :is(.lab-card, .lab-chapters article, .rd-managed-course, .rd-course-row) {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: var(--glass-3) !important;
+}
+.astra-theme :is(.lab-card, .lab-chapters article) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 340px;
+}
+
+@media print {
+  body:has(.exam-paper-result) * {
+    visibility: hidden;
+  }
+  body:has(.exam-paper-result) .exam-paper-result,
+  body:has(.exam-paper-result) .exam-paper-result * {
+    visibility: visible;
+  }
+  body:has(.exam-paper-result) .exam-paper-result {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    margin: 0 !important;
+    background: white !important;
+    color: #111 !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    backdrop-filter: none !important;
+  }
+  body:has(.exam-paper-result) .print\:hidden {
+    display: none !important;
+  }
+}
+
+/* Product-wide learning controls, including standalone offline reader.
+   Bottom-LEFT: the bottom-right corner is crowded on the homepage
+   (.scroll-top-btn at 28px, .otw-card above it) and z-fab keeps the panel
+   under every modal scrim. */
+.learning-preferences {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: var(--z-fab, 70);
+  max-width: min(360px, calc(100vw - 32px));
+}
+.learning-preferences > .sf-surface {
+  max-height: 70vh;
+  overflow: auto;
+  margin-top: 8px;
+}
+body[data-high-contrast="true"] {
+  --glass-1: #fff;
+  --glass-2: #fff;
+  --glass-3: #fff;
+  --ink: #111827;
+  --ink-2: #17233a;
+  --ink-3: #3d4c68;
+}
+body[data-large-text="true"] {
+  font-size: 18px;
+}
+body[data-large-text="true"]
+  :is(p, li, label, input, textarea, select, button) {
+  font-size: max(1em, 17px);
+}
+body[data-reduce-motion="true"] *,
+body[data-reduce-motion="true"] *::before,
+body[data-reduce-motion="true"] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+.astra-theme :focus-visible {
+  outline: 3px solid var(--accent-deep);
+  outline-offset: 3px;
+}
+.offline-reader {
+  max-width: 1100px;
+  margin: auto;
+  padding: 24px 24px 110px;
+  display: grid;
+  gap: 24px;
+}
+.offline-reader .lesson-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.astra-theme
+  :is(
+    fieldset,
+    .rd-primary,
+    .rd-body,
+    .sf-studio-grid,
+    .sf-studio-grid > *,
+    .offline-reader > *
+  ) {
+  min-width: 0;
+  min-inline-size: 0;
+}
+.astra-theme :is(input, textarea, select, canvas) {
+  max-width: 100%;
+}
+.astra-theme input[type="file"] {
+  width: 100%;
+  min-width: 0;
+}
+.astra-theme
+  .sf-studio-grid
+  :is(input:not([type="checkbox"]):not([type="radio"]), textarea, select) {
+  width: 100%;
+}

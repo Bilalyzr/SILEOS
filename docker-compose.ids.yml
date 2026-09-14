@@ -1,0 +1,49 @@
+# =============================================================================
+# docker-compose.ids.yml — lightweight IDS for SashaInfinity LMS
+# =============================================================================
+# Watches the app security log + edge access log, bans abusive IPs at the
+# edge nginx (real client IPs recovered via CF-Connecting-IP — see
+# deploy/nginx/nginx.conf). Protects web and mobile traffic (same API).
+#
+#   docker compose -f docker-compose.ids.yml up -d --build   # start
+#   docker logs -f sasha-ids                                 # observe
+#   docker exec sasha-ids python3 /app/ids_watch.py status   # ban table
+#   docker exec sasha-ids python3 /app/ids_watch.py unban 1.2.3.4
+#
+# Dry-run / rule testing without touching the live edge:
+#   IDS_DRY_RUN=1 docker compose -f docker-compose.ids.yml up -d --build
+# =============================================================================
+services:
+  ids:
+    build:
+      context: .
+      dockerfile: deploy/ids/Dockerfile
+    image: sasha-ids:latest
+    container_name: sasha-ids
+    restart: unless-stopped
+    environment:
+      - IDS_SECURITY_LOG=/logs/security.log
+      - IDS_ACCESS_LOG=/logs/edge-nginx/access.log
+      # Live path since the edge cutover: Cloudflare -> host nginx -> sasha-edge
+      # (the old compose nginx sasha_lms-nginx-1 was retired). Deny-list +
+      # reload target is the edge.
+      - IDS_DENY_FILES=/deny/99-ids-deny.conf
+      - IDS_RELOAD_CONTAINERS=sasha-edge
+      - IDS_STATE_FILE=/state/state.json
+      - IDS_ALERT_LOG=/logs/ids-alerts.log
+      - IDS_DRY_RUN=${IDS_DRY_RUN:-0}
+      - IDS_AUTH_FAIL_LIMIT=${IDS_AUTH_FAIL_LIMIT:-20}
+      - IDS_AUTH_FAIL_WINDOW=${IDS_AUTH_FAIL_WINDOW:-300}
+      - IDS_RATE_LIMIT_HITS=${IDS_RATE_LIMIT_HITS:-10}
+      - IDS_RATE_WINDOW=${IDS_RATE_WINDOW:-60}
+    volumes:
+      # logs: read feeds, write alerts, rotate security.log when huge
+      - ./logs:/logs
+      # deny targets:
+      #   /deny  -> deploy/ edge conf.d          (standby edge tier)
+      #   /deny2 -> root-stack conf.d.local      (LIVE nginx, host :3100)
+      - ./deploy/nginx/conf.d:/deny
+      - ./nginx/conf.d.local:/deny2
+      - ./deploy/nginx/ids:/state
+      # docker CLI access for `docker exec <nginx> nginx -s reload`
+      - /var/run/docker.sock:/var/run/docker.sock

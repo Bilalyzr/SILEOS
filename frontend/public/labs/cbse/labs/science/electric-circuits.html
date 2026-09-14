@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Electric Circuits — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>Electric Circuits<span class="lk-tag">Class 6–10 · Science</span></h1>
+    <div class="lk-meta">CBSE: Electricity &amp; Circuits — series vs parallel, current, Ohm's law (V = IR)</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Circuit layout</h2>
+      <div class="lk-seg" id="modeSeg">
+        <button>1 bulb</button>
+        <button class="active">Series</button>
+        <button>Parallel</button>
+      </div>
+    </div>
+    <div class="lk-card">
+      <h2>Battery voltage</h2>
+      <div class="lk-row"><label class="lk-name">V</label><input type="range" id="volt" min="1.5" max="12" step="1.5" value="6"><span class="lk-val" id="voltv">6.0 V</span></div>
+      <label class="lk-check"><input type="checkbox" id="switchChk" checked> Switch closed (circuit complete)</label>
+    </div>
+    <div class="lk-card">
+      <h2>Meter readings</h2>
+      <div class="lk-readout" id="req"></div>
+      <div class="lk-readout" id="cur"></div>
+      <div class="lk-readout" id="pow"></div>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint">Watch the <b>blue current carriers</b> — their speed is the current!
+      In <b>series</b>, one switch-off or a dead bulb kills the whole circuit, and bulbs
+      share the voltage (dim). In <b>parallel</b>, each bulb gets the full voltage (bright)
+      and works independently. Try switching bulbs off by changing the layout.</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/labkit.js"></script>
+<script src="./electric-circuits/simulation.js"></script>
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

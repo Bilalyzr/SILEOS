@@ -1,0 +1,227 @@
+/*
+ * 🇮🇳 Independence Day offer — bottom-right corner timer section.
+ * Companion to independence-day.css: a compact countdown card that keeps
+ * the 50% OFF offer visible after the pop-up auto-closes. Every class is
+ * prefixed `otw-` so nothing collides with idp-* / home.css / globals.
+ * Same tricolor palette as the pop-up: saffron #FF9933 · white · green #138808
+ */
+
+/* ---------- corner card ---------- */
+
+.otw-card {
+  position: fixed;
+  right: 28px;
+  /* clears the homepage .scroll-top-btn (bottom: 28px, 46px tall) */
+  bottom: 88px;
+  /* below the pop-up overlay (.idp-overlay sits at the modal tier) and below
+     every modal scrim, so dialogs always dim it */
+  z-index: var(--z-fab, 70);
+  width: 296px;
+  max-width: calc(100vw - 24px);
+  padding: 2px;
+  border-radius: 20px;
+  background: linear-gradient(
+    155deg,
+    #ff9933 0%,
+    #ffcf9e 30%,
+    #fdfdfb 50%,
+    #bfe3c0 70%,
+    #138808 100%
+  );
+  box-shadow:
+    0 18px 44px rgba(8, 42, 94, 0.3),
+    0 0 30px rgba(255, 153, 51, 0.18);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.otw-inner {
+  position: relative;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #ffffff 0%, #fffaf2 100%);
+  padding: 16px 14px 14px;
+  text-align: center;
+  color: #1f2a3d;
+}
+
+/* ---------- content ---------- */
+
+.otw-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(255, 153, 51, 0.12), rgba(19, 136, 8, 0.1));
+  border: 1px solid rgba(255, 153, 51, 0.35);
+  color: #b45309;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Tiny CSS flag (emoji flags don't render on Windows) */
+.otw-flag {
+  display: inline-flex;
+  flex-direction: column;
+  width: 18px;
+  height: 12px;
+  margin-right: 7px;
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(8, 42, 94, 0.14), 0 1px 3px rgba(8, 42, 94, 0.18);
+}
+
+.otw-flag span {
+  flex: 1;
+}
+
+.otw-flag span:nth-child(1) { background: #ff9933; }
+.otw-flag span:nth-child(2) { background: #ffffff; }
+.otw-flag span:nth-child(3) { background: #138808; }
+
+.otw-title {
+  margin: 10px 0;
+  font-family: 'Lexend Deca', 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: #082a5e;
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.otw-off {
+  display: block;
+  font-size: 24px;
+  line-height: 1.05;
+  margin-bottom: 1px;
+  background: linear-gradient(135deg, #ff9933 5%, #f97316 55%, #ea580c 95%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #f97316;
+  filter: drop-shadow(0 2px 8px rgba(249, 115, 22, 0.3));
+}
+
+/* ---------- countdown chip (dark navy, tricolor base ribbon) ---------- */
+
+.otw-timer {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 10px 6px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(8, 42, 94, 0.96), rgba(8, 42, 94, 0.9));
+  box-shadow: 0 5px 14px rgba(8, 42, 94, 0.28);
+}
+
+.otw-timer::after {
+  content: '';
+  position: absolute;
+  left: 9px;
+  right: 9px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    #ff9933 0% 33%,
+    #ffffff 33% 66%,
+    #138808 66% 100%
+  );
+}
+
+.otw-t-seg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+
+.otw-t-num {
+  font-family: 'Space Grotesk', 'Lexend Deca', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+  animation: otw-num-in 0.28s ease;
+}
+
+.otw-t-label {
+  margin-top: 2px;
+  font-size: 6.5px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.otw-t-colon {
+  align-self: flex-start;
+  margin-top: 1px;
+  color: #ff9933;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.otw-deadline {
+  display: block;
+  margin: 8px 0 10px;
+  font-size: 10px;
+  line-height: 1.4;
+  color: #64748b;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* ---------- CTA ---------- */
+
+.otw-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #ff9933, #f97316);
+  color: #fff;
+  font-weight: 800;
+  font-size: 12.5px;
+  letter-spacing: 0.6px;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(249, 115, 22, 0.35);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+.otw-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(249, 115, 22, 0.45);
+  filter: saturate(1.06);
+  color: #fff;
+}
+
+/* ---------- keyframes ---------- */
+
+@keyframes otw-num-in {
+  from { transform: translateY(5px) scale(0.94); opacity: 0.35; }
+  to { transform: none; opacity: 1; }
+}
+
+/* ---------- responsive & accessibility ---------- */
+
+@media (max-width: 480px) {
+  .otw-card {
+    right: 12px;
+    width: 280px;
+    bottom: 86px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .otw-t-num {
+    animation: none;
+  }
+}

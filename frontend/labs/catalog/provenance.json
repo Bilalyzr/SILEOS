@@ -1,0 +1,8 @@
+{
+  "archive": "cbse-virtual-labs.zip",
+  "sha256": "b6fa2e44843442dafa7d5b3f7432bb221f2c44ad97377dbd5a428dfe36149c65",
+  "imported_on": "2026-09-06",
+  "simulations": 59,
+  "current_chapters": 230,
+  "notes": "38 existing simulations preserve reviewed LMS fixes. 21 added from the new archive. Original standalone SCORM shell retained only in the extraction, not executed by the LMS."
+}

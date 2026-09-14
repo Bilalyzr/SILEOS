@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DNA Double Helix 3D — CBSE Virtual Labs</title>
+<link rel="stylesheet" href="../../assets/labkit.css">
+<link rel="stylesheet" href="/design/astra-glass.css"></head>
+<body class="lk-app astra-theme" data-page-family="learn">
+<header class="lk-header">
+  <a class="lk-logo" href="../../index.html">VL</a>
+  <div class="lk-title">
+    <h1>DNA Double Helix 3D<span class="lk-tag">Class 12 · Biology</span></h1>
+    <div class="lk-meta">CBSE: Molecular Basis of Inheritance — Watson–Crick model, base pairing, replication</div>
+  </div>
+  <a class="lk-back" href="../../index.html">← Library</a>
+</header>
+
+<main class="lk-main">
+  <div class="lk-stage"><canvas id="cv"></canvas></div>
+  <aside class="lk-panel">
+    <div class="lk-card">
+      <h2>Helix controls</h2>
+      <div class="lk-row"><label class="lk-name">Twist</label><input type="range" id="twist" min="0.5" max="2" step="0.1" value="1"><span class="lk-val" id="twistv">1.0×</span></div>
+      <div class="lk-row"><label class="lk-name">Unzip ↔</label><input type="range" id="unzip" min="0" max="1" step="0.02" value="0"><span class="lk-val" id="unzipv">0%</span></div>
+      <label class="lk-check"><input type="checkbox" id="spinChk" checked> Auto-rotate</label>
+      <label class="lk-check"><input type="checkbox" id="pairsChk" checked> Show base letters</label>
+    </div>
+    <div class="lk-card">
+      <h2>Base pairing</h2>
+      <div class="lk-readout"><span style="color:#f59e0b;font-weight:800;">A</span> bonds only with
+      <span style="color:#38bdf8;font-weight:800;">T</span> (2 hydrogen bonds)</div>
+      <div class="lk-readout"><span style="color:#ef4444;font-weight:800;">G</span> bonds only with
+      <span style="color:#22c55e;font-weight:800;">C</span> (3 hydrogen bonds)</div>
+    </div>
+    <div class="lk-card">
+      <h2>Think about it</h2>
+      <p class="lk-hint">Drag <b>Unzip</b> — that's the first step of <b>replication</b>:
+      helicase opens the ladder and each half becomes a template for a new strand,
+      following the A–T / G–C rule. One DNA molecule → two identical copies. Every
+      living thing on Earth shares this same 4-letter alphabet: A, T, G, C.</p>
+    </div>
+  </aside>
+</main>
+
+<script src="../../assets/three.min.js"></script>
+<script src="../../assets/lab3d.js"></script>
+<script src="../../assets/labkit.js"></script>
+<script src="./dna-helix-3d/simulation.js"></script>
+<script src="../../assets/spatial-bridge.js"></script>
+</body>
+</html>

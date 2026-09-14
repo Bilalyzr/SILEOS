@@ -1,0 +1,403 @@
+/*
+ * 🇮🇳 Independence Day flash-offer pop-up (80th Independence Day — 50% OFF).
+ * Every class is prefixed `idp-` so nothing collides with home.css / globals.
+ * The firework palette is strictly the Indian flag tricolor:
+ *   saffron #FF9933 · white #FFFFFF · green #138808
+ */
+
+/* ---------- overlay & card ---------- */
+
+.idp-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal, 80);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(8, 22, 44, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* The card wrapper is a 3px tricolor gradient ring around a white inner card. */
+.idp-card {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  padding: 3px;
+  border-radius: 28px;
+  background: linear-gradient(
+    155deg,
+    #ff9933 0%,
+    #ffcf9e 30%,
+    #fdfdfb 50%,
+    #bfe3c0 70%,
+    #138808 100%
+  );
+  box-shadow:
+    0 26px 70px rgba(8, 42, 94, 0.38),
+    0 0 46px rgba(255, 153, 51, 0.2);
+}
+
+.idp-card-inner {
+  position: relative;
+  z-index: 1;
+  border-radius: 25px;
+  background: linear-gradient(180deg, #ffffff 0%, #fffaf2 100%);
+  padding: 30px 26px 26px;
+  text-align: center;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #1f2a3d;
+}
+
+/* ---------- firework layer (crackers + sparkles on the card border) ---------- */
+
+.idp-fireworks {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* A "cracker" is one burst origin anchored on the card border. Its particles
+   fly outward and fade, then the whole cluster loops after a rest period —
+   so crackers pop occasionally rather than constantly. */
+.idp-cracker {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.idp-cracker::before {
+  /* soft flash at the burst origin, tinted per cluster */
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: -8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--flash, #ff9933) 0%, transparent 70%);
+  opacity: 0;
+  animation: idp-flash var(--t, 4s) ease-out infinite;
+}
+
+.idp-cracker i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(0, 0) scale(0.3);
+  animation: idp-particle var(--t, 4s) cubic-bezier(0.17, 0.67, 0.35, 1) infinite;
+  will-change: transform, opacity;
+}
+
+/* Small twinkling dots sitting right on the tricolor border. */
+.idp-sparkle {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  opacity: 0;
+  animation: idp-sparkle 2.6s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* ---------- content ---------- */
+
+.idp-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 5;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(8, 42, 94, 0.14);
+  background: rgba(255, 255, 255, 0.92);
+  color: #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.2s ease;
+}
+
+.idp-close:hover {
+  background: #082a5e;
+  color: #fff;
+  transform: rotate(90deg);
+}
+
+.idp-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(255, 153, 51, 0.12), rgba(19, 136, 8, 0.1));
+  border: 1px solid rgba(255, 153, 51, 0.35);
+  color: #b45309;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Tiny CSS flag (emoji flags don't render on Windows) */
+.idp-flag {
+  display: inline-flex;
+  flex-direction: column;
+  width: 24px;
+  height: 16px;
+  margin-right: 9px;
+  border-radius: 3px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(8, 42, 94, 0.14), 0 2px 5px rgba(8, 42, 94, 0.18);
+}
+
+.idp-flag span {
+  flex: 1;
+}
+
+.idp-flag span:nth-child(1) { background: #ff9933; }
+.idp-flag span:nth-child(2) { background: #ffffff; }
+.idp-flag span:nth-child(3) { background: #138808; }
+
+.idp-title {
+  margin: 16px 0 10px;
+  font-family: 'Lexend Deca', 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #082a5e;
+  font-size: 25px;
+  line-height: 1.25;
+}
+
+.idp-off {
+  display: block;
+  font-size: 46px;
+  line-height: 1.05;
+  margin-bottom: 2px;
+  background: linear-gradient(135deg, #ff9933 5%, #f97316 55%, #ea580c 95%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #f97316;
+  filter: drop-shadow(0 3px 10px rgba(249, 115, 22, 0.3));
+}
+
+.idp-lead {
+  margin: 0 0 14px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: #46536b;
+}
+
+.idp-lead strong {
+  color: #082a5e;
+}
+
+.idp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #0f6b34;
+  background: rgba(19, 136, 8, 0.09);
+  border: 1px solid rgba(19, 136, 8, 0.22);
+  margin-bottom: 16px;
+}
+
+.idp-badge::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #16a34a;
+  animation: idp-dot 1.6s ease-out infinite;
+}
+
+/* ---------- footer: deadline left, live countdown chip bottom-right ---------- */
+
+.idp-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  margin-top: 14px;
+}
+
+.idp-deadline {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: #64748b;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  text-align: left;
+}
+
+/* Dark navy chip so the white of the tricolor actually reads. */
+.idp-timer {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto; /* stays pinned right even when the footer wraps */
+  padding: 9px 12px 8px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(8, 42, 94, 0.96), rgba(8, 42, 94, 0.9));
+  box-shadow: 0 6px 18px rgba(8, 42, 94, 0.28);
+}
+
+/* tricolor ribbon along the chip's bottom edge: saffron • white • green */
+.idp-timer::after {
+  content: '';
+  position: absolute;
+  left: 11px;
+  right: 11px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    #ff9933 0% 33%,
+    #ffffff 33% 66%,
+    #138808 66% 100%
+  );
+}
+
+.idp-t-seg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+
+.idp-t-num {
+  font-family: 'Space Grotesk', 'Lexend Deca', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  font-variant-numeric: tabular-nums;
+  animation: idp-num-in 0.28s ease;
+}
+
+.idp-t-label {
+  margin-top: 3px;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.idp-t-colon {
+  align-self: flex-start;
+  margin-top: 1px;
+  color: #ff9933;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* ---------- CTA ---------- */
+
+.idp-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 15px 20px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ff9933, #f97316);
+  color: #fff;
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 0.6px;
+  text-decoration: none;
+  box-shadow: 0 10px 26px rgba(249, 115, 22, 0.38);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+.idp-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(249, 115, 22, 0.48);
+  filter: saturate(1.06);
+  color: #fff;
+}
+
+/* ---------- keyframes ---------- */
+
+@keyframes idp-flash {
+  0% { transform: scale(0.3); opacity: 0.9; }
+  35% { opacity: 0; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+@keyframes idp-particle {
+  0% { transform: translate(0, 0) scale(0.3); opacity: 0; }
+  7% { opacity: 1; }
+  38% { transform: translate(calc(var(--dx) * 0.82), calc(var(--dy) * 0.82)) scale(1); opacity: 1; }
+  62% { opacity: 0.55; }
+  78%, 100% { transform: translate(var(--dx), var(--dy)) scale(0.15); opacity: 0; }
+}
+
+@keyframes idp-sparkle {
+  0% { transform: scale(0); opacity: 0; }
+  12% { transform: scale(1); opacity: 1; }
+  30% { transform: scale(0.55); opacity: 0.75; }
+  46% { transform: scale(0.9); opacity: 0.9; }
+  60%, 100% { transform: scale(0); opacity: 0; }
+}
+
+@keyframes idp-dot {
+  0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.45); }
+  70%, 100% { box-shadow: 0 0 0 7px rgba(22, 163, 74, 0); }
+}
+
+@keyframes idp-num-in {
+  from { transform: translateY(6px) scale(0.94); opacity: 0.35; }
+  to { transform: none; opacity: 1; }
+}
+
+/* ---------- responsive & accessibility ---------- */
+
+@media (max-width: 440px) {
+  .idp-card { max-width: calc(100vw - 32px); }
+  .idp-card-inner { padding: 26px 16px 22px; }
+  .idp-title { font-size: 22px; }
+  .idp-off { font-size: 38px; }
+  .idp-t-num { font-size: 14px; }
+  .idp-t-label { font-size: 7.5px; }
+  .idp-eyebrow { letter-spacing: 0.9px; padding: 6px 11px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .idp-cracker i,
+  .idp-cracker::before,
+  .idp-sparkle,
+  .idp-badge::before,
+  .idp-t-num {
+    animation: none;
+  }
+
+  .idp-cracker i,
+  .idp-cracker::before,
+  .idp-sparkle {
+    opacity: 0;
+  }
+}

@@ -1,0 +1,302 @@
+.hero {
+  background-color: #e7effc;
+  padding: 80px 0;
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 40px;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+}
+
+.shape {
+  position: absolute;
+  z-index: -1;
+  user-select: none;
+}
+
+.shape1 {
+  top: -50px;
+  left: -50px;
+  width: 150px;
+}
+
+.shape2 {
+  bottom: 20%;
+  right: 0;
+  width: 80px;
+}
+
+.subTitle {
+  display: inline-block;
+  background-color: #f0f4f8;
+  color: #20345b;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 52px;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  color: #20345b;
+}
+
+.highlight {
+  color: #f97316;
+  position: relative;
+  display: inline-block;
+}
+
+.highlight::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background-image: url("data:image/svg+xml,%3csvg width='100' height='10' viewBox='0 0 100 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M2 8C27.3889 4.05263 68.3972 2.23684 98 4' stroke='%23F58D1E' stroke-width='4' stroke-linecap='round'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.description {
+  font-size: 16px;
+  margin-bottom: 40px;
+  max-width: 500px;
+  color: #6b7280;
+}
+
+.ctaContainer {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.primaryButton {
+  background-color: #f97316;
+  color: white;
+  padding: 16px 32px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(245, 141, 30, 0.3);
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.primaryButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.primaryButton:hover::before {
+  left: 100%;
+}
+
+.primaryButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(245, 141, 30, 0.4);
+}
+
+.contactInfo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.phoneIcon {
+  background-color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #f97316;
+  font-size: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.contactInfo span {
+  display: block;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.phoneNumber {
+  font-size: 18px;
+  font-weight: 700;
+  color: #20345b;
+  text-decoration: none;
+}
+
+.heroImageContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.heroImage {
+  max-width: 100%;
+}
+
+.infoCard {
+  position: absolute;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(8, 23, 58, 0.1);
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.infoCard:hover {
+  box-shadow: 0 15px 40px rgba(8, 23, 58, 0.15);
+  transform: translateY(-2px);
+}
+
+.studentsCard {
+  top: 35%;
+  left: -20px;
+}
+
+.certifiedCard {
+  bottom: 10%;
+  right: 0px;
+}
+
+.cardIcon {
+  width: 45px;
+  height: 45px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+}
+
+.infoCard span {
+  font-size: 14px;
+  color: #6b7280;
+  display: block;
+}
+
+.infoCard h4 {
+  margin: 0;
+  font-size: 22px;
+  color: #20345b;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .heroGrid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .heroContent {
+    order: 1;
+  }
+
+  .heroImageContainer {
+    order: 2;
+    margin-bottom: 40px;
+  }
+
+  .infoCard {
+    display: none;
+  }
+
+  .ctaContainer {
+    justify-content: center;
+  }
+
+  .description {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .title {
+    font-size: 44px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 60px 0;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .ctaContainer {
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .studentsCard {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    transform: translateY(50%);
+  }
+
+  .certifiedCard {
+    top: 0;
+    right: 0;
+    transform: translateY(-50%);
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 28px;
+  }
+
+  .primaryButton {
+    padding: 12px 25px;
+    font-size: 14px;
+  }
+
+  .phoneNumber {
+    font-size: 16px;
+  }
+
+  .infoCard h4 {
+    font-size: 18px;
+  }
+}
+
+/* Supplied redesign: quieter hero, shared surfaces, one accent family. */
+.hero { background:var(--sf-bg); min-height:calc(100vh - 72px); }
+.title { color:var(--sf-ink); letter-spacing:-.045em; }
+.subTitle,.highlight { color:var(--sf-accent); }
+.description { color:var(--sf-muted); }
+.shape { opacity:.18; }
+.infoCard { background:var(--sf-surface); border:1px solid var(--sf-line); border-radius:20px; box-shadow:var(--sf-shadow); }
+.primaryButton { border-radius:12px; background:#c2410c; }

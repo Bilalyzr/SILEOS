@@ -1,0 +1,13 @@
+# Shell scripts must stay LF, even on Windows checkouts with core.autocrlf=true.
+# A CRLF shebang line makes the kernel look for an interpreter named "/bin/sh\r",
+# which fails inside Linux containers (e.g. nginx entrypoint -> exit 127).
+*.sh text eol=lf
+
+# nginx refuses to parse a config whose directives end in CR, and the edge proxy
+# is the one component a deploy cannot restart its way out of. Same reasoning for
+# the env template: it is copied to deploy/.env.deploy on the server and read by
+# both bash and docker compose.
+*.conf text eol=lf
+.env.deploy.example text eol=lf
+Dockerfile* text eol=lf
+*.yml text eol=lf
