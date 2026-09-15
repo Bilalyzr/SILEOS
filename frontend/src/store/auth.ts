@@ -224,8 +224,15 @@ export const useAuthStore = create<AuthState>()(
               refreshToken: response.refreshToken,
             })
           } catch (error) {
-            // If refresh fails, logout user
-            get().logout()
+            // If refresh fails, end the session — but only when THIS context
+            // actually owned one. The boot-time cookie probe calls this with
+            // no tokens at all (expected 401 for anonymous visitors), and a
+            // second app instance (e.g. a lab iframe before that fix) could
+            // lose the refresh-rotation race and wipe the shared storage out
+            // from under the still-valid main session.
+            if (get().isAuthenticated || get().accessToken || get().refreshToken) {
+              get().logout()
+            }
             throw error
           } finally {
             refreshInFlight = null

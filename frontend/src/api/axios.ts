@@ -333,8 +333,16 @@ api.interceptors.response.use(
     const isRecoverable401 =
       error.response?.status === 401 && !isAuthEndpoint && !originalRequest._retry
 
+    // The boot-time session probe (initializeAuth) POSTs /auth/refresh before
+    // we know whether a token/cookie exists; for anonymous visitors that call
+    // is EXPECTED to 401 and is handled silently in the store. Don't dump it
+    // to the console as a "Production API Error" on every page load.
+    const isSilentRefreshProbe =
+      error.response?.status === 401 &&
+      originalRequest?.url?.includes('/auth/refresh')
+
     // Log errors in development and production (with different levels)
-    if (!isRecoverable401) {
+    if (!isRecoverable401 && !isSilentRefreshProbe) {
       if (import.meta.env.DEV) {
         console.error('❌ API Error:', errorInfo)
         console.error('Full error:', error)
