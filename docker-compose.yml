@@ -54,7 +54,7 @@ services:
       # (service DNS: backend:8000) and the host's system nginx reaches it via
       # 127.0.0.1, so nothing legitimate needs this on 0.0.0.0. Publishing it on
       # all interfaces exposed the API directly, bypassing nginx CORS/rate-limit.
-      - "127.0.0.1:8000:8000"
+      - "127.0.0.1:8100:8000"
     environment: &base-backend-environment
       - DATABASE_URL=postgresql://tutor:${POSTGRES_PASSWORD}@postgres:5432/tutor_lms
       - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
@@ -209,7 +209,7 @@ services:
       # Loopback only — same reasoning as backend. The docker nginx reaches the
       # streaming service via the docker network; the host's system nginx (if it
       # proxies video) reaches it on 127.0.0.1. Not for direct public access.
-      - "127.0.0.1:8001:8001"
+      - "127.0.0.1:8101:8001"
     environment:
       - PYTHONIOENCODING=utf-8
       - PYTHONUTF8=1
@@ -270,9 +270,9 @@ services:
       # Publish to localhost only so host services
       # can reach this DB. Bound to 127.0.0.1 so it
       # is NOT exposed to the public internet.
-      - "127.0.0.1:5432:5432"
+      - "127.0.0.1:15432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_sileos:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./database/schemas:/docker-entrypoint-initdb.d/schemas
     networks:
@@ -290,7 +290,7 @@ services:
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
     volumes:
-      - redis_data:/data
+      - redis_data_sileos:/data
     networks:
       - tutor-network
     restart: unless-stopped
@@ -306,7 +306,7 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "3100:3100"   # keep for direct-IP fallback
+      - "127.0.0.1:4100:3100"   # DEV DEPLOYMENT: edge on 4100, loopback only (vhost dev.sashainfinity.com -> 4100)
     environment:
       - PRERENDER_TOKEN=${PRERENDER_TOKEN:-}
     volumes:
@@ -331,9 +331,9 @@ services:
     restart: unless-stopped
 
 volumes:
-  postgres_data:
+  postgres_data_sileos:
     driver: local
-  redis_data:
+  redis_data_sileos:
     driver: local
 
 networks:
@@ -341,4 +341,4 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.30.0.0/16
+        - subnet: 172.31.0.0/16
