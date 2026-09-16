@@ -150,6 +150,19 @@ export const themeConfig = {
   },
 }
 
+// The user's real light/dark choice lives in the Aurum display preferences
+// (aurum_theme, default dark). The color themes below (purple/blue/orange…)
+// have no light/dark meaning, so sf-* components' dark styles must follow the
+// Aurum choice — otherwise this provider's boot effect overwrites the bridge
+// applied by AurumDisplayControls/AstraRouteTheme and forces "light".
+function aurumIsDark(): boolean {
+  try {
+    return localStorage.getItem('aurum_theme') !== 'light'
+  } catch {
+    return true
+  }
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = React.useState<Theme>(() => {
     const stored = localStorage.getItem('app-theme')
@@ -163,7 +176,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // Update CSS custom properties
     const config = themeConfig[newTheme]
     const root = document.documentElement
-    root.dataset.sashaTheme = newTheme === 'dark' ? 'dark' : 'light'
+    root.dataset.sashaTheme = newTheme === 'dark' || aurumIsDark() ? 'dark' : 'light'
 
     Object.entries(config.primary).forEach(([key, value]) => {
       root.style.setProperty(`--primary-${key}`, value)
@@ -174,7 +187,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // Initialize CSS variables
     const config = themeConfig[theme]
     const root = document.documentElement
-    root.dataset.sashaTheme = theme === 'dark' ? 'dark' : 'light'
+    root.dataset.sashaTheme = theme === 'dark' || aurumIsDark() ? 'dark' : 'light'
 
     Object.entries(config.primary).forEach(([key, value]) => {
       root.style.setProperty(`--primary-${key}`, value)
