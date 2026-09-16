@@ -309,11 +309,12 @@ export const useAuthStore = create<AuthState>()(
 
       checkAuth: async () => {
         // Prevent concurrent calls - if already loading or authenticated, skip
-        const state = get()
-        if (state.isLoading || (state.isAuthenticated && state.user)) {
-          // Already holding a live session (e.g. just logged in on this page):
-          // auth IS resolved — ProtectedRoute must not keep waiting.
-          if (state.isAuthenticated && state.user) set({ hasResolvedAuth: true })
+        // Concurrency guard only. A rehydrated persisted session must NOT
+        // skip validation: global logout revokes tokens server-side, and
+        // without a fresh /auth/me the store would happily keep rendering
+        // a session that every API call now rejects. (Login on this page
+        // still short-circuits via hasResolvedAuth at the callers.)
+        if (get().isLoading) {
           return
         }
 

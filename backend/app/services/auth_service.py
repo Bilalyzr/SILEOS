@@ -9,7 +9,7 @@ from jose import JWTError
 from typing import Optional
 
 from app.core.database import get_db
-from app.core.security import verify_password, verify_token, is_token_revoked
+from app.core.security import verify_password, verify_token, is_token_revoked, is_session_revoked
 from app.models.user import User
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
@@ -85,6 +85,12 @@ class AuthService:
         if is_token_revoked(token):
             raise credentials_exception
 
+        # Global logout: tokens minted before the user's last logout (on ANY
+        # origin — sibling subdomains keep their own localStorage sessions)
+        # are dead everywhere.
+        if is_session_revoked(payload):
+            raise credentials_exception
+
         user = db.query(User).filter(User.id == int(user_id)).first()
         if user is None:
             raise credentials_exception
@@ -128,6 +134,10 @@ class AuthService:
             # Logout denylist (see get_current_user): a revoked token is
             # treated as anonymous here, not as an error.
             if is_token_revoked(token):
+                return None
+
+            # Global logout (see get_current_user).
+            if is_session_revoked(payload):
                 return None
 
             user = db.query(User).filter(User.id == int(user_id)).first()

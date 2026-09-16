@@ -161,6 +161,15 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
     def _get_client_ip(self, request: Request) -> str:
         """Extract real client IP from request"""
+        # Cloudflare puts the REAL visitor IP in CF-Connecting-IP. Behind
+        # the proxy, X-Real-IP / the XFF chain only identify shared hops
+        # (CF edge IPs, the docker gateway), which collapsed unrelated
+        # visitors into one rate-limit bucket. Direct (non-proxied) traffic
+        # never carries this header, so it cannot be abused from outside.
+        cf_ip = request.headers.get("CF-Connecting-IP")
+        if cf_ip:
+            return cf_ip
+
         # Check for forwarded headers. X-Forwarded-For: use the LAST entry
         # (appended by our trusted proxy) — the first is client-spoofable.
         forwarded = last_forwarded_ip(request.headers.get("X-Forwarded-For"))
@@ -401,8 +410,13 @@ class IPWhitelistMiddleware(BaseHTTPMiddleware):
 
     def _get_client_ip(self, request: Request) -> str:
         """Extract real client IP from request"""
-        # Same policy as the rate limiter: last XFF entry (trusted proxy
+        # Same policy as the rate limiter: CF-Connecting-IP (real visitor,
+        # set by Cloudflare) first, then last XFF entry (trusted proxy
         # append), then X-Real-IP, then the socket address.
+        cf_ip = request.headers.get("CF-Connecting-IP")
+        if cf_ip:
+            return cf_ip
+
         forwarded = last_forwarded_ip(request.headers.get("X-Forwarded-For"))
         if forwarded:
             return forwarded
@@ -516,8 +530,13 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
 
     def _get_client_ip(self, request: Request) -> str:
         """Extract real client IP from request"""
-        # Same policy as the rate limiter: last XFF entry (trusted proxy
+        # Same policy as the rate limiter: CF-Connecting-IP (real visitor,
+        # set by Cloudflare) first, then last XFF entry (trusted proxy
         # append), then X-Real-IP, then the socket address.
+        cf_ip = request.headers.get("CF-Connecting-IP")
+        if cf_ip:
+            return cf_ip
+
         forwarded = last_forwarded_ip(request.headers.get("X-Forwarded-For"))
         if forwarded:
             return forwarded

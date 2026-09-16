@@ -737,6 +737,11 @@ async def refresh_token(
         if not supplied_token:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Refresh token required")
         claims = verify_token(supplied_token, expected_type="refresh")
+        # Global logout must kill refresh flows too, or a sibling subdomain
+        # would simply mint fresh access tokens after the user logged out.
+        from app.core.security import is_session_revoked
+        if is_session_revoked(claims):
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session revoked")
         user_id = claims.get("sub")
 
         if user_id is None:
@@ -1052,6 +1057,11 @@ async def logout(
     if auth_header.lower().startswith("bearer "):
         from app.core.security import revoke_access_token
         revoke_access_token(auth_header[7:].strip())
+    # Kill every origin's and device's session for this user — sibling
+    # subdomains keep their own localStorage tokens, which only a
+    # server-side revocation can reach.
+    from app.core.security import revoke_all_user_sessions
+    revoke_all_user_sessions(current_user.id)
     return {"message": "Logged out successfully"}
 
 @router.get("/me", response_model=UserResponse)

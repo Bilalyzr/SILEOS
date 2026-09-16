@@ -48,6 +48,34 @@ def _get_revocation_redis():
         )
     return _revocation_redis
 
+def revoke_all_user_sessions(user_id: int) -> None:
+    """Reject every token issued to `user_id` BEFORE now. Logout then takes
+    effect instantly on every origin (sibling-subdomain sessions live in
+    per-origin localStorage that a logout on one origin cannot clear) and
+    every device, not just the client that called /auth/logout."""
+    try:
+        _get_revocation_redis().setex(
+            f"user_sessions_revoked:{user_id}",
+            REFRESH_TOKEN_EXPIRE_DAYS * 86400,
+            str(int(datetime.utcnow().timestamp())),
+        )
+    except Exception:
+        pass  # fail open — same policy as the token denylist
+
+def is_session_revoked(payload: dict) -> bool:
+    """True when the token predates the user's last global logout."""
+    iat = payload.get("iat")
+    if not iat:
+        return False  # tokens minted before this feature age out naturally
+    try:
+        ts = _get_revocation_redis().get(f"user_sessions_revoked:{payload.get('sub')}")
+        # >= (not >): a token minted in the SAME second as the logout must
+        # die too — login→logout→refresh within one second otherwise slips
+        # through the race window.
+        return bool(ts and int(ts) >= int(iat))
+    except Exception:
+        return False
+
 def _token_fingerprint(token: str) -> str:
     return hashlib.sha256(token.encode("utf-8")).hexdigest()
 
@@ -118,7 +146,8 @@ def create_access_token(
         expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
     # Only set type to "access" if not already specified in data
-    to_encode.update({"exp": expire})
+    # iat lets logout's per-user revocation reject tokens minted before it.
+    to_encode.update({"exp": expire, "iat": int(datetime.utcnow().timestamp())})
     if "type" not in to_encode:
         to_encode["type"] = "access"
 
@@ -129,7 +158,7 @@ def create_refresh_token(data: dict) -> str:
     """Create a JWT refresh token"""
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
-    to_encode.update({"exp": expire, "type": "refresh"})
+    to_encode.update({"exp": expire, "iat": int(datetime.utcnow().timestamp()), "type": "refresh"})
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 

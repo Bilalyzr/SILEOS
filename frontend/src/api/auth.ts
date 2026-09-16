@@ -15,7 +15,17 @@ interface RefreshTokenResponse {
 }
 
 async function establishSharedSession(refreshToken: string): Promise<void> {
-  await api.post('/auth/sso', { refresh_token: refreshToken })
+  // Best-effort only: the backend also seeds the shared-domain cookie
+  // directly on /auth/login, so a failure here (e.g. a 429 from the rate
+  // limiter) must never discard an otherwise successful login.
+  try {
+    await api.post('/auth/sso', { refresh_token: refreshToken })
+  } catch (error: any) {
+    console.warn(
+      'Shared-session seeding skipped:',
+      error?.response?.status ?? error?.message,
+    )
+  }
 }
 
 export const authAPI = {
