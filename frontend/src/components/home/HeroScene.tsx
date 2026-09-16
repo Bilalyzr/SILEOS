@@ -129,7 +129,6 @@ export function HeroScene({ className = "" }: { className?: string }) {
 
     let raf = 0;
     let disposed = false;
-    const clock = new THREE.Clock();
 
     const placeNodes = (t: number) => {
       for (const node of nodes) {
@@ -154,9 +153,10 @@ export function HeroScene({ className = "" }: { className?: string }) {
     if (reduced) {
       renderFrame(1.4); // one static, composed frame
     } else {
+      const t0 = performance.now();
       const loop = () => {
         if (disposed) return;
-        if (visible && !document.hidden) renderFrame(clock.getElapsedTime());
+        if (visible && !document.hidden) renderFrame((performance.now() - t0) / 1000);
         raf = requestAnimationFrame(loop);
       };
       raf = requestAnimationFrame(loop);
