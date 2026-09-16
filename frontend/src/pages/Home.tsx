@@ -7,7 +7,6 @@ import { getMediaUrl } from "@/utils/media";
 import { IndependenceDayPopup } from "@/components/promotional/IndependenceDayPopup";
 import { OfferTimerWidget } from "@/components/promotional/OfferTimerWidget";
 import { verticalPublicHref } from "@/config/businessVerticals";
-import { HeroScene } from "@/components/home/HeroScene";
 import "./home.css";
 
 function HeroSection() {
@@ -39,10 +38,7 @@ function HeroSection() {
         </div>
       </div>
       <div className="rd-home-guide">
-        <div className="rd-home-scene">
-          <img src="/design/sasha-guide.png" alt="Sasha learning guide" />
-          <HeroScene className="rd-home-scene-canvas" />
-        </div>
+        <img src="/design/sasha-guide.png" alt="Sasha learning guide" />
         <div>
           <span>LEARN BY DOING</span>
           <strong>
