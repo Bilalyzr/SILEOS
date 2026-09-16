@@ -126,11 +126,13 @@ const ALIASES: Record<string, BusinessVerticalKey> = {
   meiporul: "meiporul",
   ma1: "meiporul",
   seyappaduporul: "seyappaduporul",
+  "seyappaduporuldev": "seyappaduporul",
   "seyappadu-porul": "seyappaduporul",
   "seyappadu porul": "seyappaduporul",
   seyappadu_porul: "seyappaduporul",
   ma2: "seyappaduporul",
   utporul: "utporul",
+  "utporuldev": "utporul",
   upporul: "utporul",
   ma3: "utporul",
 };

@@ -131,6 +131,16 @@
     cursor: not-allowed;
   }
 
+  /* Floating product-tour launcher ("How it works", fixed bottom-right,
+     z-40): while it is on screen, workspace page containers reserve bottom
+     clearance so the pill can never cover a card's links or buttons
+     (e.g. "View details" on the last dashboard card at tablet widths).
+     ProductTourProvider toggles `has-tour-fab` on <body>. */
+  body.has-tour-fab .rd-page,
+  body.has-tour-fab .rd-workspace-content {
+    padding-bottom: 4.5rem;
+  }
+
   html {
     scroll-behavior: smooth;
     /* Firefox parity with the webkit scrollbar below. */

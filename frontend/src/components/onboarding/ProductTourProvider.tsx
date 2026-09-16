@@ -618,6 +618,15 @@ export function ProductTourProvider({
   const eligible = Boolean(
     isAuthenticated && user && isTourRoute(pathname),
   );
+
+  // The floating "How it works" launcher is fixed to the bottom-right corner;
+  // while it is visible, page containers reserve clearance (see
+  // body.has-tour-fab in globals.css) so it never covers a card's actions.
+  React.useEffect(() => {
+    document.body.classList.toggle("has-tour-fab", eligible && !open);
+    return () => document.body.classList.remove("has-tour-fab");
+  }, [eligible, open]);
+
   const key = user ? storageKey(user.id, role) : "";
 
   const saveProgress = React.useCallback(
@@ -714,12 +723,14 @@ export function ProductTourProvider({
           type="button"
           onClick={openTour}
           aria-label="Open SashaInfinity product tour"
-          className="fixed bottom-5 right-4 sm:right-6 z-40 inline-flex items-center gap-2 rounded-full border border-orange-200/80 bg-white/90 px-3.5 py-2.5 text-sm font-semibold text-slate-800 shadow-[0_14px_40px_rgba(249,115,22,0.22)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-orange-300 hover:text-orange-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
+          className="fixed bottom-5 right-4 sm:right-6 z-40 inline-flex items-center gap-2 rounded-full border border-orange-200/80 bg-white/90 p-2.5 lg:px-3.5 lg:py-2.5 text-sm font-semibold text-slate-800 shadow-[0_14px_40px_rgba(249,115,22,0.22)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-orange-300 hover:text-orange-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
         >
           <span className="grid h-7 w-7 place-items-center rounded-full bg-gradient-to-br from-orange-500 to-amber-400 text-white shadow-sm">
             <HelpCircle className="h-4 w-4" />
           </span>
-          <span className="hidden sm:inline">How it works</span>
+          {/* Icon-only below lg: the wide pill covered the bottom-right card
+              corner of the dashboard grid at tablet widths. */}
+          <span className="hidden lg:inline">How it works</span>
         </button>
       )}
 

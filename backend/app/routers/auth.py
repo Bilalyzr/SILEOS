@@ -93,6 +93,8 @@ def _clear_shared_session(response: Response, request: Request) -> None:
 @router.post("/login/", response_model=TokenResponse)
 async def login(
     request: LoginRequest,
+    http_request: Request,
+    response: Response,
     db: Session = Depends(get_db)
 ) -> Any:
     """
@@ -204,6 +206,12 @@ async def login(
     # Update last_login timestamp
     user.last_login = datetime.now(timezone.utc)
     db.commit()
+
+    # Password login must seed the shared-domain refresh cookie too — it was
+    # only set by the refresh/SSO flows, so a user who logged in and hopped
+    # straight to a sibling subdomain (dev.sashainfinity.com ->
+    # seyappaduporuldev.sashainfinity.com) had no session there.
+    _set_shared_session(response, http_request, refresh_token)
 
     return {
         "access_token": access_token,

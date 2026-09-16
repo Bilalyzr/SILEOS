@@ -10,6 +10,7 @@ export const useAuth = () => {
     instructorProfile,
     isAuthenticated,
     isLoading,
+    hasResolvedAuth,
     error,
     login,
     register,
@@ -19,9 +20,13 @@ export const useAuth = () => {
     clearError,
   } = useAuthStore()
 
-  // Check authentication on mount once (no checkAuth in deps since it's stable from Zustand)
+  // Check authentication on mount once (no checkAuth in deps since it's stable from Zustand).
+  // Runs whenever auth hasn't RESOLVED yet — not only when there's no user.
+  // A hard page load with a persisted session rehydrates `user` from
+  // localStorage; skipping checkAuth in that case left hasResolvedAuth
+  // unset and ProtectedRoute spinning on "Loading..." forever.
   React.useEffect(() => {
-    if (!user && !isLoading) {
+    if (!hasResolvedAuth && !isLoading) {
       checkAuth().catch(console.error)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -68,6 +73,7 @@ export const useAuth = () => {
     instructorProfile,
     isAuthenticated,
     isLoading,
+    hasResolvedAuth,
     error,
     isInstructor,
     isStudent,

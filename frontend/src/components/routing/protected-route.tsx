@@ -16,12 +16,16 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requiredPermission,
   fallback,
 }) => {
-  const { isAuthenticated, isLoading } = useAuth()
+  const { isAuthenticated, isLoading, hasResolvedAuth } = useAuth()
   const { hasRole, hasPermission } = useAuthContext()
   const location = useLocation()
 
-  // Show loading spinner while checking authentication
-  if (isLoading) {
+  // Show loading spinner while checking authentication — including the very
+  // first render, before checkAuth() has even started (hasResolvedAuth false)
+  // and while it is in flight (isLoading). Without the first-render wait, a
+  // cross-subdomain cookie session gets bounced to /login before the async
+  // restore finishes.
+  if (isLoading || !hasResolvedAuth) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="flex flex-col items-center space-y-4">

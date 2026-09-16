@@ -61,4 +61,9 @@ COPY --from=build /app/dist ./dist
 
 EXPOSE 3000
 
+# serve.json (copied from public/ into dist/) disables cleanUrls: builtin lab
+# pages are embedded as iframes at their literal .html URLs (embed_url from
+# /virtual-labs). cleanUrls 301-strips the .html, the extensionless path
+# collides with the per-lab assets directory, the SPA fallback serves the app
+# shell, and the lab player shows a 404.
 CMD ["serve", "-s", "dist", "-l", "tcp://0.0.0.0:3000", "-n"]

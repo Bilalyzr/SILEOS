@@ -31,6 +31,13 @@ function applyPreferences(theme: AurumTheme, surface: AurumSurface) {
   for (const element of [document.documentElement, document.body]) {
     element.dataset.theme = theme;
     element.dataset.surface = surface;
+    // Bridge every theme system so ONE toggle drives them all. Before this,
+    // the toggle only flipped aurum.css's [data-theme] styles while
+    // globals.css's shadcn tokens waited for a `.dark` class nothing ever
+    // set and sasha-design.css's sf-* components keyed off a separate
+    // data-sasha-theme — leaving light content mixed into dark chrome.
+    element.classList.toggle("dark", theme === "dark");
+    element.dataset.sashaTheme = theme;
   }
 }
 

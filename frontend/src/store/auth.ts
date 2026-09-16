@@ -96,7 +96,17 @@ export const useAuthStore = create<AuthState>()(
       accessToken: null,
       refreshToken: null,
       isAuthenticated: false,
+      // NOTE: must start false — checkAuth()'s concurrency guard early-returns
+      // when isLoading is already true, so an initial true would wedge the
+      // app in a loading state. The sibling-subdomain race is closed by
+      // flipping isLoading true before the async cookie probe inside
+      // checkAuth instead.
       isLoading: false,
+      // True once checkAuth() has concluded (session restored or confirmed
+      // anonymous). ProtectedRoute waits on this so the FIRST render — which
+      // runs before any effect can start checkAuth — does not bounce a
+      // cookie-restorable session to /login.
+      hasResolvedAuth: false,
       error: null,
 
       // Actions
@@ -224,8 +234,15 @@ export const useAuthStore = create<AuthState>()(
               refreshToken: response.refreshToken,
             })
           } catch (error) {
-            // If refresh fails, logout user
-            get().logout()
+            // If refresh fails, end the session — but only when THIS context
+            // actually owned one. The boot-time cookie probe calls this with
+            // no tokens at all (expected 401 for anonymous visitors), and a
+            // second app instance (e.g. a lab iframe before that fix) could
+            // lose the refresh-rotation race and wipe the shared storage out
+            // from under the still-valid main session.
+            if (get().isAuthenticated || get().accessToken || get().refreshToken) {
+              get().logout()
+            }
             throw error
           } finally {
             refreshInFlight = null
@@ -294,6 +311,9 @@ export const useAuthStore = create<AuthState>()(
         // Prevent concurrent calls - if already loading or authenticated, skip
         const state = get()
         if (state.isLoading || (state.isAuthenticated && state.user)) {
+          // Already holding a live session (e.g. just logged in on this page):
+          // auth IS resolved — ProtectedRoute must not keep waiting.
+          if (state.isAuthenticated && state.user) set({ hasResolvedAuth: true })
           return
         }
 
@@ -303,10 +323,15 @@ export const useAuthStore = create<AuthState>()(
           if (!accessToken) {
             // localStorage is origin-scoped. Restore a Sasha-wide session from
             // the HttpOnly refresh cookie when entering a sibling subdomain.
+            // Flip isLoading BEFORE the async probe: ProtectedRoute treats
+            // isLoading=false + !isAuthenticated as "definitely anonymous"
+            // and would redirect to /login while the probe is still in
+            // flight — bouncing a session that is about to be restored.
+            set({ isLoading: true })
             try {
               await get().refreshAccessToken()
             } catch {
-              set({ isLoading: false })
+              set({ isLoading: false, hasResolvedAuth: true })
               return
             }
           }
@@ -328,6 +353,7 @@ export const useAuthStore = create<AuthState>()(
               instructorProfile: response.instructorProfile,
               isAuthenticated: true,
               isLoading: false,
+              hasResolvedAuth: true,
             })
           } catch (error: any) {
             // Axios puts the HTTP status on error.response.status (not
@@ -347,25 +373,26 @@ export const useAuthStore = create<AuthState>()(
                   instructorProfile: response.instructorProfile,
                   isAuthenticated: true,
                   isLoading: false,
+                  hasResolvedAuth: true,
                 })
               } catch (refreshError) {
                 // Refresh genuinely failed → the session is dead, log out.
                 get().logout()
-                set({ isLoading: false })
+                set({ isLoading: false, hasResolvedAuth: true })
               }
             } else {
               // Network / server error (e.g. 500). Do NOT log the user out —
               // wiping the session here is what blanked identity to "You" on a
               // transient backend hiccup. Keep the existing session + token.
               console.warn('checkAuth: keeping session despite fetch error', error)
-              set({ isLoading: false })
+              set({ isLoading: false, hasResolvedAuth: true })
             }
           }
         } catch (error: any) {
           // Unexpected error — preserve the session, just clear the loading
           // flag rather than logging the user out.
           console.warn('checkAuth failed; preserving session', error)
-          set({ isLoading: false })
+          set({ isLoading: false, hasResolvedAuth: true })
         }
       },
 
