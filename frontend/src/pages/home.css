@@ -722,3 +722,61 @@
     border: 2px solid currentColor !important;
   }
 }
+
+/* 3D hero scene — the guide image stays underneath as the no-WebGL
+   fallback; the canvas draws transparently over it when available. */
+.rd-home-scene {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  /* definite width so aspect-ratio can size the box — a flex-basis of
+     auto lets the canvas's intrinsic 36px buffer size win the row */
+  flex: 0 0 auto;
+  width: 58%;
+  max-width: 420px;
+}
+.rd-home-scene img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.35;
+}
+.rd-home-scene-canvas {
+  position: absolute;
+  inset: 0;
+}
+@media (max-width: 767px) {
+  .rd-home-scene {
+    max-width: 300px;
+  }
+}
+
+/* Micro-interactions — transform/opacity only (compositor-friendly),
+   brand colors untouched. Disabled under reduced motion below. */
+.rd-home-primary,
+.rd-home-secondary {
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.rd-home-primary:hover,
+.rd-home-secondary:hover {
+  transform: translateY(-2px);
+}
+.rd-home-paths a {
+  transition: transform 160ms ease;
+}
+.rd-home-paths a:hover {
+  transform: translateX(3px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .rd-home-primary,
+  .rd-home-secondary,
+  .rd-home-paths a {
+    transition: none;
+  }
+  .rd-home-primary:hover,
+  .rd-home-secondary:hover,
+  .rd-home-paths a:hover {
+    transform: none;
+  }
+}
