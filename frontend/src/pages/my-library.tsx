@@ -16,14 +16,20 @@ export default function MyLibraryPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const load = () => {
+    setLoading(true);
+    setError(null);
     libraryAPI
       .myLibrary()
-      .then((d) => setItems(d.items))
+      .then((d) => setItems(Array.isArray(d?.items) ? d.items : []))
       .catch((e) =>
         setError(e?.response?.data?.detail ?? "Failed to load your library"),
       )
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    load();
   }, []);
 
   return (
@@ -52,9 +58,15 @@ export default function MyLibraryPage() {
           ))}
         </div>
       ) : error ? (
-        <p role="alert" className="text-red-600 text-sm">
-          {error}
-        </p>
+        <div role="alert" className="text-sm text-red-600">
+          <p>{error}</p>
+          <button
+            onClick={load}
+            className="mt-2 px-4 py-1.5 rounded-lg bg-gray-900 text-white text-xs font-semibold hover:bg-gray-700"
+          >
+            Try again
+          </button>
+        </div>
       ) : items.length === 0 ? (
         <div className="border border-dashed border-gray-300 rounded-xl p-10 text-center">
           <p className="text-gray-500 text-sm">Nothing here yet.</p>

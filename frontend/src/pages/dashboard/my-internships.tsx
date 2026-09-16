@@ -59,35 +59,42 @@ export const MyInternshipsPage: React.FC = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true)
-        setError('')
-        const data = await internshipApi.myVouchers()
-        const mapped: StudentInternship[] = data.map((v) => {
-          const redeemed = v.status === 'redeemed'
-          const completed = !!v.course_progress?.is_completed || v.engagement_status === 'completed'
-          return {
-          id: v.id,
-          slug: v.internship_slug ?? undefined,
-          title: v.internship_title ?? 'Internship',
-          spoc_name: v.spoc_name ?? '—',
-          start_date: v.redeemed_at || v.created_at,
-          voucher_code: v.code,
-          voucher_redeemed: redeemed,
-          status: (completed ? 'completed' : redeemed ? 'in-progress' : 'pending') as InternshipStatus,
-          progress: v.course_progress?.progress_percentage ?? 0,
-          certificate_issued: v.certificate_issued,
-          course_id: v.redeemed_course_id ?? undefined,
-        }})
-        setItems(mapped)
-      } catch {
-        setError('Could not load your internships. Please try again.')
-      } finally {
-        setLoading(false)
+  const load = async () => {
+    try {
+      setLoading(true)
+      setError('')
+      const data = await internshipApi.myVouchers()
+      // A non-array payload (an HTML error page, an error envelope) must not
+      // reach .map below — surface it through the error state instead.
+      if (!Array.isArray(data)) {
+        throw new Error('Unexpected response from the server')
       }
-    })()
+      const mapped: StudentInternship[] = data.map((v) => {
+        const redeemed = v.status === 'redeemed'
+        const completed = !!v.course_progress?.is_completed || v.engagement_status === 'completed'
+        return {
+        id: v.id,
+        slug: v.internship_slug ?? undefined,
+        title: v.internship_title ?? 'Internship',
+        spoc_name: v.spoc_name ?? '—',
+        start_date: v.redeemed_at || v.created_at,
+        voucher_code: v.code,
+        voucher_redeemed: redeemed,
+        status: (completed ? 'completed' : redeemed ? 'in-progress' : 'pending') as InternshipStatus,
+        progress: v.course_progress?.progress_percentage ?? 0,
+        certificate_issued: v.certificate_issued,
+        course_id: v.redeemed_course_id ?? undefined,
+      }})
+      setItems(mapped)
+    } catch {
+      setError('Could not load your internships. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    load()
   }, [])
 
   const list = items
@@ -119,7 +126,17 @@ export const MyInternshipsPage: React.FC = () => {
         </p>
       </FadeUp>
 
-      {error && <p role="alert" className="mt-5 rounded-xl bg-red-50 p-4 text-sm text-red-800">{error}</p>}
+      {error && (
+        <div role="alert" className="mt-5 flex flex-wrap items-center gap-3 rounded-xl bg-red-50 p-4 text-sm text-red-800">
+          <span>{error}</span>
+          <button
+            onClick={load}
+            className="px-3 py-1.5 rounded-lg bg-red-800 text-white text-xs font-semibold hover:bg-red-900"
+          >
+            Try again
+          </button>
+        </div>
+      )}
 
       {/* Stat cards */}
       <StaggerGrid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
@@ -145,8 +162,8 @@ export const MyInternshipsPage: React.FC = () => {
           ) : list.length === 0 ? (
             <EmptyState
               icon={Briefcase}
-              title="No internships yet"
-              description="Browse paid internships and purchase a voucher to get started."
+              title="No internships available"
+              description="You are not enrolled in any internship yet. Browse paid internships and purchase a voucher to get started."
               action={{ label: 'Explore internships', to: '/internships' }}
             />
           ) : (

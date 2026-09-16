@@ -94,6 +94,19 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
         response.headers["X-Request-ID"] = request_id
         return response
 
+# Fixed-window counter: INCR, then set the TTL only when the key is newly
+# created. Setting EXPIRE on every hit (the previous implementation) resets
+# the window on each request, so a client that never goes quiet for a full
+# window — e.g. a browser with a 30s live-class poller — accumulates a
+# counter that can never decay and is permanently locked out once it crosses
+# the limit. Mirrors _redis_incr_with_expiry in routers/live_class_session.py.
+_RATE_WINDOW_LUA = """
+local c = redis.call('INCR', KEYS[1])
+if c == 1 then redis.call('EXPIRE', KEYS[1], ARGV[1]) end
+return c
+"""
+
+
 class RateLimitMiddleware(BaseHTTPMiddleware):
     """Advanced Rate Limiting with Redis Backend"""
 
@@ -107,6 +120,33 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         self.redis_client = redis.from_url(settings.REDIS_URL, decode_responses=True,
                                            socket_connect_timeout=0.3, socket_timeout=0.5, retry_on_timeout=False)
         self._redis_down_until = 0.0
+        self._window_incr = self.redis_client.register_script(_RATE_WINDOW_LUA)
+
+    def _hit(self, key: str, window_seconds: int) -> int:
+        """Count one request in a fixed window; returns the post-increment count."""
+        return int(self._window_incr(keys=[key], args=[window_seconds]))
+
+    def _bucket_identity(self, request: Request) -> str:
+        """Bucket key for general rate limiting.
+
+        Authenticated requests key by USER id, not IP: college computer labs
+        and corporate NATs put every learner behind one address, and the
+        frontend's dev proxy presents a single container IP for all browsers.
+        Per-user buckets keep one heavy user from locking out the room. The
+        token is verified (not just decoded) so a forged Authorization header
+        cannot mint fresh buckets; anything unverifiable falls back to IP.
+        """
+        auth = request.headers.get("Authorization", "")
+        if auth.startswith("Bearer "):
+            try:
+                from app.core.security import verify_token
+                payload = verify_token(auth[7:], expected_type=("access", "impersonation_access"))
+                sub = payload.get("sub")
+                if sub:
+                    return f"user:{sub}"
+            except Exception:
+                pass
+        return self._get_client_ip(request)
 
     def _redis_available(self) -> bool:
         import time as _t
@@ -149,7 +189,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             elif path.startswith('/certificate-verification/') or path.startswith('/api/v1/certificates/verify'):
                 await self._check_certificate_verification_rate_limit(client_ip)
             elif not is_public_endpoint:
-                await self._check_general_rate_limit(client_ip)
+                await self._check_general_rate_limit(self._bucket_identity(request))
         except HTTPException as e:
             from starlette.responses import JSONResponse
             return JSONResponse(
@@ -196,107 +236,63 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         if not self._redis_available():
             return
         try:
-            current_count = self.redis_client.get(key) or 0
-            current_count = int(current_count)
+            current_count = self._hit(key, 300)  # 5-minute fixed window
 
-            if current_count >= settings.RATE_LIMIT_LOGIN_ATTEMPTS:
+            if current_count > settings.RATE_LIMIT_LOGIN_ATTEMPTS:
                 security_logger.warning(f"Login rate limit exceeded for IP: {client_ip}")
                 raise HTTPException(
                     status_code=status.HTTP_429_TOO_MANY_REQUESTS,
                     detail="Too many login attempts. Please try again later."
                 )
 
-            # Increment counter
-            pipe = self.redis_client.pipeline()
-            pipe.incr(key)
-            pipe.expire(key, 300)  # 5 minutes
-            pipe.execute()
-
         except (redis.RedisError, OSError) as e:
             self._trip_breaker(e)
 
     async def _check_certificate_verification_rate_limit(self, client_ip: str):
         """Strict rate limiting for certificate verification attempts to prevent brute force attacks"""
-        key = f"rate_limit:cert_verify:{client_ip}"
-
         if not self._redis_available():
             return
         try:
-            current_count = self.redis_client.get(key) or 0
-            current_count = int(current_count)
-
             # Allow 5 verifications per minute, 20 per hour
-            minute_key = f"rate_limit:cert_verify:minute:{client_ip}"
-            hour_key = f"rate_limit:cert_verify:hour:{client_ip}"
-
-            current_minute = self.redis_client.get(minute_key) or 0
-            current_minute = int(current_minute)
-
-            current_hour = self.redis_client.get(hour_key) or 0
-            current_hour = int(current_hour)
-
-            if current_minute >= 5:
+            current_minute = self._hit(f"rate_limit:cert_verify:minute:{client_ip}", 60)
+            if current_minute > 5:
                 security_logger.warning(f"Certificate verification minute rate limit exceeded for IP: {client_ip}")
                 raise HTTPException(
                     status_code=status.HTTP_429_TOO_MANY_REQUESTS,
                     detail="Too many certificate verification attempts. Please try again in a minute."
                 )
 
-            if current_hour >= 20:
+            current_hour = self._hit(f"rate_limit:cert_verify:hour:{client_ip}", 3600)
+            if current_hour > 20:
                 security_logger.warning(f"Certificate verification hour rate limit exceeded for IP: {client_ip}")
                 raise HTTPException(
                     status_code=status.HTTP_429_TOO_MANY_REQUESTS,
                     detail="Too many certificate verification attempts. Please try again later."
                 )
 
-            # Increment counters
-            pipe = self.redis_client.pipeline()
-            pipe.incr(minute_key)
-            pipe.expire(minute_key, 60)  # 1 minute
-            pipe.incr(hour_key)
-            pipe.expire(hour_key, 3600)  # 1 hour
-            pipe.execute()
-
-            security_logger.info(f"Certificate verification attempt from IP: {client_ip} (minute: {current_minute + 1}, hour: {current_hour + 1})")
+            security_logger.info(f"Certificate verification attempt from IP: {client_ip} (minute: {current_minute}, hour: {current_hour})")
 
         except (redis.RedisError, OSError) as e:
             self._trip_breaker(e)
 
-    async def _check_general_rate_limit(self, client_ip: str):
+    async def _check_general_rate_limit(self, identity: str):
         """General rate limiting for all endpoints"""
-        minute_key = f"rate_limit:minute:{client_ip}"
-        hour_key = f"rate_limit:hour:{client_ip}"
-
         if not self._redis_available():
             return
         try:
-            # Check per-minute limit
-            current_minute = self.redis_client.get(minute_key) or 0
-            current_minute = int(current_minute)
-
-            # Check per-hour limit
-            current_hour = self.redis_client.get(hour_key) or 0
-            current_hour = int(current_hour)
-
-            if current_minute >= settings.RATE_LIMIT_REQUESTS_PER_MINUTE:
+            current_minute = self._hit(f"rate_limit:minute:{identity}", 60)
+            if current_minute > settings.RATE_LIMIT_REQUESTS_PER_MINUTE:
                 raise HTTPException(
                     status_code=status.HTTP_429_TOO_MANY_REQUESTS,
                     detail="Rate limit exceeded. Please try again in a minute."
                 )
 
-            if current_hour >= settings.RATE_LIMIT_REQUESTS_PER_HOUR:
+            current_hour = self._hit(f"rate_limit:hour:{identity}", 3600)
+            if current_hour > settings.RATE_LIMIT_REQUESTS_PER_HOUR:
                 raise HTTPException(
                     status_code=status.HTTP_429_TOO_MANY_REQUESTS,
                     detail="Hourly rate limit exceeded. Please try again later."
                 )
-
-            # Increment counters
-            pipe = self.redis_client.pipeline()
-            pipe.incr(minute_key)
-            pipe.expire(minute_key, 60)
-            pipe.incr(hour_key)
-            pipe.expire(hour_key, 3600)
-            pipe.execute()
 
         except (redis.RedisError, OSError) as e:
             self._trip_breaker(e)

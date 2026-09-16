@@ -140,6 +140,9 @@ api.interceptors.request.use(
 
         // Analytics + internships
         '/analytics', '/internships',
+        // Notifications mark-all-read: backend declares POST /read-all with
+        // NO trailing slash and redirect_slashes=False — appending one 404s.
+        '/notifications/read-all',
 
         // Internship-portal subsystems (SS1/SS2/SS3). Backend runs with
         // redirect_slashes=False and none of these routes declare a trailing

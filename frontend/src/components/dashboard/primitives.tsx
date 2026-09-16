@@ -578,11 +578,22 @@ export const Greeting: React.FC<{
     "SPOC WORKSPACE": "College overview",
     "MY PROFILE": "Your profile",
   };
+  // A greeting should greet: when the caller knows the user, welcome them by
+  // name with the name accent-highlighted (.greeting-name). The workspace
+  // titles remain the heading for pages without a user in context.
+  const displayName = (name || "").trim();
+  const title: React.ReactNode = displayName ? (
+    <>
+      Welcome back, <span className="greeting-name">{displayName}</span>
+    </>
+  ) : (
+    titles[chip || ""] || "Your workspace"
+  );
   return (
     <div className={className}>
       <PageHeading
         eyebrow={chip}
-        title={titles[chip || ""] || (name ? name : "Your workspace")}
+        title={title}
         description={subtitle}
         actions={
           cta ? (

@@ -9,12 +9,11 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { courseAPI } from '@/api/course'
-import { toast } from 'react-hot-toast'
 import { formatDistanceToNow } from 'date-fns'
 import { getCourseThumbnailUrl } from '@/utils/media'
 import { useAuth } from '@/hooks/use-auth'
 import {
-  Greeting, SectionCard, EmptyState, FadeUp, StaggerGrid, fadeUp,
+  Greeting, SectionCard, EmptyState, ErrorState, FadeUp, StaggerGrid, fadeUp,
 } from '@/components/dashboard/primitives'
 import { motion } from 'framer-motion'
 
@@ -43,6 +42,7 @@ export function MyCoursesPage() {
   const { fullName } = useAuth()
   const [enrolledCourses, setEnrolledCourses] = useState<EnrolledCourse[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [activeFilter, setActiveFilter] = useState<Filter>('All Courses')
 
   useEffect(() => {
@@ -52,15 +52,22 @@ export function MyCoursesPage() {
   const fetchEnrolledCourses = async () => {
     try {
       setLoading(true)
+      setError(null)
       // courseAPI types this as Course[], but /users/my-courses returns the
       // formatted shape (title/progress/instructor), not the WordPress-shaped
       // Course (post_title/post_status). EnrolledCourse below is the accurate
       // description of what actually arrives.
       const data = (await courseAPI.getEnrolledCourses()) as unknown as EnrolledCourse[]
-      setEnrolledCourses(data || [])
-    } catch (error: any) {
-      console.error('Error fetching enrolled courses:', error)
-      toast.error('Failed to load enrolled courses')
+      // A non-array payload (an HTML error page, an error envelope) used to
+      // be stored straight into state and blew up the render in `.filter`.
+      if (!Array.isArray(data)) {
+        throw new Error('Unexpected response from the server')
+      }
+      setEnrolledCourses(data)
+    } catch (err: any) {
+      console.error('Error fetching enrolled courses:', err)
+      setError(err?.response?.data?.detail || 'Failed to load enrolled courses')
+      setEnrolledCourses([])
     } finally {
       setLoading(false)
     }
@@ -157,6 +164,12 @@ export function MyCoursesPage() {
                 </div>
               ))}
             </div>
+          ) : error ? (
+            <ErrorState
+              title="Couldn't load your courses"
+              description={error}
+              onRetry={fetchEnrolledCourses}
+            />
           ) : realDataEmpty ? (
             <EmptyState
               icon={BookOpen}

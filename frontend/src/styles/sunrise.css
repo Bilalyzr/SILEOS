@@ -283,6 +283,13 @@ body.astra-theme::before {
 .astra-theme :is(.sf-hero, .si-hero) :is(h1, h2) {
   color: #442714 !important;
 }
+/* The dashboard Welcome banner: astra-glass.css sets :is(h1..h6) to the navy
+   --ink, which overrides the banner's warm #442714 ink by source order and
+   leaves the heading the wrong colour for this surface. Same fix the hero
+   rule above applies. */
+.astra-theme :is(.brand-banner, .brand-banner-compact) :is(h1, h2, h3) {
+  color: #442714 !important;
+}
 .astra-theme :is(.sf-hero, .si-hero) p {
   color: #75543e !important;
 }

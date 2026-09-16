@@ -9,7 +9,6 @@ import {
   Calendar,
   Ticket,
 } from "lucide-react";
-import toast from "react-hot-toast";
 import { internshipApi, type MyVoucher } from "@/api/internship";
 import { DashboardShell } from "@/components/dashboard/primitives";
 
@@ -17,27 +16,44 @@ export const MyInternshipDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [voucher, setVoucher] = useState<MyVoucher | null>(null);
   const [loading, setLoading] = useState(true);
+  // "not-found" (loaded fine, no such enrollment) vs "error" (the load
+  // itself failed) render different messages — an API failure must not be
+  // reported as "enrollment not found".
+  const [loadState, setLoadState] = useState<
+    "ok" | "not-found" | "error"
+  >("ok");
+  const [errorDetail, setErrorDetail] = useState<string | null>(null);
+
+  const load = async () => {
+    if (!slug) return;
+    try {
+      setLoading(true);
+      setLoadState("ok");
+      setErrorDetail(null);
+      // Fetch my vouchers and find the one matching this slug
+      const vouchers = await internshipApi.myVouchers();
+      const found = (Array.isArray(vouchers) ? vouchers : []).find(
+        (v) => v.internship_slug === slug,
+      );
+      if (found) {
+        setVoucher(found);
+      } else {
+        setLoadState("not-found");
+      }
+    } catch (err: any) {
+      console.error("Error fetching internship details:", err);
+      setLoadState("error");
+      setErrorDetail(
+        err?.response?.data?.detail || "Failed to load internship details",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (!slug) return;
-    (async () => {
-      try {
-        setLoading(true);
-        // Fetch my vouchers and find the one matching this slug
-        const vouchers = await internshipApi.myVouchers();
-        const found = vouchers.find((v) => v.internship_slug === slug);
-        if (found) {
-          setVoucher(found);
-        } else {
-          toast.error("Internship enrollment not found");
-        }
-      } catch (err: any) {
-        console.error("Error fetching internship details:", err);
-        toast.error("Failed to load internship details");
-      } finally {
-        setLoading(false);
-      }
-    })();
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
   if (loading) {
@@ -54,7 +70,23 @@ export const MyInternshipDetailPage: React.FC = () => {
     return (
       <DashboardShell>
         <div className="text-center py-12">
-          <p className="text-gray-500">Internship enrollment not found</p>
+          {loadState === "error" ? (
+            <>
+              <p className="text-red-600" role="alert">
+                {errorDetail}
+              </p>
+              <button
+                onClick={load}
+                className="px-4 py-2 mt-4 rounded-lg bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700"
+              >
+                Try again
+              </button>
+            </>
+          ) : (
+            <p className="text-gray-500">
+              No internship enrollment found for this page.
+            </p>
+          )}
           <Link
             to="/dashboard/my-internships"
             className="text-orange-600 hover:underline mt-4 inline-block"

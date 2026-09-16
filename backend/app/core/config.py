@@ -73,8 +73,11 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = Field(default="./uploads", env="UPLOAD_DIR")
 
     # Rate Limiting
-    RATE_LIMIT_REQUESTS_PER_MINUTE: int = Field(default=60, env="RATE_LIMIT_REQUESTS_PER_MINUTE")
-    RATE_LIMIT_REQUESTS_PER_HOUR: int = Field(default=1000, env="RATE_LIMIT_REQUESTS_PER_HOUR")
+    # Sized for the SPA: one dashboard load fires ~9 API calls and the app
+    # runs background pollers, so 60/min locked out active learners. Buckets
+    # are per authenticated user (per IP when anonymous) over fixed windows.
+    RATE_LIMIT_REQUESTS_PER_MINUTE: int = Field(default=200, env="RATE_LIMIT_REQUESTS_PER_MINUTE")
+    RATE_LIMIT_REQUESTS_PER_HOUR: int = Field(default=4000, env="RATE_LIMIT_REQUESTS_PER_HOUR")
     RATE_LIMIT_LOGIN_ATTEMPTS: int = Field(default=5, env="RATE_LIMIT_LOGIN_ATTEMPTS")
 
     # Security Headers
