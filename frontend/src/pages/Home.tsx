@@ -9,19 +9,6 @@ import { OfferTimerWidget } from "@/components/promotional/OfferTimerWidget";
 import { verticalPublicHref } from "@/config/businessVerticals";
 import "./home.css";
 
-// Font Awesome 6 is loaded from the public CDN once on mount so the <i> icons render.
-function useFontAwesome() {
-  useEffect(() => {
-    if (document.querySelector("link[data-sasha-fa]")) return;
-    const l = document.createElement("link");
-    l.rel = "stylesheet";
-    l.href =
-      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css";
-    l.setAttribute("data-sasha-fa", "true");
-    document.head.appendChild(l);
-  }, []);
-}
-
 function HeroSection() {
   return (
     <section className="rd-home-hero" id="home" data-testid="hero-section">
@@ -884,7 +871,6 @@ export function NewsletterSection() {
 }
 
 export const HomePage = () => {
-  useFontAwesome();
   useSEO({
     title: "SashaInfinity | Learn, practice and build",
     description:
