@@ -1,0 +1,351 @@
+{
+  "ok": true,
+  "strict": false,
+  "lint": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 3,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "gsap_timeline_set_initial_hide",
+        "severity": "warning",
+        "message": "Initial hidden state for \"#origin-chapter, #origin-bright, #origin-expansion, #origin-initials, #origin-reveal\" is set via tl.set(...) at position 0 inside the paused timeline. A zero-duration set at 0 does not render while the playhead sits exactly at 0, so frame 0 shows the un-hidden state.",
+        "selector": "#origin-chapter, #origin-bright, #origin-expansion, #origin-initials, #origin-reveal",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\compositions\\frames\\01-origin.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Use gsap.set(...) (immediate, outside the timeline) for initial states, or author the hidden state directly in CSS/attributes."
+      },
+      {
+        "code": "gsap_timeline_set_initial_hide",
+        "severity": "warning",
+        "message": "Initial hidden state for \"#origin-low-3, #origin-low-4, #origin-low-5\" is set via tl.set(...) at position 0 inside the paused timeline. A zero-duration set at 0 does not render while the playhead sits exactly at 0, so frame 0 shows the un-hidden state.",
+        "selector": "#origin-low-3, #origin-low-4, #origin-low-5",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\compositions\\frames\\01-origin.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Use gsap.set(...) (immediate, outside the timeline) for initial states, or author the hidden state directly in CSS/attributes."
+      },
+      {
+        "code": "gsap_timeline_set_initial_hide",
+        "severity": "warning",
+        "message": "Initial hidden state for \"[data-features-shot]\" is set via tl.set(...) at position 0 inside the paused timeline. A zero-duration set at 0 does not render while the playhead sits exactly at 0, so frame 0 shows the un-hidden state.",
+        "selector": "[data-features-shot]",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\compositions\\frames\\02-features.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Use gsap.set(...) (immediate, outside the timeline) for initial states, or author the hidden state directly in CSS/attributes."
+      }
+    ],
+    "filesScanned": 4
+  },
+  "runtime": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 3,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-2\" is 0.57s but its slot (data-duration) is 0.70s — the slot is shortened to the media length when rendered. Set data-duration to ~0.57s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "45",
+          "data-width": "1080",
+          "data-height": "1920"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-3\" is 0.57s but its slot (data-duration) is 0.70s — the slot is shortened to the media length when rendered. Set data-duration to ~0.57s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "45",
+          "data-width": "1080",
+          "data-height": "1920"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-4\" is 0.57s but its slot (data-duration) is 0.70s — the slot is shortened to the media length when rendered. Set data-duration to ~0.57s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "45",
+          "data-width": "1080",
+          "data-height": "1920"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 0
+      }
+    ]
+  },
+  "layout": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 4,
+    "findings": [
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 12.75,
+        "selector": "#origin-letter-0",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 240.2,
+          "top": 656.01,
+          "right": 320.18,
+          "bottom": 810.48,
+          "width": 79.98,
+          "height": 154.47
+        },
+        "containerSelector": "#origin-letter-1",
+        "text": "S",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 240.2,
+          "y": 656.01,
+          "width": 79.98,
+          "height": 154.47
+        },
+        "firstSeen": 12.75,
+        "lastSeen": 12.75,
+        "occurrences": 1
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 12.75,
+        "selector": "#origin-low-4",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 448.09,
+          "top": 838.13,
+          "right": 528.56,
+          "bottom": 992.6,
+          "width": 80.46,
+          "height": 154.47
+        },
+        "containerSelector": "#origin-low-5",
+        "text": "o",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 448.09,
+          "y": 838.13,
+          "width": 80.46,
+          "height": 154.47
+        },
+        "firstSeen": 12.75,
+        "lastSeen": 12.75,
+        "occurrences": 1
+      },
+      {
+        "code": "container_overflow",
+        "severity": "info",
+        "time": 36.8,
+        "selector": "div.f03-screen-light",
+        "message": "Element extends outside a clipping layout container.",
+        "rect": {
+          "left": 237,
+          "top": 482,
+          "right": 797,
+          "bottom": 1002,
+          "width": 560,
+          "height": 520
+        },
+        "containerSelector": "div.f03-screen",
+        "fixHint": "Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 316,
+          "top": 396,
+          "right": 764,
+          "bottom": 1214,
+          "width": 448,
+          "height": 818
+        },
+        "overflow": {
+          "left": 79,
+          "right": 33
+        },
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/03-pocket.html",
+        "bbox": {
+          "x": 237,
+          "y": 482,
+          "width": 560,
+          "height": 520
+        },
+        "firstSeen": 36.8,
+        "lastSeen": 36.8,
+        "occurrences": 1
+      },
+      {
+        "code": "container_overflow",
+        "severity": "info",
+        "time": 39.2,
+        "selector": "div.f03-screen-light",
+        "message": "Element extends outside a clipping layout container.",
+        "rect": {
+          "left": 261.24,
+          "top": 437.84,
+          "right": 776.44,
+          "bottom": 916.24,
+          "width": 515.2,
+          "height": 478.4
+        },
+        "containerSelector": "div.f03-screen",
+        "fixHint": "Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 333.92,
+          "top": 358.72,
+          "right": 746.08,
+          "bottom": 1111.28,
+          "width": 412.16,
+          "height": 752.56
+        },
+        "overflow": {
+          "left": 72.68,
+          "right": 30.36
+        },
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/03-pocket.html",
+        "bbox": {
+          "x": 261.24,
+          "y": 437.84,
+          "width": 515.2,
+          "height": 478.4
+        },
+        "firstSeen": 39.2,
+        "lastSeen": 39.2,
+        "occurrences": 1
+      }
+    ],
+    "duration": 45,
+    "samples": [
+      0,
+      2.8,
+      5.9,
+      11.8,
+      14.7,
+      17,
+      18.6,
+      22.9,
+      24.4,
+      27.1,
+      29.9,
+      33,
+      34.3,
+      36.8,
+      39.2,
+      43.5
+    ],
+    "transitionSamples": [],
+    "transitionSamplesDropped": 0,
+    "tolerance": 2,
+    "totalIssueCount": 4,
+    "truncated": false
+  },
+  "motion": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "samples": 0
+  },
+  "contrast": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": true,
+    "samples": [
+      0,
+      11.8,
+      22.9,
+      33,
+      43.5
+    ],
+    "checked": 30,
+    "passed": 30
+  },
+  "snapshots": {
+    "enabled": true,
+    "files": [
+      "snapshots\\frame-00-at-0.0s.png",
+      "snapshots\\frame-01-at-11.8s.png",
+      "snapshots\\frame-02-at-22.9s.png",
+      "snapshots\\frame-03-at-33.0s.png",
+      "snapshots\\frame-04-at-43.5s.png"
+    ],
+    "times": [
+      0,
+      11.8,
+      22.9,
+      33,
+      43.5
+    ],
+    "findingFiles": []
+  },
+  "_meta": {
+    "version": "0.8.30",
+    "latestVersion": "0.8.30",
+    "updateAvailable": false
+  }
+}

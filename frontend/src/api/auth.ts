@@ -14,16 +14,11 @@ interface RefreshTokenResponse {
   refreshToken: string
 }
 
-async function establishSharedSession(refreshToken: string): Promise<void> {
-  await api.post('/auth/sso', { refresh_token: refreshToken })
-}
-
 export const authAPI = {
   // Login user
   login: async (credentials: LoginForm): Promise<AuthResponse> => {
     const response = await api.post(`/auth/login`, credentials)
     const data = response.data
-    await establishSharedSession(data.refresh_token)
 
     return {
       user: data.user,
@@ -68,8 +63,8 @@ export const authAPI = {
   },
 
   // Refresh access token
-  refreshToken: async (refreshToken?: string | null): Promise<RefreshTokenResponse> => {
-    const response = await api.post(`/auth/refresh`, refreshToken ? { refresh_token: refreshToken } : {})
+  refreshToken: async (refreshToken: string): Promise<RefreshTokenResponse> => {
+    const response = await api.post(`/auth/refresh`, { refresh_token: refreshToken })
     const data = response.data
 
     return {
@@ -170,8 +165,6 @@ export const authAPI = {
         return { new_user: true, email: data.email, name: data.name, picture: data.picture, token: originalToken || idToken }
       }
 
-      await establishSharedSession(data.refresh_token)
-
       return {
         user: data.user,
         profile: data.profile || {} as UserProfile,
@@ -214,7 +207,6 @@ export const authAPI = {
       phone: data.phone
     })
     const result = response.data.data || response.data
-    await establishSharedSession(result.refresh_token)
     return {
       user: result.user,
       profile: result.profile || {} as UserProfile,

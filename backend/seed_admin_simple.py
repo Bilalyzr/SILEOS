@@ -87,14 +87,12 @@ def create_admin_user_sql():
             user_login, user_pass, user_nicename, user_email, user_url,
             user_activation_key, user_status, display_name, role,
             is_active, is_verified, profile_completed, last_login,
-            user_registered, created_at, updated_at,
-            totp_secret, totp_enabled
+            user_registered, created_at, updated_at
         ) VALUES (
             :user_login, :user_pass, :user_nicename, :user_email, :user_url,
             :user_activation_key, :user_status, :display_name, :role,
             :is_active, :is_verified, :profile_completed, :last_login,
-            :user_registered, :created_at, :updated_at,
-            '', FALSE
+            :user_registered, :created_at, :updated_at
         ) RETURNING id
         """)
 

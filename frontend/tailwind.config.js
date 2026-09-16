@@ -125,10 +125,8 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        // Noto Sans Tamil is self-hosted (public/design/fonts) — Tamil content
-        // must fall back to it before generic system fonts.
-        sans: ['Plus Jakarta Sans', 'Noto Sans Tamil', 'system-ui', 'sans-serif'],
-        heading: ['Plus Jakarta Sans', 'Noto Sans Tamil', 'system-ui', 'sans-serif'],
+        sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+        heading: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'Fira Code', 'Consolas', 'monospace'],
       },
       boxShadow: {
@@ -136,23 +134,6 @@ export default {
         'medium': '0 4px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
         'large': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
         'outline': '0 0 0 3px rgba(244, 145, 26, 0.5)',
-      },
-      /* Platform overlay scale — use these named tiers instead of ad-hoc values.
-         Mirrors --z-* vars in globals.css. Page-level modals (scrim is their own
-         container) sit at `modal` so the platform dialog scrim (`overlay`) can
-         still dim them when a confirm stacks on top. Portaled selects/menus use
-         `popover` because they must clear any dialog they are opened from. */
-      zIndex: {
-        'nav': '40',      // sticky section chrome
-        'header': '50',   // sticky headers, drawers
-        'dropdown': '60', // in-flow menus
-        'fab': '70',      // floating buttons/widgets (learning prefs, offer timer)
-        'modal': '80',    // page-level hand-rolled modals
-        'overlay': '90',  // platform dialog scrim (GlassDialog)
-        'dialog': '100',  // platform dialog content
-        'popover': '120', // portaled Select/DropdownMenu content
-        'toast': '200',   // react-hot-toast + award toasts
-        'banner': '300',  // impersonation banner (topmost persistent chrome)
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",

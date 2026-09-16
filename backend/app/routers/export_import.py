@@ -63,10 +63,6 @@ BRAND_INFO = {
 
 # CSV Schema definitions for each section (Enhanced with additional columns)
 CSV_SCHEMAS = {
-    "revenue": {
-        "columns": ["payment_id", "gateway_payment_id", "gateway_order_id", "user_id", "user_email", "order_id", "order_status", "amount_inr", "currency", "payment_status", "captured_at", "coupon_code"],
-        "example": ["12", "pay_demo", "order_demo", "9", "student@example.org", "33", "COMPLETED", "3999.00", "INR", "COMPLETED", "2026-09-01 10:00:00", "WELCOME10"],
-    },
     "users": {
         "columns": ["id", "user_login", "user_email", "display_name", "role", "is_active", "is_verified", "last_login", "created_at"],
         "example": ["1", "johndoe", "john@example.com", "John Doe", "student", "True", "False", "2024-01-01 12:00:00", "2024-01-01 12:00:00"]
@@ -1051,19 +1047,6 @@ def get_section_query(db: Session, section: str, status: Optional[str] = None,
             query = query.filter(BlogPost.title.ilike(f"%{search}%"))
         return query.all()
 
-    elif section == "revenue":
-        states = {"captured": PaymentStatus.COMPLETED, "completed": PaymentStatus.COMPLETED,
-                  "pending": PaymentStatus.PENDING, "failed": PaymentStatus.FAILED, "refunded": PaymentStatus.REFUNDED}
-        selected = states.get((status or "captured").lower())
-        if selected is None:
-            raise HTTPException(422, "Unknown payment status")
-        query = db.query(Payment).join(Order, Payment.order_id == Order.id).filter(Payment.payment_status == selected)
-        if date_from:
-            query = query.filter(Payment.created_at >= date_from)
-        if date_to:
-            query = query.filter(Payment.created_at <= date_to)
-        return query.all()
-
     elif section == "orders":
         query = db.query(Order)
         if status:
@@ -1125,7 +1108,7 @@ def get_section_query(db: Session, section: str, status: Optional[str] = None,
 
     elif section == "internship_roster":
         # Return all vouchers with student details - one row per student
-        # Company stays module-scoped so other query branches can use it.
+        from app.models.company import Company
 
         # Build query with joins
         query = db.query(InternshipVoucher)
@@ -1661,19 +1644,6 @@ def serialize_item(item, section: str, db: Session) -> dict:
             "published_at": datetime_serializer(item.post_date) if hasattr(item, 'post_date') and item.post_date else "",
             "created_at": datetime_serializer(item.created_at)
         }
-
-    elif section == "revenue":
-        def enum_text(value):
-            return str(getattr(value, "value", value) or "")
-        user = db.get(User, item.user_id)
-        order = db.get(Order, item.order_id)
-        return {"payment_id": item.id, "gateway_payment_id": item.gateway_payment_id or "",
-            "gateway_order_id": item.gateway_order_id or "", "user_id": item.user_id,
-            "user_email": user.user_email if user else "", "order_id": item.order_id,
-            "order_status": enum_text(order.order_status) if order else "",
-            "amount_inr": f"{Decimal(str(item.amount or 0)):.2f}", "currency": item.currency or "INR",
-            "payment_status": enum_text(item.payment_status), "captured_at": datetime_serializer(item.created_at),
-            "coupon_code": getattr(order, "coupon_code", "") if order else ""}
 
     elif section == "orders":
         user = db.query(User).filter(User.id == item.user_id).first()
@@ -2853,16 +2823,13 @@ async def import_data(
         filename = file.filename.lower()
 
         # Read file based on extension
-        input_columns = set()
         if filename.endswith('.csv'):
             df = pd.read_csv(io.BytesIO(content)) if PANDAS_AVAILABLE else None
             if df is None:
                 content_str = content.decode('utf-8')
                 reader = csv.DictReader(io.StringIO(content_str))
-                input_columns = set(reader.fieldnames or [])
                 rows = list(reader)
             else:
-                input_columns = set(str(column) for column in df.columns)
                 rows = df.to_dict('records')
         elif filename.endswith(('.xlsx', '.xls')):
             if not PANDAS_AVAILABLE:
@@ -2871,7 +2838,6 @@ async def import_data(
                     detail="Excel import requires pandas. Install: pip install pandas openpyxl"
                 )
             df = pd.read_excel(io.BytesIO(content))
-            input_columns = set(str(column) for column in df.columns)
             rows = df.to_dict('records')
         else:
             raise HTTPException(
@@ -2881,23 +2847,6 @@ async def import_data(
 
         schema = CSV_SCHEMAS[section]
         required_columns = set(schema["columns"])
-
-        # Validate the file schema from the header, not from each sparse row.
-        # Pandas represents blank cells as NaN and the normalization below
-        # removes those values; treating the removed keys as missing columns
-        # rejected perfectly valid exports whose optional id/date cells were
-        # blank. A genuinely absent header is still rejected atomically.
-        missing_columns = required_columns - input_columns
-        if missing_columns:
-            return {
-                "success_count": 0,
-                "error_count": 1,
-                "errors": [{
-                    "row": 0,
-                    "error": f"Missing columns: {', '.join(sorted(missing_columns))}",
-                }],
-                "message": "Import rejected — no rows were written. Fix the file header and re-upload.",
-            }
 
         # B7 (2026-09-04): the whole import is now ONE transaction. Every
         # row is processed in this loop (writes flushed, not committed) so
@@ -2912,6 +2861,15 @@ async def import_data(
         for idx, row in enumerate(rows, start=1):
             try:
                 row = {k: v for k, v in row.items() if pd.notna(v)} if PANDAS_AVAILABLE else row
+
+                if not required_columns.issubset(row.keys()):
+                    missing = required_columns - set(row.keys())
+                    errors.append({
+                        "row": idx,
+                        "error": f"Missing columns: {', '.join(missing)}"
+                    })
+                    error_count += 1
+                    continue
 
                 # Process based on section
                 if section in ["users", "students", "instructors", "spocs"]:
@@ -3182,7 +3140,6 @@ async def import_data(
 
         if error_count:
             # No partial writes — nothing from this file was committed.
-            db.rollback()
             return {
                 "success_count": 0,
                 "error_count": error_count,

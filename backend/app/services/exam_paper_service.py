@@ -11,7 +11,6 @@ from app.models.exam_paper import ExamPaper, ExamPriceSlab
 from app.models.payment import Order, OrderStatus, Payment, PaymentStatus
 from app.models.sileos_pack import AiJob, BankQuestion, QuestionBank
 from app.services import llm_provider
-from app.core.business_verticals import revenue_metadata
 
 STAFF = {'instructor', 'admin', 'superadmin'}
 
@@ -100,8 +99,7 @@ def fulfill_capture(db, row, entity):
     db.add(order); db.flush()
     from app.models.payment import OrderItem
     db.add(OrderItem(order_id=order.id, order_item_name=row.title, quantity=1, subtotal=amount, total=amount,
-                     product_data={'kind': 'exam_paper', 'exam_paper_id': row.id, 'question_count': row.question_count,
-                                   **revenue_metadata('seyappaduporul', 'paper_generation')}))
+                     product_data={'kind': 'exam_paper', 'exam_paper_id': row.id, 'question_count': row.question_count}))
     db.add(Payment(order_id=order.id, user_id=row.user_id, payment_method='razorpay', gateway_payment_id=payment_id,
                    gateway_transaction_id=payment_id, gateway_order_id=row.gateway_order_id, amount=amount,
                    currency='INR', payment_status=PaymentStatus.COMPLETED,

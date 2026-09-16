@@ -34,12 +34,10 @@ class ParentStudent(Base):
 
 
 def _linked_students(db: Session, parent: User):
-    # ParentStudent is the durable, approved grant. ParentLinkRequest is the
-    # pending/approval workflow that creates it; requiring both rows here
-    # silently revoked every guardian link created before that workflow was
-    # introduced. It also made access depend on disposable request history.
+    from app.models.campus_operations import ParentLinkRequest
     return (db.query(User)
             .join(ParentStudent, ParentStudent.student_user_id == User.id)
+            .join(ParentLinkRequest, (ParentLinkRequest.student_user_id == User.id) & (ParentLinkRequest.parent_user_id == parent.id) & (ParentLinkRequest.status == "approved"))
             .filter(ParentStudent.parent_user_id == parent.id)
             .all())
 

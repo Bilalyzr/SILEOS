@@ -43,29 +43,8 @@ export interface Heatmap { lesson_id: number; segments: HeatSegment[]; struggle_
 export interface CourseHotspot { lesson_id: number; lesson_title: string; segment: number; start_s: number; end_s: number; score: number; learners: number; rewinds: number; replays: number; early_quits: number; concepts: string[] }
 export interface CourseHotspots { course_id: number; days: number; hotspots: CourseHotspot[]; early_quits_by_lesson: { lesson_id: number; lesson_title: string; early_quits: number }[]; struggling_by_concept: { concept: string; learners: number }[] }
 
-export interface SashaInsightStudent {
-  user_id: number; name: string; email: string; risk_score: number
-  severity: 'high' | 'watch' | 'developing'; questions: number
-  top_concepts: string[]; likely_gap: string; evidence: string[]; last_seen: string | null
-}
-export interface SashaInsightConcept {
-  concept: string; score: number; questions: number; learners: number; likely_gap: string
-}
-export interface SashaRecentSignal {
-  id: number; user_id: number; student_name: string; concept: string; score: number
-  severity: 'high' | 'watch' | 'developing'; likely_gap: string; excerpt: string
-  reasons: string[]; created_at: string | null
-}
-export interface SashaCourseInsights {
-  course_id: number; days: number
-  summary: { questions: number; active_students: number; students_needing_attention: number; average_struggle: number; high_concern_questions: number }
-  students: SashaInsightStudent[]; concepts: SashaInsightConcept[]; recent: SashaRecentSignal[]
-  privacy: string; generated_at: string | null
-}
-
 export const signalsAPI = {
   courseHotspots: async (courseId: number) => (await api.get<CourseHotspots>(`/signals/courses/${courseId}/hotspots`)).data,
-  sashaInsights: async (courseId: number, days = 30) => (await api.get<SashaCourseInsights>(`/signals/courses/${courseId}/sasha-insights`, { params: { days } })).data,
   myProfile: async (courseId?: number) => (await api.get<StruggleProfile>('/signals/me/profile', { params: courseId ? { course_id: courseId } : undefined })).data,
   studentProfile: async (userId: number, courseId: number) => (await api.get<StruggleProfile>(`/signals/students/${userId}/profile`, { params: { course_id: courseId } })).data,
   heatmap: async (lessonId: number, userId?: number) => (await api.get<Heatmap>(`/signals/lessons/${lessonId}/heatmap`, { params: userId ? { user_id: userId } : undefined })).data,

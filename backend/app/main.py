@@ -35,10 +35,10 @@ from app.core.security_middleware import (
     RequestContextMiddleware,
     log_security_event
 )
-from app.routers import auth, courses, lessons, users, payments, payments_proxy, certificates, admin, dashboard, uploads, wishlist, instructor_reviews, quizzes, assignments, orders, blog, coupons, video, video_streaming, embed, youtube_embed, checkout, categories, tags, instructors, memberships, bundles, payouts
+from app.routers import auth, courses, lessons, users, payments, payments_proxy, certificates, admin, dashboard, uploads, wishlist, instructor_reviews, quizzes, assignments, orders, blog, coupons, video, video_streaming, embed, youtube_embed, checkout, categories, tags, instructors, memberships, bundles
 from app.routers import player, progress as progress_router, bunny, analytics, internships
 from app.routers import lab_studio
-from app.routers import admin_messages, candidate, companies, cohorts, company_billing, company_dashboard, student_workspace, export_import, ai, ai_tutor, ai_providers, question_banks, sileos, geogebra, three_d, virtual_labs, parents, course_type_capabilities
+from app.routers import admin_messages, candidate, companies, cohorts, company_billing, company_dashboard, student_workspace, export_import, ai, ai_tutor, question_banks, sileos, geogebra, three_d, virtual_labs, parents, course_type_capabilities
 from app.routers import live_class_session, live_classes, live_class_attendance, live_class_polls
 from app.routers import live_class_recordings, live_class_internal
 from app.routers import notifications as notifications_router
@@ -59,8 +59,6 @@ except ImportError as e:
     CHUNKED_UPLOAD_AVAILABLE = False
 
 settings = get_settings()
-from app.core.error_reporting import configure as configure_error_reporting
-configure_error_reporting(settings)
 
 # Build/release identity. RELEASE_TAG and DEPLOY_COLOR are injected by the
 # blue-green deploy (see deploy/docker-compose.app.yml) so /health/version can
@@ -84,27 +82,14 @@ def _validate_live_class_secrets(environment: str) -> None:
     if environment != "production":
         return
     missing = []
-    if len(settings.JITSI_JWT_SECRET or "") < 32:
+    if not settings.JITSI_JWT_SECRET:
         missing.append("JITSI_JWT_SECRET")
-    if len(settings.INTERNAL_TOKEN or "") < 32:
+    if not settings.INTERNAL_TOKEN:
         missing.append("INTERNAL_TOKEN")
-    secret_values = {
-        settings.SECRET_KEY,
-        settings.JWT_SECRET,
-        settings.JITSI_JWT_SECRET,
-        settings.INTERNAL_TOKEN,
-    }
-    if len(secret_values) != 4:
-        missing.append("distinct signing/internal secrets")
-    if settings.CODE_RUNNER_TOKEN and (
-        len(settings.CODE_RUNNER_TOKEN) < 32
-        or settings.CODE_RUNNER_TOKEN in secret_values
-    ):
-        missing.append("independent 32+ character CODE_RUNNER_TOKEN")
     if missing:
         message = (
             "Live Classes misconfigured for production: "
-            f"{', '.join(missing)} invalid. Set strong, unique values in "
+            f"{', '.join(missing)} unset. Set strong, unique values in "
             "deploy/.env.live before starting the backend "
             "(ENVIRONMENT=production)."
         )
@@ -119,8 +104,6 @@ async def lifespan(app: FastAPI):
     # Live Classes fail-fast (production only) — before init_db so a
     # misconfigured prod deploy never touches the database.
     _validate_live_class_secrets(settings.ENVIRONMENT)
-    from app.workers.runtime import validate_api_mode
-    validate_api_mode(settings)
 
     # Initialize database
     await init_db()
@@ -139,21 +122,36 @@ async def lifespan(app: FastAPI):
             "certificates_render_tmp startup purge failed", exc_info=True
         )
 
-    background_tasks = []
-    if settings.BACKGROUND_TASK_MODE == "inline":
-        from app.services.reconciliation import reconciliation_loop
-        from app.services.live_reminders import live_reminders_loop
-        from app.services.campus_worker import campus_loop
-        background_tasks = [asyncio.create_task(loop()) for loop in
-                            (reconciliation_loop, live_reminders_loop, campus_loop)]
+    # Payment reconciliation sweeper (see app/services/reconciliation.py).
+    from app.services.reconciliation import reconciliation_loop
+    reconciliation_task = asyncio.create_task(reconciliation_loop())
+
+    # Live Classes reminder loop (see app/services/live_reminders.py).
+    from app.services.live_reminders import live_reminders_loop
+    live_reminders_task = asyncio.create_task(live_reminders_loop())
+    from app.services.campus_worker import campus_loop
+    campus_task = asyncio.create_task(campus_loop())
 
     print("SashaInfinity LMS Backend Started Successfully!")
+    yield
+
+    campus_task.cancel()
     try:
-        yield
-    finally:
-        for task in background_tasks:
-            task.cancel()
-        await asyncio.gather(*background_tasks, return_exceptions=True)
+        await campus_task
+    except asyncio.CancelledError:
+        pass
+
+    reconciliation_task.cancel()
+    try:
+        await reconciliation_task
+    except asyncio.CancelledError:
+        pass
+
+    live_reminders_task.cancel()
+    try:
+        await live_reminders_task
+    except asyncio.CancelledError:
+        pass
 
     print("Shutting down SashaInfinity LMS Backend...")
 
@@ -172,10 +170,6 @@ app = FastAPI(
 # A stable request id links browser, edge and backend diagnostics even when
 # verbose request logging is disabled.
 app.add_middleware(RequestContextMiddleware)
-from app.core.runtime_telemetry import RuntimeTelemetryMiddleware
-app.add_middleware(RuntimeTelemetryMiddleware)
-from app.routers import observability
-app.include_router(observability.router, prefix="/api/v1/internal/observability", tags=["Private metrics"])
 
 # Security Middleware (order matters - IP Whitelist first)
 if settings.ENABLE_IP_WHITELISTING or settings.BLOCKED_IP_RANGES:
@@ -1261,46 +1255,11 @@ async def root():
     }
 
 # Exception Handlers
-# Fields that must never reach logs — validation failures on /auth/login,
-# /auth/register etc. carry plaintext credentials in the rejected body.
-_REDACTED_BODY_FIELDS = {"password", "confirm_password", "otp_code", "refresh_token", "access_token"}
-
-def _redact_body(body) -> str:
-    import json as _json
-    if isinstance(body, dict):
-        parsed = dict(body)
-        for field in _REDACTED_BODY_FIELDS:
-            if field in parsed:
-                parsed[field] = "***REDACTED***"
-        return _json.dumps(parsed)
-    raw = body.decode("utf-8", errors="replace") if isinstance(body, bytes) else str(body)
-    try:
-        parsed = _json.loads(raw)
-        if isinstance(parsed, dict):
-            for field in _REDACTED_BODY_FIELDS:
-                if field in parsed:
-                    parsed[field] = "***REDACTED***"
-            return _json.dumps(parsed)
-    except Exception:
-        pass
-    # Not JSON — mask conservatively by blanking any redacted field substring.
-    import re as _re
-    for field in _REDACTED_BODY_FIELDS:
-        raw = _re.sub(rf"(\"{field}\"\s*:\s*\")[^\"]*(\")", r"\1***REDACTED***\2", raw)
-        raw = _re.sub(rf"('{field}'\s*:\s*')[^']*(')", r"\1***REDACTED***\2", raw)
-    return raw
-
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    # Strip 'input' echoes (and ctx errors embedding them) so a failing
-    # credential field can never reach the logs via the errors list either.
-    _safe_errors = [
-        {k: v for k, v in err.items() if k not in ("input", "ctx")}
-        for err in exc.errors()
-    ]
-    print(f"Validation error on {request.url}: {_safe_errors}")
+    print(f"Validation error on {request.url}: {exc.errors()}")
     try:
-        body_str = _redact_body(exc.body)
+        body_str = exc.body.decode('utf-8') if isinstance(exc.body, bytes) else str(exc.body)
         print(f"Request body: {body_str}")
     except Exception as e:
         print(f"Could not decode request body: {e}")
@@ -1366,16 +1325,6 @@ app.include_router(certificate_designer.router, prefix="/api/v1/certificates/des
 app.include_router(admin.router, prefix="/api/v1/admin", tags=["Admin"])
 app.include_router(superadmin.router, prefix="/api/v1/superadmin", tags=["SuperAdmin"])
 app.include_router(dashboard.router, prefix="/api/v1/dashboard", tags=["Dashboard"])
-app.include_router(
-    payouts.instructor_router,
-    prefix="/api/v1/instructor/withdrawals",
-    tags=["Payouts"],
-)
-app.include_router(
-    payouts.admin_router,
-    prefix="/api/v1/admin/withdrawals",
-    tags=["Payouts"],
-)
 app.include_router(uploads.router, prefix="/api/v1/upload", tags=["Uploads"])
 app.include_router(wishlist.router, prefix="/api/v1/wishlist", tags=["Wishlist"])
 app.include_router(instructor_reviews.router, prefix="/api/v1/instructor-reviews", tags=["Instructor Reviews"])
@@ -1411,7 +1360,6 @@ app.include_router(question_banks.router, prefix="/api/v1/question-banks", tags=
 app.include_router(sileos.router, prefix="/api/v1", tags=["SILEOS Pack"])
 app.include_router(ai.router, prefix="/api/v1", tags=["SILEOS AI"])
 app.include_router(ai_tutor.router, prefix="/api/v1/ai", tags=["AI Teaching Layer"])
-app.include_router(ai_providers.router, prefix="/api/v1/ai", tags=["AI Provider Vault"])
 app.include_router(parents.router, prefix="/api/v1/parents", tags=["Parents"])
 from app.routers import parent_portal
 app.include_router(parent_portal.router, prefix="/api/v1/parents", tags=["Parent portal"])
@@ -1482,39 +1430,6 @@ from app.routers import exam_papers
 app.include_router(exam_papers.router, prefix="/api/v1/exam-papers", tags=["Exam Papers"])
 from app.routers import institutions
 app.include_router(institutions.router, prefix="/api/v1/institutions", tags=["Institutions"])
-
-from app.routers import platform_tenants
-app.include_router(
-    platform_tenants.router,
-    prefix="/api/v1/platform/tenants",
-    tags=["Platform tenant control plane"],
-)
-
-from app.routers import commercial
-app.include_router(
-    commercial.router,
-    prefix="/api/v1/platform/commercial",
-    tags=["Platform commercial control plane"],
-)
-
-from app.routers import coding_assessments, coding_judge_internal
-app.include_router(
-    coding_assessments.router,
-    prefix="/api/v1/utporul/coding",
-    tags=["Utporul coding assessments"],
-)
-app.include_router(
-    coding_judge_internal.router,
-    prefix="/api/v1/internal/coding",
-    tags=["Internal code judge"],
-)
-
-from app.routers import meiporul_operations
-app.include_router(
-    meiporul_operations.router,
-    prefix="/api/v1/meiporul/operations",
-    tags=["Meiporul field operations"],
-)
 
 from app.routers import campus_growth
 app.include_router(campus_growth.router, prefix="/api/v1/campus-growth", tags=["Campus growth"])

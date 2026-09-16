@@ -71,7 +71,7 @@ export const ClassReportModal: React.FC<{ classId: number; onClose: () => void; 
   }
 
   return (
-    <div className="fixed inset-0 z-modal bg-black/70 flex items-center justify-center p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-[100] bg-black/70 flex items-center justify-center p-4" onClick={onClose}>
       <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[92vh] overflow-y-auto p-5 space-y-4" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-start gap-3">
           <div className="flex-1">

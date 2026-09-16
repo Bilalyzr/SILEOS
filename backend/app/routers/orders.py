@@ -13,15 +13,17 @@ from app.models.user import User
 from app.models.course import Course
 from app.models.enrollment import Enrollment
 from app.models.payment import Payment, Order, OrderItem, OrderStatus, PaymentStatus
-from app.models.coupon import CouponUsage
+from app.models.coupon import Coupon, CouponUsage, DiscountType, CouponApplicability
+from app.models.cohort import Cohort, CohortMembership
 from app.services.auth_service import AuthService
 from app.services.coupon_service import (
     CouponError,
-    validate_and_compute,
+    resolve_checkout_code,
+    lock_referral_and_bump,
 )
 from app.services.pricing import effective_course_price
-from app.core.business_verticals import revenue_metadata
 from pydantic import BaseModel
+from sqlalchemy import and_
 
 router = APIRouter()
 
@@ -71,11 +73,6 @@ async def create_order(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Course with ID {course_id} not found"
             )
-        if course.post_status not in ("publish", "published"):
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Course with ID {course_id} is not published",
-            )
 
         # Check if already enrolled
         existing_enrollment = db.query(Enrollment).filter(
@@ -107,24 +104,51 @@ async def create_order(
             detail="Already enrolled in all selected courses"
         )
 
-    # Cart-level codes are Coupons only. Referral/voucher codes map one learner
-    # to one course/cohort and therefore belong to the direct course checkout.
+    # Validate and apply code if provided — may be a ReferralCode OR a Coupon.
     coupon = None
+    referral_row = None
+    cohort_to_assign = None
     discount_amount = 0
 
     if order_data.coupon_code:
+        # Cart checkout can reference multiple courses. Use the FIRST
+        # paid/non-free course as the "anchor" for resolver semantics.
+        # The resolver needs a single Course instance; additional course
+        # restriction checks happen via validate_and_compute inside it.
+        anchor_course = None
+        for item in order_items:
+            c = db.query(Course).filter(Course.id == item["course_id"]).first()
+            if c is not None:
+                anchor_course = c
+                break
+
         try:
-            result = validate_and_compute(
+            resolved = resolve_checkout_code(
                 db,
                 code=order_data.coupon_code,
                 user_id=current_user.id,
-                course_ids=[item["course_id"] for item in order_items],
-                total_amount=total_amount,
+                course=anchor_course,
+                for_paid=True,
             )
         except CouponError as exc:
             raise HTTPException(status_code=400, detail=exc.message)
-        coupon = result.coupon
-        discount_amount = float(result.discount_amount)
+
+        if resolved.kind is None:
+            raise HTTPException(status_code=400, detail="Invalid code")
+
+        if resolved.cohort and resolved.max_students_reached:
+            raise HTTPException(status_code=400, detail="Cohort full")
+
+        if resolved.kind == "coupon":
+            coupon = resolved.coupon
+            discount_amount = float(resolved.discount_amount)
+            cohort_to_assign = resolved.cohort  # may be None
+        elif resolved.kind == "referral":
+            # Referral alone on this mock-checkout path does NOT waive
+            # payment — it just carries a cohort mapping. discount = 0.
+            referral_row = resolved.referral_row
+            cohort_to_assign = resolved.cohort
+            discount_amount = 0
 
     final_amount = total_amount - discount_amount
 
@@ -195,8 +219,7 @@ async def create_order(
             order_item_type="line_item",
             quantity=1,
             subtotal=float(item["price_at_purchase"]),  # list price
-            total=line_totals[idx],                     # after coupon discount
-            product_data=revenue_metadata(course.course_type) if course else {},
+            total=line_totals[idx]                      # after coupon discount
         )
         db.add(order_item)
 
@@ -229,17 +252,38 @@ async def create_order(
         # Increment coupon usage count
         coupon.usage_count = (coupon.usage_count or 0) + 1
 
-    # Enroll student in all courses. Cohort/referral assignment is purposely
-    # reserved for the single-course checkout where it is unambiguous.
+    # Atomic referral redemption under SELECT FOR UPDATE.
+    if referral_row is not None:
+        try:
+            lock_referral_and_bump(db, referral_row.id)
+        except CouponError as exc:
+            db.rollback()
+            raise HTTPException(status_code=400, detail=exc.message)
+
+    # Enroll student in all courses. cohort_to_assign was set above by
+    # the resolver (None when no code or code has no cohort_id).
     for item in order_items:
         enrollment = Enrollment(
             course_id=item["course_id"],
             user_id=current_user.id,
             order_id=order.id,
             enrollment_status="enrolled",
-            cohort_id=None,
+            cohort_id=cohort_to_assign.id if cohort_to_assign else None
         )
         db.add(enrollment)
+
+        # Create cohort membership if coupon had cohort
+        if cohort_to_assign:
+            existing_membership = db.query(CohortMembership).filter(
+                CohortMembership.cohort_id == cohort_to_assign.id,
+                CohortMembership.user_id == current_user.id
+            ).first()
+            if not existing_membership:
+                membership = CohortMembership(
+                    cohort_id=cohort_to_assign.id,
+                    user_id=current_user.id
+                )
+                db.add(membership)
 
         # Update course enrollment count
         course = db.query(Course).filter(Course.id == item["course_id"]).first()

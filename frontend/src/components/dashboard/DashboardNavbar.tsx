@@ -58,7 +58,7 @@ const DEFAULT_HOME: Record<Role, string> = {
   parent: '/parent/dashboard',
   student: '/dashboard',
   instructor: '/instructor/dashboard',
-  admin: '/admin/operations',
+  admin: '/admin/dashboard',
   superadmin: '/superadmin/dashboard',
   spoc: '/spoc/dashboard',
   company: '/company/dashboard',
@@ -169,7 +169,7 @@ export const DashboardNavbar: React.FC<DashboardNavbarProps> = ({
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -8, scale: 0.96 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute right-0 top-full mt-2 w-64 dash-card p-1 z-dropdown"
+                  className="absolute right-0 top-full mt-2 w-64 dash-card p-1 z-50"
                 >
                   <div className="px-3 py-2 border-b border-slate-100">
                     <div className="font-semibold text-secondary-900 truncate text-sm">{fullName}</div>

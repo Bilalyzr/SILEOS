@@ -368,7 +368,7 @@ def save_ebook_file(owner_id: int, upload: UploadFile, db,
                 size += len(chunk)
                 if size > MAX_FILE_BYTES:
                     raise HTTPException(
-                        status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                        status_code=status.HTTP_413_CONTENT_TOO_LARGE,
                         detail=f"File exceeds the {MAX_FILE_BYTES} byte cap")
                 out.write(chunk)
         if size == 0:
@@ -387,7 +387,7 @@ def save_ebook_file(owner_id: int, upload: UploadFile, db,
         current_total = owner_total_bytes(db, owner_id)
         if current_total + size > MAX_OWNER_TOTAL_BYTES:
             raise HTTPException(
-                status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                status_code=status.HTTP_413_CONTENT_TOO_LARGE,
                 detail=f"This upload would exceed your {MAX_OWNER_TOTAL_BYTES} "
                        "byte library storage cap. Delete unused files first.")
 

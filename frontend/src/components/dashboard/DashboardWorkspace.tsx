@@ -5,7 +5,6 @@
  */
 import * as React from "react";
 import { WorkspaceBanner } from "@/components/design-system/BrandBanner";
-import { AmbientBrandBackground } from "@/components/brand/AmbientBrandBackground";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
 import { WorkspaceNavigation } from "./WorkspaceNavigation";
@@ -18,29 +17,28 @@ import { ImpersonationBanner } from "@/components/admin/ImpersonationBanner";
 import "./theme.css";
 import { WorkspaceHeader } from "./WorkspaceHeader";
 
-const SIDEBAR_W = 238;
-const SIDEBAR_W_COLLAPSED = 68;
+const SIDEBAR_W = 224;
+const SIDEBAR_W_COLLAPSED = 72;
 
 // Below this width the fixed side rail becomes an off-canvas drawer and the
 // content offset drops to 0 — otherwise the 240px paddingLeft crushes the
 // page into a sliver on phones (the cause of the overlapping dashboard text).
-const MOBILE_BREAKPOINT = "(max-width: 767px)";
-const COMPACT_BREAKPOINT = "(max-width: 1023px)";
+const MOBILE_BREAKPOINT = "(max-width: 1023px)";
 
-function useMediaQuery(query: string): boolean {
-  const [matches, setMatches] = React.useState<boolean>(
+function useIsMobile(): boolean {
+  const [isMobile, setIsMobile] = React.useState<boolean>(
     () =>
       typeof window !== "undefined" &&
-      window.matchMedia(query).matches,
+      window.matchMedia(MOBILE_BREAKPOINT).matches,
   );
   React.useEffect(() => {
-    const mql = window.matchMedia(query);
-    const onChange = () => setMatches(mql.matches);
+    const mql = window.matchMedia(MOBILE_BREAKPOINT);
+    const onChange = () => setIsMobile(mql.matches);
     onChange();
     mql.addEventListener("change", onChange);
     return () => mql.removeEventListener("change", onChange);
-  }, [query]);
-  return matches;
+  }, []);
+  return isMobile;
 }
 
 export interface DashboardWorkspaceProps {
@@ -60,8 +58,7 @@ export const DashboardWorkspace: React.FC<DashboardWorkspaceProps> = ({
   children,
 }) => {
   const { pathname } = useLocation();
-  const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
-  const isCompact = useMediaQuery(COMPACT_BREAKPOINT);
+  const isMobile = useIsMobile();
   // Persist collapsed state in localStorage; controlled here, passed to sidebar.
   const [collapsed, setCollapsed] = React.useState<boolean>(
     () =>
@@ -85,15 +82,10 @@ export const DashboardWorkspace: React.FC<DashboardWorkspaceProps> = ({
 
   // On mobile the rail is a full-width drawer (never the 72px collapsed rail)
   // and the content sits flush (no left offset).
-  const offsetW = isMobile
-    ? 0
-    : isCompact || collapsed
-      ? SIDEBAR_W_COLLAPSED
-      : SIDEBAR_W;
+  const offsetW = isMobile ? 0 : collapsed ? SIDEBAR_W_COLLAPSED : SIDEBAR_W;
 
   return (
     <div className="dash-bg rd-workspace relative min-h-screen">
-      <AmbientBrandBackground />
       {/* Admin impersonation banner - shows on all dashboards */}
       <ImpersonationBanner />
 
@@ -106,10 +98,10 @@ export const DashboardWorkspace: React.FC<DashboardWorkspaceProps> = ({
         items={items}
         role={role}
         homeTo={homeTo}
-        collapsed={isMobile ? false : isCompact ? true : collapsed}
+        collapsed={isMobile ? false : collapsed}
         onCollapsedChange={handleCollapsedChange}
         offCanvas={isMobile && !mobileOpen}
-        showCollapseToggle={!isCompact}
+        showCollapseToggle={!isMobile}
       />
 
       {/* Mobile: backdrop that closes the drawer */}
@@ -156,7 +148,7 @@ const PageTransition: React.FC<{
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -4 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.16, ease: [0.2, 0.7, 0.3, 1] }}
     >
       {children}
     </motion.div>

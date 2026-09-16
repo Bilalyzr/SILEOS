@@ -9,7 +9,7 @@ import bleach
 from typing import Any, Dict, List, Optional, Union
 from pydantic import BaseModel, validator, EmailStr
 from fastapi import HTTPException, status
-from app.core.security_middleware import schedule_security_event, security_logger
+from app.core.security_middleware import log_security_event, security_logger
 import urllib.parse
 
 class InputValidator:
@@ -90,7 +90,7 @@ class InputValidator:
         for pattern in InputValidator.XSS_PATTERNS:
             if re.search(pattern, content, re.IGNORECASE | re.DOTALL):
                 security_logger.warning(f"XSS pattern detected: {pattern}")
-                schedule_security_event(
+                log_security_event(
                     "XSS_ATTEMPT",
                     details={"pattern": pattern, "content_preview": content[:100]}
                 )
@@ -136,7 +136,7 @@ class InputValidator:
         for pattern in InputValidator.SQL_INJECTION_PATTERNS:
             if re.search(pattern, input_string, re.IGNORECASE | re.MULTILINE):
                 security_logger.warning(f"SQL injection pattern detected: {pattern}")
-                schedule_security_event(
+                log_security_event(
                     "SQL_INJECTION_ATTEMPT",
                     details={"pattern": pattern, "input_preview": input_string[:100]}
                 )
@@ -149,7 +149,7 @@ class InputValidator:
         for pattern in InputValidator.COMMAND_INJECTION_PATTERNS:
             if re.search(pattern, input_string):
                 security_logger.warning(f"Command injection pattern detected: {pattern}")
-                schedule_security_event(
+                log_security_event(
                     "COMMAND_INJECTION_ATTEMPT",
                     details={"pattern": pattern, "input_preview": input_string[:100]}
                 )
@@ -162,7 +162,7 @@ class InputValidator:
         for pattern in InputValidator.PATH_TRAVERSAL_PATTERNS:
             if re.search(pattern, input_string, re.IGNORECASE):
                 security_logger.warning(f"Path traversal pattern detected: {pattern}")
-                schedule_security_event(
+                log_security_event(
                     "PATH_TRAVERSAL_ATTEMPT",
                     details={"pattern": pattern, "input_preview": input_string[:100]}
                 )
@@ -401,7 +401,7 @@ def validate_api_input(data: Any, validator_class: type) -> Any:
             return validator_class.parse_obj(data)
     except Exception as e:
         security_logger.warning(f"Input validation failed: {str(e)}")
-        schedule_security_event(
+        log_security_event(
             "INPUT_VALIDATION_FAILED",
             details={"error": str(e), "data_type": type(data).__name__}
         )

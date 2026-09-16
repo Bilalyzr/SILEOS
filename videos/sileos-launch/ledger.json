@@ -1,0 +1,41 @@
+{
+  "fps": 30,
+  "seams": [
+    {
+      "id": "origin-to-features",
+      "cut": 18,
+      "technique": "cut-the-curve LEFT",
+      "exit": {
+        "selector": "#macro-01-origin",
+        "axis": "x",
+        "dir": -1,
+        "dur": 0.25
+      },
+      "entry": {
+        "selector": "#macro-02-features",
+        "axis": "x",
+        "dir": -1,
+        "dur": 0.32,
+        "travel": 10
+      }
+    },
+    {
+      "id": "features-to-pocket",
+      "cut": 35,
+      "technique": "cut-the-curve LEFT",
+      "exit": {
+        "selector": "#macro-02-features",
+        "axis": "x",
+        "dir": -1,
+        "dur": 0.25
+      },
+      "entry": {
+        "selector": "#macro-03-pocket",
+        "axis": "x",
+        "dir": -1,
+        "dur": 0.32,
+        "travel": 10
+      }
+    }
+  ]
+}

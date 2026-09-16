@@ -123,9 +123,15 @@ export const useCartStore = create<CartStore>()(
           state.appliedCoupon?.code ?? null
         )
 
-        // This legacy store action is only a zero-value checkout path. Paid
-        // carts use the active CartContext and the Razorpay create/verify
-        // handshake in pages/checkout.tsx.
+        // TODO(razorpay): backend /orders/ currently returns a mock
+        // completed order (no razorpay_order_id/key). When the backend
+        // is extended to create a Razorpay order for cart checkouts,
+        // this action should return early with the Razorpay details
+        // so the UI can open the checkout modal. See
+        // frontend/src/pages/course-detail.tsx for the single-course
+        // Razorpay handshake pattern to mirror.
+
+        // Mock payment path: order is already completed + enrolled.
         set({ items: [], appliedCoupon: null })
         return order
       },

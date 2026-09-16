@@ -63,10 +63,6 @@ def scope(db, institution_id, user, roles=None, lock=False):
     from app.services.campus_billing import effective_plan
 
     institution.plan = effective_plan(db, institution_id)
-    request_state = getattr(user, "_request_state", None)
-    if request_state is not None:
-        request_state.tenant_id = institution.tenant_id
-        request_state.business_vertical = "seyappaduporul"
     return institution, member
 
 
@@ -129,7 +125,6 @@ def capacity(db, inst, resource):
 def serialize(inst, role):
     return {
         "id": inst.id,
-        "tenant_id": inst.tenant_id,
         "name": inst.name,
         "slug": inst.slug,
         "kind": inst.kind,
@@ -156,9 +151,6 @@ def create(db, user, data):
     )
     db.add(inst)
     db.flush()
-    from app.services.platform_tenant_service import provision_institution
-
-    provision_institution(db, inst, user)
     db.add(
         InstitutionMember(
             institution_id=inst.id,
@@ -289,15 +281,6 @@ def accept_invite(db, invite_id, user):
             status="active",
         )
     )
-    from app.services.platform_tenant_service import sync_institution_member
-
-    sync_institution_member(
-        db,
-        institution=inst,
-        user_id=user.id,
-        role=invite.role,
-        status="active",
-    )
     invite.status = "accepted"
     audit(db, inst.id, user, "member.joined", user.display_name or "Member joined")
     save(db)
@@ -321,15 +304,6 @@ def update_member(db, institution_id, member_id, user, data):
         capacity(db, inst, "members")
     for key, value in data.model_dump().items():
         setattr(member, key, value)
-    from app.services.platform_tenant_service import sync_institution_member
-
-    sync_institution_member(
-        db,
-        institution=inst,
-        user_id=member.user_id,
-        role=member.role,
-        status=member.status,
-    )
     audit(
         db,
         institution_id,

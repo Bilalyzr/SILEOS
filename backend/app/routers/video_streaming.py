@@ -57,37 +57,32 @@ def _require_video_access(video_id: str, current_user: User, db: Session) -> Non
     `lesson_video_url` empty — matching only the latter made every such lesson
     404 here even for enrolled users.
     """
-    if not _YOUTUBE_ID_RE.fullmatch(video_id):
-        raise HTTPException(status_code=400, detail="Invalid video id")
-    if current_user.role in ("admin", "superadmin"):
+    if current_user.role == "admin":
         return
 
-    # `contains(..., autoescape=True)` is deliberate: `_` is valid inside a
-    # YouTube id but is a wildcard in SQL LIKE. The old `%{video_id}%` query
-    # could authorize the wrong lesson for ids containing an underscore.
-    lessons = db.query(Lesson).filter(
+    lesson = db.query(Lesson).filter(
         or_(
-            Lesson.lesson_video_url.contains(video_id, autoescape=True),
-            Lesson.lesson_youtube_url.contains(video_id, autoescape=True),
+            Lesson.lesson_video_url.like(f"%{video_id}%"),
+            Lesson.lesson_youtube_url.like(f"%{video_id}%"),
         )
-    ).all()
-    if not lessons:
+    ).first()
+    if not lesson:
         raise HTTPException(status_code=404, detail="Video not associated with any lesson")
 
-    course_ids = {getattr(lesson, "post_parent", None) for lesson in lessons}
-    course_ids.discard(None)
-    if not course_ids:
-        raise HTTPException(status_code=403, detail="Video lessons have no course")
-    from app.models.course import Course
-    from app.services.course_access import can_edit
+    course_id = getattr(lesson, "post_parent", None)
+    if not course_id:
+        raise HTTPException(status_code=403, detail="Lesson has no course")
+
     if current_user.role == "instructor":
-        for course in db.query(Course).filter(Course.id.in_(course_ids)).all():
-            if can_edit(db, course, current_user):
-                return
-    enrolled = db.query(Enrollment.id).filter(
+        from app.models.course import Course
+        course = db.query(Course).filter(Course.id == course_id).first()
+        if course and getattr(course, "post_author", None) == current_user.id:
+            return
+
+    enrolled = db.query(Enrollment).filter(
         Enrollment.user_id == current_user.id,
-        Enrollment.course_id.in_(course_ids),
-        Enrollment.enrollment_status.in_(("enrolled", "active", "completed")),
+        Enrollment.course_id == course_id,
+        Enrollment.enrollment_status == "enrolled",
     ).first()
     if not enrolled:
         raise HTTPException(status_code=403, detail="Not enrolled in this course")

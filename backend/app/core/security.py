@@ -4,12 +4,9 @@ Security utilities for JWT tokens and password hashing
 
 from datetime import datetime, timedelta
 from typing import Any, Union, Optional, Iterable
-import hashlib
-import hmac
 from jose import jwt, JWTError
 from passlib.context import CryptContext
-from passlib.exc import UnknownHashError
-from passlib.hash import bcrypt, phpass
+from passlib.hash import bcrypt
 
 from .config import get_settings
 
@@ -27,81 +24,9 @@ REFRESH_TOKEN_EXPIRE_DAYS = 7
 # used to start another impersonation (see /admin/impersonate handler).
 IMPERSONATION_TOKEN_EXPIRE_MINUTES = 30
 
-
-# --- Access-token revocation (logout denylist) ------------------------------
-# JWTs are stateless, so without a server-side check a logged-out access
-# token stayed valid until natural expiry (up to 30 min). On logout we now
-# blacklist the token's SHA-256 in Redis for its remaining lifetime and
-# get_current_user / get_optional_current_user refuse blacklisted tokens.
-# Consistent with the rate limiter: if Redis is unavailable we FAIL OPEN
-# (the denylist simply doesn't apply) rather than locking every user out.
-
-_revocation_redis = None
-
-def _get_revocation_redis():
-    global _revocation_redis
-    if _revocation_redis is None:
-        import redis as _redis
-        _revocation_redis = _redis.from_url(
-            settings.REDIS_URL, decode_responses=True,
-            socket_connect_timeout=0.3, socket_timeout=0.5,
-        )
-    return _revocation_redis
-
-def _token_fingerprint(token: str) -> str:
-    return hashlib.sha256(token.encode("utf-8")).hexdigest()
-
-def revoke_access_token(token: str) -> None:
-    """Blacklist `token` until its own `exp` (default: full access lifetime)."""
-    try:
-        ttl = ACCESS_TOKEN_EXPIRE_MINUTES * 60
-        try:
-            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
-            exp = payload.get("exp")
-            if exp:
-                remaining = int(exp - datetime.utcnow().timestamp())
-                if remaining > 0:
-                    ttl = remaining
-        except JWTError:
-            pass  # undecodable → keep default TTL; never extend past typical expiry
-        _get_revocation_redis().setex(f"token_blacklist:{_token_fingerprint(token)}", ttl, "1")
-    except Exception:
-        pass  # fail open — revocation is best-effort, never blocks the logout itself
-
-def is_token_revoked(token: str) -> bool:
-    try:
-        return _get_revocation_redis().get(f"token_blacklist:{_token_fingerprint(token)}") is not None
-    except Exception:
-        return False  # Redis down → fail open
-
-
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify native and explicitly supported legacy password hashes.
-
-    WordPress migrations can leave three formats that the bcrypt-only
-    ``CryptContext`` cannot identify. Treat unrecognised or malformed values as
-    an authentication failure, never as an application error. The unsalted
-    SHA-256 branch exists only for imported legacy accounts; callers should
-    upgrade a successful legacy login to the native bcrypt format separately.
-    """
-    if not plain_password or not hashed_password:
-        return False
-
-    try:
-        if hashed_password.startswith("$wp$"):
-            return bcrypt.verify(plain_password, hashed_password[4:])
-        if hashed_password.startswith(("$P$", "$H$")):
-            return phpass.verify(plain_password, hashed_password)
-        if len(hashed_password) == 64:
-            try:
-                int(hashed_password, 16)
-            except ValueError:
-                return False
-            candidate = hashlib.sha256(plain_password.encode("utf-8")).hexdigest()
-            return hmac.compare_digest(candidate, hashed_password.lower())
-        return pwd_context.verify(plain_password, hashed_password)
-    except (UnknownHashError, ValueError, TypeError):
-        return False
+    """Verify a plain password against a hashed password"""
+    return pwd_context.verify(plain_password, hashed_password)
 
 def get_password_hash(password: str) -> str:
     """Hash a password"""

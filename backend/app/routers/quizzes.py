@@ -1139,15 +1139,6 @@ async def _submit_quiz_impl(
     # attempt_info bookkeeping (_pause, _graded_answers, _manual_feedback)
     # and must never be settable by a student's answer payload.
     raw_answers_data = submission_data.get("answers", {}) or {}
-    # answers must map question_id -> answer. Anything else (a list, a
-    # string, ...) used to blow up below with AttributeError → 500; reject
-    # it as a 422 instead so a malformed client payload is never a server
-    # error.
-    if not isinstance(raw_answers_data, dict):
-        raise HTTPException(
-            status_code=422,
-            detail="'answers' must be an object mapping question ids to answers",
-        )
     answers_data = {
         k: v for k, v in raw_answers_data.items() if not str(k).startswith("_")
     }
@@ -1584,22 +1575,6 @@ def _accumulated_pause_seconds(info: dict) -> float:
     return min(total, MAX_PAUSE_SECONDS)
 
 
-def _has_passed_attempt(db: Session, quiz: Quiz, user_id: int) -> bool:
-    """Preserve the upstream no-passed-retakes rule at the start boundary.
-
-    The submit path retains its existing replay/review guards; this rule must
-    not reject a submission merely because a different attempt already passed.
-    Evaluate in SQL without loading an unbounded student's attempt history.
-    """
-    return db.query(QuizAttempt.attempt_id).filter(
-        QuizAttempt.quiz_id == quiz.id,
-        QuizAttempt.user_id == user_id,
-        QuizAttempt.attempt_status == "attempt_ended",
-        QuizAttempt.total_marks > 0,
-        QuizAttempt.earned_marks * 100 >= float(quiz.quiz_passing_grade or 0) * QuizAttempt.total_marks,
-    ).first() is not None
-
-
 @router.post("/quizzes/{quiz_id}/start")
 async def start_quiz_attempt(
     quiz_id: int,
@@ -1643,12 +1618,6 @@ async def start_quiz_attempt(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="You must be enrolled in the course to start this quiz"
             )
-
-    if _has_passed_attempt(db, quiz, current_user.id):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You have already passed this quiz — retakes are not allowed.",
-        )
 
     # Resume-existing-attempt: if the user already has an OPEN attempt
     # (attempt_started, or pending_review — review finding C1: a

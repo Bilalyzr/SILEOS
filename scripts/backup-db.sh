@@ -10,11 +10,11 @@
 #
 # Restore a backup (RUN NOTHING UNTIL YOU HAVE A FRESH SAFETY COPY):
 #   gunzip -c tutor_lms_<ts>.sql.gz | \
-#     docker exec -i sasha-postgres psql -U tutor -d tutor_lms
+#     docker exec -i sasha_lms-postgres-1 psql -U tutor -d tutor_lms
 # =============================================================================
 set -eu
 
-PGHOST="${PGHOST:-sasha-postgres}"
+PGHOST="${PGHOST:-postgres}"
 PGUSER="${PGUSER:-tutor}"
 PGDATABASE="${PGDATABASE:-tutor_lms}"
 BACKUP_DIR="${BACKUP_DIR:-/backups}"
@@ -30,10 +30,7 @@ TS=$(date +%Y%m%d_%H%M%S)
 OUT="$BACKUP_DIR/nightly/tutor_lms_${TS}.sql.gz"
 
 # --- dump --------------------------------------------------------------------
-TMP_DUMP="$OUT.part"
-if pg_dump -h "$PGHOST" -U "$PGUSER" "$PGDATABASE" > "$TMP_DUMP" 2>> "$LOG" \
-   && gzip -c "$TMP_DUMP" > "$OUT"; then
-    rm -f "$TMP_DUMP"
+if pg_dump -h "$PGHOST" -U "$PGUSER" "$PGDATABASE" | gzip > "$OUT"; then
     if [ ! -s "$OUT" ] || ! gzip -t "$OUT" 2>/dev/null; then
         log "FAIL($TS): dump failed integrity check — removing partial file"
         rm -f "$OUT"
@@ -41,15 +38,10 @@ if pg_dump -h "$PGHOST" -U "$PGUSER" "$PGDATABASE" > "$TMP_DUMP" 2>> "$LOG" \
     fi
     SIZE=$(du -h "$OUT" | cut -f1)
     ROWS=$(gzip -dc "$OUT" | grep -c '^COPY ' || true)
-    if [ "${ROWS:-0}" -eq 0 ]; then
-        log "FAIL($TS): no table dumps found; refusing to report a successful backup"
-        rm -f "$OUT"
-        exit 1
-    fi
     log "OK($TS): $OUT ($SIZE, ${ROWS} table dumps)"
 else
     log "FAIL($TS): pg_dump exited non-zero"
-    rm -f "$TMP_DUMP" "$OUT"
+    rm -f "$OUT"
     exit 1
 fi
 

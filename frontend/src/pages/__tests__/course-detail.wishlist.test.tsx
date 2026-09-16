@@ -15,8 +15,6 @@ const mockApi = vi.hoisted(() => ({
 }))
 
 vi.mock('@/api/axios', () => ({ api: mockApi }))
-const cartMock = vi.hoisted(() => ({ addToCart: vi.fn(), isInCart: vi.fn(() => false) }))
-vi.mock('@/contexts/CartContext', () => ({ useCart: () => cartMock }))
 
 vi.mock('@/hooks/use-auth', () => ({
   useAuth: () => ({ isAuthenticated: true, user: { id: 9, role: 'student' } }),
@@ -67,13 +65,7 @@ function renderPage() {
 }
 
 describe('CourseDetailPage — S-H1 wishlist', () => {
-  it('retains the upstream cart action and the original price', async () => {
-    renderPage()
-    fireEvent.click(await screen.findByRole('button', { name: 'Add to Cart' }))
-    expect(cartMock.addToCart).toHaveBeenCalledWith(expect.objectContaining({ courseId: 55, price: 999 }))
-  })
   beforeEach(() => {
-    cartMock.addToCart.mockReset()
     mockApi.get.mockReset().mockImplementation((url: string) => {
       if (url === '/wishlist') {
         return Promise.resolve({ data: { courses: [], total: 0 } })

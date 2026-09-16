@@ -19,7 +19,6 @@ ASSESSMENT_KINDS = ("quiz", "question", "assignment", "three_d_task")
 FOLLOWUP_DAYS = 3
 PASS_PERCENT = 75
 MIN_CHECK_QUESTIONS = 2
-RISK_SUPPORT_CONCEPT = "Course support"
 
 
 def utcnow():
@@ -332,118 +331,6 @@ def review_intervention(db, goal, row, action, note, reviewer_id):
         row.status = "suggested"
     _schedule(db, goal, today_for(goal))
     db.commit()
-
-
-def _risk_payload(db, user_id, course_id):
-    from app.models.sileos_pack import StudentRiskFlag
-    flag = db.query(StudentRiskFlag).filter_by(
-        user_id=user_id, course_id=course_id
-    ).first()
-    if not flag:
-        return None
-    return {
-        "risk_score": flag.risk_score,
-        "severity": flag.severity,
-        "reasons": list(flag.reasons or []),
-        "computed_at": flag.computed_at.isoformat() if flag.computed_at else None,
-    }
-
-
-def create_risk_intervention(db: Session, *, course, learner, reviewer_id: int,
-                             note: str = "", concept: str | None = None):
-    """Bridge a course-level at-risk flag into the learner-owned planner.
-
-    At-risk signals are often about pace or activity, not a tagged concept.
-    Those become a review task the learner can acknowledge; concept-linked
-    assessment interventions still use the existing adaptive-check path.
-    """
-    if not enrolled(db, learner.id, course.id):
-        raise ValueError("The learner must have an active enrollment.")
-
-    zone = "Asia/Kolkata"
-    goal = db.query(LearningGoal).filter_by(
-        user_id=learner.id, course_id=course.id
-    ).with_for_update().first()
-    goal_created = False
-    if not goal:
-        goal = LearningGoal(
-            user_id=learner.id,
-            course_id=course.id,
-            title=f"Support plan: {course.post_title}",
-            target_date=(utcnow() + timedelta(days=45)).date(),
-            daily_minutes=30,
-            timezone=zone,
-            status="active",
-        )
-        db.add(goal)
-        db.flush()
-        goal_created = True
-
-    focus = (concept or RISK_SUPPORT_CONCEPT).strip()[:80] or RISK_SUPPORT_CONCEPT
-    risk = _risk_payload(db, learner.id, course.id)
-    risk_reasons = list((risk or {}).get("reasons") or [])
-    summary = []
-    if risk:
-        summary.append(
-            f"{risk['severity'].title()} at-risk signal ({risk['risk_score']}/100)."
-        )
-    summary.extend(risk_reasons[:4])
-    if note.strip():
-        summary.append(f"Instructor note: {note.strip()}")
-    reason = " ".join(summary) or "Instructor requested a support review."
-
-    row = db.query(LearningIntervention).filter_by(
-        goal_id=goal.id, concept=focus
-    ).with_for_update().first()
-    created = False
-    if not row:
-        row = LearningIntervention(goal_id=goal.id, concept=focus)
-        db.add(row)
-        created = True
-
-    evidence = dict(row.evidence or {})
-    evidence["basis"] = "at_risk"
-    evidence["risk_flag"] = risk
-    evidence["history"] = list(evidence.get("history", [])) + [{
-        "action": "risk_intervention_created" if created else "risk_intervention_updated",
-        "note": note.strip(),
-        "reviewer_id": reviewer_id,
-        "at": utcnow().isoformat(),
-    }]
-    row.status = "suggested" if goal.status == "active" else "needs_instructor"
-    row.reason = reason
-    row.evidence = evidence
-    row.instructor_note = note.strip() or row.instructor_note
-    row.reviewed_by = reviewer_id
-    row.reviewed_at = utcnow()
-    db.flush()
-
-    if goal.status == "active":
-        existing = db.query(LearningPlanTask).filter_by(
-            intervention_id=row.id, kind="review", status="pending"
-        ).first()
-        if not existing:
-            count = db.query(LearningPlanTask).filter_by(
-                intervention_id=row.id
-            ).count()
-            _task(
-                db,
-                goal,
-                f"risk-review:{row.id}:{count}",
-                "review",
-                "Review your instructor support plan",
-                reason,
-                today_for(goal),
-                concept=focus,
-                intervention_id=row.id,
-                minutes=10,
-            )
-        _schedule(db, goal, today_for(goal))
-
-    db.commit()
-    db.refresh(row)
-    db.refresh(goal)
-    return row, goal, created, goal_created
 
 
 def planner_pass(db, now=None):

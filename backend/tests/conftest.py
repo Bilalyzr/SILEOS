@@ -32,8 +32,6 @@ os.environ.setdefault("ADMIN_PASSWORD", "test-admin-password")
 os.environ["ENABLE_API_RATE_LIMITING"] = "false"
 os.environ["ENABLE_REQUEST_LOGGING"] = "false"
 os.environ["ENABLE_IP_WHITELISTING"] = "false"
-os.environ["RUNTIME_METRICS_ENABLED"] = "false"
-os.environ["SENTRY_DSN"] = ""
 
 # TrustedHostMiddleware validates Host header — TestClient defaults to
 # `testserver`, which would otherwise 400. Pydantic-settings parses

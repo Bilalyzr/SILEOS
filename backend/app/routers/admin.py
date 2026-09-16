@@ -10,7 +10,7 @@ from sqlalchemy import func, desc
 from sqlalchemy import func as sa_func
 from sqlalchemy.exc import IntegrityError
 from typing import List, Optional, Dict, Any
-from datetime import date, datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 from pydantic import BaseModel, Field
 import logging
 import os
@@ -689,10 +689,10 @@ async def get_admin_stats(
     # can show the meaningful "active & verified" number as primary and
     # keep the raw total as a secondary hint.
     total_users = db.query(User).count()
-    active_users = db.query(User).filter(User.is_active.is_(True)).count()
+    active_users = db.query(User).filter(User.user_status == 1).count()  # 1 = active
     students = db.query(User).filter(
         User.role == "student",
-        User.is_active.is_(True),
+        User.user_status == 1,
         User.is_verified.is_(True),
     ).count()
     students_total = db.query(User).filter(User.role == "student").count()
@@ -700,9 +700,9 @@ async def get_admin_stats(
         User.role == "student",
         User.is_verified.is_(False),
     ).count()
-    instructors = db.query(User).filter(User.role == "instructor", User.is_active.is_(True)).count()
-    companies = db.query(User).filter(User.role == "company", User.is_active.is_(True)).count()
-    spocs = db.query(User).filter(User.role == "spoc", User.is_active.is_(True)).count()
+    instructors = db.query(User).filter(User.role == "instructor").count()
+    companies = db.query(User).filter(User.role == "company").count()
+    spocs = db.query(User).filter(User.role == "spoc").count()
 
     # Course statistics
     total_courses = db.query(Course).count()
@@ -716,26 +716,14 @@ async def get_admin_stats(
         Enrollment.completion_date.isnot(None)
     ).count()
 
-    # Revenue statistics. The Control Center and legacy dashboard intentionally
-    # share this one cash definition (commerce + tuition + career vouchers,
-    # less processed refunds) so admins never see competing totals.
-    from app.services.business_portfolio_service import consolidated_cash
-
-    def inr_net(start_date: date, end_date: date):
-        row = next((item for item in consolidated_cash(db, start_date, end_date) if item["currency"] == "INR"), None)
-        return row["net_cash"] if row else 0
-
-    commerce_captured = db.query(func.sum(Payment.amount)).filter(
-        Payment.payment_status.in_((PaymentStatus.COMPLETED, PaymentStatus.REFUNDED)),
-        Payment.payment_date.isnot(None),
+    # Revenue statistics (course payments + internship vouchers)
+    course_revenue = db.query(func.sum(Payment.amount)).filter(
+        Payment.payment_status == PaymentStatus.COMPLETED
     ).scalar() or 0
-    commerce_refunded = db.query(func.sum(Payment.amount)).filter(
-        Payment.payment_status == PaymentStatus.REFUNDED,
-        Payment.refund_processed_at.isnot(None),
-    ).scalar() or 0
-    course_revenue = commerce_captured - commerce_refunded
 
     internship_revenue = db.query(func.sum(InternshipVoucher.amount_paid)).scalar() or 0
+
+    total_revenue = course_revenue + internship_revenue
 
     # Revenue booked in the CURRENT CALENDAR MONTH (month-to-date), independent
     # of the `period` selector above. Month boundaries are computed in IST — the
@@ -743,20 +731,23 @@ async def get_admin_stats(
     # "this month" means what an Indian admin expects rather than a UTC month.
     IST = timezone(timedelta(hours=5, minutes=30))
     now_ist = datetime.now(timezone.utc).astimezone(IST)
-    today_ist = now_ist.date()
-    total_revenue = inr_net(date(1970, 1, 1), today_ist)
-    other_revenue = total_revenue - float(course_revenue) - float(internship_revenue)
     month_start_utc = now_ist.replace(
         day=1, hour=0, minute=0, second=0, microsecond=0
     ).astimezone(timezone.utc)
 
-    monthly_revenue = inr_net(month_start_utc.astimezone(IST).date(), today_ist)
+    monthly_course_revenue = db.query(func.sum(Payment.amount)).filter(
+        Payment.payment_status == PaymentStatus.COMPLETED,
+        Payment.created_at >= month_start_utc,
+    ).scalar() or 0
+    monthly_internship_revenue = db.query(func.sum(InternshipVoucher.amount_paid)).filter(
+        InternshipVoucher.created_at >= month_start_utc,
+    ).scalar() or 0
+    monthly_revenue = monthly_course_revenue + monthly_internship_revenue
 
     # Parse period and calculate date range for filtering
     period_map = {"7d": 7, "30d": 30, "90d": 90, "1y": 365}
     days = period_map.get(period, 30)
     cutoff_date = datetime.utcnow() - timedelta(days=days)
-    revenue_period = inr_net((now_ist - timedelta(days=days)).date(), today_ist)
 
     # New users/enrollments within the selected period
     new_users_count = db.query(User).filter(
@@ -880,9 +871,17 @@ async def get_admin_stats(
             "monthly_revenue_label": now_ist.strftime("%B %Y"),
             "course_revenue": course_revenue,
             "internship_revenue": internship_revenue,
-            "other_revenue": other_revenue,
             "avg_course_price": db.query(func.avg(Course.course_price)).scalar() or 0,
-            "revenue_period": revenue_period,
+            "revenue_period": (
+                db.query(func.sum(Payment.amount)).filter(
+                    Payment.payment_status == PaymentStatus.COMPLETED,
+                    Payment.created_at >= cutoff_date
+                ).scalar() or 0
+            ) + (
+                db.query(func.sum(InternshipVoucher.amount_paid)).filter(
+                    InternshipVoucher.created_at >= cutoff_date
+                ).scalar() or 0
+            )
         }
     }
 
@@ -892,7 +891,21 @@ async def get_revenue_timeseries(
     current_user: User = Depends(AuthService.require_admin),
     db: Session = Depends(get_db),
 ):
-    """Daily INR net cash by business pillar, on India business days."""
+    """
+    Daily revenue for the admin Revenue chart, allocated by source.
+
+    Course revenue = COMPLETED orders (Order.total_amount), bucketed by the
+    ORDER DATE (Order.date_created). Internship revenue = internship voucher
+    payments (InternshipVoucher.amount_paid), bucketed by purchase date. Each
+    point carries the per-source breakdown (`courses`, `internships`) plus their
+    sum (`revenue`) so the area chart can stack the respective allocations.
+    Days inside the window with no income are emitted as 0 so the chart is
+    continuous (no gaps, no missing dates).
+
+    Read-only — no schema/migration. Buckets are computed in Python against
+    IST (the platform's market timezone) so the day boundaries match what an
+    Indian admin expects, independent of the database's session timezone.
+    """
     valid_periods = {"7d": 7, "30d": 30, "90d": 90, "1y": 365}
     if period not in valid_periods:
         raise HTTPException(
@@ -901,18 +914,71 @@ async def get_revenue_timeseries(
         )
     days = valid_periods[period]
 
-    from app.services.business_portfolio_service import business_today, cash_timeseries
+    IST = timezone(timedelta(hours=5, minutes=30))
+    now_utc = datetime.now(timezone.utc)
+    # Pull from a day earlier than the window start to absorb the UTC→IST
+    # shift, so a payment near the boundary lands in the right bucket.
+    start_utc = now_utc - timedelta(days=days + 1)
 
-    today_ist = business_today()
+    def to_ist_date(dt):
+        """Normalize a stored timestamp (tz-aware or naive-UTC) to an IST date."""
+        if dt is None:
+            return None
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone(IST).date()
+
+    course_buckets: Dict[Any, float] = {}
+    intern_buckets: Dict[Any, float] = {}
+
+    # Course/product revenue — COMPLETED orders only, allocated to the day the
+    # order was placed (Order.date_created). total_amount is the gross order value.
+    order_rows = db.query(Order.total_amount, Order.date_created).filter(
+        Order.order_status == OrderStatus.COMPLETED,
+        Order.date_created >= start_utc,
+    ).all()
+    for total_amount, date_created in order_rows:
+        d = to_ist_date(date_created)
+        if d is not None:
+            course_buckets[d] = course_buckets.get(d, 0.0) + float(total_amount or 0)
+
+    # Internship voucher revenue, allocated to the purchase date (created_at).
+    voucher_rows = db.query(
+        InternshipVoucher.amount_paid, InternshipVoucher.created_at
+    ).filter(
+        InternshipVoucher.created_at >= start_utc,
+    ).all()
+    for amount_paid, created_at in voucher_rows:
+        d = to_ist_date(created_at)
+        if d is not None:
+            intern_buckets[d] = intern_buckets.get(d, 0.0) + float(amount_paid or 0)
+
+    # Build a continuous day-by-day series ending today (IST), filling zeros.
+    today_ist = now_utc.astimezone(IST).date()
     start_ist = today_ist - timedelta(days=days - 1)
-    points = cash_timeseries(db, start_ist, today_ist)
+
+    points = []
+    total = 0.0
+    cursor = start_ist
+    while cursor <= today_ist:
+        courses = round(course_buckets.get(cursor, 0.0), 2)
+        internships = round(intern_buckets.get(cursor, 0.0), 2)
+        revenue = round(courses + internships, 2)
+        total += revenue
+        points.append({
+            "date": cursor.isoformat(),          # YYYY-MM-DD
+            "label": cursor.strftime("%d %b"),   # e.g. "26 Jun"
+            "revenue": revenue,                   # total = courses + internships
+            "courses": courses,                   # COMPLETED orders that day
+            "internships": internships,           # internship vouchers that day
+        })
+        cursor += timedelta(days=1)
 
     return {
         "period": period,
         "currency": "INR",
-        "total": round(sum(point["revenue"] for point in points), 2),
+        "total": round(total, 2),
         "points": points,
-        "note": "Net cash by pillar. Captures use payment date; refunds use processing date; days use Asia/Kolkata.",
     }
 
 
@@ -944,12 +1010,10 @@ async def get_users_for_management(
         query = query.filter(User.role == role)
 
     if status:
-        if status == "active":
-            query = query.filter(User.is_active.is_(True))
-        elif status == "inactive":
-            query = query.filter(User.is_active.is_(False), User.user_status != 2)
-        elif status == "suspended":
-            query = query.filter(User.is_active.is_(False), User.user_status == 2)
+        # Convert status string to integer (active=1, inactive=0, suspended=2)
+        status_map = {"active": 1, "inactive": 0, "suspended": 2}
+        if status in status_map:
+            query = query.filter(User.user_status == status_map[status])
 
     if search:
         query = query.filter(
@@ -969,10 +1033,10 @@ async def get_users_for_management(
         .all()
     )
 
-    def get_status_string(user):
-        if user.is_active:
-            return "active"
-        return "suspended" if user.user_status == 2 else "inactive"
+    # Map user_status integer to status string
+    def get_status_string(status_int):
+        status_map = {0: "inactive", 1: "active", 2: "suspended"}
+        return status_map.get(status_int, "inactive")
 
     return [
         {
@@ -981,7 +1045,7 @@ async def get_users_for_management(
             "email": user.user_email,
             "display_name": user.display_name,
             "role": user.role,
-            "status": get_status_string(user),
+            "status": get_status_string(user.user_status),
             "is_verified": bool(user.is_verified),
             "joined_date": user.user_registered,
             "last_login": user.last_login,
@@ -1002,7 +1066,7 @@ async def get_students_for_voucher(
     Get students who can be added to internship rosters via manual voucher.
     Returns active students with email and display_name for dropdown.
     """
-    query = db.query(User).filter(User.role == "student", User.is_active.is_(True))
+    query = db.query(User).filter(User.role == "student", User.user_status == 1)
 
     if search:
         query = query.filter(
@@ -4423,7 +4487,7 @@ async def get_analytics_heatmaps(
             EXTRACT(HOUR FROM user_registered) as hour,
             COUNT(*) as count
         FROM users
-        WHERE is_active = TRUE AND user_registered >= :cutoff
+        WHERE user_status = 1 AND user_registered >= :cutoff
         GROUP BY dow, hour
     """), {"cutoff": cutoff}).fetchall()
 
@@ -4440,9 +4504,13 @@ async def get_analytics_heatmaps(
         ORDER BY c.id, dow
     """), {"cutoff": cutoff}).fetchall()
 
-    from app.services.business_portfolio_service import business_today, cash_timeseries
-    today = business_today()
-    revenue_daily = cash_timeseries(db, today - timedelta(days=days - 1), today)
+    revenue_daily = db.execute(text("""
+        SELECT DATE(created_at) as day, COALESCE(SUM(amount), 0) as revenue
+        FROM payments
+        WHERE payment_status = 'COMPLETED' AND created_at >= :cutoff
+        GROUP BY DATE(created_at)
+        ORDER BY day
+    """), {"cutoff": cutoff}).fetchall()
 
     return {
         "enrollment_activity": [{"day": str(r[0]), "count": r[1]} for r in enrollment_daily],
@@ -4453,7 +4521,7 @@ async def get_analytics_heatmaps(
             {"course_id": r[0], "course_name": r[1], "dow": int(r[2]), "count": r[3]}
             for r in course_engagement
         ],
-        "revenue_activity": [{"day": row["date"], "revenue": row["revenue"]} for row in revenue_daily],
+        "revenue_activity": [{"day": str(r[0]), "revenue": float(r[1])} for r in revenue_daily],
         "period_days": days,
     }
 

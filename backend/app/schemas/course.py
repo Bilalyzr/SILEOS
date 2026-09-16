@@ -5,7 +5,6 @@ Course Schemas - Pydantic models for course endpoints
 from pydantic import BaseModel, validator
 from typing import List, Optional, Dict, Any
 from datetime import datetime
-import math
 
 from app.core.course_types import normalize_course_type
 from app.core.course_links import validate_course_slug
@@ -46,10 +45,10 @@ class CourseBase(BaseModel):
             raise ValueError(f'Level must be one of: {allowed_levels}')
         return v
 
-    @validator('price', 'sale_price')
+    @validator('price')
     def validate_price(cls, v):
-        if v is not None and (not math.isfinite(v) or v < 0):
-            raise ValueError('Price must be finite and non-negative')
+        if v < 0:
+            raise ValueError('Price cannot be negative')
         return v
 
 class CourseCreate(CourseBase):
@@ -75,12 +74,6 @@ class CourseUpdate(BaseModel):
     intro_video: Optional[str] = None
     price: Optional[float] = None
     sale_price: Optional[float] = None
-
-    @validator('price', 'sale_price')
-    def validate_price(cls, v):
-        if v is not None and (not math.isfinite(v) or v < 0):
-            raise ValueError('Price must be finite and non-negative')
-        return v
     level: Optional[str] = None
     category: Optional[str] = None
     duration: Optional[int] = None
@@ -326,9 +319,3 @@ class CourseProgressResponse(BaseModel):
     last_accessed: Optional[datetime]
     completion_date: Optional[datetime]
     certificate_earned: bool
-    total_assignments: int = 0
-    completed_assignments: int = 0
-    completed_lesson_ids: List[int] = []
-    passed_quiz_ids: List[int] = []
-    completed_assignment_ids: List[int] = []
-    enrolled: bool = True

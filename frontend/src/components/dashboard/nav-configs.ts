@@ -9,7 +9,7 @@ import {
   UserCog, FileText, Send, CheckCircle,
   ShieldCheck, ScrollText, Gauge, Trophy, Layers, Package, Receipt, Video,
   ClipboardList, Gamepad2, Puzzle, Library, BookMarked, History,
-  FlaskConical, Box, Brain, Code2, Sparkles, KeyRound } from 'lucide-react'
+  FlaskConical, Box, Brain } from 'lucide-react'
 import type { SidebarItem } from './DashboardSidebar'
 
 export const ACCOUNT_NAV: SidebarItem[] = [
@@ -19,7 +19,6 @@ export const ACCOUNT_NAV: SidebarItem[] = [
 
 export const STUDENT_NAV: SidebarItem[] = [
   { to: '/exam-papers', label: 'Practice papers', icon: FileText },
-  { kind: 'link', to: '/learn-with-sasha', label: 'Learn with Sasha', icon: Sparkles },
   { kind: 'link', to: '/labs', label: 'Learning labs', icon: FlaskConical },
   { kind: 'link', to: '/dashboard',         label: 'Dashboard',       icon: LayoutDashboard, matchPrefix: '/dashboard' },
   { kind: 'group', label: 'Learning', icon: BookOpen, children: [
@@ -27,7 +26,6 @@ export const STUDENT_NAV: SidebarItem[] = [
     { kind: 'link', to: '/my-plan', label: 'My Learning Plan', icon: Brain, matchPrefix: '/my-plan' },
     { kind: 'link', to: '/student/live-classes', label: 'Live classes', icon: Video, matchPrefix: '/student/live-classes' },
     { kind: 'link', to: '/my-library',       label: 'My Library',    icon: Library },
-    { kind: 'link', to: '/coding',           label: 'Code practice', icon: Code2, matchPrefix: '/coding' },
   ]},
   { kind: 'group', label: 'Progress', icon: BarChart3, children: [
     { kind: 'link', to: '/my-grades',         label: 'My Grades',     icon: GraduationCap },
@@ -77,18 +75,16 @@ export const INSTRUCTOR_NAV: SidebarItem[] = [
   { kind: 'group', label: 'Assessment & Support', icon: ClipboardList, children: [
     { to: '/exam-papers', label: 'Paper generator', icon: FileText },
     { kind: 'link', to: '/instructor/assessment-studio', label: 'Assessment Studio', icon: Brain, matchPrefix: '/instructor/assessment-studio' },
-    { kind: 'link', to: '/instructor/coding-studio', label: 'Coding Studio', icon: Code2, matchPrefix: '/instructor/coding-studio' },
     { kind: 'link', to: '/instructor/grading',     label: 'Grading',       icon: ClipboardList, matchPrefix: '/instructor/grading' },
     { kind: 'link', to: '/instructor/review-queue', label: 'Review Queue', icon: ClipboardList, matchPrefix: '/instructor/review-queue' },
     { kind: 'link', to: '/instructor/interventions', label: 'Interventions', icon: Brain, matchPrefix: '/instructor/interventions' },
   ]},
   { kind: 'group', label: 'Learners & Insights', icon: Users, children: [
     { kind: 'link', to: '/instructor/students',    label: 'Students',      icon: Users },
-    { kind: 'link', to: '/instructor/insights',     label: 'Sasha Monitor',    icon: BarChart3, matchPrefix: '/instructor/insights' },
+    { kind: 'link', to: '/instructor/insights',     label: 'Insights',    icon: BarChart3, matchPrefix: '/instructor/insights' },
     { kind: 'link', to: '/instructor/analytics',   label: 'Analytics',     icon: BarChart3 },
     { kind: 'link', to: '/instructor/certificate-designer', label: 'Certificates', icon: Award, matchPrefix: '/instructor/certificate-designer' },
   ]},
-  { kind: 'link', to: '/instructor/payouts', label: 'Earnings & payouts', icon: CreditCard, matchPrefix: '/instructor/payouts' },
   { kind: 'link', to: '/communication-preferences', label: 'Communication preferences', icon: MessageCircle },
   { kind: 'link', to: '/profile',                label: 'Profile',       icon: Settings },
 ]
@@ -107,13 +103,8 @@ export const SPOC_NAV: SidebarItem[] = [
 
 export const ADMIN_NAV: SidebarItem[] = [
   { kind: 'link', to: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/admin/operations', label: 'Sasha Control Center', icon: Gauge },
-  { kind: 'group', label: 'Business pillars', icon: Layers, children: [
-    { to: '/admin/operations?view=meiporul', label: 'Meiporul · Immersive', icon: Box },
-    { to: '/admin/operations?view=seyappaduporul', label: 'Seyappaduporul · Schools', icon: Building2 },
-    { to: '/admin/operations?view=utporul', label: 'Utporul · Skills', icon: GraduationCap },
-  ]},
-  { kind: 'group', label: 'Shared Content Engine', icon: BookOpen, children: [
+  { to: '/admin/operations', label: 'Operations Center', icon: Gauge },
+  { kind: 'group', label: 'Learning & Content', icon: BookOpen, children: [
     { to: '/exam-papers', label: 'Paper generator', icon: FileText },
     { to: '/admin/lab-studio', label: 'Lab Studio', icon: FlaskConical },
     { to: '/admin/course-packages', label: 'Course Upload & Backup', icon: Package },
@@ -138,7 +129,6 @@ export const ADMIN_NAV: SidebarItem[] = [
     { kind: 'link', to: '/admin/memberships', label: 'Memberships', icon: Layers },
     { kind: 'link', to: '/admin/bundles',     label: 'Bundles',     icon: Package },
     { kind: 'link', to: '/admin/company-invoices', label: 'Invoices', icon: Receipt },
-    { kind: 'link', to: '/admin/payouts', label: 'Instructor payouts', icon: CreditCard },
   ]},
   { kind: 'group', label: 'Internships', icon: Briefcase, children: [
     { to: '/admin/internships',          label: 'Listings',  icon: Briefcase, matchPrefix: '/admin/internships' },
@@ -155,7 +145,6 @@ export const ADMIN_NAV: SidebarItem[] = [
     { kind: 'link', to: '/admin/hall-of-fame',  label: 'Wall of Fame', icon: Trophy },
   ]},
   { kind: 'link', to: '/communication-preferences', label: 'Communication preferences', icon: MessageCircle },
-  { kind: 'link', to: '/admin/ai-providers', label: 'AI Provider Vault', icon: KeyRound },
   { kind: 'link', to: '/admin/settings',     label: 'Settings',     icon: Settings },
 ]
 
@@ -168,7 +157,6 @@ export const SUPERADMIN_NAV: SidebarItem[] = [
   { kind: 'link', to: '/superadmin/instructors', label: 'Instructors',      icon: GraduationCap, matchPrefix: '/superadmin/instructors' },
   { kind: 'link', to: '/superadmin/admins',      label: 'Admins',           icon: UserCog,       matchPrefix: '/superadmin/admins' },
   { kind: 'link', to: '/superadmin/audit',       label: 'Impersonation audit', icon: ScrollText, matchPrefix: '/superadmin/audit' },
-  { kind: 'link', to: '/admin/operations',       label: 'Sasha Control Center', icon: Gauge },
   { kind: 'link', to: '/admin/communications',   label: 'Communications Center', icon: MessageCircle },
   { kind: 'link', to: '/admin/dashboard',        label: 'Admin console',    icon: ShieldCheck },
   { kind: 'link', to: '/communication-preferences', label: 'Communication preferences', icon: MessageCircle },

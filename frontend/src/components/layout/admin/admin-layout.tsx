@@ -6,6 +6,7 @@
  * had submenus); admin-specific impersonation banner is preserved.
  */
 import React from 'react'
+import { ImpersonationBanner } from '@/components/admin/ImpersonationBanner'
 import { DashboardWorkspace } from '@/components/dashboard/DashboardWorkspace'
 import { ADMIN_NAV } from '@/components/dashboard/nav-configs'
 
@@ -14,9 +15,12 @@ interface AdminLayoutProps {
 }
 
 export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => (
-  <DashboardWorkspace items={ADMIN_NAV} role="admin">
-    {children}
-  </DashboardWorkspace>
+  <>
+    <ImpersonationBanner />
+    <DashboardWorkspace items={ADMIN_NAV} role="admin">
+      {children}
+    </DashboardWorkspace>
+  </>
 )
 
 export default AdminLayout

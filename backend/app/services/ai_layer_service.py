@@ -223,7 +223,7 @@ def process_transcript(db: Session, report, transcript: str, actor_id: Optional[
     db.add(job)
     db.commit()
     try:
-        text = call_glm(SEGMENT_SYSTEM, transcript[:24000], feature="Live class transcript segmentation")
+        text = call_glm(SEGMENT_SYSTEM, transcript[:24000])
         topics = [t for t in parse_json_array(text) if isinstance(t, dict) and t.get("topic")]
     except Exception as exc:
         job.status, job.error, job.finished_at = "failed", str(exc)[:2000], datetime.now(timezone.utc)

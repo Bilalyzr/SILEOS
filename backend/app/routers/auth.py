@@ -6,7 +6,7 @@ Handles user authentication, registration, and token management
 from datetime import timedelta, datetime, timezone
 import secrets
 
-from fastapi import APIRouter, Depends, HTTPException, status, Request, Response, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, status, Request, BackgroundTasks
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from typing import Any, Optional
@@ -19,18 +19,13 @@ from app.core.security import (
     verify_password,
     get_password_hash,
     verify_token,
-    ACCESS_TOKEN_EXPIRE_MINUTES,
-    REFRESH_TOKEN_EXPIRE_DAYS,
+    ACCESS_TOKEN_EXPIRE_MINUTES
 )
 from app.models.user import User, UserProfile, InstructorProfile
 from app.services.auth_service import AuthService
 from app.core.firebase_admin import create_firebase_user
 from app.core import totp
-from app.utils.email import (
-    send_login_notification_email,
-    send_password_reset_email,
-    send_verification_email,
-)
+from app.utils.email import send_verification_email, send_password_reset_email
 from app.schemas.auth import (
     LoginRequest,
     RegisterRequest,
@@ -56,45 +51,11 @@ settings = get_settings()
 # WordPress-style activation key) and nothing else writes it, so it gives the
 # reset flow durable, single-use token state without Redis or a migration.
 _RESET_KEY_PREFIX = "pwdreset:"
-_SSO_REFRESH_COOKIE = "sasha_sso_refresh"
-
-
-def _shared_cookie_domain(request: Request) -> Optional[str]:
-    host = (request.url.hostname or "").lower()
-    return ".sashainfinity.com" if host == "sashainfinity.com" or host.endswith(".sashainfinity.com") else None
-
-
-def _set_shared_session(response: Response, request: Request, refresh_token: str) -> None:
-    domain = _shared_cookie_domain(request)
-    response.set_cookie(
-        key=_SSO_REFRESH_COOKIE,
-        value=refresh_token,
-        max_age=REFRESH_TOKEN_EXPIRE_DAYS * 86400,
-        path="/api/v1/auth",
-        domain=domain,
-        secure=domain is not None,
-        httponly=True,
-        samesite="lax",
-    )
-
-
-def _clear_shared_session(response: Response, request: Request) -> None:
-    domain = _shared_cookie_domain(request)
-    response.delete_cookie(
-        key=_SSO_REFRESH_COOKIE,
-        path="/api/v1/auth",
-        domain=domain,
-        secure=domain is not None,
-        httponly=True,
-        samesite="lax",
-    )
 
 @router.post("/login", response_model=TokenResponse)
 @router.post("/login/", response_model=TokenResponse)
 async def login(
     request: LoginRequest,
-    http_request: Request,
-    response: Response,
     db: Session = Depends(get_db)
 ) -> Any:
     """
@@ -206,12 +167,6 @@ async def login(
     # Update last_login timestamp
     user.last_login = datetime.now(timezone.utc)
     db.commit()
-
-    # Password login must seed the shared-domain refresh cookie too — it was
-    # only set by the refresh/SSO flows, so a user who logged in and hopped
-    # straight to a sibling subdomain (dev.sashainfinity.com ->
-    # seyappaduporuldev.sashainfinity.com) had no session there.
-    _set_shared_session(response, http_request, refresh_token)
 
     return {
         "access_token": access_token,
@@ -716,7 +671,7 @@ async def register(
         "username": new_user.user_login,
         "display_name": new_user.display_name,
         "role": new_user.role,
-        "status": "active" if new_user.is_active else "inactive",
+        "status": "active" if new_user.user_status == 1 else "pending",
         "message": message,
         # Lets the client skip the verify-email screen when auto-verified.
         "requires_verification": not new_user.is_verified,
@@ -724,20 +679,15 @@ async def register(
 
 @router.post("/refresh", response_model=TokenResponse)
 async def refresh_token(
-    payload: RefreshTokenRequest,
-    request: Request,
-    response: Response,
+    request: RefreshTokenRequest,
     db: Session = Depends(get_db)
 ) -> Any:
     """
     Refresh access token using refresh token
     """
     try:
-        supplied_token = payload.refresh_token or request.cookies.get(_SSO_REFRESH_COOKIE)
-        if not supplied_token:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Refresh token required")
-        claims = verify_token(supplied_token, expected_type="refresh")
-        user_id = claims.get("sub")
+        payload = verify_token(request.refresh_token, expected_type="refresh")
+        user_id = payload.get("sub")
 
         if user_id is None:
             raise HTTPException(
@@ -749,14 +699,14 @@ async def refresh_token(
         # verify_token(expected_type="refresh") already rejects non-refresh
         # tokens, but we double-check here so a future refactor that loosens
         # the type check can't accidentally re-open this door.
-        if claims.get("type") == "impersonation_access":
+        if payload.get("type") == "impersonation_access":
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Impersonation tokens cannot be refreshed",
             )
 
         user = db.query(User).filter(User.id == int(user_id)).first()
-        if not user or not user.is_active:
+        if not user:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="User not found"
@@ -768,10 +718,9 @@ async def refresh_token(
             data={"sub": str(user.id)}, expires_delta=access_token_expires
         )
 
-        _set_shared_session(response, request, supplied_token)
         return {
             "access_token": access_token,
-            "refresh_token": supplied_token,
+            "refresh_token": request.refresh_token,
             "token_type": "bearer",
             "expires_in": ACCESS_TOKEN_EXPIRE_MINUTES * 60,
             "user": {
@@ -788,29 +737,6 @@ async def refresh_token(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid refresh token"
         )
-
-
-@router.post("/sso")
-async def establish_shared_session(
-    payload: RefreshTokenRequest,
-    request: Request,
-    response: Response,
-    db: Session = Depends(get_db),
-) -> Any:
-    """Place a validated refresh token in the shared Sasha domain cookie."""
-    token = payload.refresh_token
-    if not token:
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="refresh_token is required")
-    try:
-        claims = verify_token(token, expected_type="refresh")
-        user_id = claims.get("sub")
-        user = db.query(User).filter(User.id == int(user_id)).first() if user_id else None
-        if not user or not user.is_active:
-            raise ValueError("inactive or missing user")
-    except Exception:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token") from None
-    _set_shared_session(response, request, token)
-    return {"shared_session": True}
 
 @router.post("/resend-verification")
 async def resend_verification_email(
@@ -903,7 +829,6 @@ async def verify_email(
 
         # Mark email as verified
         user.is_verified = True
-        user.is_active = True
         user.user_status = 1  # Set to active (1 = active)
         db.commit()
 
@@ -1037,21 +962,11 @@ async def change_password(
 
 @router.post("/logout")
 async def logout(
-    request: Request,
-    response: Response,
     current_user: User = Depends(AuthService.get_current_user)
 ) -> Any:
     """
     Logout user (client should remove tokens)
     """
-    _clear_shared_session(response, request)
-    # Revoke the presented access token so it cannot keep calling the API
-    # until natural expiry. (The denylist entry self-expires at the token's
-    # own `exp` — see app/core/security.py.)
-    auth_header = request.headers.get("authorization", "")
-    if auth_header.lower().startswith("bearer "):
-        from app.core.security import revoke_access_token
-        revoke_access_token(auth_header[7:].strip())
     return {"message": "Logged out successfully"}
 
 @router.get("/me", response_model=UserResponse)
@@ -1078,7 +993,7 @@ async def get_current_user_info(
         "username": current_user.user_login,
         "display_name": current_user.display_name,
         "role": current_user.role,
-        "status": "active" if current_user.is_active else "suspended" if current_user.user_status == 2 else "inactive",
+        "status": str(current_user.user_status),
         "profile_completed": current_user.profile_completed,
         "totp_enabled": bool(current_user.totp_enabled),
         "profile": {
@@ -1453,12 +1368,14 @@ async def google_login(
         # when the mail server is slow/unreachable the request hangs past the
         # client's receive timeout and Google sign-in appears to fail. Scheduling
         # it as a background task decouples login latency from email delivery.
-        background_tasks.add_task(
-            send_login_notification_email,
-            email=user.user_email,
-            user_name=user.display_name or name,
-            login_method="Google",
-        )
+        # TODO: Re-enable after SMTP password fixed
+        # from app.utils.email import send_login_notification_email
+        # background_tasks.add_task(
+        #     send_login_notification_email,
+        #     email=user.user_email,
+        #     user_name=user.display_name or name,
+        #     login_method="Google",
+        # )
 
         # Update last_login timestamp
         user.last_login = datetime.now(timezone.utc)
@@ -1764,16 +1681,14 @@ async def complete_google_login(
 
 @router.post("/linkedin")
 async def linkedin_login(
-    payload: dict,
-    response: Response,
-    http_request: Request,
+    request: dict,
     db: Session = Depends(get_db)
 ):
     """Exchange LinkedIn auth code for user profile and login"""
     import httpx as httpx_client
     import os
 
-    code = payload.get("code")
+    code = request.get("code")
     if not code:
         raise HTTPException(status_code=400, detail="Code required")
 
@@ -1836,12 +1751,10 @@ async def linkedin_login(
         db.commit()
         db.refresh(user)
 
+    from app.core.security import create_access_token
     access_token = create_access_token({"sub": str(user.id)})
-    refresh_token = create_refresh_token({"sub": str(user.id)})
-    _set_shared_session(response, http_request, refresh_token)
     return {
         "access_token": access_token,
-        "refresh_token": refresh_token,
         "token_type": "bearer",
         "user": {
             "id": user.id,

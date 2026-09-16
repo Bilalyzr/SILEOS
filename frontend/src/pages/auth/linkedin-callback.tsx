@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { roleHomePath } from '@/utils/role-routing'
 
 export const LinkedInCallbackPage = () => {
   useEffect(() => {
@@ -29,11 +28,11 @@ export const LinkedInCallbackPage = () => {
       if (data.access_token) {
         const existing = JSON.parse(localStorage.getItem('auth-storage') || '{"state":{}}')
         existing.state.accessToken = data.access_token
-        existing.state.refreshToken = data.refresh_token || null
+        existing.state.refreshToken = null
         existing.state.isAuthenticated = true
         existing.state.user = data.user || null
         localStorage.setItem('auth-storage', JSON.stringify(existing))
-        window.location.href = roleHomePath(data.user?.role)
+        window.location.href = '/dashboard'
       } else {
         window.location.href = '/login?error=linkedin_failed'
       }

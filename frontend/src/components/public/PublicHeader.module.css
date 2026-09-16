@@ -7,12 +7,7 @@
   border-bottom: 1px solid rgba(203, 213, 225, 0.3);
   position: sticky;
   top: 0;
-  /* Tier system (globals.css --z-*): legacy 1001 sat ABOVE toasts (200) and
-     the impersonation banner (300), hiding every toast on public pages. The
-     header must stay above its own mobile menu/backdrop (no in-menu close
-     button — the hamburger in this bar is the toggle), so it takes the
-     dialog tier: below popover (120), toast (200), banner (300). */
-  z-index: var(--z-dialog, 100);
+  z-index: 1001;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   border-radius: 0 0 24px 24px;
@@ -255,8 +250,7 @@
   top: 0;
   left: 0;
   right: 0;
-  /* Below the header (its hamburger is the close toggle), above page modals. */
-  z-index: var(--z-overlay, 90);
+  z-index: 1000;
   animation: slideDown 0.3s ease-out;
   border-radius: 0 0 24px 24px;
   margin: 0 8px;
@@ -291,7 +285,7 @@
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  z-index: var(--z-modal, 80);
+  z-index: 999;
   animation: fadeIn 0.2s ease-out;
   cursor: pointer;
 }

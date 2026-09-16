@@ -110,13 +110,6 @@ check_color_once() {
     done
 
     # --- backend readiness: the one check that gates on Postgres --------------
-    # Standby workers also report health, so both blue/green colours can pass
-    # without both becoming scheduler leaders.
-    if ! docker exec "sasha-runtime-${colour}" python -m app.workers.runtime --health >/dev/null 2>&1; then
-        FAIL_REASON="maintenance worker is missing, stale or unavailable"
-        return 1
-    fi
-
     container="$(container_name backend "$colour")"
     if ! body="$(probe_in_container "$container" "http://127.0.0.1:8000/health/ready")"; then
         FAIL_REASON="backend readiness probe failed (non-2xx or no response)"

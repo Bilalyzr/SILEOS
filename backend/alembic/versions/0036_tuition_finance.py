@@ -10,9 +10,6 @@ foreign keys; only unpublished plan children cascade with their plan.
 
 from alembic import op
 import sqlalchemy as sa
-from app.core.migration_operations import idempotent_create_operations
-
-op = idempotent_create_operations(op)
 
 
 revision = "0036"

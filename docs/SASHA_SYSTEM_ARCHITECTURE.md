@@ -2,11 +2,6 @@
 
 Architecture, operating processes and codebase guide
 
-> Business organization: the platform is operated as three connected pillars
-> (Meiporul, Seyappaduporul, and Utporul) with one admin control plane. See
-> [BUSINESS_VERTICAL_ARCHITECTURE.md](BUSINESS_VERTICAL_ARCHITECTURE.md) for
-> ownership, subdomains, revenue reporting, and implementation status.
-
 Snapshot: 6 September 2026. Scope: the outer `Sasha_LMS` workspace delivered with the GPT handover. This document describes the code inspected locally and distinguishes implemented behavior from integrations that require configuration or hardware validation. It is not a production deployment certificate.
 
 ## 1. System map

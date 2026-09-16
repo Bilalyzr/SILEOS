@@ -6,31 +6,9 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.core.listing import paginate, csv_stream
 from app.services import operations_service as svc
-from app.services.business_portfolio_service import business_today as _business_today
 from app.services.auth_service import AuthService
 
 router = APIRouter(dependencies=[Depends(AuthService.require_admin)])
-
-
-@router.get('/runtime')
-def runtime_status(db: Session = Depends(get_db)):
-    from app.services.runtime_service import snapshot
-    from app.core.config import get_settings
-    result = snapshot(db)
-    result['mode'] = get_settings().BACKGROUND_TASK_MODE
-    return result
-
-
-@router.get('/telemetry')
-async def runtime_telemetry():
-    from app.core.runtime_telemetry import telemetry
-    return await telemetry.snapshot()
-
-
-@router.post('/runtime/{name}/retry')
-def retry_runtime(name: str, db: Session = Depends(get_db), actor=Depends(AuthService.require_admin)):
-    from app.services.runtime_service import request_retry
-    return request_retry(db, name, actor)
 
 
 @router.get('/readiness')
@@ -45,8 +23,7 @@ def provider_probe(provider: str):
         from app.services.llm_provider import llm_configured, call_glm
         if not llm_configured(): raise HTTPException(503,'AI provider is not configured.')
         try:
-            answer=call_glm('You are a connectivity check. Reply with the word ready.',
-                            'Connectivity check', max_tokens=10, feature="AI readiness probe")
+            answer=call_glm('You are a connectivity check. Reply with the word ready.', 'Connectivity check', max_tokens=10)
             if not answer.strip():raise ValueError('Empty response')
             return {'status':'verified','detail':'AI provider returned a nonempty response. Educational output quality still requires review.'}
         except Exception:
@@ -73,19 +50,10 @@ def summary(db: Session = Depends(get_db)):
 
 
 @router.get("/revenue")
-def revenue(start: date = Query(default_factory=lambda: _business_today() - timedelta(days=30)), end: date = Query(default_factory=lambda: _business_today()), db: Session = Depends(get_db)):
+def revenue(start: date = Query(default_factory=lambda: date.today() - timedelta(days=30)), end: date = Query(default_factory=date.today), db: Session = Depends(get_db)):
     if end < start or (end - start).days > 366:
         raise HTTPException(422, "Choose a date window of at most 366 days.")
     return svc.revenue(db, start, end)
-
-
-@router.get("/portfolio")
-def portfolio(start: date = Query(default_factory=lambda: _business_today() - timedelta(days=30)), end: date = Query(default_factory=lambda: _business_today()), db: Session = Depends(get_db)):
-    if end < start or (end - start).days > 366:
-        raise HTTPException(422, "Choose a date window of at most 366 days.")
-    from app.services.business_portfolio_service import portfolio as build_portfolio
-
-    return build_portfolio(db, start, end)
 
 
 @router.get("/lists/{dataset}")

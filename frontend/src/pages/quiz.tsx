@@ -501,8 +501,8 @@ export const QuizPage = () => {
       {/* Submit Dialog */}
       <Dialog.Root open={showSubmitDialog} onOpenChange={setShowSubmitDialog}>
         <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 bg-black/50 z-overlay" />
-          <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-xl z-dialog w-full max-w-md p-6">
+          <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
+          <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-xl z-50 w-full max-w-md p-6">
             <Dialog.Title className="text-lg font-semibold mb-4">
               Submit Quiz
             </Dialog.Title>
@@ -539,8 +539,8 @@ export const QuizPage = () => {
       {/* Exit Dialog */}
       <Dialog.Root open={showExitDialog} onOpenChange={setShowExitDialog}>
         <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 bg-black/50 z-overlay" />
-          <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-xl z-dialog w-full max-w-md p-6">
+          <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
+          <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-xl z-50 w-full max-w-md p-6">
             <Dialog.Title className="text-lg font-semibold mb-4">
               Exit Quiz
             </Dialog.Title>

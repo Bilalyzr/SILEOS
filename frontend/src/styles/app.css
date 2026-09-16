@@ -1,8 +1,0 @@
-/* Deterministic cascade: legacy layers first, Aurum migration layer last. */
-@import "./globals.css";
-@import "./sasha-design.css";
-@import "./page-redesign.css";
-@import "./astra-glass.css";
-@import "./campus-glass.css";
-@import "./campus-growth.css";
-@import "./aurum.css";

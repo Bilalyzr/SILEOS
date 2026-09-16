@@ -1,7 +1,7 @@
 import React from 'react'
 import { useAuthStore } from '@/store/auth'
 import { getAvatarUrl } from '@/utils/media'
-import { normalizeRole, roleSatisfies } from '@/utils/role-routing'
+import { normalizeRole } from '@/utils/role-routing'
 
 export const useAuth = () => {
   const {
@@ -10,7 +10,6 @@ export const useAuth = () => {
     instructorProfile,
     isAuthenticated,
     isLoading,
-    hasResolvedAuth,
     error,
     login,
     register,
@@ -20,13 +19,9 @@ export const useAuth = () => {
     clearError,
   } = useAuthStore()
 
-  // Check authentication on mount once (no checkAuth in deps since it's stable from Zustand).
-  // Runs whenever auth hasn't RESOLVED yet — not only when there's no user.
-  // A hard page load with a persisted session rehydrates `user` from
-  // localStorage; skipping checkAuth in that case left hasResolvedAuth
-  // unset and ProtectedRoute spinning on "Loading..." forever.
+  // Check authentication on mount once (no checkAuth in deps since it's stable from Zustand)
   React.useEffect(() => {
-    if (!hasResolvedAuth && !isLoading) {
+    if (!user && !isLoading) {
       checkAuth().catch(console.error)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,7 +68,6 @@ export const useAuth = () => {
     instructorProfile,
     isAuthenticated,
     isLoading,
-    hasResolvedAuth,
     error,
     isInstructor,
     isStudent,
@@ -105,10 +99,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const hasPermission = React.useCallback((permission: string): boolean => {
     if (!user) return false
 
-    // user_status=1 means "active", not "administrator". Privileged
-    // permissions are derived from the actual RBAC role only.
-    const role = normalizeRole(user.role)
-    if (role === 'admin' || role === 'superadmin') return true
+    // Admin has all permissions
+    if (user.user_status === 1) return true // Assuming 1 is admin status
 
     // Check instructor permissions
     if (isInstructor && instructorProfile?.is_approved) {
@@ -136,7 +128,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const hasRole = React.useCallback((role: string): boolean => {
     if (!user) return false
 
-    return roleSatisfies(user.role, role)
+    // Normalise both sides so role-string drift (casing/whitespace) can't
+    // lock an admin out of admin routes.
+    const current = normalizeRole(user.role)
+    // SuperAdmin is a superset of admin: it can reach every role's routes
+    // (including /admin/* and /superadmin/*).
+    if (current === "superadmin") return true
+    // Admin can access all roles
+    if (current === "admin") return true
+    return current === normalizeRole(role)
   }, [user])
 
   const canAccessRoute = React.useCallback((route: string): boolean => {

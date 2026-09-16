@@ -19,9 +19,12 @@ import { api } from './axios'
  *             created_at, items: [{course_id, price_at_purchase}],
  *             coupon_code }
  *
- * `/orders/` is reserved for zero-value carts. Paid multi-course carts use
- * `/payments/create-order` + `/payments/verify`, with an immutable server-side
- * price snapshot and Razorpay checkout in `pages/checkout.tsx`.
+ * NOTE: The backend `/orders/` endpoint currently executes a *mock*
+ * payment — it marks the order COMPLETED and enrolls the student
+ * synchronously. It does NOT return a Razorpay order_id/key. Until
+ * the backend wires Razorpay for multi-course cart checkout (see
+ * course-detail.tsx single-course flow for reference), the frontend
+ * cart checkout cannot open the Razorpay modal. TODO below.
  */
 
 export interface CouponValidationRequest {
@@ -53,6 +56,12 @@ export interface OrderResponse {
   created_at: string
   items: OrderItem[]
   coupon_code: string | null
+  // TODO: backend does not yet return these for cart checkout. When the
+  // backend is extended to create a Razorpay order for multi-course
+  // carts, surface these fields so the UI can open the Razorpay modal
+  // the same way course-detail.tsx does for single-course purchases.
+  razorpay_order_id?: string
+  razorpay_key?: string
 }
 
 /**

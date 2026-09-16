@@ -34,9 +34,7 @@ config = context.config
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
-    # Migration rehearsals can run in-process. Do not silence existing payment,
-    # delivery or application loggers after configuring Alembic's own output.
-    fileConfig(config.config_file_name, disable_existing_loggers=False)
+    fileConfig(config.config_file_name)
 
 # Import all models so they register on Base.metadata before we hand it to
 # Alembic for autogenerate/compare support.

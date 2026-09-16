@@ -103,7 +103,7 @@ async def adaptive_lesson(course_id: int, body: AdaptiveIn, db: Session = Depend
               f"LEARNER MASTERY ESTIMATE: {state['estimate'] if state['estimate'] is not None else 'unknown'} "
               f"(weak concepts: {', '.join(state['weak']) or 'none known'})\nMATERIAL:\n{svc.course_material(db, course_id)}")
     try:
-        data = svc.parse_json_object(call_glm(svc.ADAPT_SYSTEM, prompt, feature="Adaptive lesson"))
+        data = svc.parse_json_object(call_glm(svc.ADAPT_SYSTEM, prompt))
     except Exception as exc:
         _finish(db, job, error=str(exc))
         raise HTTPException(status_code=502, detail=f"AI provider failed: {str(exc)[:200]}")
@@ -132,7 +132,7 @@ async def check_question(body: CheckIn, db: Session = Depends(get_db),
     prompt = (f"COURSE: {course.post_title}\nLANGUAGE: {course.course_language or 'English'}\nCONCEPT: {state['concept'] or 'a core idea of the course'}\n"
               f"DIFFICULTY: {state['level']}\nMATERIAL:\n{svc.course_material(db, course.id, limit=25, chars=400)}")
     try:
-        data = svc.parse_json_object(call_glm(svc.CHECK_SYSTEM, prompt, feature="Tutor check question"))
+        data = svc.parse_json_object(call_glm(svc.CHECK_SYSTEM, prompt))
     except Exception as exc:
         _finish(db, job, error=str(exc))
         raise HTTPException(status_code=502, detail=f"AI provider failed: {str(exc)[:200]}")

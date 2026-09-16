@@ -1,0 +1,74 @@
+[
+  {
+    "policy": "nginx/conf.d/default.conf",
+    "title": "Duck (sample)",
+    "calls": 1,
+    "triangles": 4212
+  },
+  {
+    "policy": "nginx/conf.d/default.conf",
+    "title": "Textured Box (sample)",
+    "calls": 1,
+    "triangles": 12
+  },
+  {
+    "policy": "nginx/conf.d/default.conf",
+    "title": "snub_cube",
+    "calls": 38,
+    "triangles": 88
+  },
+  {
+    "policy": "nginx/conf.d/default.conf",
+    "title": "Sasha-Character",
+    "calls": 7,
+    "triangles": 193236
+  },
+  {
+    "policy": "nginx/conf.d/default.production.conf",
+    "title": "Duck (sample)",
+    "calls": 1,
+    "triangles": 4212
+  },
+  {
+    "policy": "nginx/conf.d/default.production.conf",
+    "title": "Textured Box (sample)",
+    "calls": 1,
+    "triangles": 12
+  },
+  {
+    "policy": "nginx/conf.d/default.production.conf",
+    "title": "snub_cube",
+    "calls": 38,
+    "triangles": 88
+  },
+  {
+    "policy": "nginx/conf.d/default.production.conf",
+    "title": "Sasha-Character",
+    "calls": 7,
+    "triangles": 193236
+  },
+  {
+    "policy": "deploy/nginx/snippets/security-headers.conf",
+    "title": "Duck (sample)",
+    "calls": 1,
+    "triangles": 4212
+  },
+  {
+    "policy": "deploy/nginx/snippets/security-headers.conf",
+    "title": "Textured Box (sample)",
+    "calls": 1,
+    "triangles": 12
+  },
+  {
+    "policy": "deploy/nginx/snippets/security-headers.conf",
+    "title": "snub_cube",
+    "calls": 38,
+    "triangles": 88
+  },
+  {
+    "policy": "deploy/nginx/snippets/security-headers.conf",
+    "title": "Sasha-Character",
+    "calls": 7,
+    "triangles": 193236
+  }
+]

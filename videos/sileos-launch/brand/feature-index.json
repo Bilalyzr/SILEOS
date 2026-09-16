@@ -1,0 +1,170 @@
+[
+  {
+    "segment": "Course Studio",
+    "icon": "course",
+    "features": [
+      {
+        "name": "Custom course links",
+        "icon": "link"
+      },
+      {
+        "name": "Course backup & restore",
+        "icon": "backup"
+      }
+    ]
+  },
+  {
+    "segment": "Live Classrooms",
+    "icon": "live",
+    "features": [
+      {
+        "name": "Live-now access",
+        "icon": "liveaccess"
+      },
+      {
+        "name": "Attendance",
+        "icon": "attendance"
+      }
+    ]
+  },
+  {
+    "segment": "Video Learning",
+    "icon": "video",
+    "features": [
+      {
+        "name": "Recordings",
+        "icon": "recording"
+      },
+      {
+        "name": "Local transcription",
+        "icon": "transcript"
+      }
+    ]
+  },
+  {
+    "segment": "Virtual Labs",
+    "icon": "lab",
+    "features": [
+      {
+        "name": "59 supplied labs",
+        "icon": "supplied"
+      },
+      {
+        "name": "Lab import & export",
+        "icon": "exchange"
+      }
+    ]
+  },
+  {
+    "segment": "3D \u00c2\u00b7 AR \u00c2\u00b7 VR",
+    "icon": "xr",
+    "features": [
+      {
+        "name": "GLB uploads",
+        "icon": "upload"
+      },
+      {
+        "name": "Interactive hotspots",
+        "icon": "hotspot"
+      }
+    ]
+  },
+  {
+    "segment": "Guided Learning",
+    "icon": "guided",
+    "features": [
+      {
+        "name": "Investigations",
+        "icon": "investigate"
+      },
+      {
+        "name": "Lab assessments",
+        "icon": "labcheck"
+      }
+    ]
+  },
+  {
+    "segment": "Exam Studio",
+    "icon": "exam",
+    "features": [
+      {
+        "name": "JEE & NEET papers",
+        "icon": "jee"
+      },
+      {
+        "name": "Staff text & PDF inputs",
+        "icon": "pdf"
+      }
+    ]
+  },
+  {
+    "segment": "Assessments",
+    "icon": "assessment",
+    "features": [
+      {
+        "name": "Quizzes & assignments",
+        "icon": "quiz"
+      },
+      {
+        "name": "Gradebook",
+        "icon": "gradebook"
+      }
+    ]
+  },
+  {
+    "segment": "Learning Library",
+    "icon": "library",
+    "features": [
+      {
+        "name": "E-books",
+        "icon": "ebook"
+      },
+      {
+        "name": "Categorized assets",
+        "icon": "assets"
+      }
+    ]
+  },
+  {
+    "segment": "Personal Learning",
+    "icon": "personal",
+    "features": [
+      {
+        "name": "Progress & mastery",
+        "icon": "progress"
+      },
+      {
+        "name": "Certificates",
+        "icon": "certificate"
+      }
+    ]
+  },
+  {
+    "segment": "Offline Learning",
+    "icon": "offline",
+    "features": [
+      {
+        "name": "Saved courses",
+        "icon": "saved"
+      },
+      {
+        "name": "English & Tamil",
+        "icon": "language"
+      }
+    ]
+  },
+  {
+    "segment": "Campus &amp; Control",
+    "icon": "campus",
+    "features": [
+      {
+        "name": "Company portal",
+        "icon": "company"
+      },
+      {
+        "name": "Payments & admin controls",
+        "icon": "controls"
+      }
+    ]
+  }
+]

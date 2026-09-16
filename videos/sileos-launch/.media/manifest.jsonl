@@ -1,0 +1,8 @@
+{"id":"bgm_001","type":"bgm","path":"assets/audio/close.wav","source":"existing","description":"close","duration":5.3,"provenance":{"provider":"local","adopted":true}}
+{"id":"bgm_002","type":"bgm","path":"assets/audio/expansion.wav","source":"existing","description":"expansion","duration":5,"provenance":{"provider":"local","adopted":true}}
+{"id":"bgm_003","type":"bgm","path":"assets/audio/features.wav","source":"existing","description":"features","duration":11.4,"provenance":{"provider":"local","adopted":true}}
+{"id":"bgm_004","type":"bgm","path":"assets/audio/history.wav","source":"existing","description":"history","duration":6.4,"provenance":{"provider":"local","adopted":true}}
+{"id":"bgm_005","type":"bgm","path":"assets/audio/music.wav","source":"existing","description":"music","duration":48,"provenance":{"provider":"local","adopted":true}}
+{"id":"bgm_006","type":"bgm","path":"assets/audio/name.wav","source":"existing","description":"name","duration":4,"provenance":{"provider":"local","adopted":true}}
+{"id":"icon_001","type":"icon","path":"assets/sileos-mark-white.svg","source":"existing","description":"sileos mark white","provenance":{"provider":"local","adopted":true}}
+{"id":"icon_002","type":"icon","path":"assets/sileos-mark.svg","source":"existing","description":"sileos mark","provenance":{"provider":"local","adopted":true}}

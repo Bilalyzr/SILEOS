@@ -1,0 +1,104 @@
+<template>
+  <style>
+    @font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/PlusJakartaSans.ttf') format('truetype');font-weight:100 900;font-style:normal}
+    @font-face{font-family:'JetBrains Mono';src:url('assets/fonts/JetBrainsMono.ttf') format('truetype');font-weight:100 900;font-style:normal}
+    #root{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:'Plus Jakarta Sans';color:#fff}
+    .f03-ground{position:absolute;inset:0;background:#0b2540}
+    .f03-orange{position:absolute;inset:0;background:radial-gradient(ellipse at 70% 22%,#fbbf24 0%,#ff751f 42%,#b23c05 100%)}
+    #pocket-content{position:absolute;inset:0}
+    .f03-light{position:absolute;left:10px;top:90px;width:1060px;height:1470px;background:radial-gradient(ellipse,rgba(255,117,31,.2),rgba(255,117,31,0) 68%)}
+    .f03-heading{position:absolute;left:84px;top:202px;width:912px;text-align:center;font-size:83px;font-weight:800;letter-spacing:-5px;margin:0;line-height:1.1}
+    .f03-phone{position:absolute;left:300px;top:380px;width:480px;height:850px;box-sizing:border-box;border:3px solid rgba(255,255,255,.68);border-radius:70px;background:linear-gradient(145deg,rgba(255,255,255,.38),rgba(255,255,255,.035) 42%,rgba(255,117,31,.19));box-shadow:22px 28px 0 rgba(1,13,25,.32),0 44px 85px rgba(0,0,0,.30),inset 1px 1px 0 rgba(255,255,255,.6);transform-origin:50% 50%}
+    .f03-screen{position:absolute;inset:13px;border-radius:56px;background:linear-gradient(170deg,#183c57,#0b2540 53%,#17233a);overflow:hidden;border:1px solid rgba(255,255,255,.26)}
+    .f03-screen-light{position:absolute;left:-80px;top:85px;width:560px;height:520px;background:radial-gradient(ellipse,rgba(255,117,31,.23),transparent 66%)}
+    .f03-speaker{position:absolute;left:183px;top:25px;width:110px;height:16px;background:#07192b;border-radius:20px;border:1px solid rgba(255,255,255,.12)}
+    .f03-phone-word{position:absolute;left:20px;top:425px;width:434px;text-align:center;font-size:67px;line-height:1.2;font-weight:800;letter-spacing:-3px}
+    .f03-phone-sub{position:absolute;left:20px;top:511px;width:434px;text-align:center;font-size:22px;letter-spacing:4px;color:#e8d4c9;font-weight:500}
+    .f03-shortcuts{position:absolute;left:29px;top:600px;width:416px;display:flex;gap:12px}
+    .f03-shortcut{width:130px;height:121px;box-sizing:border-box;border:1px solid rgba(255,255,255,.26);background:rgba(255,255,255,.07);border-radius:22px;display:flex;align-items:center;flex-direction:column;justify-content:center;gap:12px}
+    .f03-shortcut svg{width:39px;height:39px;fill:none;stroke:#ffad68;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+    .f03-shortcut span{font-size:16px;letter-spacing:1.5px;font-weight:800}
+    .f03-homebar{position:absolute;left:165px;bottom:25px;width:144px;height:6px;border-radius:8px;background:rgba(255,255,255,.6)}
+    .f03-edge{position:absolute;inset:-4px;width:482px;height:852px;fill:none;stroke:#ffad68;stroke-width:3;stroke-dasharray:450 2300;filter:drop-shadow(0 0 9px #ff751f)}
+    .f03-tile{position:absolute;width:132px;height:132px;border-radius:32px;display:flex;justify-content:center;align-items:center;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.35));border:2px solid rgba(255,255,255,.83);box-shadow:0 18px 40px rgba(0,0,0,.18)}
+    .f03-tile svg{width:76px;height:76px;fill:none;stroke:#b23c05;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+    #f03-book{left:105px;top:530px}#f03-cube{left:838px;top:465px}#f03-video{left:76px;top:994px}#f03-check{left:853px;top:1050px}
+    .f03-appmark{position:absolute;left:380px;top:420px;width:320px;height:320px;border-radius:72px;box-sizing:border-box;background:linear-gradient(145deg,#ff9d46,#ff751f 50%,#b23c05);border:2px solid rgba(255,225,191,.72);box-shadow:0 24px 65px rgba(255,117,31,.29),inset 2px 2px 0 rgba(255,255,255,.48);display:flex;justify-content:center;align-items:center;transform-origin:50% 50%}
+    .f03-appmark img{width:238px;height:238px;object-fit:contain}
+    .f03-close-kicker{position:absolute;left:84px;top:1247px;width:912px;text-align:center;font-size:34px;font-weight:500;letter-spacing:10px;color:#ffb979}
+    .f03-close-line{position:absolute;left:70px;top:1330px;width:940px;text-align:center;font-size:69px;letter-spacing:-3px;font-weight:800;line-height:1.13}
+    .f03-brand-kicker{position:absolute;left:84px;top:288px;width:912px;text-align:center;font-size:30px;font-weight:500;letter-spacing:11px;color:#ffb979}
+    .f03-brand-word{position:absolute;left:84px;top:813px;width:912px;text-align:center;font-size:160px;line-height:1.12;font-weight:800;letter-spacing:-11px}
+    .f03-coming{position:absolute;left:84px;top:1090px;width:912px;text-align:center;font-size:50px;line-height:1.2;font-weight:800;letter-spacing:32px}
+    .f03-tagline{position:absolute;left:84px;top:1200px;width:912px;text-align:center;font-size:34px;line-height:1.3;font-weight:500;color:#dce4ee;letter-spacing:.4px}
+    .f03-underline{position:absolute;left:270px;top:1310px;width:540px;height:5px;border-radius:6px;background:linear-gradient(90deg,rgba(255,117,31,0),#ff751f,#fbbf24,rgba(255,117,31,0));transform-origin:center}
+  </style>
+  <div data-hf-id="hf-ktab" id="root" data-composition-id="03-pocket" data-width="1080" data-height="1920">
+    <div data-hf-id="hf-ijs0" id="pocket-ground" class="clip f03-ground" data-start="0" data-duration="10" data-track-index="0"></div>
+    <div data-hf-id="hf-f0bm" id="f03-orange" class="clip f03-orange" data-start="0" data-duration="10" data-track-index="1"></div>
+    <div data-hf-id="hf-8zrj" id="pocket-content" class="clip" data-start="0" data-duration="10" data-track-index="2">
+      <div data-hf-id="hf-r55a" class="f03-light"></div>
+      <div data-hf-id="hf-cmno" id="f03-phone-stage">
+        <h2 data-hf-id="hf-ew47" id="f03-heading" class="f03-heading">ONE WORLD.</h2>
+        <div data-hf-id="hf-32sy" id="f03-phone" class="f03-phone">
+          <div data-hf-id="hf-mbmu" class="f03-screen"><div data-hf-id="hf-hvct" class="f03-screen-light"></div></div>
+          <div data-hf-id="hf-8gtx" class="f03-speaker"></div>
+          <div data-hf-id="hf-pepu" class="f03-phone-word">SILeos</div>
+          <div data-hf-id="hf-ikkk" class="f03-phone-sub">YOUR NEXT CHAPTER</div>
+          <div data-hf-id="hf-o7j7" class="f03-shortcuts">
+            <div data-hf-id="hf-rank" class="f03-shortcut"><svg data-hf-id="hf-g3ih" viewBox="0 0 48 48"><path data-hf-id="hf-kkln" d="M24 12C18 7 9 7 4 10v28c6-3 13-3 20 2 7-5 14-5 20-2V10c-5-3-14-3-20 2v28" /></svg><span data-hf-id="hf-2htd">LEARN</span></div>
+            <div data-hf-id="hf-ui6g" class="f03-shortcut"><svg data-hf-id="hf-1j99" viewBox="0 0 48 48"><path data-hf-id="hf-018w" d="M5 8h38v26H5zM24 34v10m-8 0h16M13 18l8 6 15-12" /></svg><span data-hf-id="hf-2x2e">TEACH</span></div>
+            <div data-hf-id="hf-tb9d" class="f03-shortcut"><svg data-hf-id="hf-2q6c" viewBox="0 0 48 48"><path data-hf-id="hf-46yx" d="m24 3 19 11v22L24 47 5 36V14zm0 22L5 14m19 11 19-11M24 25v22" /></svg><span data-hf-id="hf-pi80">EXPLORE</span></div>
+          </div>
+          <div data-hf-id="hf-uu3e" class="f03-homebar"></div>
+          <svg data-hf-id="hf-bspp" id="f03-edge" class="f03-edge" viewBox="0 0 482 852"><rect data-hf-id="hf-3b7h" x="3" y="3" width="476" height="846" rx="70" /></svg>
+        </div>
+        <div data-hf-id="hf-81qt" id="f03-book" class="f03-tile"><svg data-hf-id="hf-3io1" viewBox="0 0 80 80"><path data-hf-id="hf-vp5j" d="M40 19C29 11 16 11 7 16v47c10-4 22-4 33 4 11-8 23-8 33-4V16c-9-5-22-5-33 3v48M16 26c5-1 10 0 15 3m-15 9c5-1 10 0 15 3m18-12c5-3 10-4 15-3" /></svg></div>
+        <div data-hf-id="hf-pm5p" id="f03-cube" class="f03-tile"><svg data-hf-id="hf-gwut" viewBox="0 0 80 80"><path data-hf-id="hf-mokw" d="m40 7 29 17v32L40 73 11 56V24zm0 34L11 24m29 17 29-17M40 41v32M26 15l29 17" /></svg></div>
+        <div data-hf-id="hf-1ekr" id="f03-video" class="f03-tile"><svg data-hf-id="hf-i3rw" viewBox="0 0 80 80"><rect data-hf-id="hf-sqew" x="6" y="19" width="47" height="43" rx="9" /><path data-hf-id="hf-5m08" d="m53 31 20-10v39L53 50zM24 31l15 10-15 10z" /></svg></div>
+        <div data-hf-id="hf-04y6" id="f03-check" class="f03-tile"><svg data-hf-id="hf-hpgv" viewBox="0 0 80 80"><rect data-hf-id="hf-2mh4" x="14" y="9" width="52" height="63" rx="10" /><path data-hf-id="hf-n65n" d="m23 30 6 6 11-13m-17 29 6 6 11-13m8-15h10M48 53h10" /></svg></div>
+        <div data-hf-id="hf-6476" id="f03-close-kicker" class="f03-close-kicker">NEXT CHAPTER</div>
+        <div data-hf-id="hf-i76s" id="f03-close-line" class="f03-close-line">IN YOUR POCKET.</div>
+      </div>
+      <div data-hf-id="hf-1o82" id="f03-appmark" class="f03-appmark"><img data-hf-id="hf-cw1j" src="assets/sileos-mark-white.svg" alt="SILeos infinity book emblem"></div>
+      <div data-hf-id="hf-ladb" id="f03-brand-stage">
+        <div data-hf-id="hf-x604" id="f03-brand-kicker" class="f03-brand-kicker">SASHA INFINITY</div>
+        <div data-hf-id="hf-a4dv" id="f03-brand-word" class="f03-brand-word">SILeos</div>
+        <div data-hf-id="hf-wnl0" id="f03-coming" class="f03-coming">COMING SOON</div>
+        <div data-hf-id="hf-kk47" id="f03-tagline" class="f03-tagline">Learning. Teaching. Limitless.</div>
+        <div data-hf-id="hf-1dgi" id="f03-underline" class="f03-underline"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function(){
+      const tl=gsap.timeline({paused:true});gsap.set("#f03-brand-stage",{autoAlpha:0});
+      tl.fromTo('#f03-orange',{autoAlpha:1},{autoAlpha:0,duration:1.3,ease:'power2.inOut'},.15);
+      tl.fromTo('#f03-phone',{scale:1,y:0},{scale:1,y:0,duration:.01},0);
+      tl.fromTo('#f03-appmark',{scale:.675,y:98},{scale:.675,y:98,duration:.01},0);
+      tl.fromTo('#f03-heading',{autoAlpha:0,x:75},{autoAlpha:1,x:0,duration:.65,ease:'power3.out'},.08);
+      tl.fromTo('#f03-book',{x:0,y:0,scale:1,rotation:-12,autoAlpha:1},{x:369,y:82,scale:.36,rotation:0,autoAlpha:0,duration:1.05,ease:'power3.in'},.35);
+      tl.fromTo('#f03-cube',{x:0,y:0,scale:1,rotation:14,autoAlpha:1},{x:-364,y:147,scale:.36,rotation:0,autoAlpha:0,duration:1.07,ease:'power3.in'},.46);
+      tl.fromTo('#f03-video',{x:0,y:0,scale:1,rotation:-8,autoAlpha:1},{x:398,y:-382,scale:.36,rotation:0,autoAlpha:0,duration:1.04,ease:'power3.in'},.65);
+      tl.fromTo('#f03-check',{x:0,y:0,scale:1,rotation:11,autoAlpha:1},{x:-379,y:-438,scale:.36,rotation:0,autoAlpha:0,duration:1.03,ease:'power3.in'},.82);
+      tl.fromTo('#f03-edge',{autoAlpha:0,strokeDashoffset:0},{autoAlpha:.85,strokeDashoffset:-2450,duration:3.8,ease:'power1.inOut'},1.35);
+      tl.to('#f03-phone',{scale:.92,y:-70,duration:1.2,ease:'power3.inOut'},2);
+      tl.to('#f03-appmark',{scale:.621,y:38.16,duration:1.2,ease:'power3.inOut'},2);
+      tl.fromTo('#f03-close-kicker',{autoAlpha:0,y:40},{autoAlpha:1,y:0,duration:.7,ease:'power3.out'},2.9);
+      tl.fromTo('#f03-close-line',{autoAlpha:0,x:95},{autoAlpha:1,x:0,duration:.8,ease:'power3.out'},3.55);
+      tl.set('#f03-phone-stage',{autoAlpha:1},0);
+      tl.set('#f03-phone-stage',{autoAlpha:0},5.6);
+      tl.set('#f03-brand-stage',{autoAlpha:0},0);
+      tl.set('#f03-brand-stage',{autoAlpha:1},5.6);
+      tl.to('#f03-appmark',{scale:1,y:0,duration:1.04,ease:'power3.inOut'},5.6);
+      tl.fromTo('#f03-brand-kicker',{autoAlpha:0,y:25},{autoAlpha:1,y:0,duration:.65,ease:'power3.out'},5.85);
+      tl.fromTo('#f03-brand-word',{autoAlpha:0,x:92,scale:.95},{autoAlpha:1,x:0,scale:1,duration:.8,ease:'power3.out'},6.05);
+      tl.fromTo('#f03-coming',{autoAlpha:0,y:36},{autoAlpha:1,y:0,duration:.7,ease:'power3.out'},6.8);
+      tl.fromTo('#f03-tagline',{autoAlpha:0,y:25},{autoAlpha:1,y:0,duration:.65,ease:'power3.out'},7.3);
+      tl.fromTo('#f03-underline',{scaleX:0,autoAlpha:0},{scaleX:1,autoAlpha:1,duration:.6,ease:'power3.out'},7.6);
+      tl.to('#f03-appmark',{scale:1,duration:1.8},8.2);
+      window.__timelines=window.__timelines||{};
+      window.__timelines['03-pocket']=tl;
+    })();
+  </script>
+</template>

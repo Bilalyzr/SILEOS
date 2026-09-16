@@ -131,7 +131,7 @@ const DEFAULT_HOME: Record<Role, string> = {
   parent: '/parent/dashboard',
   student: '/dashboard',
   instructor: '/instructor/dashboard',
-  admin: '/admin/operations',
+  admin: '/admin/dashboard',
   superadmin: '/superadmin/dashboard',
   spoc: '/spoc/dashboard',
   company: '/company/dashboard',
@@ -353,7 +353,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 8, scale: 0.96 }}
               transition={{ duration: 0.15 }}
-              className="absolute bottom-16 left-2 right-2 mb-1 dash-card p-1 z-dropdown"
+              className="absolute bottom-16 left-2 right-2 mb-1 dash-card p-1 z-50"
               style={{ width: collapsed ? 220 : undefined }}
             >
               <Link

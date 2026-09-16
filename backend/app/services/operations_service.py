@@ -5,7 +5,7 @@ from pathlib import Path
 import shutil
 from sqlalchemy import func, case, text
 from app.core import listing
-from app.models.course import Course, Lesson
+from app.models.course import Course
 from app.models.user import User, InstructorProfile
 from app.models.enrollment import Enrollment
 from app.models.payment import Order, Payment, PaymentStatus
@@ -14,14 +14,6 @@ from app.models.learning_planner import LearningIntervention, LearningPlanTask
 from app.models.recording_lesson import RecordingLesson
 from app.models.membership import Membership, MembershipPlan, MembershipStatus
 from app.models.operations import ServiceHeartbeat
-from app.models.ebook import Ebook
-from app.models.three_d import ThreeDModel
-from app.models.content_library import VirtualLabCatalog
-from app.models.geogebra import GeoGebraApplet
-from app.models.live_class import LiveClass, LiveClassStatus
-from app.models.quiz import Quiz
-from app.models.certificate import IssuedCertificate
-from app.models.exam_paper import ExamPaper
 
 
 def now():
@@ -61,59 +53,6 @@ def listing_query(db, dataset, q="", status=""):
         sorts = {"name": model.post_title, "created": model.created_at, "status": model.post_status, "id": model.id}
         if status: query = query.filter(model.post_status == status)
         serialize = lambda r: {"id": r.id, "name": r.post_title, "detail": r.course_category, "status": r.post_status, "created": r.created_at, "amount": float(r.course_price or 0), "href": f"/instructor/courses/{r.id}/edit"}
-    elif dataset == "lessons":
-        model = Lesson; query = db.query(model); cols = [model.post_title, model.post_excerpt]
-        sorts = {"name": model.post_title, "created": model.created_at, "status": model.post_status, "id": model.id}
-        if status: query = query.filter(model.post_status == status)
-        serialize = lambda r: {"id": r.id, "name": r.post_title, "detail": f"Course #{r.post_parent}", "status": r.post_status, "created": r.created_at, "amount": None, "href": f"/instructor/courses/{r.post_parent}/edit"}
-    elif dataset == "ebooks":
-        model = Ebook; query = db.query(model); cols = [model.title, model.category, model.slug]
-        sorts = {"name": model.title, "created": model.created_at, "status": model.status, "id": model.id}
-        if status: query = query.filter(model.status == status)
-        serialize = lambda r: {"id": r.id, "name": r.title, "detail": r.category, "status": r.status, "created": r.created_at, "amount": float(r.discount_price_inr if r.discount_price_inr is not None else r.price_inr), "href": "/admin/content-libraries"}
-    elif dataset == "three_d_models":
-        model = ThreeDModel; query = db.query(model); cols = [model.title, model.format]
-        sorts = {"name": model.title, "created": model.created_at, "status": model.is_library, "id": model.id}
-        if status:
-            if status not in ("library", "private"): raise ValueError("Choose library or private.")
-            query = query.filter(model.is_library.is_(status == "library"))
-        serialize = lambda r: {"id": r.id, "name": r.title, "detail": r.format, "status": "library" if r.is_library else "private", "created": r.created_at, "amount": None, "href": "/admin/content-libraries"}
-    elif dataset == "virtual_labs":
-        model = VirtualLabCatalog; query = db.query(model); cols = [model.title, model.subject, model.provider]
-        sorts = {"name": model.title, "created": model.created_at, "status": model.is_published, "id": model.id}
-        if status:
-            if status not in ("published", "draft"): raise ValueError("Choose published or draft.")
-            query = query.filter(model.is_published.is_(status == "published"))
-        serialize = lambda r: {"id": r.id, "name": r.title, "detail": f"{r.subject} · {r.provider}", "status": "published" if r.is_published else "draft", "created": r.created_at, "amount": None, "href": "/admin/lab-studio"}
-    elif dataset == "geogebra":
-        model = GeoGebraApplet; query = db.query(model); cols = [model.title, model.app_type, model.material_id]
-        sorts = {"name": model.title, "created": model.created_at, "status": model.app_type, "id": model.id}
-        if status and status != "available": raise ValueError("Choose available or clear the status filter.")
-        serialize = lambda r: {"id": r.id, "name": r.title, "detail": r.app_type, "status": "available", "created": r.created_at, "amount": None, "href": "/admin/content-libraries"}
-    elif dataset == "live_classes":
-        model = LiveClass; query = db.query(model); cols = [model.title, model.description]
-        sorts = {"name": model.title, "created": model.created_at, "status": model.status, "id": model.id}
-        if status:
-            try: query = query.filter(model.status == LiveClassStatus(status))
-            except ValueError: raise ValueError("Unknown live-class status.") from None
-        serialize = lambda r: {"id": r.id, "name": r.title, "detail": f"Course #{r.course_id}", "status": value(r.status), "created": r.created_at, "amount": None, "href": "/admin/past-classes"}
-    elif dataset == "quizzes":
-        model = Quiz; query = db.query(model); cols = [model.post_title, model.post_excerpt]
-        sorts = {"name": model.post_title, "created": model.created_at, "status": model.post_status, "id": model.id}
-        if status: query = query.filter(model.post_status == status)
-        serialize = lambda r: {"id": r.id, "name": r.post_title, "detail": f"Course #{r.post_parent}", "status": r.post_status, "created": r.created_at, "amount": None, "href": "/admin/quizzes"}
-    elif dataset == "certificates":
-        model = IssuedCertificate; query = db.query(model); cols = [model.certificate_title, model.secure_certificate_id]
-        sorts = {"name": model.certificate_title, "created": model.created_at, "status": model.is_valid, "id": model.id}
-        if status:
-            if status not in ("valid", "invalid"): raise ValueError("Choose valid or invalid.")
-            query = query.filter(model.is_valid.is_(status == "valid"))
-        serialize = lambda r: {"id": r.id, "name": r.certificate_title, "detail": r.secure_certificate_id, "status": "valid" if r.is_valid else "invalid", "created": r.created_at, "amount": None, "href": "/admin/certificates"}
-    elif dataset == "exam_papers":
-        model = ExamPaper; query = db.query(model); cols = [model.title, model.exam]
-        sorts = {"name": model.title, "created": model.created_at, "status": model.status, "id": model.id}
-        if status: query = query.filter(model.status == status)
-        serialize = lambda r: {"id": r.id, "name": r.title, "detail": f"{r.exam} · {r.question_count} questions", "status": r.status, "created": r.created_at, "amount": float(Decimal(r.amount_paise or 0) / 100), "href": "/admin/exam-pricing"}
     elif dataset in ("students", "instructors"):
         model = User; query = db.query(model).filter(model.role == dataset[:-1]); cols = [model.display_name, model.user_email]
         sorts = {"name": model.display_name, "created": model.created_at, "status": model.is_active, "id": model.id}
@@ -172,16 +111,18 @@ def outcomes(db):
 
 
 def revenue(db, start, end):
-    from app.services.business_portfolio_service import consolidated_cash, reporting_window
-
-    after, before = reporting_window(start, end)
-    currencies = consolidated_cash(db, start, end)
+    after = datetime.combine(start, datetime.min.time(), tzinfo=timezone.utc)
+    before = datetime.combine(end + timedelta(days=1), datetime.min.time(), tzinfo=timezone.utc)
+    captured = db.query(Payment.currency, func.sum(Payment.amount)).filter(Payment.payment_status.in_([PaymentStatus.COMPLETED, PaymentStatus.REFUNDED]), Payment.payment_date >= after, Payment.payment_date < before).group_by(Payment.currency).all()
+    refunds = dict(db.query(Payment.currency, func.sum(Payment.amount)).filter(Payment.payment_status == PaymentStatus.REFUNDED, Payment.refund_processed_at >= after, Payment.refund_processed_at < before).group_by(Payment.currency).all())
+    gross = dict(captured)
+    currencies = [{"currency": currency or "INR", "captured": float(gross.get(currency) or 0), "refunded": float(refunds.get(currency) or 0), "net_cash": float((gross.get(currency) or 0) - (refunds.get(currency) or 0))} for currency in sorted(set(gross) | set(refunds))]
     mrr = Decimal("0")
     for plan, membership in db.query(MembershipPlan, Membership).join(Membership, Membership.plan_id == MembershipPlan.id).filter(Membership.status == MembershipStatus.ACTIVE):
         if not membership.current_period_end or utc(membership.current_period_end) <= now(): continue
         months = {"daily": Decimal(12) / 365, "weekly": Decimal(12) / 52, "monthly": Decimal(1), "yearly": Decimal(12)}.get(plan.period)
         if months and plan.interval > 0: mrr += plan.price / (months * plan.interval)
-    return {"from": str(start), "to": str(end), "currencies": currencies, "estimated_active_mrr_inr": float(round(mrr, 2)), "failed_payments": db.query(Payment).filter(Payment.payment_status == PaymentStatus.FAILED, Payment.payment_date >= after, Payment.payment_date < before).count(), "refunds_needing_attention": db.query(Payment).filter(Payment.refund_status.in_(["failed", "requested"])).count(), "refunds_missing_timestamp": db.query(Payment).filter(Payment.payment_status == PaymentStatus.REFUNDED, Payment.refund_processed_at.is_(None)).count(), "note": "Asia/Kolkata business-day window. All pillar sources use the same consolidated cash definition; refunds use processing date. MRR is an estimate, not collected cash."}
+    return {"from": str(start), "to": str(end), "currencies": currencies, "estimated_active_mrr_inr": float(round(mrr, 2)), "failed_payments": db.query(Payment).filter(Payment.payment_status == PaymentStatus.FAILED, Payment.payment_date >= after, Payment.payment_date < before).count(), "refunds_needing_attention": db.query(Payment).filter(Payment.refund_status.in_(["failed", "requested"])).count(), "refunds_missing_timestamp": db.query(Payment).filter(Payment.payment_status == PaymentStatus.REFUNDED, Payment.refund_processed_at.is_(None)).count(), "note": "UTC date window. Refunds use processing date; missing refund timestamps are reported separately. MRR is an estimate of current active subscriptions, not collected cash."}
 
 
 def health(db):

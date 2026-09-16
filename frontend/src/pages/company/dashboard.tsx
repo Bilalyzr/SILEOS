@@ -679,7 +679,7 @@ function StudentDrawer({
   const acceptedManagers = (managers?.items || []).filter((m) => m.accepted_at);
 
   return (
-    <div className="fixed inset-0 z-modal flex justify-end" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex justify-end" onClick={onClose}>
       <div className="bg-black/30 absolute inset-0" />
       <div
         onClick={(e) => e.stopPropagation()}
@@ -1280,7 +1280,7 @@ function InternshipDetailDrawer({
   const ourStudents = studentsData?.items || [];
 
   return (
-    <div className="fixed inset-0 z-modal flex justify-end" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex justify-end" onClick={onClose}>
       <div className="bg-black/30 absolute inset-0" />
       <div
         onClick={(e) => e.stopPropagation()}
@@ -1891,12 +1891,12 @@ function CellEditor({
 
   return (
     <div
-      className="fixed inset-0 z-modal flex items-center justify-center"
+      className="fixed inset-0 z-50 flex items-center justify-center"
       onClick={onClose}
     >
       <div className="bg-black/40 absolute inset-0" />
       <div
-        className="relative bg-white rounded-xl shadow-2xl p-5 w-[400px] max-w-[calc(100vw-2rem)]"
+        className="relative bg-white rounded-xl shadow-2xl p-5 w-[400px]"
         onClick={(e) => e.stopPropagation()}
         data-glass="work"
       >

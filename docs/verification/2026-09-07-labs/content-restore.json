@@ -1,0 +1,142 @@
+{
+  "courses": [
+    {
+      "archive": "course-10.zip",
+      "restored": true,
+      "lessons": 6,
+      "draft": true,
+      "investigations_moved_from_quizzes": 1,
+      "warnings": [
+        "Learner accounts, enrollments, submissions, grades, payment records and live-class attendance are excluded.",
+        "Quiz lab reaction-lab-basics restored as a lesson investigation (cbse-balance-equations); review quiz grading before publication."
+      ]
+    },
+    {
+      "archive": "course-11.zip",
+      "restored": true,
+      "lessons": 1,
+      "draft": true,
+      "investigations_moved_from_quizzes": 0,
+      "warnings": [
+        "Learner accounts, enrollments, submissions, grades, payment records and live-class attendance are excluded."
+      ]
+    },
+    {
+      "archive": "course-12.zip",
+      "restored": true,
+      "lessons": 1,
+      "draft": true,
+      "investigations_moved_from_quizzes": 0,
+      "warnings": [
+        "Learner accounts, enrollments, submissions, grades, payment records and live-class attendance are excluded."
+      ]
+    },
+    {
+      "archive": "course-13.zip",
+      "restored": true,
+      "lessons": 6,
+      "draft": true,
+      "investigations_moved_from_quizzes": 1,
+      "warnings": [
+        "Learner accounts, enrollments, submissions, grades, payment records and live-class attendance are excluded.",
+        "Quiz lab reaction-lab-basics restored as a lesson investigation (cbse-balance-equations); review quiz grading before publication."
+      ]
+    },
+    {
+      "archive": "course-14.zip",
+      "restored": true,
+      "lessons": 1,
+      "draft": true,
+      "investigations_moved_from_quizzes": 0,
+      "warnings": [
+        "Learner accounts, enrollments, submissions, grades, payment records and live-class attendance are excluded."
+      ]
+    },
+    {
+      "archive": "course-2.zip",
+      "restored": true,
+      "lessons": 2,
+      "draft": true,
+      "investigations_moved_from_quizzes": 0,
+      "warnings": [
+        "Learner accounts, enrollments, submissions, grades, payment records and live-class attendance are excluded."
+      ]
+    },
+    {
+      "archive": "course-3.zip",
+      "restored": true,
+      "lessons": 0,
+      "draft": true,
+      "investigations_moved_from_quizzes": 0,
+      "warnings": [
+        "Learner accounts, enrollments, submissions, grades, payment records and live-class attendance are excluded."
+      ]
+    },
+    {
+      "archive": "course-4.zip",
+      "restored": true,
+      "lessons": 1,
+      "draft": true,
+      "investigations_moved_from_quizzes": 0,
+      "warnings": [
+        "Learner accounts, enrollments, submissions, grades, payment records and live-class attendance are excluded."
+      ]
+    },
+    {
+      "archive": "course-5.zip",
+      "restored": true,
+      "lessons": 6,
+      "draft": true,
+      "investigations_moved_from_quizzes": 1,
+      "warnings": [
+        "Learner accounts, enrollments, submissions, grades, payment records and live-class attendance are excluded.",
+        "Quiz lab reaction-lab-basics restored as a lesson investigation (cbse-balance-equations); review quiz grading before publication."
+      ]
+    },
+    {
+      "archive": "course-6.zip",
+      "restored": true,
+      "lessons": 1,
+      "draft": true,
+      "investigations_moved_from_quizzes": 0,
+      "warnings": [
+        "Learner accounts, enrollments, submissions, grades, payment records and live-class attendance are excluded."
+      ]
+    },
+    {
+      "archive": "course-7.zip",
+      "restored": true,
+      "lessons": 2,
+      "draft": true,
+      "investigations_moved_from_quizzes": 0,
+      "warnings": [
+        "Learner accounts, enrollments, submissions, grades, payment records and live-class attendance are excluded."
+      ]
+    },
+    {
+      "archive": "course-8.zip",
+      "restored": true,
+      "lessons": 1,
+      "draft": true,
+      "investigations_moved_from_quizzes": 0,
+      "warnings": [
+        "Learner accounts, enrollments, submissions, grades, payment records and live-class attendance are excluded."
+      ]
+    },
+    {
+      "archive": "course-9.zip",
+      "restored": true,
+      "lessons": 1,
+      "draft": true,
+      "investigations_moved_from_quizzes": 0,
+      "warnings": [
+        "Learner accounts, enrollments, submissions, grades, payment records and live-class attendance are excluded.",
+        "Recording chapter links refer to original class reports; recording history is not included in this content-only backup."
+      ]
+    }
+  ],
+  "library_models": 4,
+  "library_idempotent": true,
+  "isolated": true,
+  "note": "Checks structural restoration. The malformed New Lesson source remains marked for re-export."
+}

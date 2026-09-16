@@ -1,4 +1,5 @@
 # Production Docker Compose - Single Container Setup
+version: '3.8'
 
 services:
   sashainfinity-lms:
@@ -11,7 +12,7 @@ services:
     ports:
       - "8081:80"
       - "8443:443"
-    environment: &production-environment
+    environment:
       # Database
       # Password comes from .env (compose auto-loads it) — never hardcode it here.
       # A hardcoded password that drifts from the volume's actual password is what
@@ -20,25 +21,16 @@ services:
       - REDIS_URL=redis://redis:6379/0
 
       # Security
-      - SECRET_KEY=${SECRET_KEY:?Set a persistent 32+ character SECRET_KEY}
-      - AI_CREDENTIAL_ENCRYPTION_KEY=${AI_CREDENTIAL_ENCRYPTION_KEY:?Set a stable AI credential encryption key}
-      - JWT_SECRET=${JWT_SECRET:?Set a distinct persistent 32+ character JWT_SECRET}
-      - VIDEO_SECRET=${VIDEO_SECRET:?Set a distinct 32+ character video signing secret}
-      - JITSI_JWT_SECRET=${JITSI_JWT_SECRET:?Set a distinct 32+ character Jitsi signing secret}
-      - INTERNAL_TOKEN=${INTERNAL_TOKEN:?Set a distinct 32+ character internal-service token}
-      - JITSI_PUBLIC_URL=${JITSI_PUBLIC_URL:-https://live.sashainfinity.com}
-      - JITSI_JWT_APP_ID=${JITSI_JWT_APP_ID:-sashainfinity}
-      - CODE_RUNNER_TOKEN=${CODE_RUNNER_TOKEN:-}
+      - SECRET_KEY=${SECRET_KEY}
+      - JWT_SECRET=${JWT_SECRET}
       # Fail closed: no known default admin password. Deploy must set ADMIN_PASSWORD.
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:?ADMIN_PASSWORD must be set in the environment}
       - ADMIN_EMAIL=${ADMIN_EMAIL:-admin@sashainfinity.com}
       - ADMIN_USERNAME=${ADMIN_USERNAME:-sashainfinity_admin}
-      - MIN_WITHDRAWAL_INR=${MIN_WITHDRAWAL_INR:-500}
 
       # Payment
-      - RAZORPAY_KEY=${RAZORPAY_KEY:?Set the production Razorpay key}
-      - RAZORPAY_SECRET=${RAZORPAY_SECRET:?Set the production Razorpay secret}
-      - RAZORPAY_WEBHOOK_SECRET=${RAZORPAY_WEBHOOK_SECRET:?Set the Razorpay webhook signing secret}
+      - RAZORPAY_KEY=${RAZORPAY_KEY}
+      - RAZORPAY_SECRET=${RAZORPAY_SECRET}
 
       # Meta WhatsApp Cloud API — secrets are read only by the backend.
       - WHATSAPP_PHONE_NUMBER_ID=${WHATSAPP_PHONE_NUMBER_ID:-}
@@ -54,10 +46,10 @@ services:
       # Without these the EmailService silently no-ops (logs "would be sent")
       # and no mail is ever delivered. Values come from .env (compose
       # auto-loads it for ${...} substitution).
-      - SMTP_HOST=${SMTP_HOST:?Set the production SMTP host}
+      - SMTP_HOST=${SMTP_HOST}
       - SMTP_PORT=${SMTP_PORT:-587}
-      - SMTP_USER=${SMTP_USER:?Set the production SMTP user}
-      - SMTP_PASSWORD=${SMTP_PASSWORD:?Set the production SMTP password}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
       - EMAIL_FROM=${EMAIL_FROM:-noreply@sashainfinity.com}
 
       # Bunny.net CDN (course video streaming) — bunny.py reads these via
@@ -70,9 +62,6 @@ services:
 
       # Application
       - ENVIRONMENT=production
-      - BACKGROUND_TASK_MODE=worker
-      - OBSERVABILITY_TOKEN=${OBSERVABILITY_TOKEN:-}
-      - SENTRY_DSN=${SENTRY_DSN:-}
       - DEBUG=false
       # Toggle via prod .env. Default false keeps the email-verification gate;
       # set AUTO_VERIFY_EMAIL=true to let new signups log in without verifying
@@ -85,25 +74,22 @@ services:
       # Security Configuration
       - ENABLE_API_RATE_LIMITING=${ENABLE_API_RATE_LIMITING:-true}
       - ENABLE_SECURITY_HEADERS=${ENABLE_SECURITY_HEADERS:-true}
-      - ALERT_ON_SECURITY_EVENTS=${ALERT_ON_SECURITY_EVENTS:-true}
-      - SECURITY_ALERT_EMAIL=${SECURITY_ALERT_EMAIL:-admin@sashainfinity.com}
       - MIN_PASSWORD_LENGTH=${MIN_PASSWORD_LENGTH:-12}
       - SESSION_TIMEOUT_MINUTES=${SESSION_TIMEOUT_MINUTES:-30}
 
       # File Uploads
       - MAX_FILE_SIZE=${MAX_FILE_SIZE:-10485760}
-      - UPLOAD_DIR=/app/uploads
       - SCAN_UPLOADED_FILES=${SCAN_UPLOADED_FILES:-true}
 
       # CORS
-      - CORS_ORIGINS=${CORS_ORIGINS:-["https://lms.sashainfinity.com", "https://backend.sashainfinity.com", "https://meiporul.sashainfinity.com", "https://seyappaduporul.sashainfinity.com", "https://utporul.sashainfinity.com"]}
-      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-["lms.sashainfinity.com", "backend.sashainfinity.com", "meiporul.sashainfinity.com", "seyappaduporul.sashainfinity.com", "utporul.sashainfinity.com", "localhost"]}
+      - CORS_ORIGINS=${CORS_ORIGINS:-["https://lms.sashainfinity.com", "https://backend.sashainfinity.com"]}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-["lms.sashainfinity.com", "backend.sashainfinity.com", "localhost"]}
 
       # Python
       - PYTHONPATH=/app/backend
       - PYTHONUNBUFFERED=1
       - PYTHONDONTWRITEBYTECODE=1
-    volumes: &production-volumes
+    volumes:
       - ./uploads:/app/uploads
       - ./backend/three_d:/app/backend/three_d
       - ./certificates:/app/certificates
@@ -134,54 +120,6 @@ services:
     depends_on:
       - postgres
       - redis
-
-  runtime-worker:
-    build:
-      context: .
-      dockerfile: Dockerfile.production
-    environment: *production-environment
-    volumes: *production-volumes
-    working_dir: /app/backend
-    entrypoint: ["python", "-m", "app.workers.runtime"]
-    command: []
-    init: true
-    networks: [app-network]
-    depends_on: [postgres, redis]
-    restart: unless-stopped
-    stop_grace_period: 120s
-    healthcheck:
-      test: ["CMD", "python", "-m", "app.workers.runtime", "--health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 45s
-
-  code-judge-worker:
-    profiles: ["coding"]
-    build:
-      context: ./code-judge-worker
-      dockerfile: Dockerfile
-    environment:
-      - BACKEND_INTERNAL_URL=http://sashainfinity-lms/api/v1
-      - CODE_RUNNER_TOKEN=${CODE_RUNNER_TOKEN:-}
-      - CODE_RUNNER_VERSION=${CODE_RUNNER_VERSION:-judge0-worker-1.0}
-      - CODE_RUNNER_POLL_SECONDS=${CODE_RUNNER_POLL_SECONDS:-1}
-      - JUDGE0_URL=${JUDGE0_URL:-}
-      - JUDGE0_AUTH_TOKEN=${JUDGE0_AUTH_TOKEN:-}
-    depends_on:
-      - sashainfinity-lms
-    networks:
-      - app-network
-    read_only: true
-    tmpfs:
-      - /tmp:size=32m,noexec,nosuid,nodev
-    cap_drop:
-      - ALL
-    security_opt:
-      - no-new-privileges:true
-    mem_limit: 256m
-    cpus: 0.50
-    restart: unless-stopped
 
   # External services (if needed)
   postgres:

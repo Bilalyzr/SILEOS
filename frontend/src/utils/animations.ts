@@ -1,10 +1,6 @@
 // Advanced animation utilities for enhanced UX
 
 export const celebrationAnimation = () => {
-  // Respect prefers-reduced-motion: the global CSS guard already kills CSS
-  // animations, but these particles are JS-driven and must opt out here.
-  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
-
   // Confetti effect for achievements
   const colors = ['#9333ea', '#2563eb', '#16a34a', '#ea580c', '#db2777']
   const confettiCount = 50
@@ -21,9 +17,7 @@ export const celebrationAnimation = () => {
       left: 50%;
       opacity: 1;
       pointer-events: none;
-      /* Toast tier, not 9999: confetti must float above content but never
-         above toasts/banners (see the --z-* scale in globals.css). */
-      z-index: 200;
+      z-index: 9999;
       border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
     `
 
@@ -33,11 +27,6 @@ export const celebrationAnimation = () => {
     const velocity = 5 + Math.random() * 10
     const tx = Math.cos(angle) * velocity * 50
     const ty = Math.sin(angle) * velocity * 50 - 100
-
-    if (typeof confetti.animate !== 'function') {
-      confetti.remove()
-      continue
-    }
 
     confetti.animate([
       { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
@@ -75,11 +64,6 @@ export const rippleEffect = (e: React.MouseEvent, color: string = '#9333ea') => 
   target.style.overflow = 'hidden'
   target.appendChild(ripple)
 
-  if (typeof ripple.animate !== 'function') {
-    ripple.remove()
-    return
-  }
-
   ripple.animate([
     { transform: 'translate(-50%, -50%) scale(0)', opacity: 0.6 },
     { transform: 'translate(-50%, -50%) scale(4)', opacity: 0 }
@@ -90,7 +74,6 @@ export const rippleEffect = (e: React.MouseEvent, color: string = '#9333ea') => 
 }
 
 export const shakeAnimation = (element: HTMLElement) => {
-  if (typeof element.animate !== 'function') return
   element.animate([
     { transform: 'translateX(0)' },
     { transform: 'translateX(-10px)' },
@@ -105,7 +88,6 @@ export const shakeAnimation = (element: HTMLElement) => {
 }
 
 export const pulseGlow = (element: HTMLElement, color: string = '#9333ea') => {
-  if (typeof element.animate !== 'function') return
   element.animate([
     { boxShadow: `0 0 0 0 ${color}80` },
     { boxShadow: `0 0 0 10px ${color}00` }
@@ -117,7 +99,6 @@ export const pulseGlow = (element: HTMLElement, color: string = '#9333ea') => {
 }
 
 export const floatAnimation = (element: HTMLElement) => {
-  if (typeof element.animate !== 'function') return
   element.animate([
     { transform: 'translateY(0px)' },
     { transform: 'translateY(-10px)' },

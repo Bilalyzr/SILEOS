@@ -1,0 +1,2060 @@
+{
+  "ok": false,
+  "strict": false,
+  "lint": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 18,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "studio_missing_editable_id",
+        "severity": "warning",
+        "message": "<div class=\"base\" data-start=\"0\" data-track-index=\"0\"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add a stable, human-readable id such as id=\"hero-title\" or id=\"scene-1-card\" to every timeline-visible element you want agents or Studio to edit."
+      },
+      {
+        "code": "studio_missing_editable_id",
+        "severity": "warning",
+        "message": "<div class=\"scene\" data-composition-id=\"01-origin\" data-start=\"0\" data-track-index=\"1\"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.",
+        "selector": "[data-composition-id=\"01-origin\"]",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add a stable, human-readable id such as id=\"hero-title\" or id=\"scene-1-card\" to every timeline-visible element you want agents or Studio to edit."
+      },
+      {
+        "code": "studio_missing_editable_id",
+        "severity": "warning",
+        "message": "<div class=\"scene\" data-composition-id=\"02-features\" data-start=\"18\" data-track-index=\"1\"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.",
+        "selector": "[data-composition-id=\"02-features\"]",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add a stable, human-readable id such as id=\"hero-title\" or id=\"scene-1-card\" to every timeline-visible element you want agents or Studio to edit."
+      },
+      {
+        "code": "studio_missing_editable_id",
+        "severity": "warning",
+        "message": "<div class=\"scene\" data-composition-id=\"03-pocket\" data-start=\"35\" data-track-index=\"1\"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.",
+        "selector": "[data-composition-id=\"03-pocket\"]",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add a stable, human-readable id such as id=\"hero-title\" or id=\"scene-1-card\" to every timeline-visible element you want agents or Studio to edit."
+      },
+      {
+        "code": "studio_missing_editable_id",
+        "severity": "warning",
+        "message": "<div class=\"origin-bg\" data-start=\"0\" data-track-index=\"0\"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\compositions\\frames\\01-origin.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add a stable, human-readable id such as id=\"hero-title\" or id=\"scene-1-card\" to every timeline-visible element you want agents or Studio to edit."
+      },
+      {
+        "code": "gsap_timeline_set_initial_hide",
+        "severity": "warning",
+        "message": "Initial hidden state for \"#origin-chapter, #origin-bright, #origin-expansion, #origin-initials, #origin-reveal\" is set via tl.set(...) at position 0 inside the paused timeline. A zero-duration set at 0 does not render while the playhead sits exactly at 0, so frame 0 shows the un-hidden state.",
+        "selector": "#origin-chapter, #origin-bright, #origin-expansion, #origin-initials, #origin-reveal",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\compositions\\frames\\01-origin.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Use gsap.set(...) (immediate, outside the timeline) for initial states, or author the hidden state directly in CSS/attributes."
+      },
+      {
+        "code": "gsap_timeline_set_initial_hide",
+        "severity": "warning",
+        "message": "Initial hidden state for \"#origin-low-3, #origin-low-4, #origin-low-5\" is set via tl.set(...) at position 0 inside the paused timeline. A zero-duration set at 0 does not render while the playhead sits exactly at 0, so frame 0 shows the un-hidden state.",
+        "selector": "#origin-low-3, #origin-low-4, #origin-low-5",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\compositions\\frames\\01-origin.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Use gsap.set(...) (immediate, outside the timeline) for initial states, or author the hidden state directly in CSS/attributes."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"02-features-ground\" starts with a digit, so the common selector `#02-features-ground` throws a SyntaxError in querySelector().",
+        "selector": "#02-features-ground",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\compositions\\frames\\02-features.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"02-features-light\" starts with a digit, so the common selector `#02-features-light` throws a SyntaxError in querySelector().",
+        "selector": "#02-features-light",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\compositions\\frames\\02-features.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"02-features-brand\" starts with a digit, so the common selector `#02-features-brand` throws a SyntaxError in querySelector().",
+        "selector": "#02-features-brand",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\compositions\\frames\\02-features.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"02-features-eyebrow\" starts with a digit, so the common selector `#02-features-eyebrow` throws a SyntaxError in querySelector().",
+        "selector": "#02-features-eyebrow",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\compositions\\frames\\02-features.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"02-features-line\" starts with a digit, so the common selector `#02-features-line` throws a SyntaxError in querySelector().",
+        "selector": "#02-features-line",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\compositions\\frames\\02-features.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"02-features-tile\" starts with a digit, so the common selector `#02-features-tile` throws a SyntaxError in querySelector().",
+        "selector": "#02-features-tile",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\compositions\\frames\\02-features.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"02-features-shots\" starts with a digit, so the common selector `#02-features-shots` throws a SyntaxError in querySelector().",
+        "selector": "#02-features-shots",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\compositions\\frames\\02-features.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"02-features-progress-track\" starts with a digit, so the common selector `#02-features-progress-track` throws a SyntaxError in querySelector().",
+        "selector": "#02-features-progress-track",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\compositions\\frames\\02-features.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"02-features-progress\" starts with a digit, so the common selector `#02-features-progress` throws a SyntaxError in querySelector().",
+        "selector": "#02-features-progress",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\compositions\\frames\\02-features.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "gsap_timeline_set_initial_hide",
+        "severity": "warning",
+        "message": "Initial hidden state for \"[data-features-shot]\" is set via tl.set(...) at position 0 inside the paused timeline. A zero-duration set at 0 does not render while the playhead sits exactly at 0, so frame 0 shows the un-hidden state.",
+        "selector": "[data-features-shot]",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\compositions\\frames\\02-features.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Use gsap.set(...) (immediate, outside the timeline) for initial states, or author the hidden state directly in CSS/attributes."
+      },
+      {
+        "code": "studio_missing_editable_id",
+        "severity": "warning",
+        "message": "<div class=\"f03-ground\" data-start=\"0\" data-track-index=\"0\"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "C:\\Users\\Admin\\Downloads\\Sasha_LMS_handover_GPT5.6_Terra_2026-09-06\\Sasha_LMS\\videos\\sileos-launch\\compositions\\frames\\03-pocket.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add a stable, human-readable id such as id=\"hero-title\" or id=\"scene-1-card\" to every timeline-visible element you want agents or Studio to edit."
+      }
+    ],
+    "filesScanned": 4
+  },
+  "runtime": {
+    "ok": false,
+    "errorCount": 1,
+    "warningCount": 3,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "page_error",
+        "severity": "error",
+        "message": "tl is not defined",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "45",
+          "data-width": "1080",
+          "data-height": "1920"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-2\" is 0.57s but its slot (data-duration) is 0.70s — the slot is shortened to the media length when rendered. Set data-duration to ~0.57s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "45",
+          "data-width": "1080",
+          "data-height": "1920"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-3\" is 0.57s but its slot (data-duration) is 0.70s — the slot is shortened to the media length when rendered. Set data-duration to ~0.57s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "45",
+          "data-width": "1080",
+          "data-height": "1920"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-4\" is 0.57s but its slot (data-duration) is 0.70s — the slot is shortened to the media length when rendered. Set data-duration to ~0.57s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "45",
+          "data-width": "1080",
+          "data-height": "1920"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 0
+      }
+    ]
+  },
+  "layout": {
+    "ok": false,
+    "errorCount": 40,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "div.origin-eyebrow",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 84,
+          "top": 190,
+          "right": 408.38,
+          "bottom": 226,
+          "width": 324.38,
+          "height": 36
+        },
+        "containerSelector": "div.origin-eyebrow",
+        "text": "SASHA INFINITY",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 190,
+          "width": 324.38,
+          "height": 36
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-century",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 84,
+          "top": 369,
+          "right": 415.73,
+          "bottom": 412,
+          "width": 331.73,
+          "height": 43
+        },
+        "containerSelector": "#origin-new-label",
+        "text": "FOR CENTURIES",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 369,
+          "width": 331.73,
+          "height": 43
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-century",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 84,
+          "top": 369,
+          "right": 415.73,
+          "bottom": 412,
+          "width": 331.73,
+          "height": 43
+        },
+        "containerSelector": "div.origin-exp-label",
+        "text": "FOR CENTURIES",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 369,
+          "width": 331.73,
+          "height": 43
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-teach",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 78,
+          "top": 492,
+          "right": 555.7,
+          "bottom": 668,
+          "width": 477.7,
+          "height": 176
+        },
+        "containerSelector": "#origin-reimagined-a",
+        "text": "TEACH.",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 78,
+          "y": 492,
+          "width": 477.7,
+          "height": 176
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-teach",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 78,
+          "top": 492,
+          "right": 555.7,
+          "bottom": 668,
+          "width": 477.7,
+          "height": 176
+        },
+        "containerSelector": "#origin-tail-0",
+        "text": "TEACH.",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 78,
+          "y": 492,
+          "width": 477.7,
+          "height": 176
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-teach",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 78,
+          "top": 492,
+          "right": 555.7,
+          "bottom": 668,
+          "width": 477.7,
+          "height": 176
+        },
+        "containerSelector": "#origin-tail-1",
+        "text": "TEACH.",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 78,
+          "y": 492,
+          "width": 477.7,
+          "height": 176
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-teach",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 78,
+          "top": 492,
+          "right": 555.7,
+          "bottom": 668,
+          "width": 477.7,
+          "height": 176
+        },
+        "containerSelector": "#origin-letter-0",
+        "text": "TEACH.",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 78,
+          "y": 492,
+          "width": 477.7,
+          "height": 176
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-teach",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 78,
+          "top": 492,
+          "right": 555.7,
+          "bottom": 668,
+          "width": 477.7,
+          "height": 176
+        },
+        "containerSelector": "#origin-letter-1",
+        "text": "TEACH.",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 78,
+          "y": 492,
+          "width": 477.7,
+          "height": 176
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-learn",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 78,
+          "top": 662,
+          "right": 545.91,
+          "bottom": 838,
+          "width": 467.91,
+          "height": 176
+        },
+        "containerSelector": "#origin-reimagined-a",
+        "text": "LEARN.",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 78,
+          "y": 662,
+          "width": 467.91,
+          "height": 176
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-learn",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 78,
+          "top": 662,
+          "right": 545.91,
+          "bottom": 838,
+          "width": 467.91,
+          "height": 176
+        },
+        "containerSelector": "#origin-reimagined-b",
+        "text": "LEARN.",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 78,
+          "y": 662,
+          "width": 467.91,
+          "height": 176
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-learn",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 78,
+          "top": 662,
+          "right": 545.91,
+          "bottom": 838,
+          "width": 467.91,
+          "height": 176
+        },
+        "containerSelector": "#origin-tail-1",
+        "text": "LEARN.",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 78,
+          "y": 662,
+          "width": 467.91,
+          "height": 176
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-learn",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 78,
+          "top": 662,
+          "right": 545.91,
+          "bottom": 838,
+          "width": 467.91,
+          "height": 176
+        },
+        "containerSelector": "#origin-tail-2",
+        "text": "LEARN.",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 78,
+          "y": 662,
+          "width": 467.91,
+          "height": 176
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-learn",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 78,
+          "top": 662,
+          "right": 545.91,
+          "bottom": 838,
+          "width": 467.91,
+          "height": 176
+        },
+        "containerSelector": "#origin-letter-1",
+        "text": "LEARN.",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 78,
+          "y": 662,
+          "width": 467.91,
+          "height": 176
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-learn",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 78,
+          "top": 662,
+          "right": 545.91,
+          "bottom": 838,
+          "width": 467.91,
+          "height": 176
+        },
+        "containerSelector": "#origin-letter-2",
+        "text": "LEARN.",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 78,
+          "y": 662,
+          "width": 467.91,
+          "height": 176
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-reimagined-a",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 84,
+          "top": 612,
+          "right": 667.55,
+          "bottom": 758,
+          "width": 583.55,
+          "height": 146
+        },
+        "containerSelector": "#origin-tail-1",
+        "text": "LEARNING,",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 612,
+          "width": 583.55,
+          "height": 146
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-reimagined-a",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 84,
+          "top": 612,
+          "right": 667.55,
+          "bottom": 758,
+          "width": 583.55,
+          "height": 146
+        },
+        "containerSelector": "#origin-tail-2",
+        "text": "LEARNING,",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 612,
+          "width": 583.55,
+          "height": 146
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-reimagined-a",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 84,
+          "top": 612,
+          "right": 667.55,
+          "bottom": 758,
+          "width": 583.55,
+          "height": 146
+        },
+        "containerSelector": "#origin-letter-1",
+        "text": "LEARNING,",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 612,
+          "width": 583.55,
+          "height": 146
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-reimagined-a",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 84,
+          "top": 612,
+          "right": 667.55,
+          "bottom": 758,
+          "width": 583.55,
+          "height": 146
+        },
+        "containerSelector": "#origin-letter-2",
+        "text": "LEARNING,",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 612,
+          "width": 583.55,
+          "height": 146
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-reimagined-b",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 84,
+          "top": 770,
+          "right": 710.78,
+          "bottom": 900,
+          "width": 626.78,
+          "height": 130
+        },
+        "containerSelector": "#origin-tail-2",
+        "text": "REIMAGINED.",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 770,
+          "width": 626.78,
+          "height": 130
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-reimagined-b",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 84,
+          "top": 770,
+          "right": 710.78,
+          "bottom": 900,
+          "width": 626.78,
+          "height": 130
+        },
+        "containerSelector": "#origin-tail-3",
+        "text": "REIMAGINED.",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 770,
+          "width": 626.78,
+          "height": 130
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-reimagined-b",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 84,
+          "top": 770,
+          "right": 710.78,
+          "bottom": 900,
+          "width": 626.78,
+          "height": 130
+        },
+        "containerSelector": "#origin-letter-2",
+        "text": "REIMAGINED.",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 770,
+          "width": 626.78,
+          "height": 130
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-reimagined-b",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 84,
+          "top": 770,
+          "right": 710.78,
+          "bottom": 900,
+          "width": 626.78,
+          "height": 130
+        },
+        "containerSelector": "#origin-cap-3",
+        "text": "REIMAGINED.",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 770,
+          "width": 626.78,
+          "height": 130
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-reimagined-b",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 84,
+          "top": 770,
+          "right": 710.78,
+          "bottom": 900,
+          "width": 626.78,
+          "height": 130
+        },
+        "containerSelector": "#origin-low-3",
+        "text": "REIMAGINED.",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 770,
+          "width": 626.78,
+          "height": 130
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-cap-3",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 180,
+          "top": 850,
+          "right": 217.7,
+          "bottom": 930,
+          "width": 37.7,
+          "height": 80
+        },
+        "containerSelector": "#origin-low-3",
+        "text": "E",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 180,
+          "y": 850,
+          "width": 37.7,
+          "height": 80
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-cap-4",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 180,
+          "top": 970,
+          "right": 236.2,
+          "bottom": 1050,
+          "width": 56.2,
+          "height": 80
+        },
+        "containerSelector": "#origin-low-4",
+        "text": "O",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 180,
+          "y": 970,
+          "width": 56.2,
+          "height": 80
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "content_overlap",
+        "severity": "error",
+        "time": 0,
+        "selector": "#origin-cap-5",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 180,
+          "top": 1090,
+          "right": 221.42,
+          "bottom": 1170,
+          "width": 41.42,
+          "height": 80
+        },
+        "containerSelector": "#origin-low-5",
+        "text": "S",
+        "fixHint": "Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 180,
+          "y": 1090,
+          "width": 41.42,
+          "height": 80
+        },
+        "firstSeen": 0,
+        "lastSeen": 17.875,
+        "occurrences": 144
+      },
+      {
+        "code": "text_occluded",
+        "severity": "error",
+        "time": 1.25,
+        "selector": "div.origin-eyebrow",
+        "message": "Text is hidden beneath an opaque element.",
+        "rect": {
+          "left": 84,
+          "top": 190,
+          "right": 408.38,
+          "bottom": 226,
+          "width": 324.38,
+          "height": 36
+        },
+        "containerSelector": "div.origin-pale",
+        "text": "SASHA INFINITY",
+        "fixHint": "Give the text its own zone, raise its stacking order above the covering element, or mark intentional layering with data-layout-allow-occlusion.",
+        "coveredFraction": 1,
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 190,
+          "width": 324.38,
+          "height": 36
+        },
+        "firstSeen": 1.25,
+        "lastSeen": 16.25,
+        "occurrences": 7
+      },
+      {
+        "code": "text_occluded",
+        "severity": "error",
+        "time": 1.25,
+        "selector": "#origin-century",
+        "message": "Text is hidden beneath an opaque element.",
+        "rect": {
+          "left": 84,
+          "top": 369,
+          "right": 415.73,
+          "bottom": 412,
+          "width": 331.73,
+          "height": 43
+        },
+        "containerSelector": "div.origin-pale",
+        "text": "FOR CENTURIES",
+        "fixHint": "Give the text its own zone, raise its stacking order above the covering element, or mark intentional layering with data-layout-allow-occlusion.",
+        "coveredFraction": 1,
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 369,
+          "width": 331.73,
+          "height": 43
+        },
+        "firstSeen": 1.25,
+        "lastSeen": 16.25,
+        "occurrences": 7
+      },
+      {
+        "code": "text_occluded",
+        "severity": "error",
+        "time": 1.25,
+        "selector": "#origin-teach",
+        "message": "Text is hidden beneath an opaque element.",
+        "rect": {
+          "left": 78,
+          "top": 492,
+          "right": 555.7,
+          "bottom": 668,
+          "width": 477.7,
+          "height": 176
+        },
+        "containerSelector": "div.origin-pale",
+        "text": "TEACH.",
+        "fixHint": "Give the text its own zone, raise its stacking order above the covering element, or mark intentional layering with data-layout-allow-occlusion.",
+        "coveredFraction": 1,
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 78,
+          "y": 492,
+          "width": 477.7,
+          "height": 176
+        },
+        "firstSeen": 1.25,
+        "lastSeen": 16.25,
+        "occurrences": 7
+      },
+      {
+        "code": "text_occluded",
+        "severity": "error",
+        "time": 1.25,
+        "selector": "#origin-learn",
+        "message": "Text is hidden beneath an opaque element.",
+        "rect": {
+          "left": 78,
+          "top": 662,
+          "right": 545.91,
+          "bottom": 838,
+          "width": 467.91,
+          "height": 176
+        },
+        "containerSelector": "div.origin-pale",
+        "text": "LEARN.",
+        "fixHint": "Give the text its own zone, raise its stacking order above the covering element, or mark intentional layering with data-layout-allow-occlusion.",
+        "coveredFraction": 1,
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 78,
+          "y": 662,
+          "width": 467.91,
+          "height": 176
+        },
+        "firstSeen": 1.25,
+        "lastSeen": 16.25,
+        "occurrences": 7
+      },
+      {
+        "code": "text_occluded",
+        "severity": "error",
+        "time": 1.25,
+        "selector": "#origin-new-label",
+        "message": "Text is hidden beneath an opaque element.",
+        "rect": {
+          "left": 84,
+          "top": 400,
+          "right": 383.78,
+          "bottom": 443,
+          "width": 299.78,
+          "height": 43
+        },
+        "containerSelector": "div.origin-pale",
+        "text": "NEW CHAPTER",
+        "fixHint": "Give the text its own zone, raise its stacking order above the covering element, or mark intentional layering with data-layout-allow-occlusion.",
+        "coveredFraction": 1,
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 400,
+          "width": 299.78,
+          "height": 43
+        },
+        "firstSeen": 1.25,
+        "lastSeen": 16.25,
+        "occurrences": 7
+      },
+      {
+        "code": "text_occluded",
+        "severity": "error",
+        "time": 1.25,
+        "selector": "#origin-reimagined-a",
+        "message": "Text is hidden beneath an opaque element.",
+        "rect": {
+          "left": 84,
+          "top": 612,
+          "right": 667.55,
+          "bottom": 758,
+          "width": 583.55,
+          "height": 146
+        },
+        "containerSelector": "div.origin-glass",
+        "text": "LEARNING,",
+        "fixHint": "Give the text its own zone, raise its stacking order above the covering element, or mark intentional layering with data-layout-allow-occlusion.",
+        "coveredFraction": 1,
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 612,
+          "width": 583.55,
+          "height": 146
+        },
+        "firstSeen": 1.25,
+        "lastSeen": 16.25,
+        "occurrences": 7
+      },
+      {
+        "code": "text_occluded",
+        "severity": "error",
+        "time": 1.25,
+        "selector": "#origin-reimagined-b",
+        "message": "Text is hidden beneath an opaque element.",
+        "rect": {
+          "left": 84,
+          "top": 770,
+          "right": 710.78,
+          "bottom": 900,
+          "width": 626.78,
+          "height": 130
+        },
+        "containerSelector": "div.origin-glass",
+        "text": "REIMAGINED.",
+        "fixHint": "Give the text its own zone, raise its stacking order above the covering element, or mark intentional layering with data-layout-allow-occlusion.",
+        "coveredFraction": 1,
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 770,
+          "width": 626.78,
+          "height": 130
+        },
+        "firstSeen": 1.25,
+        "lastSeen": 16.25,
+        "occurrences": 7
+      },
+      {
+        "code": "text_occluded",
+        "severity": "error",
+        "time": 1.25,
+        "selector": "#origin-for-both",
+        "message": "Text is hidden beneath an opaque element.",
+        "rect": {
+          "left": 128,
+          "top": 1169,
+          "right": 430.61,
+          "bottom": 1266.89,
+          "width": 302.61,
+          "height": 97.89
+        },
+        "containerSelector": "div.origin-glass",
+        "text": "FOR LEARNERS.FOR EDUCATORS.",
+        "fixHint": "Give the text its own zone, raise its stacking order above the covering element, or mark intentional layering with data-layout-allow-occlusion.",
+        "coveredFraction": 1,
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 128,
+          "y": 1169,
+          "width": 302.61,
+          "height": 97.89
+        },
+        "firstSeen": 1.25,
+        "lastSeen": 16.25,
+        "occurrences": 7
+      },
+      {
+        "code": "text_occluded",
+        "severity": "error",
+        "time": 1.25,
+        "selector": "div.origin-exp-label",
+        "message": "Text is hidden beneath an opaque element.",
+        "rect": {
+          "left": 158,
+          "top": 375,
+          "right": 575.28,
+          "bottom": 409,
+          "width": 417.28,
+          "height": 34
+        },
+        "containerSelector": "#origin-logo-tile",
+        "text": "A NEW OPERATING SYSTEM",
+        "fixHint": "Give the text its own zone, raise its stacking order above the covering element, or mark intentional layering with data-layout-allow-occlusion.",
+        "coveredFraction": 0.56,
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 158,
+          "y": 375,
+          "width": 417.28,
+          "height": 34
+        },
+        "firstSeen": 1.25,
+        "lastSeen": 16.25,
+        "occurrences": 7
+      },
+      {
+        "code": "text_occluded",
+        "severity": "error",
+        "time": 1.25,
+        "selector": "#origin-tail-0",
+        "message": "Text is hidden beneath an opaque element.",
+        "rect": {
+          "left": 235,
+          "top": 490,
+          "right": 372.09,
+          "bottom": 570,
+          "width": 137.09,
+          "height": 80
+        },
+        "containerSelector": "#origin-logo-tile",
+        "text": "asha",
+        "fixHint": "Give the text its own zone, raise its stacking order above the covering element, or mark intentional layering with data-layout-allow-occlusion.",
+        "coveredFraction": 0.22,
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 235,
+          "y": 490,
+          "width": 137.09,
+          "height": 80
+        },
+        "firstSeen": 1.25,
+        "lastSeen": 16.25,
+        "occurrences": 7
+      },
+      {
+        "code": "text_occluded",
+        "severity": "error",
+        "time": 1.25,
+        "selector": "#origin-tail-1",
+        "message": "Text is hidden beneath an opaque element.",
+        "rect": {
+          "left": 208,
+          "top": 610,
+          "right": 391.45,
+          "bottom": 690,
+          "width": 183.45,
+          "height": 80
+        },
+        "containerSelector": "#origin-logo-tile",
+        "text": "nfinity",
+        "fixHint": "Give the text its own zone, raise its stacking order above the covering element, or mark intentional layering with data-layout-allow-occlusion.",
+        "coveredFraction": 0.26,
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 208,
+          "y": 610,
+          "width": 183.45,
+          "height": 80
+        },
+        "firstSeen": 1.25,
+        "lastSeen": 16.25,
+        "occurrences": 7
+      },
+      {
+        "code": "text_occluded",
+        "severity": "error",
+        "time": 1.25,
+        "selector": "#origin-tail-5",
+        "message": "Text is hidden beneath an opaque element.",
+        "rect": {
+          "left": 235,
+          "top": 1090,
+          "right": 419.83,
+          "bottom": 1170,
+          "width": 184.83,
+          "height": 80
+        },
+        "containerSelector": "#origin-learn-pill",
+        "text": "ystem",
+        "fixHint": "Give the text its own zone, raise its stacking order above the covering element, or mark intentional layering with data-layout-allow-occlusion.",
+        "coveredFraction": 1,
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 235,
+          "y": 1090,
+          "width": 184.83,
+          "height": 80
+        },
+        "firstSeen": 1.25,
+        "lastSeen": 16.25,
+        "occurrences": 7
+      },
+      {
+        "code": "text_occluded",
+        "severity": "error",
+        "time": 1.25,
+        "selector": "#origin-cap-5",
+        "message": "Text is hidden beneath an opaque element.",
+        "rect": {
+          "left": 180,
+          "top": 1090,
+          "right": 221.42,
+          "bottom": 1170,
+          "width": 41.42,
+          "height": 80
+        },
+        "containerSelector": "#origin-learn-pill",
+        "text": "S",
+        "fixHint": "Give the text its own zone, raise its stacking order above the covering element, or mark intentional layering with data-layout-allow-occlusion.",
+        "coveredFraction": 0.81,
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 180,
+          "y": 1090,
+          "width": 41.42,
+          "height": 80
+        },
+        "firstSeen": 1.25,
+        "lastSeen": 16.25,
+        "occurrences": 7
+      },
+      {
+        "code": "text_occluded",
+        "severity": "error",
+        "time": 1.25,
+        "selector": "#origin-low-5",
+        "message": "Text is hidden beneath an opaque element.",
+        "rect": {
+          "left": 180,
+          "top": 1090,
+          "right": 212.97,
+          "bottom": 1170,
+          "width": 32.97,
+          "height": 80
+        },
+        "containerSelector": "#origin-learn-pill",
+        "text": "s",
+        "fixHint": "Give the text its own zone, raise its stacking order above the covering element, or mark intentional layering with data-layout-allow-occlusion.",
+        "coveredFraction": 0.74,
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 180,
+          "y": 1090,
+          "width": 32.97,
+          "height": 80
+        },
+        "firstSeen": 1.25,
+        "lastSeen": 16.25,
+        "occurrences": 7
+      }
+    ],
+    "duration": 45,
+    "samples": [
+      1.25,
+      3.75,
+      6.25,
+      8.75,
+      11.25,
+      13.75,
+      16.25,
+      18.75,
+      21.25,
+      23.75,
+      26.25,
+      28.75,
+      31.25,
+      33.75,
+      36.25,
+      38.75,
+      41.25,
+      43.75
+    ],
+    "transitionSamples": [],
+    "transitionSamplesDropped": 0,
+    "tolerance": 2,
+    "totalIssueCount": 40,
+    "truncated": false
+  },
+  "motion": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "samples": 0
+  },
+  "contrast": {
+    "ok": false,
+    "errorCount": 18,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "contrast_aa_failure",
+        "severity": "error",
+        "message": "Contrast is 1.07:1; WCAG AA requires 3:1.",
+        "text": "SASHA INFINITY",
+        "fg": "rgb(255,255,255)",
+        "bg": "rgb(247,247,248)",
+        "ratio": 1.07,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(143,143,143)",
+        "large": true,
+        "selector": "div > div:nth-of-type(2) > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1)",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 190,
+          "width": 324.375,
+          "height": 36
+        },
+        "time": 1.25
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "error",
+        "message": "Contrast is 1.64:1; WCAG AA requires 3:1.",
+        "text": "FOR CENTURIES",
+        "fg": "rgb(251,191,36)",
+        "bg": "rgb(253,253,252)",
+        "ratio": 1.64,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(184,140,26)",
+        "large": true,
+        "selector": "#origin-century",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 369,
+          "width": 331.734375,
+          "height": 43
+        },
+        "time": 1.25
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "error",
+        "message": "Contrast is 1.02:1; WCAG AA requires 3:1.",
+        "text": "TEACH.",
+        "fg": "rgb(255,255,255)",
+        "bg": "rgb(254,252,249)",
+        "ratio": 1.02,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(146,146,146)",
+        "large": true,
+        "selector": "#origin-teach",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 78,
+          "y": 505,
+          "width": 477.703125,
+          "height": 151.1875
+        },
+        "time": 1.25
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "error",
+        "message": "Contrast is 1.04:1; WCAG AA requires 3:1.",
+        "text": "LEARN.",
+        "fg": "rgb(255,255,255)",
+        "bg": "rgb(254,250,246)",
+        "ratio": 1.04,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(145,145,145)",
+        "large": true,
+        "selector": "#origin-learn",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 78,
+          "y": 675,
+          "width": 467.90625,
+          "height": 151.1875
+        },
+        "time": 1.25
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "error",
+        "message": "Contrast is 1.07:1; WCAG AA requires 3:1.",
+        "text": "SASHA INFINITY",
+        "fg": "rgb(255,255,255)",
+        "bg": "rgb(247,247,248)",
+        "ratio": 1.07,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(143,143,143)",
+        "large": true,
+        "selector": "div > div:nth-of-type(2) > div > div > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(2)",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 190,
+          "width": 324.375,
+          "height": 36
+        },
+        "time": 1.25
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "error",
+        "message": "Contrast is 1.63:1; WCAG AA requires 3:1.",
+        "text": "NEW CHAPTER",
+        "fg": "rgb(251,191,36)",
+        "bg": "rgb(253,252,252)",
+        "ratio": 1.63,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(184,140,26)",
+        "large": true,
+        "selector": "#origin-new-label",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 400,
+          "width": 299.78125,
+          "height": 43
+        },
+        "time": 1.25
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "error",
+        "message": "Contrast is 1.12:1; WCAG AA requires 3:1.",
+        "text": "LEARNING,",
+        "fg": "rgb(255,255,255)",
+        "bg": "rgb(254,239,232)",
+        "ratio": 1.12,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(139,139,139)",
+        "large": true,
+        "selector": "#origin-reimagined-a",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 615,
+          "width": 946,
+          "height": 141.515625
+        },
+        "time": 1.25
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "error",
+        "message": "Contrast is 1.1:1; WCAG AA requires 3:1.",
+        "text": "REIMAGINED.",
+        "fg": "rgb(255,255,255)",
+        "bg": "rgb(254,242,230)",
+        "ratio": 1.1,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(141,141,141)",
+        "large": true,
+        "selector": "#origin-reimagined-b",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 773,
+          "width": 946,
+          "height": 125.65625
+        },
+        "time": 1.25
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "error",
+        "message": "Contrast is 1.05:1; WCAG AA requires 3:1.",
+        "text": "FOR LEARNERS.FOR EDUCATORS.",
+        "fg": "rgb(255,255,255)",
+        "bg": "rgb(254,249,246)",
+        "ratio": 1.05,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(145,145,145)",
+        "large": true,
+        "selector": "#origin-for-both",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 128,
+          "y": 1160,
+          "width": 302.609375,
+          "height": 117.78125
+        },
+        "time": 1.25
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "error",
+        "message": "Contrast is 1.07:1; WCAG AA requires 3:1.",
+        "text": "SASHA INFINITY",
+        "fg": "rgb(255,255,255)",
+        "bg": "rgb(247,247,248)",
+        "ratio": 1.07,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(143,143,143)",
+        "large": true,
+        "selector": "div > div:nth-of-type(2) > div > div > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1)",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 190,
+          "width": 324.375,
+          "height": 36
+        },
+        "time": 11.25
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "error",
+        "message": "Contrast is 1.64:1; WCAG AA requires 3:1.",
+        "text": "FOR CENTURIES",
+        "fg": "rgb(251,191,36)",
+        "bg": "rgb(253,253,252)",
+        "ratio": 1.64,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(184,140,26)",
+        "large": true,
+        "selector": "#origin-century",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 369,
+          "width": 331.734375,
+          "height": 43
+        },
+        "time": 11.25
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "error",
+        "message": "Contrast is 1.02:1; WCAG AA requires 3:1.",
+        "text": "TEACH.",
+        "fg": "rgb(255,255,255)",
+        "bg": "rgb(254,252,249)",
+        "ratio": 1.02,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(146,146,146)",
+        "large": true,
+        "selector": "#origin-teach",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 78,
+          "y": 505,
+          "width": 477.703125,
+          "height": 151.1875
+        },
+        "time": 11.25
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "error",
+        "message": "Contrast is 1.04:1; WCAG AA requires 3:1.",
+        "text": "LEARN.",
+        "fg": "rgb(255,255,255)",
+        "bg": "rgb(254,250,246)",
+        "ratio": 1.04,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(145,145,145)",
+        "large": true,
+        "selector": "#origin-learn",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 78,
+          "y": 675,
+          "width": 467.90625,
+          "height": 151.1875
+        },
+        "time": 11.25
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "error",
+        "message": "Contrast is 1.07:1; WCAG AA requires 3:1.",
+        "text": "SASHA INFINITY",
+        "fg": "rgb(255,255,255)",
+        "bg": "rgb(247,247,248)",
+        "ratio": 1.07,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(143,143,143)",
+        "large": true,
+        "selector": "div > div:nth-of-type(2) > div > div > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(2)",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 190,
+          "width": 324.375,
+          "height": 36
+        },
+        "time": 11.25
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "error",
+        "message": "Contrast is 1.63:1; WCAG AA requires 3:1.",
+        "text": "NEW CHAPTER",
+        "fg": "rgb(251,191,36)",
+        "bg": "rgb(253,252,252)",
+        "ratio": 1.63,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(184,140,26)",
+        "large": true,
+        "selector": "#origin-new-label",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 400,
+          "width": 299.78125,
+          "height": 43
+        },
+        "time": 11.25
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "error",
+        "message": "Contrast is 1.12:1; WCAG AA requires 3:1.",
+        "text": "LEARNING,",
+        "fg": "rgb(255,255,255)",
+        "bg": "rgb(254,239,232)",
+        "ratio": 1.12,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(139,139,139)",
+        "large": true,
+        "selector": "#origin-reimagined-a",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 615,
+          "width": 946,
+          "height": 141.515625
+        },
+        "time": 11.25
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "error",
+        "message": "Contrast is 1.1:1; WCAG AA requires 3:1.",
+        "text": "REIMAGINED.",
+        "fg": "rgb(255,255,255)",
+        "bg": "rgb(254,242,230)",
+        "ratio": 1.1,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(141,141,141)",
+        "large": true,
+        "selector": "#origin-reimagined-b",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 84,
+          "y": 773,
+          "width": 946,
+          "height": 125.65625
+        },
+        "time": 11.25
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "error",
+        "message": "Contrast is 1.05:1; WCAG AA requires 3:1.",
+        "text": "FOR LEARNERS.FOR EDUCATORS.",
+        "fg": "rgb(255,255,255)",
+        "bg": "rgb(254,249,246)",
+        "ratio": 1.05,
+        "requiredRatio": 3,
+        "suggestedColor": "rgb(145,145,145)",
+        "large": true,
+        "selector": "#origin-for-both",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-origin.html",
+        "bbox": {
+          "x": 128,
+          "y": 1160,
+          "width": 302.609375,
+          "height": 117.78125
+        },
+        "time": 11.25
+      }
+    ],
+    "enabled": true,
+    "samples": [
+      1.25,
+      11.25,
+      21.25,
+      31.25,
+      43.75
+    ],
+    "checked": 58,
+    "passed": 40
+  },
+  "snapshots": {
+    "enabled": true,
+    "files": [
+      "snapshots\\frame-00-at-1.3s.png",
+      "snapshots\\frame-01-at-11.3s.png",
+      "snapshots\\frame-02-at-21.3s.png",
+      "snapshots\\frame-03-at-31.3s.png",
+      "snapshots\\frame-04-at-43.8s.png"
+    ],
+    "times": [
+      1.25,
+      11.25,
+      21.25,
+      31.25,
+      43.75
+    ],
+    "findingFiles": [
+      "snapshots\\finding-00-content_overlap.png",
+      "snapshots\\finding-01-content_overlap.png",
+      "snapshots\\finding-02-content_overlap.png",
+      "snapshots\\finding-03-content_overlap.png",
+      "snapshots\\finding-04-content_overlap.png",
+      "snapshots\\finding-05-content_overlap.png",
+      "snapshots\\finding-06-content_overlap.png",
+      "snapshots\\finding-07-content_overlap.png",
+      "snapshots\\finding-08-content_overlap.png",
+      "snapshots\\finding-09-content_overlap.png",
+      "snapshots\\finding-10-content_overlap.png",
+      "snapshots\\finding-11-content_overlap.png"
+    ]
+  },
+  "_meta": {
+    "version": "0.8.30",
+    "latestVersion": "0.8.30",
+    "updateAvailable": false
+  }
+}

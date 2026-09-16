@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, Field, model_validator, field_validator
+from pydantic import BaseModel, Field, model_validator
 
 
 class InvoiceItemIn(BaseModel):
@@ -33,21 +33,11 @@ class InvoiceCreate(BaseModel):
     notes: str = ""
     items: list[InvoiceItemIn] = Field(min_length=1)
 
-    @field_validator("due_date", mode="before")
-    @classmethod
-    def accept_date_only(cls, value):
-        return value + "T00:00:00Z" if isinstance(value, str) and len(value) == 10 else value
-
 
 class InvoiceUpdate(BaseModel):
     due_date: datetime | None = None
     notes: str | None = None
     items: list[InvoiceItemIn] | None = None
-
-    @field_validator("due_date", mode="before")
-    @classmethod
-    def accept_date_only(cls, value):
-        return value + "T00:00:00Z" if isinstance(value, str) and len(value) == 10 else value
 
 
 class InvoiceOut(BaseModel):
