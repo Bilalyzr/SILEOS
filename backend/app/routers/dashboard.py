@@ -772,11 +772,27 @@ async def get_instructor_dashboard(
             Enrollment.course_id.in_(course_ids)
         ).distinct().count()
 
-    # Dashboard and payout availability must use exactly one revenue formula.
-    from app.services.payout_service import instructor_earned_by_course
-
-    earnings_by_course: Dict[int, float] = instructor_earned_by_course(db, course_ids)
-    total_earnings = sum(earnings_by_course.values())
+    # Calculate total earnings through orders, per course line.
+    # OrderItem.total is the amount actually paid for that course (net of any
+    # coupon discount). Summing Payment.amount across an OrderItem join instead
+    # fanned out: a 3-course order counted its full total three times.
+    earnings_by_course: Dict[int, float] = {}
+    total_earnings = 0.0
+    if course_ids:
+        earning_rows = db.query(
+            OrderItem.course_id,
+            func.sum(OrderItem.total),
+        ).join(
+            Order, OrderItem.order_id == Order.id
+        ).filter(
+            OrderItem.course_id.in_(course_ids),
+            Order.order_status == OrderStatus.COMPLETED,
+            # Exclude the un-paid mock cart orders — see the admin revenue
+            # calculation below for why these exist.
+            func.coalesce(Order.payment_method, "") != "mock",
+        ).group_by(OrderItem.course_id).all()
+        earnings_by_course = {cid: float(amount or 0) for cid, amount in earning_rows}
+        total_earnings = sum(earnings_by_course.values())
 
     # Average rating across all of this instructor's reviews.
     from app.models.instructor_review import InstructorReview

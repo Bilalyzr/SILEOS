@@ -7,19 +7,6 @@
 /* CSS Variables for consistent theming */
 @layer base {
   :root {
-    /* Platform overlay scale (mirror of zIndex tokens in tailwind.config.js).
-       Raw CSS (astra/campus layers, promotional widgets) must use these vars
-       instead of literal values so nothing floats above a dialog scrim. */
-    --z-nav: 40;
-    --z-header: 50;
-    --z-dropdown: 60;
-    --z-fab: 70;
-    --z-modal: 80;
-    --z-overlay: 90;
-    --z-dialog: 100;
-    --z-popover: 120;
-    --z-toast: 200;
-    --z-banner: 300;
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -83,89 +70,31 @@
     overflow-x: hidden;
   }
 
-  /* Mobile table safety net (2026-09-14 UI audit): html/body overflow-x
-     hidden means UNwrapped wide tables were silently CLIPPED on phones
-     (spoc/cohort, admin/cohorts+colleges+spocs, institutions, vouchers…).
-     Tables that already sit in a scroll wrapper (overflow-x-auto /
-     campus-table-wrap / TableScrollArea) are excluded via the :not() chain —
-     this rule only rescues the unwrapped ones by making them scroll
-     horizontally instead of being cut off. */
-  @media (max-width: 767px) {
-    .rd-workspace-content :not(.overflow-x-auto):not(.campus-table-wrap):not([data-table-scroll]) > table,
-    .rd-public :not(.overflow-x-auto):not(.campus-table-wrap):not([data-table-scroll]) > table {
-      display: block;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-  }
-
-  /* Native form controls (the app has 228 raw <select>, 672 raw <input>)
-     render as unstyled OS defaults on the dark theme. accent-color is the
-     zero-risk global lift; full restyling stays per-component. */
-  input[type='checkbox'],
-  input[type='radio'],
-  input[type='range'] {
-    accent-color: #f97316;
-  }
-
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-    /* Interactive elements ship their own active/hover feedback; suppress the
-       gray iOS tap flash so it doesn't double up with those states. */
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  /* Pointer affordance: native buttons default to `cursor: default` in most
-     browsers. Disabled controls signal they are not clickable. */
-  button:not(:disabled),
-  [role="button"]:not(:disabled),
-  summary {
-    cursor: pointer;
-  }
-
-  button:disabled {
-    cursor: not-allowed;
-  }
-
-  /* Floating product-tour launcher ("How it works", fixed bottom-right,
-     z-40): while it is on screen, workspace page containers reserve bottom
-     clearance so the pill can never cover a card's links or buttons
-     (e.g. "View details" on the last dashboard card at tablet widths).
-     ProductTourProvider toggles `has-tour-fab` on <body>. */
-  body.has-tour-fab .rd-page,
-  body.has-tour-fab .rd-workspace-content {
-    padding-bottom: 4.5rem;
   }
 
   html {
     scroll-behavior: smooth;
-    /* Firefox parity with the webkit scrollbar below. */
-    scrollbar-width: thin;
-    scrollbar-color: rgba(128, 128, 128, 0.45) transparent;
   }
 
-  /* Custom scrollbar — neutral translucent so it reads on both the light
-     pages and the dark Aurum canvas (a light track would glare on dark). */
+  /* Custom scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    background: transparent;
+    @apply bg-neutral-100;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(128, 128, 128, 0.45);
-    border-radius: 9999px;
+    @apply bg-neutral-300 rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(128, 128, 128, 0.7);
+    @apply bg-neutral-400;
   }
 
   /* Selection styles */
@@ -574,8 +503,26 @@
   @apply text-primary-500;
 }
 
-/* React Hot Toast — visual polish lives in the <Toaster> props in App.tsx;
-   the portal inherits the theme tokens from <body>. */
+/* React Hot Toast */
+.Toastify__toast {
+  @apply rounded-lg shadow-medium;
+}
+
+.Toastify__toast--success {
+  @apply bg-success-500;
+}
+
+.Toastify__toast--error {
+  @apply bg-danger-500;
+}
+
+.Toastify__toast--warning {
+  @apply bg-warning-500;
+}
+
+.Toastify__toast--info {
+  @apply bg-primary-500;
+}
 
 /* Custom Animations for Enhanced Features */
 @keyframes floatUp {
@@ -1119,13 +1066,11 @@
     grid-template-columns: 1fr !important;
   }
 
-  /* Drawer tier only: a modal (z-modal and above) must always cover it.
-     The previous z-index: 1000 hoisted the drawer above every dialog scrim. */
   .dashboard-sidebar {
     position: fixed !important;
     left: -100% !important;
     transition: left 0.3s ease !important;
-    z-index: var(--z-header, 50) !important;
+    z-index: 1000 !important;
   }
 
   .dashboard-sidebar.open {
@@ -1294,15 +1239,6 @@
   .si-btn-ghost {
     @apply inline-flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg text-sm text-gray-700 hover:bg-black/5 transition;
   }
-  /* Keyboard users were invisible on the si-btn system: hover/active/disabled
-     existed but there was no focus-visible ring (the legacy .btn has one).
-     focus-visible (not focus) so mouse clicks don't flash a ring. */
-  .si-btn-primary:focus-visible,
-  .si-btn-secondary:focus-visible,
-  .si-btn-danger:focus-visible,
-  .si-btn-ghost:focus-visible {
-    @apply outline-none ring-2 ring-orange-500 ring-offset-2 ring-offset-white;
-  }
   /* page enter (item 2): every workspace/main content fades and lifts in once */
   .si-page-enter { animation: si-page-enter 420ms cubic-bezier(0.16, 1, 0.3, 1) both; }
   @keyframes si-page-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
@@ -1310,43 +1246,4 @@
   .si-input {
     @apply px-3 py-2 rounded-xl border border-gray-200 bg-white/90 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-400/60 focus:border-orange-300;
   }
-}
-
-/* Global motion guard. The theme layers scope theirs to `.astra-theme *`;
-   this additionally covers the document element (smooth scrolling) and any
-   surface that renders outside the themed tree. */
-@media (prefers-reduced-motion: reduce) {  html {
-    scroll-behavior: auto;
-  }
-
-  .animate-fade-in,
-  .animate-slide-in-up,
-  .animate-slide-in-down,
-  .animate-scale-in,
-  .animate-bounce-in,
-  .animate-float-up,
-  .animate-shimmer,
-  .hover-lift,
-  .hover-scale,
-  .card-hover,
-  .course-card {
-    animation: none !important;
-    transition: none !important;
-  }
-
-  .hover-lift:hover,
-  .hover-scale:hover,
-  .card-hover:hover,
-  .course-card:hover {
-    transform: none !important;
-  }
-}
-
-/* Scroll lock for hand-rolled modals. Page modals share the z-modal tier and
-   are conditionally rendered, so any mounted z-modal means the page behind
-   must not scroll. Radix dialogs (GlassDialog, quiz, filters) lock scroll
-   themselves — this covers the ~45 custom `fixed inset-0` modals that don't.
-   :has() is already load-bearing in astra-glass.css / aurum.css. */
-body:has(.z-modal) {
-  overflow: hidden;
 }

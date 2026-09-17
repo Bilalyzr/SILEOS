@@ -75,9 +75,7 @@ class Course(Base):
     # Certificate settings
     certificate_template = Column(String(255), default="")
     course_sections_meta = Column(Text, default="")
-    # Every course belongs to one business pillar. Existing blank rows are
-    # reconciled to Utporul (the shared authoring/default pillar) at startup.
-    course_type = Column(String(50), nullable=False, default="utporul", server_default="utporul")
+    course_type = Column(String(50), default="")
     enabled_tools = Column(JSON, default=list)
     is_template = Column(Boolean, default=False)   # R6: start-from-template catalogue
     certificate_design = Column(JSON, default={})

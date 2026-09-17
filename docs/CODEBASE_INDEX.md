@@ -18,7 +18,6 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 - `/admin/certificates`
 - `/admin/cohorts`
 - `/admin/colleges`
-- `/admin/communications`
 - `/admin/companies`
 - `/admin/company-invoices`
 - `/admin/content-libraries`
@@ -61,13 +60,11 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 - `/blog/:slug`
 - `/bundles`
 - `/bundles/:slug`
-- `/campus`
 - `/cart`
 - `/categories`
 - `/certificates/:courseId`
 - `/checkout`
 - `/checkout/:courseId`
-- `/communication-preferences`
 - `/company/dashboard`
 - `/contact`
 - `/courses`
@@ -94,9 +91,6 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 - `/forgot-password`
 - `/games/:id/play`
 - `/hall-of-fame`
-- `/help`
-- `/institutions`
-- `/institutions/:institutionId/*`
 - `/instructor`
 - `/instructor/:id`
 - `/instructor/analytics`
@@ -144,7 +138,6 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 - `/library`
 - `/library/:slug`
 - `/login`
-- `/meiporul`
 - `/meiporul-ar`
 - `/membership`
 - `/my-courses`
@@ -162,7 +155,6 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 - `/reset-password`
 - `/search`
 - `/settings`
-- `/seyappaduporul`
 - `/shipping`
 - `/spoc/:spocId/profile`
 - `/spoc/blog`
@@ -184,7 +176,6 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 - `/superadmin/students`
 - `/terms`
 - `/u/:username`
-- `/utporul`
 - `/verify-certificate`
 - `/verify-certificate/:certificateId`
 - `/verify-email`
@@ -194,125 +185,96 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 
 | Router | Prefix | main.py line |
 |---|---|---|
-| auth.router | `/api/v1/auth` | 1307 |
-| notifications_router.router | `/api/v1/notifications` | 1308 |
-| course_type_capabilities.router | `/api/v1` | 1309 |
-| courses.router | `/api/v1/courses` | 1310 |
-| categories.router | `/api/v1/categories` | 1311 |
-| tags.router | `/api/v1/tags` | 1312 |
-| instructors.router | `/api/v1/instructors` | 1313 |
-| lessons.router | `/api/v1/lessons` | 1314 |
-| checkout.router | `/api/v1/checkout` | 1315 |
-| users.router | `/api/v1/users` | 1316 |
-| payments.router | `/api/v1/payments` | 1317 |
-| payments_proxy.router | `/api/v1/payments` | 1318 |
-| memberships.router | `/api/v1/memberships` | 1319 |
-| bundles.router | `/api/v1/bundles` | 1320 |
-| library.router | `/api/v1/library` | 1321 |
-| orders.router | `/api/v1/orders` | 1322 |
-| certificates.router | `/api/v1/certificates` | 1323 |
-| certificate_designer.router | `/api/v1/certificates/designer` | 1324 |
-| admin.router | `/api/v1/admin` | 1325 |
-| superadmin.router | `/api/v1/superadmin` | 1326 |
-| dashboard.router | `/api/v1/dashboard` | 1327 |
-| uploads.router | `/api/v1/upload` | 1328 |
-| wishlist.router | `/api/v1/wishlist` | 1329 |
-| instructor_reviews.router | `/api/v1/instructor-reviews` | 1330 |
-| quizzes.router | `/api/v1` | 1331 |
-| assignments.router | `/api/v1` | 1332 |
-| gradebook.router | `/api/v1` | 1333 |
-| h5p.router | `/api/v1/h5p` | 1334 |
-| games.router | `/api/v1/games` | 1335 |
-| gamification.router | `/api/v1/gamification` | 1336 |
-| certificate_verification.router | `/api/v1` | 1337 |
-| blog.router | `/api/v1/blog` | 1338 |
-| hall_of_fame.router | `/api/v1/hall-of-fame` | 1339 |
-| coupons.router | `/api/v1/coupons` | 1340 |
-| video.router | `/api/v1/extract` | 1341 |
-| video_streaming.router | `/api/v1/stream` | 1342 |
-| embed.router | `/api/v1/embed` | 1343 |
-| youtube_embed.router | `/api/v1/youtube` | 1344 |
-| player.router | `/api/v1/video` | 1345 |
-| progress_router.router | `/api/v1/progress` | 1346 |
-| bunny.router | `/api/v1/bunny` | 1347 |
-| analytics.router | `/api/v1/analytics` | 1348 |
-| internships.router | `/api/v1` | 1349 |
-| candidate.router | `/api/v1/candidates` | 1350 |
-| companies.router | `/api/v1/companies` | 1351 |
-| company_dashboard.router | `/api/v1/companies` | 1352 |
-| company_billing.router | `/api/v1/companies/billing` | 1353 |
-| cohorts.router | `/api/v1/cohorts` | 1354 |
-| student_workspace.router | `/api/v1/student` | 1355 |
-| admin_messages.router | `/api/v1/admin/messages` | 1356 |
-| export_import.router | `/api/v1` | 1357 |
-| question_banks.router | `/api/v1/question-banks` | 1359 |
-| sileos.router | `/api/v1` | 1360 |
-| ai.router | `/api/v1` | 1361 |
-| ai_tutor.router | `/api/v1/ai` | 1362 |
-| parents.router | `/api/v1/parents` | 1363 |
-| parent_portal.router | `/api/v1/parents` | 1365 |
-| geogebra.router | `/api/v1/geogebra` | 1366 |
-| three_d.router | `/api/v1/three-d` | 1367 |
-| virtual_labs.router | `/api/v1/virtual-labs` | 1368 |
-| lab_studio.router | `/api/v1/lab-studio` | 1369 |
-| scorable_items.router | `/api/v1/scorable-items` | 1372 |
-| three_d_tasks.router | `/api/v1/three-d-tasks` | 1374 |
-| mastery.router | `/api/v1/mastery` | 1376 |
-| tag_taxonomy.router | `/api/v1/tag-taxonomy` | 1378 |
-| ai_engines.router | `/api/v1/ai` | 1381 |
-| flywheel.router | `/api/v1/flywheel` | 1383 |
-| funnel.router | `/api/v1/funnel` | 1385 |
-| course_ops.router | `/api/v1/course-ops` | 1387 |
-| learning_signals.router | `/api/v1/signals` | 1389 |
-| learning_planner.router | `/api/v1/planner` | 1391 |
-| studio.router | `/api/v1/studio` | 1392 |
-| content_library_admin.router | `/api/v1/admin/content-library` | 1393 |
-| live_class_session.router | `/api/v1/live` | 1394 |
-| live_classes.router | `/api/v1/live` | 1395 |
-| live_class_attendance.router | `/api/v1/live` | 1396 |
-| live_class_polls.router | `/api/v1/live` | 1397 |
-| live_class_recordings.router | `/api/v1/live` | 1398 |
-| live_class_internal.router | `/api/v1/internal/live` | 1399 |
-| chunked_upload.router | `/api/v1/upload/chunked` | 1403 |
-| assessment_studio.router | `/api/v1/assessment-studio` | 1418 |
-| recording_lessons.router | `/api/v1/recording-lessons` | 1421 |
-| operations.router | `/api/v1/admin/operations` | 1424 |
-| course_packages.router | `/api/v1/course-packages` | 1427 |
-| exam_papers.router | `/api/v1/exam-papers` | 1430 |
-| institutions.router | `/api/v1/institutions` | 1432 |
-| campus_growth.router | `/api/v1/campus-growth` | 1435 |
-| campus_operations.router | `/api/v1/institutions` | 1438 |
-| campus_billing.router | `/api/v1/institutions` | 1439 |
-| campus_action_center.router | `/api/v1/institutions` | 1441 |
-| campus_control_plane.router | `/api/v1/institutions` | 1443 |
-| admissions.router | `/api/v1/institutions` | 1445 |
-| tuition.router | `/api/v1/institutions` | 1446 |
-| brand_sharing.router | `/api/v1/share` | 1449 |
-| campus_learning.router | `/api/v1/institutions` | 1460 |
-| campus_pilot.router | `/api/v1/institutions` | 1463 |
-| campus_pilot.webhook_router | `/api/v1/whatsapp` | 1464 |
-| campus_exams.router | `/api/v1/institutions` | 1466 |
-| tuition_reminders.router | `/api/v1/institutions` | 1468 |
-| tuition_collection.router | `/api/v1/institutions` | 1470 |
-| campus_staff.router | `/api/v1/institutions` | 1472 |
-| campus_transport.router | `/api/v1/institutions` | 1474 |
-| campus_hostel.router | `/api/v1/institutions` | 1476 |
-| whatsapp.router | `/api/v1/whatsapp` | 1478 |
+| auth.router | `/api/v1/auth` | 1294 |
+| notifications_router.router | `/api/v1/notifications` | 1295 |
+| course_type_capabilities.router | `/api/v1` | 1296 |
+| courses.router | `/api/v1/courses` | 1297 |
+| categories.router | `/api/v1/categories` | 1298 |
+| tags.router | `/api/v1/tags` | 1299 |
+| instructors.router | `/api/v1/instructors` | 1300 |
+| lessons.router | `/api/v1/lessons` | 1301 |
+| checkout.router | `/api/v1/checkout` | 1302 |
+| users.router | `/api/v1/users` | 1303 |
+| payments.router | `/api/v1/payments` | 1304 |
+| payments_proxy.router | `/api/v1/payments` | 1305 |
+| memberships.router | `/api/v1/memberships` | 1306 |
+| bundles.router | `/api/v1/bundles` | 1307 |
+| library.router | `/api/v1/library` | 1308 |
+| orders.router | `/api/v1/orders` | 1309 |
+| certificates.router | `/api/v1/certificates` | 1310 |
+| certificate_designer.router | `/api/v1/certificates/designer` | 1311 |
+| admin.router | `/api/v1/admin` | 1312 |
+| superadmin.router | `/api/v1/superadmin` | 1313 |
+| dashboard.router | `/api/v1/dashboard` | 1314 |
+| uploads.router | `/api/v1/upload` | 1315 |
+| wishlist.router | `/api/v1/wishlist` | 1316 |
+| instructor_reviews.router | `/api/v1/instructor-reviews` | 1317 |
+| quizzes.router | `/api/v1` | 1318 |
+| assignments.router | `/api/v1` | 1319 |
+| gradebook.router | `/api/v1` | 1320 |
+| h5p.router | `/api/v1/h5p` | 1321 |
+| games.router | `/api/v1/games` | 1322 |
+| gamification.router | `/api/v1/gamification` | 1323 |
+| certificate_verification.router | `/api/v1` | 1324 |
+| blog.router | `/api/v1/blog` | 1325 |
+| hall_of_fame.router | `/api/v1/hall-of-fame` | 1326 |
+| coupons.router | `/api/v1/coupons` | 1327 |
+| video.router | `/api/v1/extract` | 1328 |
+| video_streaming.router | `/api/v1/stream` | 1329 |
+| embed.router | `/api/v1/embed` | 1330 |
+| youtube_embed.router | `/api/v1/youtube` | 1331 |
+| player.router | `/api/v1/video` | 1332 |
+| progress_router.router | `/api/v1/progress` | 1333 |
+| bunny.router | `/api/v1/bunny` | 1334 |
+| analytics.router | `/api/v1/analytics` | 1335 |
+| internships.router | `/api/v1` | 1336 |
+| candidate.router | `/api/v1/candidates` | 1337 |
+| companies.router | `/api/v1/companies` | 1338 |
+| company_dashboard.router | `/api/v1/companies` | 1339 |
+| company_billing.router | `/api/v1/companies/billing` | 1340 |
+| cohorts.router | `/api/v1/cohorts` | 1341 |
+| student_workspace.router | `/api/v1/student` | 1342 |
+| admin_messages.router | `/api/v1/admin/messages` | 1343 |
+| export_import.router | `/api/v1` | 1344 |
+| question_banks.router | `/api/v1/question-banks` | 1346 |
+| sileos.router | `/api/v1` | 1347 |
+| ai.router | `/api/v1` | 1348 |
+| ai_tutor.router | `/api/v1/ai` | 1349 |
+| parents.router | `/api/v1/parents` | 1350 |
+| geogebra.router | `/api/v1/geogebra` | 1351 |
+| three_d.router | `/api/v1/three-d` | 1352 |
+| virtual_labs.router | `/api/v1/virtual-labs` | 1353 |
+| lab_studio.router | `/api/v1/lab-studio` | 1354 |
+| scorable_items.router | `/api/v1/scorable-items` | 1357 |
+| three_d_tasks.router | `/api/v1/three-d-tasks` | 1359 |
+| mastery.router | `/api/v1/mastery` | 1361 |
+| tag_taxonomy.router | `/api/v1/tag-taxonomy` | 1363 |
+| ai_engines.router | `/api/v1/ai` | 1366 |
+| flywheel.router | `/api/v1/flywheel` | 1368 |
+| funnel.router | `/api/v1/funnel` | 1370 |
+| course_ops.router | `/api/v1/course-ops` | 1372 |
+| learning_signals.router | `/api/v1/signals` | 1374 |
+| learning_planner.router | `/api/v1/planner` | 1376 |
+| studio.router | `/api/v1/studio` | 1377 |
+| content_library_admin.router | `/api/v1/admin/content-library` | 1378 |
+| live_class_session.router | `/api/v1/live` | 1379 |
+| live_classes.router | `/api/v1/live` | 1380 |
+| live_class_attendance.router | `/api/v1/live` | 1381 |
+| live_class_polls.router | `/api/v1/live` | 1382 |
+| live_class_recordings.router | `/api/v1/live` | 1383 |
+| live_class_internal.router | `/api/v1/internal/live` | 1384 |
+| chunked_upload.router | `/api/v1/upload/chunked` | 1388 |
+| assessment_studio.router | `/api/v1/assessment-studio` | 1403 |
+| recording_lessons.router | `/api/v1/recording-lessons` | 1406 |
+| operations.router | `/api/v1/admin/operations` | 1409 |
+| course_packages.router | `/api/v1/course-packages` | 1412 |
+| exam_papers.router | `/api/v1/exam-papers` | 1415 |
 
 ## Declared database tables
 
 | Table | Model source |
 |---|---|
 | `admin_messages` | `backend/app/models/admin_message.py` |
-| `admission_programs` | `backend/app/models/admissions.py` |
-| `admission_intakes` | `backend/app/models/admissions.py` |
-| `admission_applications` | `backend/app/models/admissions.py` |
-| `admission_documents` | `backend/app/models/admissions.py` |
-| `admission_notes` | `backend/app/models/admissions.py` |
-| `admission_tasks` | `backend/app/models/admissions.py` |
-| `admission_stage_history` | `backend/app/models/admissions.py` |
-| `campus_learner_profiles` | `backend/app/models/admissions.py` |
-| `campus_learner_lifecycle_history` | `backend/app/models/admissions.py` |
 | `tutor_escalations` | `backend/app/models/ai_layer.py` |
 | `content_error_reports` | `backend/app/models/ai_layer.py` |
 | `studio_questions` | `backend/app/models/assessment_studio.py` |
@@ -322,52 +284,6 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `blog_comments` | `backend/app/models/blog.py` |
 | `bundles` | `backend/app/models/bundle.py` |
 | `bundle_courses` | `backend/app/models/bundle.py` |
-| `campus_action_items` | `backend/app/models/campus_action_center.py` |
-| `campus_domains` | `backend/app/models/campus_control_plane.py` |
-| `campus_integrations` | `backend/app/models/campus_control_plane.py` |
-| `campus_retention_policies` | `backend/app/models/campus_control_plane.py` |
-| `campus_privacy_requests` | `backend/app/models/campus_control_plane.py` |
-| `campus_consent_receipts` | `backend/app/models/campus_control_plane.py` |
-| `campus_exams` | `backend/app/models/campus_exams.py` |
-| `campus_exam_papers` | `backend/app/models/campus_exams.py` |
-| `campus_exam_marks` | `backend/app/models/campus_exams.py` |
-| `campus_hall_tickets` | `backend/app/models/campus_exams.py` |
-| `campus_leads` | `backend/app/models/campus_growth.py` |
-| `campus_hostel_blocks` | `backend/app/models/campus_hostel.py` |
-| `campus_hostel_rooms` | `backend/app/models/campus_hostel.py` |
-| `campus_hostel_allocations` | `backend/app/models/campus_hostel.py` |
-| `campus_hostel_passes` | `backend/app/models/campus_hostel.py` |
-| `campus_hostel_visitors` | `backend/app/models/campus_hostel.py` |
-| `campus_terms` | `backend/app/models/campus_operations.py` |
-| `campus_attendance` | `backend/app/models/campus_operations.py` |
-| `campus_assessments` | `backend/app/models/campus_operations.py` |
-| `campus_scores` | `backend/app/models/campus_operations.py` |
-| `campus_resources` | `backend/app/models/campus_operations.py` |
-| `campus_branding` | `backend/app/models/campus_operations.py` |
-| `campus_mail_jobs` | `backend/app/models/campus_operations.py` |
-| `parent_link_requests` | `backend/app/models/campus_operations.py` |
-| `campus_subscriptions` | `backend/app/models/campus_operations.py` |
-| `campus_learning_courses` | `backend/app/models/campus_operations.py` |
-| `campus_lessons` | `backend/app/models/campus_operations.py` |
-| `campus_lesson_progress` | `backend/app/models/campus_operations.py` |
-| `campus_onboarding_states` | `backend/app/models/campus_pilot.py` |
-| `campus_events` | `backend/app/models/campus_pilot.py` |
-| `campus_announcements` | `backend/app/models/campus_pilot.py` |
-| `campus_notice_reads` | `backend/app/models/campus_pilot.py` |
-| `campus_goals` | `backend/app/models/campus_pilot.py` |
-| `campus_grade_policies` | `backend/app/models/campus_pilot.py` |
-| `campus_report_comments` | `backend/app/models/campus_pilot.py` |
-| `campus_whatsapp_contacts` | `backend/app/models/campus_pilot.py` |
-| `campus_whatsapp_campaigns` | `backend/app/models/campus_pilot.py` |
-| `campus_whatsapp_messages` | `backend/app/models/campus_pilot.py` |
-| `campus_whatsapp_webhook_events` | `backend/app/models/campus_pilot.py` |
-| `campus_leave_types` | `backend/app/models/campus_staff.py` |
-| `campus_leave_requests` | `backend/app/models/campus_staff.py` |
-| `campus_substitutions` | `backend/app/models/campus_staff.py` |
-| `campus_transport_routes` | `backend/app/models/campus_transport.py` |
-| `campus_transport_stops` | `backend/app/models/campus_transport.py` |
-| `campus_transport_assignments` | `backend/app/models/campus_transport.py` |
-| `campus_transport_logs` | `backend/app/models/campus_transport.py` |
 | `candidate_profiles` | `backend/app/models/candidate.py` |
 | `candidate_eligibility` | `backend/app/models/candidate.py` |
 | `certificates` | `backend/app/models/certificate.py` |
@@ -381,11 +297,6 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `cohort_memberships` | `backend/app/models/cohort.py` |
 | `cohort_sessions` | `backend/app/models/cohort.py` |
 | `session_attendance` | `backend/app/models/cohort.py` |
-| `communication_profiles` | `backend/app/models/communication_automation.py` |
-| `communication_topic_preferences` | `backend/app/models/communication_automation.py` |
-| `institution_automation_rules` | `backend/app/models/communication_automation.py` |
-| `automation_dispatches` | `backend/app/models/communication_automation.py` |
-| `communication_outbox` | `backend/app/models/communication_automation.py` |
 | `companies` | `backend/app/models/company.py` |
 | `company_interests` | `backend/app/models/company.py` |
 | `company_managers` | `backend/app/models/company_dashboard.py` |
@@ -436,15 +347,6 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `h5p_contents` | `backend/app/models/h5p.py` |
 | `h5p_results` | `backend/app/models/h5p.py` |
 | `hall_of_fame_members` | `backend/app/models/hall_of_fame.py` |
-| `institutions` | `backend/app/models/institution.py` |
-| `institution_members` | `backend/app/models/institution.py` |
-| `institution_invites` | `backend/app/models/institution.py` |
-| `institution_batches` | `backend/app/models/institution.py` |
-| `institution_batch_members` | `backend/app/models/institution.py` |
-| `institution_courses` | `backend/app/models/institution.py` |
-| `institution_assignments` | `backend/app/models/institution.py` |
-| `institution_audit` | `backend/app/models/institution.py` |
-| `institution_plan_requests` | `backend/app/models/institution.py` |
 | `instructor_reviews` | `backend/app/models/instructor_review.py` |
 | `internships` | `backend/app/models/internship.py` |
 | `internship_vouchers` | `backend/app/models/internship.py` |
@@ -502,29 +404,12 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `three_d_models` | `backend/app/models/three_d.py` |
 | `three_d_tasks` | `backend/app/models/three_d_task.py` |
 | `three_d_task_attempts` | `backend/app/models/three_d_task.py` |
-| `tuition_fee_plans` | `backend/app/models/tuition.py` |
-| `tuition_fee_components` | `backend/app/models/tuition.py` |
-| `tuition_installment_templates` | `backend/app/models/tuition.py` |
-| `tuition_fee_assignments` | `backend/app/models/tuition.py` |
-| `tuition_installments` | `backend/app/models/tuition.py` |
-| `tuition_payments` | `backend/app/models/tuition.py` |
-| `tuition_adjustments` | `backend/app/models/tuition.py` |
-| `tuition_ledger_entries` | `backend/app/models/tuition.py` |
-| `tuition_receipts` | `backend/app/models/tuition.py` |
-| `tuition_invoices` | `backend/app/models/tuition_collection.py` |
-| `tuition_online_orders` | `backend/app/models/tuition_collection.py` |
-| `tuition_reminder_policies` | `backend/app/models/tuition_reminders.py` |
-| `tuition_reminders` | `backend/app/models/tuition_reminders.py` |
 | `users` | `backend/app/models/user.py` |
 | `user_profiles` | `backend/app/models/user.py` |
 | `instructor_profiles` | `backend/app/models/user.py` |
 | `admin_impersonation_logs` | `backend/app/models/user.py` |
 | `user_roles` | `backend/app/models/user.py` |
 | `webhook_events` | `backend/app/models/webhook_event.py` |
-| `whatsapp_contacts` | `backend/app/models/whatsapp.py` |
-| `whatsapp_campaigns` | `backend/app/models/whatsapp.py` |
-| `whatsapp_messages` | `backend/app/models/whatsapp.py` |
-| `whatsapp_status_receipts` | `backend/app/models/whatsapp.py` |
 
 ## Source file inventory
 
@@ -532,13 +417,12 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 |---|---|
 | `backend/app/api/v1/certificate_verification.py` | 194 |
 | `backend/app/core/auth_security.py` | 421 |
-| `backend/app/core/business_verticals.py` | 65 |
 | `backend/app/core/cache_headers.py` | 21 |
-| `backend/app/core/config.py` | 216 |
+| `backend/app/core/config.py` | 200 |
 | `backend/app/core/config_broken.py` | 78 |
 | `backend/app/core/cors.py` | 44 |
 | `backend/app/core/course_links.py` | 16 |
-| `backend/app/core/course_types.py` | 82 |
+| `backend/app/core/course_types.py` | 78 |
 | `backend/app/core/csv_safety.py` | 26 |
 | `backend/app/core/database.py` | 120 |
 | `backend/app/core/database_async.py` | 82 |
@@ -550,9 +434,9 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `backend/app/core/redis_full.py` | 221 |
 | `backend/app/core/secure_upload.py` | 404 |
 | `backend/app/core/security.py` | 127 |
-| `backend/app/core/security_middleware.py` | 641 |
+| `backend/app/core/security_middleware.py` | 621 |
 | `backend/app/core/totp.py` | 66 |
-| `backend/app/main.py` | 1478 |
+| `backend/app/main.py` | 1415 |
 | `backend/app/main_email_test.py` | 201 |
 | `backend/app/main_frontend_integration.py` | 170 |
 | `backend/app/main_payment_test.py` | 211 |
@@ -560,27 +444,16 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `backend/app/main_test.py` | 139 |
 | `backend/app/migration/data_migrator.py` | 600 |
 | `backend/app/migration/legacy_extractor.py` | 285 |
-| `backend/app/models/__init__.py` | 322 |
+| `backend/app/models/__init__.py` | 181 |
 | `backend/app/models/admin_message.py` | 28 |
-| `backend/app/models/admissions.py` | 455 |
 | `backend/app/models/ai_layer.py` | 47 |
 | `backend/app/models/assessment_studio.py` | 20 |
 | `backend/app/models/assignment.py` | 135 |
 | `backend/app/models/blog.py` | 74 |
 | `backend/app/models/bundle.py` | 36 |
-| `backend/app/models/campus_action_center.py` | 29 |
-| `backend/app/models/campus_control_plane.py` | 107 |
-| `backend/app/models/campus_exams.py` | 104 |
-| `backend/app/models/campus_growth.py` | 38 |
-| `backend/app/models/campus_hostel.py` | 95 |
-| `backend/app/models/campus_operations.py` | 195 |
-| `backend/app/models/campus_pilot.py` | 171 |
-| `backend/app/models/campus_staff.py` | 76 |
-| `backend/app/models/campus_transport.py` | 78 |
 | `backend/app/models/candidate.py` | 99 |
 | `backend/app/models/certificate.py` | 234 |
 | `backend/app/models/cohort.py` | 151 |
-| `backend/app/models/communication_automation.py` | 300 |
 | `backend/app/models/company.py` | 133 |
 | `backend/app/models/company_dashboard.py` | 111 |
 | `backend/app/models/company_invoice.py` | 171 |
@@ -600,7 +473,6 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `backend/app/models/geogebra.py` | 63 |
 | `backend/app/models/h5p.py` | 73 |
 | `backend/app/models/hall_of_fame.py` | 38 |
-| `backend/app/models/institution.py` | 144 |
 | `backend/app/models/instructor_review.py` | 43 |
 | `backend/app/models/internship.py` | 159 |
 | `backend/app/models/internship_request.py` | 39 |
@@ -622,16 +494,11 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `backend/app/models/tag_cluster.py` | 22 |
 | `backend/app/models/three_d.py` | 28 |
 | `backend/app/models/three_d_task.py` | 53 |
-| `backend/app/models/tuition.py` | 450 |
-| `backend/app/models/tuition_collection.py` | 116 |
-| `backend/app/models/tuition_reminders.py` | 86 |
 | `backend/app/models/user.py` | 187 |
 | `backend/app/models/webhook_event.py` | 41 |
-| `backend/app/models/whatsapp.py` | 124 |
 | `backend/app/routers/__init__.py` | 3 |
 | `backend/app/routers/admin.py` | 5385 |
 | `backend/app/routers/admin_messages.py` | 347 |
-| `backend/app/routers/admissions.py` | 350 |
 | `backend/app/routers/ai.py` | 203 |
 | `backend/app/routers/ai_engines.py` | 416 |
 | `backend/app/routers/ai_tutor.py` | 374 |
@@ -640,20 +507,8 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `backend/app/routers/assignments.py` | 1151 |
 | `backend/app/routers/auth.py` | 1767 |
 | `backend/app/routers/blog.py` | 824 |
-| `backend/app/routers/brand_sharing.py` | 53 |
 | `backend/app/routers/bundles.py` | 106 |
 | `backend/app/routers/bunny.py` | 246 |
-| `backend/app/routers/campus_action_center.py` | 57 |
-| `backend/app/routers/campus_billing.py` | 278 |
-| `backend/app/routers/campus_control_plane.py` | 198 |
-| `backend/app/routers/campus_exams.py` | 186 |
-| `backend/app/routers/campus_growth.py` | 83 |
-| `backend/app/routers/campus_hostel.py` | 123 |
-| `backend/app/routers/campus_learning.py` | 286 |
-| `backend/app/routers/campus_operations.py` | 651 |
-| `backend/app/routers/campus_pilot.py` | 892 |
-| `backend/app/routers/campus_staff.py` | 118 |
-| `backend/app/routers/campus_transport.py` | 78 |
 | `backend/app/routers/candidate.py` | 290 |
 | `backend/app/routers/categories.py` | 106 |
 | `backend/app/routers/certificate_designer.py` | 587 |
@@ -661,7 +516,7 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `backend/app/routers/checkout.py` | 59 |
 | `backend/app/routers/chunked_upload.py` | 592 |
 | `backend/app/routers/cohorts.py` | 1035 |
-| `backend/app/routers/companies.py` | 1160 |
+| `backend/app/routers/companies.py` | 1128 |
 | `backend/app/routers/company_billing.py` | 379 |
 | `backend/app/routers/company_dashboard.py` | 1061 |
 | `backend/app/routers/content_library_admin.py` | 360 |
@@ -678,11 +533,10 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `backend/app/routers/funnel.py` | 82 |
 | `backend/app/routers/games.py` | 526 |
 | `backend/app/routers/gamification.py` | 195 |
-| `backend/app/routers/geogebra.py` | 190 |
+| `backend/app/routers/geogebra.py` | 185 |
 | `backend/app/routers/gradebook.py` | 207 |
 | `backend/app/routers/h5p.py` | 567 |
 | `backend/app/routers/hall_of_fame.py` | 233 |
-| `backend/app/routers/institutions.py` | 303 |
 | `backend/app/routers/instructor_reviews.py` | 317 |
 | `backend/app/routers/instructors.py` | 43 |
 | `backend/app/routers/internships.py` | 1608 |
@@ -700,10 +554,9 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `backend/app/routers/mastery.py` | 188 |
 | `backend/app/routers/memberships.py` | 259 |
 | `backend/app/routers/notifications.py` | 65 |
-| `backend/app/routers/operations.py` | 89 |
+| `backend/app/routers/operations.py` | 80 |
 | `backend/app/routers/orders.py` | 372 |
-| `backend/app/routers/parent_portal.py` | 16 |
-| `backend/app/routers/parents.py` | 213 |
+| `backend/app/routers/parents.py` | 186 |
 | `backend/app/routers/payments.py` | 1056 |
 | `backend/app/routers/payments_proxy.py` | 664 |
 | `backend/app/routers/player.py` | 130 |
@@ -715,34 +568,23 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `backend/app/routers/sileos.py` | 730 |
 | `backend/app/routers/student_workspace.py` | 145 |
 | `backend/app/routers/studio.py` | 98 |
-| `backend/app/routers/superadmin.py` | 935 |
+| `backend/app/routers/superadmin.py` | 900 |
 | `backend/app/routers/tag_taxonomy.py` | 75 |
 | `backend/app/routers/tags.py` | 28 |
-| `backend/app/routers/three_d.py` | 249 |
+| `backend/app/routers/three_d.py` | 231 |
 | `backend/app/routers/three_d_tasks.py` | 362 |
-| `backend/app/routers/tuition.py` | 214 |
-| `backend/app/routers/tuition_collection.py` | 184 |
-| `backend/app/routers/tuition_reminders.py` | 50 |
 | `backend/app/routers/uploads.py` | 692 |
 | `backend/app/routers/users.py` | 605 |
 | `backend/app/routers/video.py` | 116 |
 | `backend/app/routers/video_streaming.py` | 363 |
-| `backend/app/routers/virtual_labs.py` | 370 |
-| `backend/app/routers/whatsapp.py` | 304 |
+| `backend/app/routers/virtual_labs.py` | 369 |
 | `backend/app/routers/wishlist.py` | 146 |
 | `backend/app/routers/youtube_embed.py` | 260 |
 | `backend/app/schemas/__init__.py` | 3 |
 | `backend/app/schemas/admin.py` | 135 |
-| `backend/app/schemas/admissions.py` | 432 |
 | `backend/app/schemas/assessment.py` | 50 |
 | `backend/app/schemas/auth.py` | 136 |
 | `backend/app/schemas/bundle.py` | 47 |
-| `backend/app/schemas/campus_exams.py` | 66 |
-| `backend/app/schemas/campus_hostel.py` | 72 |
-| `backend/app/schemas/campus_operations.py` | 84 |
-| `backend/app/schemas/campus_pilot.py` | 121 |
-| `backend/app/schemas/campus_staff.py` | 63 |
-| `backend/app/schemas/campus_transport.py` | 64 |
 | `backend/app/schemas/candidate.py` | 92 |
 | `backend/app/schemas/certificate.py` | 229 |
 | `backend/app/schemas/cohort.py` | 211 |
@@ -756,7 +598,6 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `backend/app/schemas/edgyy_payment.py` | 176 |
 | `backend/app/schemas/exam_paper.py` | 30 |
 | `backend/app/schemas/game_config.py` | 273 |
-| `backend/app/schemas/institution.py` | 67 |
 | `backend/app/schemas/instructor_review.py` | 41 |
 | `backend/app/schemas/internship.py` | 331 |
 | `backend/app/schemas/lab_config.py` | 291 |
@@ -765,36 +606,17 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `backend/app/schemas/payment.py` | 101 |
 | `backend/app/schemas/scorable.py` | 210 |
 | `backend/app/schemas/three_d_task_config.py` | 520 |
-| `backend/app/schemas/tuition.py` | 323 |
-| `backend/app/schemas/tuition_reminders.py` | 43 |
 | `backend/app/schemas/user.py` | 110 |
-| `backend/app/schemas/whatsapp.py` | 65 |
 | `backend/app/scripts/__init__.py` | 0 |
 | `backend/app/scripts/cleanup_broken_uploads.py` | 96 |
 | `backend/app/scripts/delete_all_courses.py` | 149 |
 | `backend/app/seed_data/sashainfinity_courses.py` | 277 |
 | `backend/app/seed_data.py` | 406 |
 | `backend/app/services/__init__.py` | 3 |
-| `backend/app/services/admissions_service.py` | 1471 |
 | `backend/app/services/ai_layer_service.py` | 267 |
 | `backend/app/services/assessment_studio_service.py` | 279 |
 | `backend/app/services/attendance_report.py` | 149 |
 | `backend/app/services/auth_service.py` | 240 |
-| `backend/app/services/brand_artwork.py` | 105 |
-| `backend/app/services/business_portfolio_service.py` | 307 |
-| `backend/app/services/campus_action_center.py` | 521 |
-| `backend/app/services/campus_billing.py` | 139 |
-| `backend/app/services/campus_control_plane.py` | 388 |
-| `backend/app/services/campus_exams.py` | 744 |
-| `backend/app/services/campus_growth.py` | 130 |
-| `backend/app/services/campus_hostel.py` | 451 |
-| `backend/app/services/campus_mail.py` | 56 |
-| `backend/app/services/campus_pilot.py` | 431 |
-| `backend/app/services/campus_report_pdf.py` | 529 |
-| `backend/app/services/campus_staff.py` | 633 |
-| `backend/app/services/campus_transport.py` | 443 |
-| `backend/app/services/campus_whatsapp.py` | 721 |
-| `backend/app/services/campus_worker.py` | 67 |
 | `backend/app/services/certificate_html_renderer.py` | 640 |
 | `backend/app/services/certificate_service.py` | 1648 |
 | `backend/app/services/class_report_service.py` | 377 |
@@ -803,7 +625,7 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `backend/app/services/course_access.py` | 31 |
 | `backend/app/services/course_asset_service.py` | 63 |
 | `backend/app/services/course_ops_service.py` | 237 |
-| `backend/app/services/course_package_service.py` | 606 |
+| `backend/app/services/course_package_service.py` | 561 |
 | `backend/app/services/course_service.py` | 659 |
 | `backend/app/services/email_service.py` | 1194 |
 | `backend/app/services/exam_paper_service.py` | 196 |
@@ -814,11 +636,10 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `backend/app/services/glb_budget.py` | 114 |
 | `backend/app/services/gradebook_service.py` | 244 |
 | `backend/app/services/h5p_service.py` | 340 |
-| `backend/app/services/institution_service.py` | 673 |
 | `backend/app/services/invoice_pdf.py` | 207 |
 | `backend/app/services/invoice_service.py` | 148 |
 | `backend/app/services/jitsi_token_service.py` | 110 |
-| `backend/app/services/lab_catalog_service.py` | 69 |
+| `backend/app/services/lab_catalog_service.py` | 56 |
 | `backend/app/services/lab_investigation_service.py` | 107 |
 | `backend/app/services/lab_model_service.py` | 123 |
 | `backend/app/services/lab_studio_service.py` | 38 |
@@ -833,11 +654,9 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `backend/app/services/mastery_service.py` | 327 |
 | `backend/app/services/media_pipeline.py` | 100 |
 | `backend/app/services/membership_access.py` | 87 |
-| `backend/app/services/model_library_service.py` | 64 |
 | `backend/app/services/notification_service.py` | 48 |
 | `backend/app/services/offline_learning_service.py` | 49 |
-| `backend/app/services/operations_service.py` | 147 |
-| `backend/app/services/parent_portal.py` | 236 |
+| `backend/app/services/operations_service.py` | 139 |
 | `backend/app/services/payment_service.py` | 197 |
 | `backend/app/services/pricing.py` | 353 |
 | `backend/app/services/public_preview.py` | 35 |
@@ -845,17 +664,13 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `backend/app/services/recording_lesson_service.py` | 162 |
 | `backend/app/services/refund_service.py` | 506 |
 | `backend/app/services/report_theme.py` | 260 |
-| `backend/app/services/retention_service.py` | 328 |
+| `backend/app/services/retention_service.py` | 191 |
 | `backend/app/services/studio_service.py` | 302 |
 | `backend/app/services/supplied_lab_pack.py` | 127 |
 | `backend/app/services/tag_service.py` | 252 |
 | `backend/app/services/transcription_provider.py` | 38 |
-| `backend/app/services/tuition_collection.py` | 700 |
-| `backend/app/services/tuition_reminders.py` | 694 |
-| `backend/app/services/tuition_service.py` | 1262 |
 | `backend/app/services/user_service.py` | 217 |
-| `backend/app/services/webhook_processor.py` | 587 |
-| `backend/app/services/whatsapp_campaigns.py` | 153 |
+| `backend/app/services/webhook_processor.py` | 567 |
 | `backend/app/services/xapi_service.py` | 48 |
 | `backend/app/utils/__init__.py` | 3 |
 | `backend/app/utils/email.py` | 1190 |
@@ -891,22 +706,8 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `backend/alembic/versions/0025_course_tools.py` | 24 |
 | `backend/alembic/versions/0026_transfer_lifecycle.py` | 38 |
 | `backend/alembic/versions/0027_lab_notebooks.py` | 28 |
-| `backend/alembic/versions/0028_exam_papers_course_links.py` | 59 |
+| `backend/alembic/versions/0028_exam_papers_course_links.py` | 52 |
 | `backend/alembic/versions/0029_integrated_learning.py` | 19 |
-| `backend/alembic/versions/0030_institutions.py` | 199 |
-| `backend/alembic/versions/0031_campus_operations.py` | 307 |
-| `backend/alembic/versions/0032_campus_learning.py` | 126 |
-| `backend/alembic/versions/0033_campus_pilot.py` | 230 |
-| `backend/alembic/versions/0034_global_whatsapp.py` | 278 |
-| `backend/alembic/versions/0035_admissions_student_lifecycle.py` | 528 |
-| `backend/alembic/versions/0036_tuition_finance.py` | 526 |
-| `backend/alembic/versions/0037_campus_growth_control_plane.py` | 196 |
-| `backend/alembic/versions/0038_campus_exams.py` | 112 |
-| `backend/alembic/versions/0039_tuition_reminders.py` | 86 |
-| `backend/alembic/versions/0040_campus_staff_leave.py` | 94 |
-| `backend/alembic/versions/0041_campus_transport.py` | 115 |
-| `backend/alembic/versions/0042_campus_hostel.py` | 135 |
-| `backend/alembic/versions/0043_fee_collection.py` | 159 |
 | `backend/scripts/build_concept_extensions.py` | 48 |
 | `backend/scripts/install_transcription_model.py` | 13 |
 | `backend/scripts/migrate_wp_orders.py` | 233 |
@@ -918,17 +719,9 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `frontend/src/api/assessment-studio.ts` | 15 |
 | `frontend/src/api/assignment.ts` | 79 |
 | `frontend/src/api/auth.ts` | 244 |
-| `frontend/src/api/axios.ts` | 472 |
+| `frontend/src/api/axios.ts` | 467 |
 | `frontend/src/api/blog.ts` | 96 |
 | `frontend/src/api/bundle.ts` | 48 |
-| `frontend/src/api/campus-control-plane.ts` | 80 |
-| `frontend/src/api/campus-exams.ts` | 164 |
-| `frontend/src/api/campus-growth.ts` | 38 |
-| `frontend/src/api/campus-hostel.ts` | 134 |
-| `frontend/src/api/campus-os.ts` | 1039 |
-| `frontend/src/api/campus-staff.ts` | 131 |
-| `frontend/src/api/campus-transport.ts` | 92 |
-| `frontend/src/api/campus.ts` | 447 |
 | `frontend/src/api/candidate.ts` | 102 |
 | `frontend/src/api/cart.ts` | 100 |
 | `frontend/src/api/certificateDesigner.ts` | 112 |
@@ -951,7 +744,6 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `frontend/src/api/gradebook.ts` | 109 |
 | `frontend/src/api/h5p.ts` | 246 |
 | `frontend/src/api/hallOfFame.ts` | 72 |
-| `frontend/src/api/institutions.ts` | 174 |
 | `frontend/src/api/internship.ts` | 369 |
 | `frontend/src/api/lab-studio.ts` | 158 |
 | `frontend/src/api/labs.ts` | 131 |
@@ -960,22 +752,18 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `frontend/src/api/mastery.ts` | 99 |
 | `frontend/src/api/membership.ts` | 51 |
 | `frontend/src/api/notifications.ts` | 19 |
-| `frontend/src/api/operations.ts` | 146 |
-| `frontend/src/api/parent-portal.ts` | 62 |
+| `frontend/src/api/operations.ts` | 95 |
 | `frontend/src/api/planner.ts` | 26 |
-| `frontend/src/api/quiz.ts` | 276 |
 | `frontend/src/api/recording-lessons.ts` | 21 |
 | `frontend/src/api/scorable.ts` | 96 |
 | `frontend/src/api/signals.ts` | 59 |
 | `frontend/src/api/studio.ts` | 77 |
 | `frontend/src/api/superadmin.ts` | 154 |
-| `frontend/src/api/threeD.ts` | 51 |
+| `frontend/src/api/threeD.ts` | 43 |
 | `frontend/src/api/threeDTasks.ts` | 81 |
-| `frontend/src/api/tuition-reminders.ts` | 70 |
 | `frontend/src/api/upload.ts` | 188 |
 | `frontend/src/api/video.ts` | 115 |
-| `frontend/src/api/whatsapp.ts` | 130 |
-| `frontend/src/App.tsx` | 2477 |
+| `frontend/src/App.tsx` | 2396 |
 | `frontend/src/components/about/AboutSections.module.css` | 928 |
 | `frontend/src/components/about/CoreOfferingsSection.tsx` | 68 |
 | `frontend/src/components/about/CTASection.tsx` | 25 |
@@ -984,11 +772,6 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `frontend/src/components/about/PageTitleSection.tsx` | 12 |
 | `frontend/src/components/about/StatsSection.tsx` | 33 |
 | `frontend/src/components/about/WhoWeAreSection.tsx` | 39 |
-| `frontend/src/components/admin/BusinessPortfolio.tsx` | 195 |
-| `frontend/src/components/admin/certificate-templates/index.ts` | 3 |
-| `frontend/src/components/admin/certificate-templates/template-builder.tsx` | 528 |
-| `frontend/src/components/admin/certificate-templates/template-management.tsx` | 539 |
-| `frontend/src/components/admin/certificate-templates/template-uploader.tsx` | 350 |
 | `frontend/src/components/admin/CoursesProgressChart.tsx` | 319 |
 | `frontend/src/components/admin/ExportImportPanel.tsx` | 884 |
 | `frontend/src/components/admin/heatmaps.tsx` | 449 |
@@ -1039,24 +822,22 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `frontend/src/components/course/TemplatePicker.tsx` | 45 |
 | `frontend/src/components/dashboard/charts.tsx` | 315 |
 | `frontend/src/components/dashboard/ContinueLearning.tsx` | 38 |
-| `frontend/src/components/dashboard/DashboardNavbar.tsx` | 227 |
-| `frontend/src/components/dashboard/DashboardSidebar.tsx` | 511 |
-| `frontend/src/components/dashboard/DashboardWorkspace.tsx` | 174 |
+| `frontend/src/components/dashboard/DashboardNavbar.tsx` | 220 |
+| `frontend/src/components/dashboard/DashboardSidebar.tsx` | 501 |
+| `frontend/src/components/dashboard/DashboardWorkspace.tsx` | 172 |
 | `frontend/src/components/dashboard/MembershipCard.tsx` | 141 |
 | `frontend/src/components/dashboard/MyInternshipCharts.tsx` | 216 |
-| `frontend/src/components/dashboard/nav-configs.ts` | 170 |
+| `frontend/src/components/dashboard/nav-configs.ts` | 150 |
 | `frontend/src/components/dashboard/primitives.tsx` | 619 |
 | `frontend/src/components/dashboard/RoleLayouts.tsx` | 61 |
 | `frontend/src/components/dashboard/StudentInternshipSummary.tsx` | 92 |
 | `frontend/src/components/dashboard/theme.css` | 274 |
 | `frontend/src/components/dashboard/two-factor-section.tsx` | 275 |
-| `frontend/src/components/dashboard/WorkspaceHeader.tsx` | 80 |
-| `frontend/src/components/dashboard/WorkspaceNavigation.tsx` | 49 |
+| `frontend/src/components/dashboard/WorkspaceHeader.tsx` | 75 |
+| `frontend/src/components/dashboard/WorkspaceNavigation.tsx` | 48 |
 | `frontend/src/components/design-system/AstraRouteTheme.tsx` | 46 |
 | `frontend/src/components/design-system/AstraSymbol.tsx` | 15 |
-| `frontend/src/components/design-system/BrandBanner.tsx` | 116 |
 | `frontend/src/components/design-system/GlassSurface.tsx` | 19 |
-| `frontend/src/components/design-system/PageBanner.tsx` | 51 |
 | `frontend/src/components/design-system/PageLayout.tsx` | 102 |
 | `frontend/src/components/flywheel/DigiLockerButton.tsx` | 31 |
 | `frontend/src/components/flywheel/EarningsPanel.tsx` | 70 |
@@ -1080,41 +861,21 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `frontend/src/components/gamification/StreakCard.tsx` | 91 |
 | `frontend/src/components/gamification/XPLevelCard.tsx` | 86 |
 | `frontend/src/components/geogebra/GeoGebraAuthorCard.tsx` | 118 |
-| `frontend/src/components/geogebra/GeoGebraEmbed.tsx` | 126 |
+| `frontend/src/components/geogebra/GeoGebraEmbed.tsx` | 103 |
 | `frontend/src/components/h5p/H5PLesson.tsx` | 255 |
 | `frontend/src/components/h5p/H5PPicker.tsx` | 214 |
 | `frontend/src/components/home/Hero3DBackground.tsx` | 45 |
 | `frontend/src/components/home/HeroSection.module.css` | 302 |
 | `frontend/src/components/home/ScrollStack.css` | 28 |
 | `frontend/src/components/home/ScrollStack.tsx` | 312 |
-| `frontend/src/components/institutions/BillingRecovery.tsx` | 115 |
-| `frontend/src/components/institutions/CampusAcademics.tsx` | 468 |
-| `frontend/src/components/institutions/CampusActionCenter.tsx` | 344 |
-| `frontend/src/components/institutions/CampusAdmissions.tsx` | 429 |
-| `frontend/src/components/institutions/CampusBilling.tsx` | 229 |
-| `frontend/src/components/institutions/CampusControlPlane.tsx` | 192 |
-| `frontend/src/components/institutions/CampusExams.tsx` | 850 |
-| `frontend/src/components/institutions/CampusFinance.tsx` | 517 |
-| `frontend/src/components/institutions/CampusHostel.tsx` | 637 |
-| `frontend/src/components/institutions/CampusLearning.tsx` | 458 |
-| `frontend/src/components/institutions/CampusOsPrimitives.tsx` | 125 |
-| `frontend/src/components/institutions/CampusPilot.tsx` | 861 |
-| `frontend/src/components/institutions/CampusStaff.tsx` | 604 |
-| `frontend/src/components/institutions/CampusTools.tsx` | 509 |
-| `frontend/src/components/institutions/CampusTransport.tsx` | 382 |
-| `frontend/src/components/institutions/FeeCashDesk.tsx` | 184 |
-| `frontend/src/components/institutions/FeeReminders.tsx` | 332 |
-| `frontend/src/components/institutions/GuardianRequests.tsx` | 83 |
-| `frontend/src/components/institutions/InstitutionDialog.tsx` | 530 |
-| `frontend/src/components/institutions/InstitutionPlanQueue.tsx` | 152 |
 | `frontend/src/components/instructor/PurchasesByCourseChart.tsx` | 164 |
 | `frontend/src/components/instructor/QuizSetupModal.tsx` | 565 |
 | `frontend/src/components/labs/concept-templates.ts` | 126 |
-| `frontend/src/components/labs/ConceptLabPlayer.tsx` | 126 |
+| `frontend/src/components/labs/ConceptLabPlayer.tsx` | 122 |
 | `frontend/src/components/labs/diagrams/CellDiagram.tsx` | 61 |
 | `frontend/src/components/labs/diagrams/SkeletonDiagram.tsx` | 82 |
 | `frontend/src/components/labs/GuidedLabAuthor.tsx` | 394 |
-| `frontend/src/components/labs/GuidedLabPlayer.tsx` | 298 |
+| `frontend/src/components/labs/GuidedLabPlayer.tsx` | 295 |
 | `frontend/src/components/labs/LearningPreferences.tsx` | 101 |
 | `frontend/src/components/labs/native/chemistry.ts` | 81 |
 | `frontend/src/components/labs/native/IdentifyLab.tsx` | 145 |
@@ -1128,7 +889,7 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `frontend/src/components/layout/admin/superadmin-layout.tsx` | 25 |
 | `frontend/src/components/layout/auth-layout.tsx` | 40 |
 | `frontend/src/components/layout/footer.tsx` | 231 |
-| `frontend/src/components/layout/header.tsx` | 350 |
+| `frontend/src/components/layout/header.tsx` | 348 |
 | `frontend/src/components/layout/main-layout.tsx` | 27 |
 | `frontend/src/components/live/AttendancePanel.tsx` | 82 |
 | `frontend/src/components/live/ClassCountdown.tsx` | 112 |
@@ -1153,7 +914,7 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `frontend/src/components/public/PublicFooter.module.css` | 142 |
 | `frontend/src/components/public/PublicFooter.tsx` | 156 |
 | `frontend/src/components/public/PublicHeader.module.css` | 529 |
-| `frontend/src/components/public/PublicHeader.tsx` | 215 |
+| `frontend/src/components/public/PublicHeader.tsx` | 206 |
 | `frontend/src/components/routing/lazy-page.tsx` | 23 |
 | `frontend/src/components/routing/page-guides.ts` | 441 |
 | `frontend/src/components/routing/PageBackButton.tsx` | 22 |
@@ -1165,38 +926,34 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `frontend/src/components/SortableLecture.tsx` | 32 |
 | `frontend/src/components/spoc/CohortMasteryPanel.tsx` | 67 |
 | `frontend/src/components/spoc/ViewAsSpocBanner.tsx` | 86 |
-| `frontend/src/components/streak/streak-card.tsx` | 2 |
 | `frontend/src/components/studio/GuardianVisibility.tsx` | 43 |
 | `frontend/src/components/studio/RewardDesigner.tsx` | 99 |
 | `frontend/src/components/studio/ScheduleBuilder.tsx` | 80 |
 | `frontend/src/components/studio/StudioFace.tsx` | 125 |
 | `frontend/src/components/studio/TierPreview.tsx` | 85 |
 | `frontend/src/components/three-d/DeferredThreeD.tsx` | 57 |
-| `frontend/src/components/three-d/load-glb.ts` | 36 |
 | `frontend/src/components/three-d/tasks/ThreeDTaskPlayer.tsx` | 380 |
 | `frontend/src/components/three-d/ThreeDCheckYourself.tsx` | 33 |
-| `frontend/src/components/three-d/ThreeDModelPicker.tsx` | 178 |
+| `frontend/src/components/three-d/ThreeDModelPicker.tsx` | 159 |
 | `frontend/src/components/three-d/ThreeDTeachingKit.tsx` | 69 |
-| `frontend/src/components/three-d/ThreeDViewer.tsx` | 621 |
+| `frontend/src/components/three-d/ThreeDViewer.tsx` | 637 |
 | `frontend/src/components/three-d/xr-session.ts` | 183 |
 | `frontend/src/components/ui/avatar.tsx` | 59 |
 | `frontend/src/components/ui/badge.tsx` | 45 |
 | `frontend/src/components/ui/button.tsx` | 115 |
 | `frontend/src/components/ui/card.tsx` | 91 |
 | `frontend/src/components/ui/confirm.tsx` | 128 |
-| `frontend/src/components/ui/dialog.tsx` | 134 |
+| `frontend/src/components/ui/dialog.tsx` | 133 |
 | `frontend/src/components/ui/input.tsx` | 66 |
 | `frontend/src/components/ui/logo.tsx` | 116 |
 | `frontend/src/components/ui/pagination.tsx` | 170 |
 | `frontend/src/components/ui/progress.tsx` | 59 |
-| `frontend/src/components/ui/share-button.tsx` | 219 |
+| `frontend/src/components/ui/share-button.tsx` | 145 |
 | `frontend/src/components/ui/star-rating.tsx` | 121 |
 | `frontend/src/components/upload/document-upload.tsx` | 196 |
 | `frontend/src/components/upload/image-upload.tsx` | 225 |
 | `frontend/src/components/upload/index.ts` | 3 |
 | `frontend/src/components/upload/video-upload.tsx` | 145 |
-| `frontend/src/components/verticals/BusinessVerticalPage.tsx` | 184 |
-| `frontend/src/components/verticals/SubdomainHome.tsx` | 9 |
 | `frontend/src/components/video/AudioOnlyToggle.tsx` | 42 |
 | `frontend/src/components/video/native-video-player.tsx` | 360 |
 | `frontend/src/components/video/react-player.tsx` | 81 |
@@ -1205,7 +962,6 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `frontend/src/components/video/video-player.tsx` | 126 |
 | `frontend/src/components/video/youtube-extracted-player.tsx` | 331 |
 | `frontend/src/components/video/youtube-player.tsx` | 100 |
-| `frontend/src/config/businessVerticals.ts` | 158 |
 | `frontend/src/config/courseTypes.ts` | 102 |
 | `frontend/src/config/urls.ts` | 77 |
 | `frontend/src/contexts/CartContext.tsx` | 217 |
@@ -1229,10 +985,9 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `frontend/src/lib/firebase.ts` | 73 |
 | `frontend/src/lib/gradebook.ts` | 115 |
 | `frontend/src/lib/lessonContentSync.ts` | 91 |
-| `frontend/src/lib/razorpayCheckout.ts` | 59 |
-| `frontend/src/main.tsx` | 56 |
+| `frontend/src/main.tsx` | 53 |
 | `frontend/src/offline/learning.ts` | 110 |
-| `frontend/src/offline/main.tsx` | 312 |
+| `frontend/src/offline/main.tsx` | 318 |
 | `frontend/src/offline/OfflineSyncBridge.tsx` | 24 |
 | `frontend/src/offline/storage.ts` | 117 |
 | `frontend/src/pages/About.tsx` | 22 |
@@ -1245,7 +1000,6 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `frontend/src/pages/admin/certificates.tsx` | 523 |
 | `frontend/src/pages/admin/cohorts.tsx` | 712 |
 | `frontend/src/pages/admin/colleges.tsx` | 264 |
-| `frontend/src/pages/admin/communications.tsx` | 546 |
 | `frontend/src/pages/admin/companies.tsx` | 884 |
 | `frontend/src/pages/admin/company-invoices.tsx` | 794 |
 | `frontend/src/pages/admin/content-libraries.tsx` | 934 |
@@ -1263,7 +1017,7 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `frontend/src/pages/admin/memberships.tsx` | 723 |
 | `frontend/src/pages/admin/messages.tsx` | 358 |
 | `frontend/src/pages/admin/new-course.tsx` | 478 |
-| `frontend/src/pages/admin/operations.tsx` | 689 |
+| `frontend/src/pages/admin/operations.tsx` | 679 |
 | `frontend/src/pages/admin/orders.tsx` | 664 |
 | `frontend/src/pages/admin/quizzes.tsx` | 309 |
 | `frontend/src/pages/admin/reviews.tsx` | 184 |
@@ -1281,21 +1035,19 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `frontend/src/pages/auth/verify-email.tsx` | 191 |
 | `frontend/src/pages/blog-detail.tsx` | 541 |
 | `frontend/src/pages/blog.tsx` | 421 |
-| `frontend/src/pages/bundle-detail.tsx` | 288 |
-| `frontend/src/pages/bundles.tsx` | 111 |
-| `frontend/src/pages/campus-for-institutions.tsx` | 228 |
+| `frontend/src/pages/bundle-detail.tsx` | 285 |
+| `frontend/src/pages/bundles.tsx` | 114 |
 | `frontend/src/pages/cart.tsx` | 314 |
 | `frontend/src/pages/categories.tsx` | 187 |
-| `frontend/src/pages/category-meiporul.tsx` | 7 |
-| `frontend/src/pages/category-seyappaduporul.tsx` | 7 |
-| `frontend/src/pages/category-utporul.tsx` | 7 |
+| `frontend/src/pages/category-meiporul.tsx` | 254 |
+| `frontend/src/pages/category-seyappaduporul.tsx` | 251 |
+| `frontend/src/pages/category-utporul.tsx` | 253 |
 | `frontend/src/pages/certificate.tsx` | 303 |
 | `frontend/src/pages/checkout.tsx` | 770 |
-| `frontend/src/pages/communication-preferences.tsx` | 332 |
 | `frontend/src/pages/company/dashboard.tsx` | 3026 |
 | `frontend/src/pages/Contact.tsx` | 18 |
 | `frontend/src/pages/course-detail.tsx` | 1574 |
-| `frontend/src/pages/courses.tsx` | 794 |
+| `frontend/src/pages/courses.tsx` | 791 |
 | `frontend/src/pages/dashboard/analytics-print.css` | 55 |
 | `frontend/src/pages/dashboard/analytics.tsx` | 653 |
 | `frontend/src/pages/dashboard/internship-inbox.tsx` | 138 |
@@ -1304,16 +1056,14 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `frontend/src/pages/dashboard/my-internship-detail.tsx` | 198 |
 | `frontend/src/pages/dashboard/my-internships.tsx` | 260 |
 | `frontend/src/pages/dashboard/my-vouchers.tsx` | 185 |
-| `frontend/src/pages/dashboard.tsx` | 439 |
-| `frontend/src/pages/exam-papers.tsx` | 441 |
+| `frontend/src/pages/dashboard.tsx` | 437 |
+| `frontend/src/pages/exam-papers.tsx` | 423 |
 | `frontend/src/pages/for-companies/signup.tsx` | 239 |
 | `frontend/src/pages/for-companies.tsx` | 74 |
 | `frontend/src/pages/game-play.tsx` | 121 |
 | `frontend/src/pages/hall-of-fame.tsx` | 412 |
-| `frontend/src/pages/help.tsx` | 76 |
 | `frontend/src/pages/home.css` | 724 |
-| `frontend/src/pages/Home.tsx` | 911 |
-| `frontend/src/pages/institutions.tsx` | 1414 |
+| `frontend/src/pages/Home.tsx` | 910 |
 | `frontend/src/pages/instructor/analytics.tsx` | 243 |
 | `frontend/src/pages/instructor/assessment-studio.tsx` | 924 |
 | `frontend/src/pages/instructor/assignment-builder.tsx` | 960 |
@@ -1350,30 +1100,29 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `frontend/src/pages/instructor/students.tsx` | 572 |
 | `frontend/src/pages/instructor/three-d-tasks.tsx` | 1465 |
 | `frontend/src/pages/instructor-profile.tsx` | 503 |
-| `frontend/src/pages/internship-detail.tsx` | 252 |
-| `frontend/src/pages/internships.tsx` | 117 |
+| `frontend/src/pages/internship-detail.tsx` | 261 |
+| `frontend/src/pages/internships.tsx` | 119 |
 | `frontend/src/pages/lab-workspace.tsx` | 213 |
-| `frontend/src/pages/labs.tsx` | 329 |
+| `frontend/src/pages/labs.tsx` | 322 |
 | `frontend/src/pages/leaderboard.tsx` | 114 |
 | `frontend/src/pages/lesson-redesigned.tsx` | 2765 |
-| `frontend/src/pages/library-detail.tsx` | 159 |
-| `frontend/src/pages/library.tsx` | 187 |
+| `frontend/src/pages/library-detail.tsx` | 144 |
+| `frontend/src/pages/library.tsx` | 186 |
 | `frontend/src/pages/meiporul-ar.tsx` | 529 |
 | `frontend/src/pages/membership.tsx` | 267 |
 | `frontend/src/pages/my-courses.tsx` | 257 |
 | `frontend/src/pages/my-library.tsx` | 107 |
 | `frontend/src/pages/not-found.tsx` | 126 |
-| `frontend/src/pages/parent/dashboard.tsx` | 359 |
+| `frontend/src/pages/parent/dashboard.tsx` | 155 |
 | `frontend/src/pages/privacy.tsx` | 637 |
 | `frontend/src/pages/profile.tsx` | 1071 |
-| `frontend/src/pages/public-profile.tsx` | 278 |
+| `frontend/src/pages/public-profile.tsx` | 266 |
 | `frontend/src/pages/quiz-taking.tsx` | 1173 |
-| `frontend/src/pages/quiz.tsx` | 571 |
 | `frontend/src/pages/recording-lesson.tsx` | 69 |
 | `frontend/src/pages/refund-policy.tsx` | 246 |
 | `frontend/src/pages/search.tsx` | 363 |
 | `frontend/src/pages/server-down.tsx` | 276 |
-| `frontend/src/pages/settings.tsx` | 330 |
+| `frontend/src/pages/settings.tsx` | 314 |
 | `frontend/src/pages/shipping.tsx` | 330 |
 | `frontend/src/pages/spoc/blog.tsx` | 367 |
 | `frontend/src/pages/spoc/cohort.tsx` | 645 |
@@ -1401,23 +1150,17 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `frontend/src/store/cartStore.ts` | 179 |
 | `frontend/src/store/course.ts` | 311 |
 | `frontend/src/store/liveClassStore.ts` | 110 |
-| `frontend/src/store/quiz.ts` | 419 |
 | `frontend/src/styles/astra-glass.css` | 1249 |
 | `frontend/src/styles/astra-tokens.css` | 41 |
-| `frontend/src/styles/campus-glass.css` | 691 |
-| `frontend/src/styles/campus-growth.css` | 87 |
-| `frontend/src/styles/campus-os.css` | 462 |
 | `frontend/src/styles/category-page.module.css` | 445 |
 | `frontend/src/styles/globals.css` | 1249 |
 | `frontend/src/styles/home.css` | 73 |
 | `frontend/src/styles/page-redesign.css` | 1514 |
 | `frontend/src/styles/sasha-design.css` | 801 |
-| `frontend/src/styles/sunrise.css` | 401 |
 | `frontend/src/test-setup.ts` | 1 |
 | `frontend/src/types/index.ts` | 637 |
 | `frontend/src/utils/animations.ts` | 123 |
 | `frontend/src/utils/auth-helper.ts` | 27 |
-| `frontend/src/utils/brand-artwork.ts` | 153 |
 | `frontend/src/utils/certificate-share.ts` | 112 |
 | `frontend/src/utils/cn.ts` | 6 |
 | `frontend/src/utils/media.ts` | 96 |
@@ -1559,7 +1302,7 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `frontend/labs/simulations/xr/molecule-viewer-xr/view.html` | 65 |
 | `frontend/labs/simulations/xr/solar-system-xr/simulation.js` | 151 |
 | `frontend/labs/simulations/xr/solar-system-xr/view.html` | 54 |
-| `frontend/scripts/build-labs.mjs` | 117 |
+| `frontend/scripts/build-labs.mjs` | 100 |
 | `flutter_app/lib/config/app_config.dart` | 78 |
 | `flutter_app/lib/config/design_tokens.dart` | 157 |
 | `flutter_app/lib/config/routes.dart` | 316 |
@@ -1770,29 +1513,19 @@ Generated from the outer workspace on 6 September 2026. Secrets, runtime data, d
 | `streaming-service/video_streaming.py` | 279 |
 | `nginx/cache.conf` | 5 |
 | `nginx/conf.d/aapanel.conf` | 23 |
-| `nginx/conf.d/default.conf` | 554 |
-| `nginx/conf.d/default.production.conf` | 225 |
+| `nginx/conf.d/default.conf` | 502 |
+| `nginx/conf.d/default.production.conf` | 202 |
 | `nginx/conf.d/map_crawler.conf` | 18 |
-| `nginx/conf.d.local/default.conf` | 158 |
+| `nginx/conf.d.local/default.conf` | 135 |
 | `nginx/nginx-entrypoint.sh` | 9 |
 | `nginx/nginx.conf` | 53 |
 | `scripts/apply_integrated_migration.py` | 20 |
 | `scripts/backup-db.sh` | 56 |
 | `scripts/build_architecture_inventory.py` | 51 |
-| `scripts/campus_release_check.py` | 103 |
 | `scripts/check_local_release.py` | 31 |
-| `scripts/export_project_content.py` | 72 |
-| `scripts/export_release.py` | 89 |
 | `scripts/ids_watch.py` | 412 |
-| `scripts/preview_campus.py` | 579 |
-| `scripts/preview_labs.py` | 31 |
 | `scripts/purge-cloudflare-cache.sh` | 34 |
 | `scripts/render_architecture_pdf.py` | 123 |
-| `scripts/scrub-secrets.sh` | 66 |
 | `scripts/setup.sh` | 82 |
 | `scripts/smoke.sh` | 56 |
 | `scripts/start-recording-worker.ps1` | 12 |
-| `scripts/verify-lab-assets.cjs` | 67 |
-| `scripts/verify-model-assets.cjs` | 72 |
-| `scripts/verify-nginx-whatsapp-webhook.cjs` | 94 |
-| `scripts/verify_content_restore.py` | 74 |

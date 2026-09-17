@@ -24,7 +24,6 @@ import { OfferTimerWidget } from "@/components/promotional/OfferTimerWidget";
 import { fetchMembershipPlans } from "@/api/membership";
 import { fetchBundles } from "@/api/bundle";
 import { StudentLiveClasses } from "@/components/live/StudentLiveClasses";
-import { verticalFromHostname } from "@/config/businessVerticals";
 
 // Function to convert API course to local Course interface
 
@@ -63,10 +62,6 @@ const sortOptions = [
 
 export const CoursesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const hostVertical =
-    typeof window === "undefined"
-      ? null
-      : verticalFromHostname(window.location.hostname);
   const [categories, setCategories] = React.useState<
     { id: string; name: string; count: number }[]
   >([]);
@@ -265,9 +260,7 @@ export const CoursesPage = () => {
       category: searchParams.get("category") || "",
       level: searchParams.get("level") || "",
       price_type: searchParams.get("price_type") || "",
-      // A product subdomain is a real catalog boundary, not just a branded
-      // home page. An explicit query remains useful on the root domain.
-      course_type: searchParams.get("course_type") || hostVertical || "",
+      course_type: searchParams.get("course_type") || "",
       sort: searchParams.get("sort") || "latest",
     };
     setFilters(urlFilters);
@@ -275,7 +268,7 @@ export const CoursesPage = () => {
     // narrowing the results to 2 pages returned an empty grid, which reads as
     // "the filter is broken".
     setCurrentPage(1);
-  }, [hostVertical, searchParams, setFilters]);
+  }, [searchParams, setFilters]);
 
   const handleFilterChange = (key: string, value: string) => {
     const newParams = new URLSearchParams(searchParams);
@@ -401,8 +394,8 @@ export const CoursesPage = () => {
                 </Dialog.Trigger>
 
                 <Dialog.Portal>
-                  <Dialog.Overlay className="fixed inset-0 bg-black/50 z-overlay" />
-                  <Dialog.Content className="fixed top-0 right-0 h-full w-full sm:w-80 bg-white shadow-xl z-dialog p-6 overflow-y-auto">
+                  <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
+                  <Dialog.Content className="fixed top-0 right-0 h-full w-full sm:w-80 bg-white shadow-xl z-50 p-6 overflow-y-auto">
                     <div className="flex items-center justify-between mb-6">
                       <Dialog.Title className="text-lg font-semibold">
                         Filters
@@ -660,7 +653,8 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
 
       <Select.Portal>
         <Select.Content
-          className="bg-white border border-neutral-200 rounded-lg shadow-lg p-1 overflow-hidden min-w-[150px] max-h-[300px] z-popover"
+          className="bg-white border border-neutral-200 rounded-lg shadow-lg p-1 overflow-hidden min-w-[150px] max-h-[300px]"
+          style={{ zIndex: 9999 }}
           position="popper"
           sideOffset={5}
           align="start"

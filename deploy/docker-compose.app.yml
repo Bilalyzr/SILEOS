@@ -60,7 +60,7 @@ services:
     # Pin it to the origin IP so the app talks to the host's Postfix directly.
     extra_hosts:
       - "mail.sashainfinity.com:178.236.185.167"
-    environment: &app-environment
+    environment:
       # --- release identity (surfaced by /health/version) ---
       - RELEASE_TAG=${RELEASE_TAG}
       - DEPLOY_COLOR=${COLOR}
@@ -69,7 +69,6 @@ services:
       - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
       # --- secrets ---
       - SECRET_KEY=${SECRET_KEY}
-      - AI_CREDENTIAL_ENCRYPTION_KEY=${AI_CREDENTIAL_ENCRYPTION_KEY:?Set a stable AI credential encryption key}
       - VIDEO_SECRET=${VIDEO_SECRET:?Set VIDEO_SECRET in .env}
       - JWT_SECRET=${JWT_SECRET}
       - RAZORPAY_KEY=${RAZORPAY_KEY}
@@ -79,9 +78,6 @@ services:
       - RAZORPAY_WEBHOOK_SECRET=${RAZORPAY_WEBHOOK_SECRET:-}
       # --- application ---
       - ENVIRONMENT=${ENVIRONMENT:-production}
-      - BACKGROUND_TASK_MODE=worker
-      - OBSERVABILITY_TOKEN=${OBSERVABILITY_TOKEN:-}
-      - SENTRY_DSN=${SENTRY_DSN:-}
       - DEBUG=${DEBUG:-false}
       - AUTO_VERIFY_EMAIL=${AUTO_VERIFY_EMAIL:-false}
       - PYTHONIOENCODING=utf-8
@@ -97,7 +93,6 @@ services:
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
       - ADMIN_FIRST_NAME=${ADMIN_FIRST_NAME:-SashaInfinity}
       - ADMIN_LAST_NAME=${ADMIN_LAST_NAME:-Administrator}
-      - MIN_WITHDRAWAL_INR=${MIN_WITHDRAWAL_INR:-500}
       # --- security ---
       - ENABLE_API_RATE_LIMITING=${ENABLE_API_RATE_LIMITING:-true}
       - ENABLE_REQUEST_LOGGING=${ENABLE_REQUEST_LOGGING:-true}
@@ -166,7 +161,7 @@ services:
       - JITSI_RECORDINGS_DIR=${BACKEND_JITSI_RECORDINGS_DIR:-/app/recordings_live}
       - INTERNAL_TOKEN=${INTERNAL_TOKEN}
       - DEFAULT_TIMEZONE=${DEFAULT_TIMEZONE:-Asia/Kolkata}
-    volumes: &app-volumes
+    volumes:
       # Shared mutable state — both colours mount the same host dirs so uploads
       # and generated certificates survive a colour switch. Source code is NOT
       # mounted; it comes from the image.
@@ -261,24 +256,6 @@ services:
   # ---------------------------------------------------------------------------
   # React frontend (static build served by `serve`)
   # ---------------------------------------------------------------------------
-  runtime-worker:
-    container_name: sasha-runtime-${COLOR:?COLOR must be set (blue|green)}
-    image: ${REGISTRY:-local}/${IMAGE_PREFIX:-sasha-lms}-backend:${RELEASE_TAG}
-    environment: *app-environment
-    volumes: *app-volumes
-    init: true
-    command: ["python", "-m", "app.workers.runtime"]
-    networks: [sasha-net]
-    restart: unless-stopped
-    stop_grace_period: 120s
-    healthcheck:
-      test: ["CMD", "python", "-m", "app.workers.runtime", "--health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 45s
-    logging: *default_logging
-
   frontend:
     image: ${REGISTRY:-local}/${IMAGE_PREFIX:-sasha-lms}-frontend:${RELEASE_TAG}
     build:

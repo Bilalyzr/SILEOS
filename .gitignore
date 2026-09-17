@@ -79,7 +79,8 @@ venv.bak/
 ehthumbs.db
 Thumbs.db
 
-# Docker ignore files are source and must ship with builds.
+# Docker
+.dockerignore
 
 # Database
 *.db
@@ -276,7 +277,9 @@ backend/uploads/
 /backend/certificates/certificate_*
 /.local/
 /frontend/.npm-cache/
-/deliverables/release-source/
-/deliverables/*.zip
-/deliverables/*.sha256
-/deploy/transcription_models/
+
+# Local Git credential note — never commit (contains a PAT).
+gitTok.md
+
+# Nested near-duplicate snapshot repo (embedded git repo — never commit).
+SILEOS/

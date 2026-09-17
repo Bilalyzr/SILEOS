@@ -90,8 +90,7 @@ def next_class_agenda(db: Session, course_id: int, class_id: Optional[int] = Non
         db.commit()
         try:
             prose = call_glm("You turn a factual teaching agenda into a crisp 6-8 line plan for the instructor's next live class. "
-                             "Do not invent facts; keep every number.", "\n".join(f"- {i['text']} ({i['minutes']} min)" for i in items),
-                             feature="Next-class agenda polishing")
+                             "Do not invent facts; keep every number.", "\n".join(f"- {i['text']} ({i['minutes']} min)" for i in items))
             out["prose"] = prose
             job.status, job.output_json, job.finished_at = "done", {"chars": len(prose)}, datetime.now(timezone.utc)
         except Exception as exc:

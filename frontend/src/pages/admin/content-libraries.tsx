@@ -1,4 +1,3 @@
-// A8 · Management tables. API calls, validation and permissions stay unchanged.
 import { AstraSymbol } from "@/components/design-system/AstraSymbol";
 import { PageLayout, PageHeader } from "@/components/design-system/PageLayout";
 /**
@@ -60,10 +59,10 @@ export function AdminContentLibrariesPage() {
     <PageLayout
       header={
         <PageHeader>
-          <h1 className="aurum-page-title">
+          <h1 className="text-2xl font-bold text-gray-900">
             Content Libraries
           </h1>
-          <p className="aurum-page-description">
+          <p className="text-sm text-gray-500 mt-1">
             Curate what instructors can drop into a curriculum: virtual labs,
             shared 3D assets and prebuilt games.
           </p>
@@ -71,7 +70,7 @@ export function AdminContentLibrariesPage() {
       }
       className="rd-screen rd-screen-admin-content-libraries"
     >
-      <div className="aurum-tabbar" role="tablist" aria-label="Content library type">
+      <div className="flex gap-2 border-b border-gray-200 mb-6" role="tablist">
         {(
           [
             ["labs", "Virtual Labs", FlaskConical],
@@ -85,7 +84,11 @@ export function AdminContentLibrariesPage() {
             role="tab"
             aria-selected={tab === key}
             onClick={() => setTab(key)}
-            className={`aurum-tab ${tab === key ? "is-active" : ""}`}
+            className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 -mb-px ${
+              tab === key
+                ? "border-orange-500 text-orange-700"
+                : "border-transparent text-gray-500 hover:text-gray-800"
+            }`}
           >
             <Icon className="w-4 h-4" /> {label}
           </button>
@@ -253,14 +256,14 @@ function LabsTab() {
             resetForm();
             setShowForm(true);
           }}
-          className="aurum-primary"
+          className="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-lg bg-orange-500 text-white hover:bg-orange-600"
         >
           <Plus className="w-4 h-4" /> Add lab
         </button>
         <button
           type="button"
           onClick={load}
-          className="aurum-secondary"
+          className="inline-flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50"
         >
           <RefreshCw className="w-4 h-4" /> Refresh
         </button>
@@ -408,7 +411,7 @@ function LabsTab() {
               type="button"
               disabled={saving}
               onClick={save}
-              className="aurum-secondary"
+              className="px-4 py-2 text-sm font-medium rounded-lg bg-gray-900 text-white hover:bg-black disabled:opacity-50"
             >
               {saving
                 ? "Saving…"
@@ -419,7 +422,7 @@ function LabsTab() {
             <button
               type="button"
               onClick={resetForm}
-              className="aurum-ghost"
+              className="px-4 py-2 text-sm rounded-lg border border-gray-300"
             >
               Cancel
             </button>
@@ -443,7 +446,7 @@ function LabsTab() {
           </p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="aurum-data-table">
+            <table className="w-full text-sm">
               <thead className="bg-gray-50 text-left text-xs text-gray-500">
                 <tr>
                   <th className="px-4 py-2">Title</th>
@@ -457,27 +460,27 @@ function LabsTab() {
               <tbody>
                 {rows.map((r) => (
                   <tr key={r.catalog_id} className="border-t border-gray-100">
-                    <td data-label="Title" className="px-4 py-2 font-medium text-gray-900">
+                    <td className="px-4 py-2 font-medium text-gray-900">
                       {r.title}
                     </td>
-                    <td data-label="Slug" className="px-4 py-2 font-mono text-xs text-gray-600">
+                    <td className="px-4 py-2 font-mono text-xs text-gray-600">
                       {r.slug}
                     </td>
-                    <td data-label="Subject" className="px-4 py-2 capitalize">{r.subject}</td>
-                    <td data-label="Provider" className="px-4 py-2 capitalize">
+                    <td className="px-4 py-2 capitalize">{r.subject}</td>
+                    <td className="px-4 py-2 capitalize">
                       {r.provider}
                       {r.native_template
                         ? ` · ${r.native_template.replace("_", " ")}`
                         : ""}
                     </td>
-                    <td data-label="Status" className="px-4 py-2">
+                    <td className="px-4 py-2">
                       {r.is_published ? (
                         <span className="text-emerald-700">Published</span>
                       ) : (
                         <span className="text-gray-400">Hidden</span>
                       )}
                     </td>
-                    <td data-label="Actions" className="px-4 py-2 text-right whitespace-nowrap">
+                    <td className="px-4 py-2 text-right whitespace-nowrap">
                       <button
                         type="button"
                         title="Preview"
@@ -571,7 +574,7 @@ function LabsTab() {
           type="button"
           onClick={importPack}
           disabled={!packText.trim()}
-          className="aurum-secondary mt-2"
+          className="mt-2 inline-flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-lg bg-gray-900 text-white hover:bg-black disabled:opacity-40"
         >
           <Upload className="w-4 h-4" /> Import pack
         </button>
@@ -579,7 +582,7 @@ function LabsTab() {
 
       {previewSlug && (
         <div
-          className="fixed inset-0 z-modal bg-black/70 flex items-center justify-center p-4"
+          className="fixed inset-0 z-[100] bg-black/70 flex items-center justify-center p-4"
           onClick={() => setPreviewSlug(null)}
         >
           <div
@@ -701,7 +704,7 @@ function ThreeDTab() {
             The shared library is empty.
           </p>
         ) : (
-          <table className="aurum-data-table">
+          <table className="w-full text-sm">
             <thead className="bg-gray-50 text-left text-xs text-gray-500">
               <tr>
                 <th className="px-4 py-2">Title</th>
@@ -713,21 +716,21 @@ function ThreeDTab() {
             <tbody>
               {models.map((m) => (
                 <tr key={m.id} className="border-t border-gray-100">
-                  <td data-label="Title" className="px-4 py-2 font-medium text-gray-900">
+                  <td className="px-4 py-2 font-medium text-gray-900">
                     <AstraSymbol value="🧊" /> {m.title}{" "}
                     <span className="text-xs text-gray-400">#{m.id}</span>
                   </td>
-                  <td data-label="Size" className="px-4 py-2">
+                  <td className="px-4 py-2">
                     {(m.file_size_bytes / 1048576).toFixed(1)} MB
                   </td>
-                  <td data-label="Shared" className="px-4 py-2">
+                  <td className="px-4 py-2">
                     {m.is_library ? (
                       <span className="text-emerald-700">Yes</span>
                     ) : (
                       <span className="text-gray-400">No</span>
                     )}
                   </td>
-                  <td data-label="Actions" className="px-4 py-2 text-right whitespace-nowrap">
+                  <td className="px-4 py-2 text-right whitespace-nowrap">
                     <button
                       type="button"
                       onClick={() => toggle(m)}
@@ -844,7 +847,7 @@ function GamesTab() {
           type="button"
           disabled={busy}
           onClick={importDefaults}
-          className="aurum-primary"
+          className="inline-flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-lg bg-violet-600 text-white hover:bg-violet-700 disabled:opacity-50"
         >
           <Gamepad2 className="w-4 h-4" />{" "}
           {busy ? "Working…" : "Load shipped pack"}
@@ -861,7 +864,7 @@ function GamesTab() {
             No prebuilt games yet — load the shipped pack or import your own.
           </p>
         ) : (
-          <table className="aurum-data-table">
+          <table className="w-full text-sm">
             <thead className="bg-gray-50 text-left text-xs text-gray-500">
               <tr>
                 <th className="px-4 py-2">Title</th>
@@ -874,15 +877,15 @@ function GamesTab() {
             <tbody>
               {games.map((g) => (
                 <tr key={g.id} className="border-t border-gray-100">
-                  <td data-label="Title" className="px-4 py-2 font-medium text-gray-900">
+                  <td className="px-4 py-2 font-medium text-gray-900">
                     <AstraSymbol value="🎮" /> {g.title}
                   </td>
-                  <td data-label="Template" className="px-4 py-2 capitalize">
+                  <td className="px-4 py-2 capitalize">
                     {g.template.replace("_", " ")}
                   </td>
-                  <td data-label="Items" className="px-4 py-2">{g.item_count}</td>
-                  <td data-label="Max score" className="px-4 py-2">{g.max_score}</td>
-                  <td data-label="Marketplace" className="px-4 py-2">
+                  <td className="px-4 py-2">{g.item_count}</td>
+                  <td className="px-4 py-2">{g.max_score}</td>
+                  <td className="px-4 py-2">
                     {g.is_listed && g.status === "published" ? (
                       <span className="text-emerald-700">Listed</span>
                     ) : (
@@ -919,7 +922,7 @@ function GamesTab() {
           type="button"
           onClick={importPack}
           disabled={busy || !packText.trim()}
-          className="aurum-secondary mt-2"
+          className="mt-2 inline-flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-lg bg-gray-900 text-white hover:bg-black disabled:opacity-40"
         >
           <Upload className="w-4 h-4" /> Import pack
         </button>

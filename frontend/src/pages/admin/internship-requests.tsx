@@ -351,7 +351,7 @@ function DetailDrawer({
   onClose: () => void;
 }) {
   return (
-    <div className="fixed inset-0 z-modal flex justify-end" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex justify-end" onClick={onClose}>
       <div className="bg-black/30 absolute inset-0" />
       <div
         onClick={(e) => e.stopPropagation()}
@@ -464,13 +464,13 @@ function ApproveModal({
 
   return (
     <div
-      className="fixed inset-0 z-modal flex items-center justify-center"
+      className="fixed inset-0 z-50 flex items-center justify-center"
       onClick={onCancel}
     >
       <div className="bg-black/40 absolute inset-0" />
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative bg-white rounded-xl shadow-2xl p-6 w-[440px] max-w-[calc(100vw-2rem)]"
+        className="relative bg-white rounded-xl shadow-2xl p-6 w-[440px]"
         data-glass="work"
       >
         <h3 className="font-bold text-slate-900 mb-1">Approve &amp; publish</h3>
@@ -549,13 +549,13 @@ function RejectModal({
   const valid = reason.trim().length >= 10;
   return (
     <div
-      className="fixed inset-0 z-modal flex items-center justify-center"
+      className="fixed inset-0 z-50 flex items-center justify-center"
       onClick={onCancel}
     >
       <div className="bg-black/40 absolute inset-0" />
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative bg-white rounded-xl shadow-2xl p-6 w-[480px] max-w-[calc(100vw-2rem)]"
+        className="relative bg-white rounded-xl shadow-2xl p-6 w-[480px]"
         data-glass="work"
       >
         <h3 className="font-bold text-slate-900 mb-1">Return to company</h3>
@@ -604,13 +604,13 @@ function DeleteModal({
 }) {
   return (
     <div
-      className="fixed inset-0 z-modal flex items-center justify-center"
+      className="fixed inset-0 z-50 flex items-center justify-center"
       onClick={onCancel}
     >
       <div className="bg-black/40 absolute inset-0" />
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative bg-white rounded-xl shadow-2xl p-6 w-[420px] max-w-[calc(100vw-2rem)]"
+        className="relative bg-white rounded-xl shadow-2xl p-6 w-[420px]"
         data-glass="content"
       >
         <h3 className="font-bold text-slate-900 mb-1">

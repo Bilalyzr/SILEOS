@@ -52,8 +52,10 @@ export default function MyMasteryPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const load = () => {
     let cancelled = false;
+    setLoading(true);
+    setError(null);
     Promise.all([
       masteryAPI.me(),
       api
@@ -77,12 +79,15 @@ export default function MyMasteryPage() {
       .then(([g, cs]) => {
         if (!cancelled) {
           setGraph(g);
-          setCourses(cs);
+          setCourses(Array.isArray(cs) ? cs : []);
           if (cs[0]) setCourseId(cs[0].id);
         }
       })
-      .catch(() => {
-        if (!cancelled) setError("Could not load your mastery graph");
+      .catch((e: any) => {
+        if (!cancelled)
+          setError(
+            e?.response?.data?.detail || "Could not load your mastery graph",
+          );
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -90,7 +95,9 @@ export default function MyMasteryPage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  };
+
+  useEffect(() => load(), []);
 
   useEffect(() => {
     if (!courseId || !uid) return;
@@ -131,7 +138,13 @@ export default function MyMasteryPage() {
   if (error || !graph)
     return (
       <div className="p-6 text-sm text-red-600" role="alert">
-        {error}
+        <p>{error}</p>
+        <button
+          onClick={load}
+          className="mt-2 px-4 py-1.5 rounded-lg bg-gray-900 text-white text-xs font-semibold hover:bg-gray-700"
+        >
+          Try again
+        </button>
       </div>
     );
 

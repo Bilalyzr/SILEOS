@@ -177,9 +177,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
       throw new Error('Your cart is empty')
     }
     const order = await apiCheckout(courseIds, appliedCoupon?.code ?? null)
-    // This path is intentionally only used for zero-value carts. Paid carts
-    // are created and verified through /payments by CheckoutPage, then clear
-    // the cart only after the server confirms fulfillment.
+    // TODO(razorpay): /orders/ currently returns a mock-completed
+    // order (no razorpay_order_id/key). When the backend is extended
+    // to create a Razorpay order for cart checkouts, open the
+    // Razorpay modal here instead of clearing the cart. See
+    // course-detail.tsx for the single-course Razorpay pattern.
     clearCart()
     return order
   }

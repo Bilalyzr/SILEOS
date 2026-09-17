@@ -1367,7 +1367,7 @@ function Overlay({
 
   return createPortal(
     <div
-      className={`fixed inset-0 bg-black/40 flex items-start sm:items-center justify-center z-modal p-4 overflow-y-auto ${className}`}
+      className={`fixed inset-0 bg-black/40 flex items-start sm:items-center justify-center z-[100] p-4 overflow-y-auto ${className}`}
       role="dialog"
       aria-modal="true"
     >

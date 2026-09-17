@@ -2,19 +2,17 @@
 from datetime import date, timedelta
 from typing import Any, Dict, Literal
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from app.core.database import get_db
-from app.models.communication_automation import CommunicationTopicPreference
 from app.models.course import Course
 from app.models.learning_planner import LearningGoal, LearningPlanTask, LearningIntervention
-from app.models.user import User, UserProfile
+from app.models.user import User
 from app.services.auth_service import AuthService
 from app.services.course_access import can_edit, collaborated_course_ids, ADMIN_ROLES
 from app.services import learning_planner_service as svc
 from app.services.learning_signals_service import adaptive_questions
-from app.services.notification_service import create_notification, _send_notification_email
 
 router = APIRouter()
 
@@ -48,42 +46,6 @@ class AnswersIn(BaseModel):
 class ReviewIn(BaseModel):
     action: Literal["dismiss", "request_check"]
     note: str = Field(min_length=3, max_length=2000)
-
-
-class RiskInterventionIn(BaseModel):
-    course_id: int = Field(gt=0)
-    user_id: int = Field(gt=0)
-    note: str = Field(default="", max_length=2000)
-    concept: str | None = Field(default=None, max_length=80)
-
-
-def _send_learning_notification(db, *, user_id: int, title: str, message: str,
-                                related_id: int, background_tasks: BackgroundTasks):
-    profile = db.query(UserProfile).filter(UserProfile.user_id == user_id).first()
-    topic = db.query(CommunicationTopicPreference).filter_by(
-        user_id=user_id, topic="learning_interventions"
-    ).first()
-    in_app_enabled = True if topic is None else bool(topic.in_app_enabled)
-    email_enabled = True if topic is None else bool(topic.email_enabled)
-    email_allowed = email_enabled and (True if profile is None else bool(profile.receive_notifications))
-    if in_app_enabled:
-        create_notification(
-            db,
-            user_id=user_id,
-            type="learning_intervention",
-            title=title,
-            message=message,
-            link="/student/learning-plan",
-            related_id=related_id,
-            send_email=email_allowed,
-            background_tasks=background_tasks,
-        )
-    elif email_allowed:
-        account = db.query(User).filter(User.id == user_id).first()
-        if account and account.user_email:
-            background_tasks.add_task(
-                _send_notification_email, account.user_email, title, message
-            )
 
 
 def _own_goal(db, gid, user, active=False):
@@ -219,62 +181,8 @@ def instructor_queue(db: Session = Depends(planner_db), user: User = Depends(Aut
     return {"interventions": out, "limit": 300}
 
 
-@router.post("/instructor/risk-interventions")
-def create_from_risk(
-    body: RiskInterventionIn,
-    background_tasks: BackgroundTasks,
-    db: Session = Depends(planner_db),
-    user: User = Depends(AuthService.require_instructor),
-):
-    course = db.query(Course).filter_by(id=body.course_id).first()
-    if not course:
-        raise HTTPException(404, "Course not found")
-    if not can_edit(db, course, user):
-        raise HTTPException(403, "Not your course")
-    learner = db.query(User).filter_by(id=body.user_id).first()
-    if not learner:
-        raise HTTPException(404, "Learner not found")
-    try:
-        row, goal, created, goal_created = svc.create_risk_intervention(
-            db,
-            course=course,
-            learner=learner,
-            reviewer_id=user.id,
-            note=body.note.strip(),
-            concept=body.concept,
-        )
-    except ValueError as exc:
-        raise HTTPException(409, str(exc))
-
-    _send_learning_notification(
-        db,
-        user_id=goal.user_id,
-        title="Your instructor added a support step",
-        message=body.note.strip() or row.reason,
-        related_id=row.id,
-        background_tasks=background_tasks,
-    )
-    return {
-        **svc.intervention_dict(row),
-        "goal_id": goal.id,
-        "goal_status": goal.status,
-        "course_id": course.id,
-        "course_title": course.post_title,
-        "learner_id": learner.id,
-        "learner_name": learner.display_name or "Learner",
-        "created": created,
-        "goal_created": goal_created,
-    }
-
-
 @router.post("/instructor/interventions/{intervention_id}/review")
-def review(
-    intervention_id: int,
-    body: ReviewIn,
-    background_tasks: BackgroundTasks,
-    db: Session = Depends(planner_db),
-    user: User = Depends(AuthService.require_instructor),
-):
+def review(intervention_id: int, body: ReviewIn, db: Session = Depends(planner_db), user: User = Depends(AuthService.require_instructor)):
     row = db.query(LearningIntervention).filter_by(id=intervention_id).first()
     if not row:
         raise HTTPException(404, "Intervention not found")
@@ -287,17 +195,4 @@ def review(
     if len(body.note.strip()) < 3:
         raise HTTPException(422, "Explain the intervention decision")
     svc.review_intervention(db, goal, row, body.action, body.note.strip(), user.id)
-    title = (
-        "Your instructor requested an understanding check"
-        if body.action == "request_check"
-        else "Your instructor added a learning-plan note"
-    )
-    _send_learning_notification(
-        db,
-        user_id=goal.user_id,
-        title=title,
-        message=body.note.strip(),
-        related_id=row.id,
-        background_tasks=background_tasks,
-    )
     return svc.intervention_dict(row)

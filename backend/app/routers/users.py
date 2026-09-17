@@ -282,7 +282,7 @@ async def get_user_stats(
             "total_users": total_users,
             "total_courses": total_courses,
             "total_enrollments": total_enrollments,
-            "active_users": db.query(User).filter(User.is_active.is_(True)).count()
+            "active_users": db.query(User).filter(User.user_status == 1).count()
         }
 
 # Instructor Application Endpoints

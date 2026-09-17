@@ -1410,7 +1410,7 @@ export function CreateCourse() {
           {/* Certificate template full-size preview */}
           {previewTemplate && (
             <div
-              className="fixed inset-0 z-modal bg-black/70 flex items-center justify-center p-4"
+              className="fixed inset-0 z-[100] bg-black/70 flex items-center justify-center p-4"
               onClick={() => setPreviewTemplate(null)}
             >
               <div

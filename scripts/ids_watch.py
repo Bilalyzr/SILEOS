@@ -276,17 +276,6 @@ def rotate_if_huge():
         pass
 
 # ------------------------------------------------------------------ watch ---
-def auth_failure_kind(uri, status, method):
-    """Business permission denials and navigation throttles are not auth attacks."""
-    path = uri.split("?", 1)[0].rstrip("/")
-    if method == "POST" and path.startswith("/api/v1/auth/"):
-        if status in ("401", "403"):
-            return "auth"
-        if status == "429":
-            return "rate"
-    return None
-
-
 def watch():
     alert("START", security_log=SECURITY_LOG, access_log=ACCESS_LOG,
           deny_files=DENY_FILES, reload_containers=RELOAD_CONTAINERS,
@@ -313,9 +302,10 @@ def watch():
         ip, method, uri, status = m.groups()
         if ATTACK_URI_RE.search(uri) and method in ("GET", "POST", "HEAD"):
             return ban_ip(bans, ip, f"attack_uri:{uri[:80]}")
-        kind = auth_failure_kind(uri, status, method)
-        if kind:
-            note(ip, kind)
+        if status in ("401", "403"):
+            note(ip, "auth")
+        elif status == "429":
+            note(ip, "rate")
         return False
 
     last_sweep = time.time()
@@ -347,9 +337,11 @@ def watch():
                 continue
             m = RESPONSE_RE.search(line)
             if m:
-                # Without a URI this cannot distinguish a legitimate permission
-                # denial from an authentication attack. Use scoped access logs.
-                pass
+                status, ip = m.group(1), m.group(2)
+                if status in ("401", "403"):
+                    note(ip, "auth")
+                elif status == "429":
+                    note(ip, "rate")
 
         for line in acc_tail.lines():
             changed |= handle_access_line(line)

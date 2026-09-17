@@ -1,9 +1,6 @@
 """Campus academics, private resources, guardian consent and subscriptions."""
 from alembic import op
 import sqlalchemy as sa
-from app.core.migration_operations import idempotent_create_operations
-
-op = idempotent_create_operations(op)
 
 revision = "0031"
 down_revision = "0030"

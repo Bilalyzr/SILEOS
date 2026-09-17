@@ -29,7 +29,7 @@ export function AdaptiveLessonPanel({ courseId, concept }: { courseId: number; c
   }
 
   return (
-    <div className="rounded-xl border border-orange-200 bg-orange-50/60 p-4" data-testid="adaptive-lesson">
+    <div className="rounded-xl border border-violet-200 bg-violet-50/50 p-4" data-testid="adaptive-lesson">
       <p className="font-semibold text-gray-900">Adaptive mini-lesson</p>
       <p className="text-xs text-gray-600 mb-2">A short lesson pitched at where you are on one concept — recover a gap, consolidate, or go a step further.</p>
       <div className="flex flex-wrap gap-2 items-center">
@@ -37,12 +37,12 @@ export function AdaptiveLessonPanel({ courseId, concept }: { courseId: number; c
         <select value={mode} onChange={(e) => setMode(e.target.value as AdaptiveMode | '')} className="px-2 py-1.5 border border-gray-300 rounded-lg text-sm" aria-label="Mode">
           {MODES.map((m) => <option key={m.id} value={m.id}>{m.label}</option>)}
         </select>
-        <button type="button" disabled={busy} onClick={go} className="rounded-lg bg-gradient-to-r from-orange-600 to-amber-500 px-3 py-1.5 text-sm text-white hover:from-orange-700 hover:to-orange-600 disabled:opacity-40">{busy ? 'Building…' : 'Build my lesson'}</button>
+        <button type="button" disabled={busy} onClick={go} className="px-3 py-1.5 text-sm rounded-lg bg-violet-600 text-white hover:bg-violet-700 disabled:opacity-40">{busy ? 'Building…' : 'Build my lesson'}</button>
       </div>
       {msg && <p className="text-xs text-amber-800 mt-2" role="alert">{msg}</p>}
       {lesson && (
         <div className="mt-3 rounded-lg bg-white border border-gray-200 p-3 text-sm">
-          <p className="text-xs uppercase tracking-wide text-orange-700">{lesson.mode}{lesson.concept ? ` · ${lesson.concept}` : ''}{lesson.estimate != null ? ` · mastery ${Math.round(lesson.estimate)}%` : ''}</p>
+          <p className="text-xs text-violet-700 uppercase tracking-wide">{lesson.mode}{lesson.concept ? ` · ${lesson.concept}` : ''}{lesson.estimate != null ? ` · mastery ${Math.round(lesson.estimate)}%` : ''}</p>
           <h3 className="font-semibold text-gray-900">{lesson.lesson.title || 'Your lesson'}</h3>
           {(lesson.lesson.sections || []).map((s, i) => (
             <div key={i} className="mt-2"><p className="font-medium text-gray-800">{s.heading}</p><p className="text-gray-700 whitespace-pre-wrap">{s.body}</p></div>

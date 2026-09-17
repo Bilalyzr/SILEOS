@@ -13,30 +13,10 @@ export type AppRole = string | null | undefined
 export const normalizeRole = (role: AppRole): string =>
   (role ?? '').toString().trim().toLowerCase()
 
-/**
- * Route-role hierarchy. Keep this deliberately narrow: SuperAdmin inherits
- * the admin control plane, while Admin may use instructor authoring screens
- * to manage content. Viewing a student, company, or SPOC workspace must use
- * the audited impersonation flow instead of silently borrowing that role.
- */
-export const roleSatisfies = (currentRole: AppRole, requiredRole: AppRole): boolean => {
-  const current = normalizeRole(currentRole)
-  const required = normalizeRole(requiredRole)
-  if (!current || !required) return false
-  if (current === required) return true
-  if (current === 'superadmin') return required === 'admin'
-  if (current === 'admin') return required === 'instructor'
-  // CompanyManager is a company-scoped manager that works inside the company
-  // portal; without this rule its post-login redirect to /company/dashboard
-  // (ROLE_HOME) hit the guard's requiredRole='company' and 403'd.
-  if (current === 'company_manager') return required === 'company'
-  return false
-}
-
 /** Role → its dashboard landing route. */
 const ROLE_HOME: Record<string, string> = {
   superadmin: '/superadmin/dashboard',
-  admin: '/admin/operations',
+  admin: '/admin/dashboard',
   instructor: '/instructor/dashboard',
   company: '/company/dashboard',
   company_manager: '/company/dashboard',

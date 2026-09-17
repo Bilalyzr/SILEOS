@@ -14,7 +14,6 @@ import { PageLayout } from "@/components/design-system/PageLayout";
  */
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
 import {
   Users,
   BookOpen,
@@ -27,11 +26,9 @@ import {
   Edit3,
   Award,
   ShoppingCart,
-  AlertTriangle,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { dashboardAPI, InstructorDashboardData } from "@/api/dashboard";
-import { plannerAPI, plannerError } from "@/api/planner";
 import { ExportImportPanel } from "@/components/admin/ExportImportPanel";
 import { ReviewQueueCard } from "@/components/flywheel/ReviewQueueCard";
 import type { ExportSection } from "@/api/admin";
@@ -58,15 +55,6 @@ interface AssignmentWithSubmissions {
   ungraded_submissions: number;
   graded_submissions: number;
   due_date?: string;
-}
-
-interface AtRiskAlert {
-  user_id: number;
-  risk_score: number;
-  severity: "low" | "medium" | "high";
-  reasons: string[];
-  courseId: number;
-  courseTitle: string;
 }
 
 /**
@@ -110,15 +98,7 @@ export function InstructorDashboard() {
     [],
   );
   const [loadingAssignments, setLoadingAssignments] = useState(true);
-  const [riskAlerts, setRiskAlerts] = useState<AtRiskAlert[]>([]);
-  const [loadingRiskAlerts, setLoadingRiskAlerts] = useState(false);
-  const [connectingRiskKey, setConnectingRiskKey] = useState<string | null>(
-    null,
-  );
   const [profile, setProfile] = useState<any>(null);
-  const [studentNameById, setStudentNameById] = useState<Record<number, string>>(
-    {},
-  );
 
   const fetchDashboard = useCallback(async () => {
     try {
@@ -187,81 +167,6 @@ export function InstructorDashboard() {
     else if (!isLoading) setLoadingAssignments(false);
   }, [data, isLoading]);
 
-  useEffect(() => {
-    const loadStudentDirectory = async () => {
-      try {
-        const res = await api.get("/dashboard/instructor/students");
-        const students = (res.data?.students || []) as Array<{
-          id: number;
-          name: string;
-        }>;
-        const map: Record<number, string> = {};
-        for (const student of students) {
-          map[student.id] = student.name || `Student #${student.id}`;
-        }
-        setStudentNameById(map);
-      } catch {
-        setStudentNameById({});
-      }
-    };
-
-    loadStudentDirectory();
-  }, []);
-
-  useEffect(() => {
-    const fetchRiskAlerts = async () => {
-      const coursesList = data?.courses || [];
-      if (!coursesList.length) {
-        setRiskAlerts([]);
-        setLoadingRiskAlerts(false);
-        return;
-      }
-
-      setLoadingRiskAlerts(true);
-      const collected: AtRiskAlert[] = [];
-      try {
-        for (const course of coursesList.slice(0, 4)) {
-          try {
-            const r = await api.get(`/analytics/courses/${course.id}/at-risk`);
-            const results = (r.data?.results || []) as Array<{
-              user_id: number;
-              risk_score: number;
-              severity: "low" | "medium" | "high";
-              reasons: string[];
-            }>;
-
-            for (const item of results) {
-              if (!item.reasons || item.reasons.length === 0) continue;
-              collected.push({
-                ...item,
-                courseId: course.id,
-                courseTitle: course.title,
-              });
-            }
-          } catch {
-            // Keep the dashboard resilient — one course endpoint can fail without
-            // blocking every instructor insight.
-          }
-        }
-      } finally {
-        const order: Record<"high" | "medium" | "low", number> = {
-          high: 0,
-          medium: 1,
-          low: 2,
-        };
-        collected.sort(
-          (a, b) => b.risk_score - a.risk_score || order[a.severity] - order[b.severity],
-        );
-        setRiskAlerts(collected);
-        setLoadingRiskAlerts(false);
-      }
-    };
-
-    if (!isLoading) {
-      fetchRiskAlerts();
-    }
-  }, [data?.courses, isLoading]);
-
   // Derived stats from the real API.
   const courses = ((data as any)?.courses ?? []) as any[];
   const liveAssignments = (assignments ?? []) as any[];
@@ -290,30 +195,6 @@ export function InstructorDashboard() {
   const sortedAssignments = [...liveAssignments].sort(
     (a: any, b: any) => b.ungraded_submissions - a.ungraded_submissions,
   );
-  const riskSorted = [...riskAlerts].slice(0, 6);
-
-  const connectRiskIntervention = async (item: AtRiskAlert) => {
-    const key = `${item.courseId}-${item.user_id}`;
-    setConnectingRiskKey(key);
-    try {
-      const result = await plannerAPI.createFromRisk({
-        course_id: item.courseId,
-        user_id: item.user_id,
-        note:
-          item.reasons.slice(0, 2).join(" ") ||
-          "Please review this learner's at-risk signal.",
-      });
-      toast.success(
-        result.created
-          ? "Support step added to the learner plan."
-          : "Support step updated in the learner plan.",
-      );
-    } catch (cause) {
-      toast.error(plannerError(cause));
-    } finally {
-      setConnectingRiskKey(null);
-    }
-  };
 
   return (
     <PageLayout
@@ -392,91 +273,6 @@ export function InstructorDashboard() {
       </StaggerGrid>
       <div className="rd-dashboard-grid">
         <div>
-          <StaggerGrid className="grid grid-cols-1 mb-6">
-            <SectionCard
-              title="Learners needing support"
-              description={
-                riskAlerts.length
-                  ? `${riskAlerts.length} learner${riskAlerts.length === 1 ? "" : "s"} flagged this cycle`
-                  : "No learner interventions flagged right now"
-              }
-              icon={AlertTriangle}
-              bodyClassName="space-y-3"
-              action={{ label: "View in Insights", to: "/instructor/insights?tab=risk" }}
-            >
-              {loadingRiskAlerts ? (
-                <>
-                  <SkeletonRow />
-                  <SkeletonRow />
-                  <SkeletonRow />
-                </>
-              ) : riskSorted.length === 0 ? (
-                <EmptyState
-                  icon={AlertTriangle}
-                  title="No at-risk learners"
-                  description="Sasha is not seeing lag signals from your top active courses."
-                />
-              ) : (
-                riskSorted.map((item) => (
-                  <div
-                    key={`${item.courseId}-${item.user_id}`}
-                    className="group rounded-xl border border-slate-200 p-4 space-y-2"
-                  >
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <h3 className="font-semibold text-secondary-900 text-sm">
-                        {studentNameById[item.user_id] || `Student #${item.user_id}`}
-                      </h3>
-                      <span
-                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                          item.severity === "high"
-                            ? "bg-red-100 text-red-700"
-                            : item.severity === "medium"
-                              ? "bg-amber-100 text-amber-700"
-                              : "bg-slate-100 text-slate-600"
-                        }`}
-                      >
-                        {item.severity.toUpperCase()} · {item.risk_score}
-                      </span>
-                    </div>
-                    <p className="text-xs text-slate-500">
-                      Course: {item.courseTitle}
-                    </p>
-                    <ul className="text-xs text-slate-600 space-y-1">
-                      {item.reasons.slice(0, 2).map((reason, index) => (
-                        <li key={`${item.courseId}-${item.user_id}-${index}`}>• {reason}</li>
-                      ))}
-                    </ul>
-                    <div className="pt-2 border-t border-slate-100 flex gap-2 flex-wrap">
-                      <button
-                        type="button"
-                        onClick={() => void connectRiskIntervention(item)}
-                        disabled={
-                          connectingRiskKey === `${item.courseId}-${item.user_id}`
-                        }
-                        className="dash-cta text-xs"
-                      >
-                        {connectingRiskKey === `${item.courseId}-${item.user_id}`
-                          ? "Connecting..."
-                          : "Add support step"}
-                      </button>
-                      <Link
-                        to={`/instructor/insights?tab=risk&course_id=${item.courseId}`}
-                        className="dash-cta-ghost text-xs"
-                      >
-                        Open risk view
-                      </Link>
-                      <Link
-                        to="/instructor/interventions"
-                        className="dash-cta-ghost text-xs"
-                      >
-                        Open interventions
-                      </Link>
-                    </div>
-                  </div>
-                ))
-              )}
-            </SectionCard>
-          </StaggerGrid>
           <StaggerGrid className="grid grid-cols-1 mb-6">
             <SectionCard
               title="Pending grading"

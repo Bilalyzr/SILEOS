@@ -1,7 +1,5 @@
 # CLAUDE.md
 
-September 2026 update: the application now uses Alembic (head `0050`) and has backend/frontend regression suites. Recurring maintenance runs in `app.workers.runtime` with durable leases, not in every API process. See [PRODUCTION_RUNTIME.md](docs/PRODUCTION_RUNTIME.md) and [the release guide](docs/SAAS_RELEASE_2026-09-14.md) before deployment; older architecture notes below may describe the pre-migration setup.
-
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview

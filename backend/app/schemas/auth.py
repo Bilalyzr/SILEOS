@@ -89,9 +89,7 @@ class UserResponse(BaseModel):
     profile_completed: Optional[bool] = None
 
 class RefreshTokenRequest(BaseModel):
-    # Optional because a sibling Sasha subdomain can restore the shared
-    # session from the HttpOnly domain cookie without exposing it to JS.
-    refresh_token: Optional[str] = None
+    refresh_token: str
 
 class PasswordResetRequest(BaseModel):
     email: EmailStr

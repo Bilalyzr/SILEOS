@@ -1198,7 +1198,7 @@ async def student_my_vouchers(
     rows = (
         db.query(InternshipVoucher)
         .options(
-            joinedload(InternshipVoucher.internship).joinedload(Internship.spoc),
+            joinedload(InternshipVoucher.internship),
             joinedload(InternshipVoucher.redeemed_course),
         )
         .filter(InternshipVoucher.buyer_user_id == current_user.id)
@@ -1241,40 +1241,23 @@ async def student_my_vouchers(
             for e in enrollments
         }
 
-    certificate_map = {}
-    if redeemed_course_ids:
-        certificates = (
-            db.query(IssuedCertificate.course_id, IssuedCertificate.id)
-            .filter(
-                IssuedCertificate.user_id == current_user.id,
-                IssuedCertificate.course_id.in_(redeemed_course_ids),
-                IssuedCertificate.is_valid.is_(True),
-            )
-            .all()
-        )
-        certificate_map = {course_id: certificate_id for course_id, certificate_id in certificates}
-
-    # Attendance is a grouped read, not one COUNT query per voucher. A learner
-    # may hold many historical internships and this endpoint is used on every
-    # dashboard visit.
-    internship_ids = sorted({v.internship_id for v in rows if v.internship_id})
-    attendance_map = {}
-    if internship_ids:
-        attendance_rows = (
-            db.query(InternshipAttendance.internship_id, sa_func.count(InternshipAttendance.id))
-            .filter(
-                InternshipAttendance.internship_id.in_(internship_ids),
-                InternshipAttendance.user_id == current_user.id,
-                InternshipAttendance.status.in_(["present", "late"]),
-            )
-            .group_by(InternshipAttendance.internship_id)
-            .all()
-        )
-        attendance_map = {internship_id: int(count) for internship_id, count in attendance_rows}
-
     # Build response with attendance count
     result = []
     for v in rows:
+        # Calculate attendance count for this voucher's internship and user
+        attendance_count = 0
+        if v.internship_id:
+            attendance_count = (
+                db.query(sa_func.count(InternshipAttendance.id))
+                .filter(
+                    InternshipAttendance.internship_id == v.internship_id,
+                    InternshipAttendance.user_id == current_user.id,
+                    InternshipAttendance.status.in_(["present", "late"]),
+                )
+                .scalar()
+                or 0
+            )
+
         # Progress of the course this voucher was redeemed for (None until
         # redeemed). Connects voucher usage with course/progress status.
         course_progress = progress_map.get(v.redeemed_on_course_id) if v.redeemed_on_course_id else None
@@ -1287,25 +1270,17 @@ async def student_my_vouchers(
             "internship_id": v.internship_id,
             "internship_title": v.internship.title if v.internship else None,
             "internship_slug": v.internship.slug if v.internship else None,
-            "spoc_name": (
-                v.internship.spoc.display_name
-                if v.internship and v.internship.spoc
-                else None
-            ),
             "redeemed_on_course_id": v.redeemed_on_course_id,
             "redeemed_course_id": v.redeemed_on_course_id,
             "redeemed_course_title": (
                 v.redeemed_course.post_title if v.redeemed_course else None
             ),
             "company_name": company_map.get(v.hired_by_company_id) if v.hired_by_company_id else None,
-            "attendance_count": attendance_map.get(v.internship_id, 0),
-            "engagement_status": v.engagement_status,
+            "attendance_count": int(attendance_count),
             "redeemed_at": v.redeemed_at,
             "created_at": v.created_at,
             # Issue 6: course-progress status for the redeemed course.
             "course_progress": course_progress,
-            "certificate_issued": v.redeemed_on_course_id in certificate_map,
-            "issued_certificate_id": certificate_map.get(v.redeemed_on_course_id),
         })
 
     return result

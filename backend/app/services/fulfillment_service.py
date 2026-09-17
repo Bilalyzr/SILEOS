@@ -38,7 +38,6 @@ from app.models.payment import (
     PaymentStatus,
 )
 from app.models.user import User
-from app.core.business_verticals import revenue_metadata
 from app.services.coupon_service import lock_referral_and_bump
 
 logger = logging.getLogger(__name__)
@@ -161,7 +160,6 @@ def fulfill_course_purchase(
             quantity=1,
             subtotal=base_price,
             total=paid_amount,
-            product_data=revenue_metadata(course.course_type),
         ))
         db.add(Payment(
             user_id=user.id,
@@ -238,144 +236,6 @@ def fulfill_course_purchase(
         order_id=order_row.id,
         is_new_enrollment=is_new_enrollment,
         cohort_id=cohort.id if cohort else None,
-    )
-
-
-def fulfill_cart_purchase(
-    db: Session,
-    *,
-    user: User,
-    line_prices_paise: dict[int, int],
-    razorpay_order_id: str,
-    razorpay_payment_id: str,
-    paid_amount: float,
-    coupon_discount: float = 0.0,
-    currency: str = "INR",
-    coupon: Coupon | None = None,
-) -> FulfillmentResult:
-    """Write one paid multi-course cart and grant every snapshotted course.
-
-    Prices are the immutable checkout-time amounts from the gateway order
-    notes, expressed in paise.  Like the other fulfillment functions this is
-    idempotent on ``gateway_payment_id`` and deliberately does not commit.
-    """
-    order_row = db.query(Order).join(Payment, Payment.order_id == Order.id).filter(
-        Payment.gateway_payment_id == str(razorpay_payment_id)
-    ).first()
-    created_order = order_row is None
-    if order_row is not None and order_row.user_id != user.id:
-        raise ValueError("Gateway payment already belongs to another user")
-
-    unique_ids = list(dict.fromkeys(int(cid) for cid in line_prices_paise))
-    courses = db.query(Course).filter(Course.id.in_(unique_ids)).all()
-    found = {course.id: course for course in courses}
-    course_list = [found[cid] for cid in unique_ids if cid in found]
-    missing = [cid for cid in unique_ids if cid not in found]
-
-    snapshot_subtotal = sum(int(value) for value in line_prices_paise.values()) / 100.0
-    if abs((snapshot_subtotal - float(coupon_discount)) - float(paid_amount)) > 0.011:
-        raise ValueError("Cart payment does not reconcile with its snapshot")
-
-    if missing:
-        from app.services.email_service import EmailService
-
-        logger.error(
-            "cart fulfillment: deleted courses %s (user=%s payment=%s)",
-            missing, user.id, razorpay_payment_id,
-        )
-        EmailService.send_payment_alert(
-            "cart payment references deleted courses",
-            f"user_id={user.id}\nrazorpay_payment_id={razorpay_payment_id}\n"
-            f"razorpay_order_id={razorpay_order_id}\nmissing course_ids={missing}\n"
-            "The payment trail was preserved and remaining courses were granted. "
-            "Refund or hand-grant the missing lines.",
-        )
-
-    if created_order:
-        now = datetime.now(timezone.utc)
-        order_row = Order(
-            user_id=user.id,
-            order_key=f"CRT_{uuid.uuid4().hex[:12].upper()}",
-            order_status=OrderStatus.COMPLETED,
-            currency=currency or "INR",
-            subtotal_amount=snapshot_subtotal,
-            discount_amount=coupon_discount,
-            total_amount=paid_amount,
-            payment_method="razorpay_cart",
-            payment_method_title="Razorpay (cart)",
-            transaction_id=str(razorpay_payment_id),
-            billing_email=user.user_email or "",
-            date_paid=now,
-            date_completed=now,
-        )
-        db.add(order_row)
-        db.flush()
-
-        # Allocate the captured amount across the surviving course lines in
-        # proportion to their checkout prices.  The final line absorbs paise
-        # rounding so per-vertical revenue sums exactly to the payment.
-        found_weight = sum(line_prices_paise[c.id] for c in course_list)
-        remaining = round(float(paid_amount), 2)
-        for index, course in enumerate(course_list):
-            line_subtotal = line_prices_paise[course.id] / 100.0
-            if index == len(course_list) - 1:
-                line_total = remaining
-            else:
-                weight = (
-                    line_prices_paise[course.id] / found_weight
-                    if found_weight else 1 / max(len(course_list), 1)
-                )
-                line_total = round(float(paid_amount) * weight, 2)
-                remaining = round(remaining - line_total, 2)
-            db.add(OrderItem(
-                order_id=order_row.id,
-                course_id=course.id,
-                order_item_name=course.post_title or f"Course {course.id}",
-                order_item_type="cart_item",
-                quantity=1,
-                subtotal=line_subtotal,
-                total=line_total,
-                product_data=revenue_metadata(course.course_type),
-            ))
-
-        db.add(Payment(
-            user_id=user.id,
-            order_id=order_row.id,
-            payment_method="razorpay_cart",
-            gateway_transaction_id=str(razorpay_payment_id),
-            gateway_payment_id=str(razorpay_payment_id),
-            gateway_order_id=str(razorpay_order_id),
-            amount=paid_amount,
-            currency=currency or "INR",
-            payment_status=PaymentStatus.COMPLETED,
-            processed_date=now,
-        ))
-
-        if coupon is not None:
-            db.add(CouponUsage(
-                coupon_id=coupon.id,
-                user_id=user.id,
-                order_id=order_row.id,
-                discount_amount=coupon_discount,
-            ))
-            coupon.usage_count = (coupon.usage_count or 0) + 1
-
-    any_new = False
-    for course in course_list:
-        if grant_purchased_course(
-            db,
-            user_id=user.id,
-            course_id=course.id,
-            order_id=order_row.id,
-            source="cart",
-        ):
-            any_new = True
-
-    return FulfillmentResult(
-        created_order=created_order,
-        order_id=order_row.id,
-        is_new_enrollment=any_new,
-        cohort_id=None,
     )
 
 
@@ -475,7 +335,6 @@ def fulfill_bundle_purchase(
                 order_item_name=c.post_title or f"Course {c.id}",
                 order_item_type="bundle_item", quantity=1,
                 subtotal=list_price, total=share,
-                product_data=revenue_metadata(c.course_type),
             ))
         db.add(Payment(
             user_id=user.id, order_id=order_row.id,
@@ -631,7 +490,6 @@ def fulfill_ebook_purchase(
                 quantity=1,
                 subtotal=list_price,
                 total=paid_amount,
-                product_data=revenue_metadata("seyappaduporul", "digital_resources"),
             ))
         db.add(Payment(
             user_id=user.id,

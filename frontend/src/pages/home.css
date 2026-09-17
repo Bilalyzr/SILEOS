@@ -457,7 +457,7 @@
 
 /* ===== SCROLL TOP ===== */
 .sasha-home .scroll-top-btn {
-  position: fixed; bottom: 28px; right: 28px; z-index: var(--z-modal, 80);
+  position: fixed; bottom: 28px; right: 28px; z-index: 90;
   width: 46px; height: 46px; border-radius: 14px;
   background: var(--sasha-primary); color: #fff; border: none;
   cursor: pointer; font-size: 15px; display: none; align-items: center;

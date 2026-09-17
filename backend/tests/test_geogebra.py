@@ -4,8 +4,6 @@ Covers: applet CRUD + material-URL normalization, the FREE-COURSE-ONLY
 attach rule (the owner's business rule, enforced in the content resolver),
 atomic-pair 400s, cross-owner 403, in-use delete 409, embed payload shape.
 """
-import asyncio
-
 import pytest
 
 
@@ -41,48 +39,6 @@ def _course(db, instructor, price=0, sale=None):
     db.commit()
     db.refresh(c)
     return c
-
-
-def test_anonymous_embed_gate_direct(db, make_user):
-    """Exercise the public-preview policy without importing the full app.
-
-    This remains runnable even when unrelated router schemas prevent the
-    legacy pinned test environment from importing app.main.
-    """
-    from fastapi import HTTPException
-    from app.models.course import Course, Lesson
-    from app.models.geogebra import GeoGebraApplet
-    from app.routers.geogebra import embed_params
-
-    instructor = make_user(role="instructor", email="direct-ggb@example.com")
-    applet = GeoGebraApplet(owner_id=instructor.id, title="Vectors", app_type="geometry")
-    course = Course(
-        post_author=instructor.id,
-        post_title="Public vectors",
-        post_status="publish",
-        course_price=0,
-    )
-    db.add_all([applet, course])
-    db.flush()
-    lesson = Lesson(
-        post_author=instructor.id,
-        post_parent=course.id,
-        post_title="Explore vectors",
-        lesson_preview=True,
-        lesson_content_type="geogebra",
-        geogebra_applet_id=applet.id,
-    )
-    db.add(lesson)
-    db.commit()
-
-    result = asyncio.run(embed_params(applet.id, db=db, current_user=None))
-    assert result["applet_parameters"]["appName"] == "geometry"
-
-    lesson.lesson_preview = False
-    db.commit()
-    with pytest.raises(HTTPException) as exc:
-        asyncio.run(embed_params(applet.id, db=db, current_user=None))
-    assert exc.value.status_code == 401
 
 
 # ------------------------------------------------------------------- CRUD
@@ -128,31 +84,6 @@ def test_embed_payload_shape(client, instructor_headers, applet):
     # anonymous access is 401 (authoring library is not scrapeable)
     r = client.get(f"/api/v1/geogebra/applets/{applet['id']}/embed")
     assert r.status_code == 401
-
-
-def test_anonymous_embed_opens_only_for_published_preview(
-    client, db, instructor, instructor_headers, applet
-):
-    from app.models.course import Lesson
-
-    course = _course(db, instructor, price=0)
-    response = client.post(f"/api/v1/courses/{course.id}/lessons", json={
-        "title": "Public construction",
-        "lesson_content_type": "geogebra",
-        "geogebra_applet_id": applet["id"],
-    }, headers=instructor_headers)
-    assert response.status_code == 200, response.text
-    lesson = db.get(Lesson, response.json()["id"])
-    lesson.lesson_preview = True
-    db.commit()
-
-    response = client.get(f"/api/v1/geogebra/applets/{applet['id']}/embed")
-    assert response.status_code == 200
-
-    course.post_status = "draft"
-    db.commit()
-    response = client.get(f"/api/v1/geogebra/applets/{applet['id']}/embed")
-    assert response.status_code == 401
 
 
 # ------------------------------------------------- free-course attach rule

@@ -208,8 +208,8 @@ class DesignerTemplateOut(BaseModel):
     name: str
     description: str
     orientation: str
-    certificate_width: int = Field(1400, ge=200, le=6000)
-    certificate_height: int = Field(1080, ge=200, le=6000)
+    certificate_width: int
+    certificate_height: int
     background_color: str
     background_image: str
     elements_config: List[Dict[str, Any]]

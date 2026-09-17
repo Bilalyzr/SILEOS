@@ -170,21 +170,16 @@ async def embed_params(
     db: Session = Depends(get_db),
     current_user=Depends(AuthService.get_optional_current_user),
 ):
-    """Return deployggb.js parameters to authenticated learners, or to an
-    anonymous visitor only when this applet is attached to a public-preview
-    lesson in a published course. The authoring library remains private."""
+    """The deployggb.js appletParameters for the player. Applets referenced
+    by lessons of free courses are public content — no per-user data — but
+    we still require auth to keep anonymous scraping of the authoring
+    library off this endpoint."""
+    if current_user is None:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED,
+                            detail="Authentication required")
     applet = db.query(GeoGebraApplet).filter(GeoGebraApplet.id == applet_id).first()
     if not applet:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Applet not found")
-    if current_user is None:
-        from app.services.public_preview import require_anonymous_preview
-
-        require_anonymous_preview(
-            db,
-            "geogebra_applet_id",
-            applet_id,
-            "This GeoGebra interactive",
-        )
     d = _applet_dict(applet)
     d["applet_parameters"] = applet.embed_params()
     return d

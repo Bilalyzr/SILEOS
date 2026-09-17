@@ -10,13 +10,11 @@ import pyotp
 import secrets
 import sys
 from contextlib import asynccontextmanager
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 
 root = Path(__file__).resolve().parents[1]
-local = Path(os.environ.get("SASHA_PREVIEW_ROOT", str(root / ".local"))).resolve()
-if not local.is_relative_to((root / ".local").resolve()):
-    raise RuntimeError("Synthetic preview files must remain inside this workspace's .local directory")
-local.mkdir(parents=True, exist_ok=True)
+local = root / ".local"
+local.mkdir(exist_ok=True)
 sys.path.insert(0, str(root / "backend"))
 os.environ.update(
     {
@@ -33,7 +31,7 @@ os.environ.update(
         "WHATSAPP_APP_SECRET": "",
         "WHATSAPP_VERIFY_TOKEN": "",
         "WHATSAPP_APPROVED_TEMPLATES": "",
-        "DATABASE_URL": "sqlite:///" + (local / "campus-preview.sqlite").as_posix(),
+        "DATABASE_URL": os.environ.get("DATABASE_URL") or "sqlite:///" + (local / "campus-preview.sqlite").as_posix(),
         "REDIS_URL": "redis://127.0.0.1:6399/0",
         "SECRET_KEY": "local-preview-" + "x" * 64,
         "JWT_SECRET": "local-preview-" + "y" * 64,
@@ -53,7 +51,7 @@ os.environ.update(
     }
 )
 
-from app.core.database import Base, engine, SessionLocal, reconcile_business_verticals
+from app.core.database import Base, engine, SessionLocal
 
 engine.echo = False
 from app import models
@@ -77,7 +75,6 @@ from app.models.campus_operations import ParentLinkRequest
 from app.routers.parents import ParentStudent
 
 Base.metadata.create_all(engine)
-reconcile_business_verticals()
 with SessionLocal() as db:
     owner = db.query(User).filter_by(user_email="campus-owner@example.org").first()
     if not owner:
@@ -130,7 +127,6 @@ with SessionLocal() as db:
                 post_status="published",
                 course_price_type="free",
                 post_name=title.lower().replace(" ", "-"),
-                course_type="utporul",
             )
             db.add(course)
             db.flush()
@@ -335,7 +331,7 @@ def provision_preview_accounts() -> list[dict[str, str]]:
             "email": "platform-admin@example.org",
             "account_role": "admin",
             "display_name": "Preview Platform Administrator",
-            "landing_path": "/admin/operations",
+            "landing_path": "/admin/dashboard",
         },
         {
             "role": "Super administrator",
@@ -370,7 +366,6 @@ def provision_preview_accounts() -> list[dict[str, str]]:
             user.display_name = spec["display_name"]
             user.role = spec["account_role"]
             user.is_active = True
-            user.user_status = 1
             user.is_verified = True
             user.profile_completed = True
 
@@ -564,57 +559,6 @@ def provision_preview_accounts() -> list[dict[str, str]]:
 
 
 provision_preview_accounts()
-
-
-def seed_sasha_learning_monitor() -> None:
-    """Give the local instructor preview realistic, non-production evidence."""
-    from app.models.tutor_learning_signal import TutorLearningSignal
-
-    concept_sets = {
-        "Foundations of Physics": ("projectile motion", "vectors", "force and acceleration"),
-        "Mathematics for Discovery": ("quadratic equations", "trigonometry", "fractions"),
-        "Introduction to Computer Science": ("loops and iteration", "variables", "algorithm tracing"),
-        "Environmental Studies": ("carbon cycle", "ecosystem balance", "waste segregation"),
-    }
-    prompts = (
-        ("I am still confused. Can you explain {concept} again with a simpler example?", 91.0, "high", "repeated_confusion", 3),
-        ("How do I apply {concept} step by step to this problem?", 74.0, "watch", "application_gap", 2),
-        ("What is the meaning of {concept}, and how is it different from the last topic?", 58.0, "watch", "terminology_gap", 1),
-        ("I am not sure whether I understand {concept}. Can you check me?", 43.0, "developing", "confidence_gap", 0),
-    )
-    now = datetime.now(timezone.utc)
-    with SessionLocal() as db:
-        students = db.query(User).filter(User.role == "student").order_by(User.id).limit(8).all()
-        if not students:
-            return
-        courses = db.query(Course).filter(Course.post_title.in_(concept_sets)).all()
-        for course in courses:
-            if db.query(TutorLearningSignal.id).filter(TutorLearningSignal.course_id == course.id).first():
-                continue
-            concepts = concept_sets[course.post_title]
-            for index, (template, score, severity, gap, repeats) in enumerate(prompts):
-                student = students[index % len(students)]
-                concept = concepts[index % len(concepts)]
-                db.add(TutorLearningSignal(
-                    user_id=student.id,
-                    course_id=course.id,
-                    session_key=f"preview-{course.id}-{student.id}",
-                    prompt_excerpt=template.format(concept=concept),
-                    concept=concept,
-                    struggle_score=score,
-                    severity=severity,
-                    likely_gap=gap,
-                    reasons=[
-                        "The learner explicitly described confusion or uncertainty.",
-                        f"This concept appeared in {repeats} earlier Sasha questions." if repeats else "A course-linked explanation request was recorded for follow-up evidence.",
-                    ],
-                    repeat_count=repeats,
-                    created_at=now - timedelta(hours=index * 7 + course.id),
-                ))
-            db.commit()
-
-
-seed_sasha_learning_monitor()
 
 from app.main import app
 

@@ -22,9 +22,6 @@ import { useCart } from "@/contexts/CartContext"
 
 const navigation = [
   { name: "Home", href: "/" },
-  { name: "Meiporul", href: "/meiporul" },
-  { name: "Seyappaduporul", href: "/seyappaduporul" },
-  { name: "Utporul", href: "/utporul" },
   { name: "Courses", href: "/courses" },
   { name: "Bundles", href: "/bundles" },
   { name: "Membership", href: "/membership" },
@@ -32,6 +29,7 @@ const navigation = [
   { name: "Internships", href: "/internships" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contact" },
+  { name: "Meiporul AR", href: "/meiporul-ar" },
 ]
 
 export const Header: React.FC = () => {
@@ -129,7 +127,7 @@ export const Header: React.FC = () => {
                   </DropdownMenu.Trigger>
                   <DropdownMenu.Portal>
                     <DropdownMenu.Content
-                      className="z-popover w-56 bg-white rounded-md shadow-lg border p-2"
+                      className="w-56 bg-white rounded-md shadow-lg border p-2"
                       align="end"
                     >
                       <div className="px-2 py-1.5">

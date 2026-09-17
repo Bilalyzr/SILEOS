@@ -5,7 +5,6 @@ Payment Service - Business logic for payment processing
 import razorpay
 import hmac
 import hashlib
-import asyncio
 from datetime import datetime, timedelta
 from typing import Dict, Any, Optional
 from sqlalchemy.orm import Session
@@ -29,26 +28,21 @@ class PaymentService:
     @staticmethod
     async def create_payment_intent(amount: int, currency: str, metadata: Dict[str, str]) -> Dict[str, Any]:
         """
-        Create a real Razorpay order. Fails closed when credentials are absent.
+        Create payment intent - MOCK MODE (for development)
+        In production, this would integrate with Razorpay
         """
         try:
-            payment_service = PaymentService()
-            order = await asyncio.to_thread(
-                payment_service.razorpay_client.order.create,
-                {
-                    "amount": int(amount),
-                    "currency": currency.upper(),
-                    "receipt": f"intent_{datetime.utcnow():%Y%m%d%H%M%S%f}"[:40],
-                    "notes": metadata,
-                },
-            )
+            # Mock payment intent - generate a fake order ID
+            import uuid
+            mock_order_id = f"order_mock_{uuid.uuid4().hex[:16]}"
+
             return {
-                "id": order["id"],
-                "client_secret": order["id"],
-                "amount": order["amount"],
-                "currency": order["currency"],
-                "status": order["status"],
-                "is_mock": False,
+                "id": mock_order_id,
+                "client_secret": mock_order_id,
+                "amount": amount,
+                "currency": currency,
+                "status": "created",
+                "is_mock": True
             }
 
         except Exception as e:
@@ -57,25 +51,21 @@ class PaymentService:
     @staticmethod
     async def verify_payment(payment_intent_id: str) -> Dict[str, Any]:
         """
-        Read an order's status from Razorpay. This does not replace the
-        signature-and-amount verification in the payment router.
+        Verify payment status - MOCK MODE (for development)
+        In production, this would verify with Razorpay
         """
         try:
-            if not payment_intent_id.startswith("order_"):
-                return {"status": "failed", "error": "Invalid Razorpay order id"}
-            payment_service = PaymentService()
-            order = await asyncio.to_thread(
-                payment_service.razorpay_client.order.fetch,
-                payment_intent_id,
-            )
-            return {
-                "status": "succeeded" if order.get("status") == "paid" else order.get("status", "pending"),
-                "order_id": payment_intent_id,
-                "amount": order.get("amount"),
-                "amount_paid": order.get("amount_paid"),
-                "currency": order.get("currency"),
-                "is_mock": False,
-            }
+            # Mock verification - always succeeds for mock payments
+            if payment_intent_id.startswith("order_mock_"):
+                import uuid
+                return {
+                    "status": "succeeded",
+                    "razorpay_payment_id": f"pay_mock_{uuid.uuid4().hex[:16]}",
+                    "order_id": payment_intent_id,
+                    "is_mock": True
+                }
+
+            return {"status": "pending"}
 
         except Exception as e:
             return {"status": "failed", "error": str(e)}

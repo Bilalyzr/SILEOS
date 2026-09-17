@@ -33,17 +33,21 @@ export default function LabsPage() {
       : "/instructor/lab-studio";
   useEffect(() => {
     let live = true;
-    Promise.all([labStudio.curriculum(), listLabs()])
-      .then(([d, c]) => {
-        if (live) {
-          setData(d);
-          setCatalog(c);
-        }
-      })
-      .catch(() => {
-        if (live)
-          setError("Could not load the lab library. Please reload to retry.");
-      });
+    // allSettled: the catalog and the curriculum are independent — one
+    // failing (e.g. a transient API error) must not blank the whole page.
+    // The lab cards render from the catalog alone; the curriculum view and
+    // class filters simply degrade when their call failed.
+    Promise.allSettled([labStudio.curriculum(), listLabs()]).then(
+      ([d, c]) => {
+        if (!live) return;
+        if (d.status === "fulfilled") setData(d.value);
+        if (c.status === "fulfilled") setCatalog(c.value);
+        if (d.status === "rejected" || c.status === "rejected")
+          setError(
+            "Part of the lab library could not be loaded — some sections may be missing.",
+          );
+      },
+    );
     return () => {
       live = false;
     };

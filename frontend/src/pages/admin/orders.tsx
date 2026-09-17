@@ -70,7 +70,6 @@ export const AdminOrders: React.FC = () => {
     total_revenue: number;
     course_revenue: number;
     internship_revenue: number;
-    other_revenue: number;
   } | null>(null);
 
   const fetchOrders = useCallback(async () => {
@@ -97,7 +96,6 @@ export const AdminOrders: React.FC = () => {
           total_revenue: Number(rs.total_revenue ?? 0),
           course_revenue: Number(rs.course_revenue ?? 0),
           internship_revenue: Number(rs.internship_revenue ?? 0),
-          other_revenue: Number(rs.other_revenue ?? 0),
         });
       }
 
@@ -190,7 +188,6 @@ export const AdminOrders: React.FC = () => {
     internshipRevenue:
       revenueStats?.internship_revenue ??
       internshipOrders.reduce((sum, o) => sum + o.amount, 0),
-    otherRevenue: revenueStats?.other_revenue ?? 0,
   };
 
   return (
@@ -291,11 +288,10 @@ export const AdminOrders: React.FC = () => {
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Revenue components</p>
+              <p className="text-sm text-gray-600">Course + Internship</p>
               <p className="text-xs text-gray-500 mt-1">
-                Commerce ₹{stats.courseRevenue.toLocaleString()} · Career ₹
-                {stats.internshipRevenue.toLocaleString()} · Other ₹
-                {stats.otherRevenue.toLocaleString()}
+                ₹{stats.courseRevenue.toLocaleString()} + ₹
+                {stats.internshipRevenue.toLocaleString()}
               </p>
             </div>
             <TrendingUp className="w-8 h-8 text-gray-600" />
@@ -628,7 +624,7 @@ export const AdminOrders: React.FC = () => {
       </div>
       {isVideoModalOpen && previewVideoUrl && (
         <div
-          className="fixed inset-0 z-modal flex items-center justify-center bg-black/90 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
           onClick={() => {
             setIsVideoModalOpen(false);
             setPreviewVideoUrl("");

@@ -1,7 +1,5 @@
 import { MotionConfig } from "framer-motion";
-// LearningPreferences moved 2026-09-14: it renders per-route inside
-// lazy-page's guide row (next to "How this page works"), not at the app
-// root — the old root mount floated it fixed at the bottom-left corner.
+import { LearningPreferences } from "./components/labs/LearningPreferences";
 import { OfflineSyncBridge } from "./offline/OfflineSyncBridge";
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -10,7 +8,8 @@ import App from "./App.tsx";
 // Pages use <i className="fa-solid fa-..."> markup; without this the glyphs
 // render as blank boxes. Imported here so it applies to every route.
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import "./styles/app.css";
+import "./styles/globals.css";
+import "./styles/sasha-design.css";
 import { ThemeProvider } from "./contexts/theme-context";
 import { HelmetProvider } from "react-helmet-async";
 
@@ -41,9 +40,17 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           transition={{ duration: 0.16, ease: [0.2, 0.7, 0.3, 1] }}
         >
           <App />
+          <LearningPreferences />
           <OfflineSyncBridge />
         </MotionConfig>
       </ThemeProvider>
     </HelmetProvider>
   </React.StrictMode>,
 ); // v1778429448
+
+import "./styles/page-redesign.css";
+
+import "./styles/astra-glass.css";
+import "./styles/campus-glass.css";
+import "./styles/campus-growth.css";
+import "./styles/sunrise.css";

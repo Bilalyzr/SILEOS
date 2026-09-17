@@ -7,7 +7,7 @@ from app.core.config import get_settings
 
 def report(db):
     settings=get_settings()
-    from app.services.llm_provider import llm_configured
+    from app.services.llm_provider import glm_api_key as api_key
     from app.services.transcription_provider import configuration
     checks=[]
     def add(key,label,ready,detail):checks.append({'key':key,'label':label,'status':'configured' if ready else 'blocked','detail':detail})
@@ -17,8 +17,7 @@ def report(db):
     secret=settings.RAZORPAY_SECRET or settings.RAZORPAY_KEY_SECRET
     add('payments','Razorpay credentials',bool(key and secret),'Credentials present; complete a real test-mode checkout before launch.' if key and secret else 'Configure Razorpay key and secret on the server.')
     add('webhook','Payment webhook',bool(settings.RAZORPAY_WEBHOOK_SECRET),'Webhook secret configured; delivery and signature tests still required.' if settings.RAZORPAY_WEBHOOK_SECRET else 'Configure the Razorpay webhook secret.')
-    ai_ready = llm_configured()
-    add('ai','AI question generation',ai_ready,'An active provider key is available; use the provider vault health check to verify connectivity.' if ai_ready else 'Add a GLM or Gemini key in Admin → AI Provider Vault.')
+    add('ai','AI question generation',bool(api_key()),'Provider configured; use the provider probe to verify connectivity.' if api_key() else 'Configure GLM_API_KEY or ZHIPUAI_API_KEY on the server.')
     stable=all(len(os.environ.get(k,'').strip())>=32 and not os.environ.get(k,'').startswith('your-') for k in ('SECRET_KEY','JWT_SECRET'))
     add('auth','Persistent signing keys',stable,'Environment keys present. Rotate through your deployment secret manager.' if stable else 'Set persistent SECRET_KEY and JWT_SECRET in deployment secrets.')
     root=Path(settings.UPLOAD_DIR)

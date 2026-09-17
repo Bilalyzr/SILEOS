@@ -1192,20 +1192,3 @@ You can also read this message in your dashboard:
         if not sent:
             logger.error("PAYMENT ALERT (email not sent): %s — %s", subject, body)
         return sent
-
-    @staticmethod
-    def send_security_alert(subject: str, body: str) -> bool:
-        """Deliver a high-signal security alert without raising into a request."""
-        to_email = getattr(settings, "SECURITY_ALERT_EMAIL", "") or getattr(
-            settings, "ADMIN_EMAIL", ""
-        ) or settings.EMAIL_FROM
-        try:
-            sent = EmailService._send_smtp_email(
-                to_email, f"[SashaInfinity security] {subject}", body
-            )
-        except Exception:
-            logger.exception("security alert email raised")
-            sent = False
-        if not sent:
-            logger.error("SECURITY ALERT (email not sent): %s — %s", subject, body)
-        return sent

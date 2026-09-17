@@ -391,7 +391,7 @@ export const CertificateDesignerEditor: React.FC<CertificateDesignerEditorProps>
 
       {previewUrl && (
         <div
-          className="fixed inset-0 bg-black/60 z-modal flex items-center justify-center p-6"
+          className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-6"
           onClick={() => setPreviewUrl(null)}
           role="dialog"
           aria-modal="true"

@@ -37,9 +37,6 @@ class RevenueStats(BaseModel):
     monthly_revenue_label: str = ""  # e.g. "July 2026" — the month above
     avg_course_price: float
     revenue_period: float  # Generic field for period-filtered revenue
-    course_revenue: float = 0  # net commerce payments; legacy field name
-    internship_revenue: float = 0
-    other_revenue: float = 0  # tuition and future non-commerce adapters
 
 class AdminStatsResponse(BaseModel):
     user_stats: UserStats

@@ -448,8 +448,7 @@ def test_ai_generation_happy_path_monkeypatched(client, db, instructor,
 
     calls = {}
 
-    def fake_call(system, prompt, *, feature):
-        assert feature == "AI question generation"
+    def fake_call(system, prompt):
         calls["prompt"] = prompt
         return fake_reply
 

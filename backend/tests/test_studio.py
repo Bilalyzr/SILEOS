@@ -142,7 +142,8 @@ def test_streak_freeze_covers_missed_days_within_allowance(client, db, headers, 
 
 
 def test_parent_digest_honours_parent_view(client, db, headers, instructor, student_user, make_user):
-    from app.core.security import create_access_token
+    from app.services.auth_service import AuthService
+    from app.main import app
     c = _course(db, instructor, "seyappaduporul")
     db.add(Enrollment(user_id=student_user.id, course_id=c.id, enrollment_status="enrolled", course_progress_percentage=42))
     db.commit()
@@ -151,22 +152,18 @@ def test_parent_digest_honours_parent_view(client, db, headers, instructor, stud
     parent = make_user(role="parent", email="studio-parent@example.com")
     db.add(ParentStudent(parent_user_id=parent.id, student_user_id=student_user.id))
     db.commit()
-    parent_headers = {
-        "Authorization": f"Bearer {create_access_token({'sub': str(parent.id)})}",
-    }
-    response = client.get("/api/v1/parents/digest", headers=parent_headers)
-    assert response.status_code == 200, response.text
-    d = response.json()
-    course = d["digests"][0]["courses"][0]
-    assert course["progress"] == 42 and "attendance" in course and "recent_scores" not in course
-    update = client.put(f"/api/v1/studio/courses/{c.id}/settings", headers=headers,
-                        json={"parent_view": {"completion": False, "scores": True}})
-    assert update.status_code == 200, update.text
-    response = client.get("/api/v1/parents/digest", headers=parent_headers)
-    assert response.status_code == 200, response.text
-    d = response.json()
-    course = d["digests"][0]["courses"][0]
-    assert "progress" not in course and "recent_scores" in course and "risk" in course
+    app.dependency_overrides[AuthService.get_current_user] = lambda: parent
+    try:
+        d = client.get("/api/v1/parents/digest").json()
+        course = d["digests"][0]["courses"][0]
+        assert course["progress"] == 42 and "attendance" in course and "recent_scores" not in course
+        client.put(f"/api/v1/studio/courses/{c.id}/settings", headers=headers,
+                   json={"parent_view": {"completion": False, "scores": True}})
+        d = client.get("/api/v1/parents/digest").json()
+        course = d["digests"][0]["courses"][0]
+        assert "progress" not in course and "recent_scores" in course and "risk" in course
+    finally:
+        app.dependency_overrides.pop(AuthService.get_current_user, None)
 
 
 def test_schedule_term_view_and_clone_week(client, db, headers, instructor):

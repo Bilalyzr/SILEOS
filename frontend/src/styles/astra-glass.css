@@ -1172,66 +1172,18 @@ body.astra-theme.lk-app {
   }
 }
 
-/* Product-wide learning controls, including standalone offline reader.
-   Bottom-LEFT: the bottom-right corner is crowded on the homepage
-   (.scroll-top-btn at 28px, .otw-card above it) and z-fab keeps the panel
-   under every modal scrim. */
+/* Product-wide learning controls, including standalone offline reader. */
 .learning-preferences {
   position: fixed;
-  left: 16px;
+  right: 16px;
   bottom: 16px;
-  z-index: var(--z-fab, 70);
+  z-index: 80;
   max-width: min(360px, calc(100vw - 32px));
 }
 .learning-preferences > .sf-surface {
   max-height: 70vh;
   overflow: auto;
   margin-top: 8px;
-}
-
-/* 2026-09-14: on routed app pages the Accessibility / அணுகல்தன்மை trigger
-   sits in the top guide row beside "How this page works" (lazy-page.tsx),
-   instead of floating fixed at the bottom-left where it overlapped page
-   content. Scoped to .astra-guide-row so the standalone offline reader
-   (offline/main.tsx) keeps the base fixed bottom-left placement above. */
-.astra-guide-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  margin: 20px clamp(12px, 3vw, 32px) 0;
-}
-.astra-guide-row > .astra-page-guide {
-  flex: 1 1 auto;
-  min-width: 0;
-  margin: 0; /* the row carries the outer margin now */
-}
-.astra-guide-row > .learning-preferences {
-  position: relative; /* overrides fixed bottom-left */
-  inset: auto;
-  flex: 0 0 auto;
-  margin: 0 0 0 auto; /* right-aligns the trigger on pages without a guide */
-}
-.astra-guide-row > .learning-preferences > .sf-surface {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  width: min(360px, calc(100vw - 32px));
-  box-shadow: var(--lift, 0 12px 32px rgba(23, 33, 54, 0.18));
-}
-@media (max-width: 640px) {
-  .astra-guide-row {
-    flex-direction: column-reverse;
-    align-items: stretch;
-    margin-top: 12px;
-  }
-  .astra-guide-row > .learning-preferences {
-    align-self: flex-end;
-  }
-}
-@media print {
-  .astra-guide-row {
-    display: none !important;
-  }
 }
 body[data-high-contrast="true"] {
   --glass-1: #fff;

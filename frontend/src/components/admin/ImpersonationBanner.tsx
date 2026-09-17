@@ -137,7 +137,7 @@ export const ImpersonationBanner: React.FC = () => {
   return (
     <div
       role="alert"
-      className="fixed top-0 left-0 right-0 z-banner bg-red-600 text-white shadow-lg"
+      className="fixed top-0 left-0 right-0 z-[9999] bg-red-600 text-white shadow-lg"
       style={{ minHeight: '44px' }}
     >
       <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between gap-4">

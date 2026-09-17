@@ -106,18 +106,10 @@ export const CourseCard: React.FC<CourseCardProps> = ({
                 {course.post_title}
               </h3>
               {isLive && <Badge variant="danger">Live now</Badge>}
-              {/* Unreviewed courses showed "★★★★★ 0.0 (0)", which reads as a
-                 bad rating. Show a neutral "New" chip until real reviews exist. */}
-              {(course.total_reviews ?? 0) > 0 ? (
-                <div className="flex items-center gap-2 text-xs text-neutral-600 mb-2">
-                  <StarRating rating={course.average_rating ?? 0} size="sm" showValue />
-                  <span>({course.total_reviews})</span>
-                </div>
-              ) : (
-                <div className="mb-2">
-                  <Badge variant="secondary">New</Badge>
-                </div>
-              )}
+              <div className="flex items-center gap-2 text-xs text-neutral-600 mb-2">
+                <StarRating rating={course.average_rating ?? 0} size="sm" showValue />
+                <span>({course.total_reviews})</span>
+              </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5 text-xs text-neutral-500">
                   <Users className="w-3 h-3" />
@@ -227,12 +219,10 @@ export const CourseCard: React.FC<CourseCardProps> = ({
                 {course.instructor?.display_name || course.instructor?.display_name || "Instructor"}
               </span>
             </div>
-            {(course.total_reviews ?? 0) > 0 && (
-              <div className="flex flex-shrink-0 items-center gap-1 rounded-full bg-warning-50 px-2.5 py-1 text-xs font-bold text-warning-700">
-                <Star className="w-3 h-3 fill-current" />
-                {(course.average_rating ?? 0).toFixed(1)}
-              </div>
-            )}
+            <div className="flex flex-shrink-0 items-center gap-1 rounded-full bg-warning-50 px-2.5 py-1 text-xs font-bold text-warning-700">
+              <Star className="w-3 h-3 fill-current" />
+              {(course.average_rating ?? 0).toFixed(1)}
+            </div>
           </div>
 
           {/* Workshops / Hours / College (below Taught By) */}

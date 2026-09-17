@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Plus,
   Upload,
@@ -48,7 +48,11 @@ const TemplateManagement: React.FC<TemplateManagementProps> = ({ onClose }) => {
     is_default: false
   })
 
-  const loadTemplates = useCallback(async () => {
+  useEffect(() => {
+    loadTemplates()
+  }, [])
+
+  const loadTemplates = async () => {
     try {
       setLoading(true)
       const data = await getCertificateTemplates()
@@ -59,11 +63,7 @@ const TemplateManagement: React.FC<TemplateManagementProps> = ({ onClose }) => {
     } finally {
       setLoading(false)
     }
-  }, [])
-
-  useEffect(() => {
-    loadTemplates()
-  }, [loadTemplates])
+  }
 
   const showMessage = (type: 'success' | 'error', text: string) => {
     setMessage({ type, text })

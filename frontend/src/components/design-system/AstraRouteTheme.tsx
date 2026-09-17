@@ -1,6 +1,5 @@
 import { useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { initialiseAurumPreferences } from "@/components/brand/AurumDisplayControls";
 
 export type PageFamily =
   | "dashboard"
@@ -42,7 +41,6 @@ export function AstraRouteTheme() {
   const { pathname } = useLocation();
   useLayoutEffect(() => {
     document.body.dataset.pageFamily = pageFamily(pathname);
-    initialiseAurumPreferences();
   }, [pathname]);
   return null;
 }
