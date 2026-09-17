@@ -999,88 +999,44 @@ body.astra-theme.lk-app {
   white-space: normal;
   overflow-wrap: anywhere;
 }
-.astra-theme .astra-page-guide {
-  margin: 20px clamp(12px, 3vw, 32px) 0;
-  padding: 16px 20px;
-  border: 1px solid var(--hairline);
-  border-left: 3px solid var(--accent, #ff751f);
-  border-radius: var(--r-s, 16px);
-  background: var(--glass-3);
-  color: var(--ink, #172136);
-  box-shadow: var(--lift);
+/* App-wide back navigation: a single quiet control above the page content.
+   Replaces the former page-guide card (title + purpose + workflow steps).
+   Default has no side margins — role workspaces and page shells already pad
+   their content columns; the public layout pads nothing, so it opts in. */
+.astra-theme .astra-page-back {
+  margin: 16px 0 -6px;
 }
-.astra-guide-top {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-.astra-guide-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 700;
-  font-size: 14px;
+.rd-public-main .astra-page-back {
+  margin: 16px clamp(12px, 3vw, 32px) -6px;
 }
 .astra-back-button {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 7px;
-  min-height: 44px;
-  padding: 8px 14px;
+  gap: 6px;
+  min-height: 34px;
+  padding: 5px 12px 5px 10px;
   border: 1px solid var(--hairline);
-  border-radius: 12px;
-  background: var(--glass-2);
-  font-weight: 700;
-  font-size: 13px;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ink-2, #3d4c68);
+  font-weight: 600;
+  font-size: 12.5px;
   cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
 .astra-back-button:hover {
-  background: rgba(255, 117, 31, 0.12);
+  background: var(--glass-2);
+  border-color: rgba(154, 69, 22, 0.28);
+  color: #853b14;
 }
-.astra-back-button:focus-visible,
-.astra-guide-workflow summary:focus-visible {
-  outline: 3px solid #ff751f;
-  outline-offset: 3px;
+.astra-back-button:focus-visible {
+  outline: 2px solid #ad4b16;
+  outline-offset: 2px;
 }
-.astra-page-guide > p {
-  font-size: 13px;
-  line-height: 1.7;
-  margin: 8px 0;
-  max-width: 90ch;
-}
-.astra-guide-workflow summary {
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 8px 0;
-  width: fit-content;
-}
-.astra-guide-workflow ol {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin: 8px 0 0;
-  padding: 0;
-  list-style: none;
-}
-.astra-guide-workflow li {
-  display: flex;
-  gap: 8px;
-  font-size: 12px;
-  line-height: 1.6;
-}
-.astra-guide-workflow li span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 23px;
-  height: 23px;
-  border-radius: 50%;
-  background: rgba(255, 117, 31, 0.13);
-  color: #9a3412;
-  font-weight: 700;
+@media print {
+  .astra-page-back {
+    display: none !important;
+  }
 }
 .astra-model-guide {
   padding: 18px;
@@ -1102,22 +1058,6 @@ body.astra-theme.lk-app {
 .lab-experience {
   min-width: 0;
   width: 100%;
-}
-@media (max-width: 640px) {
-  .astra-theme .astra-page-guide {
-    padding: 12px;
-  }
-  .astra-guide-workflow ol {
-    grid-template-columns: 1fr;
-  }
-  .astra-guide-top {
-    gap: 10px;
-  }
-}
-@media print {
-  .astra-page-guide {
-    display: none !important;
-  }
 }
 .astra-theme .astra-inline-icon {
   display: inline-block;
