@@ -1,5 +1,4 @@
 import { MotionConfig } from "framer-motion";
-import { LearningPreferences } from "./components/labs/LearningPreferences";
 import { OfflineSyncBridge } from "./offline/OfflineSyncBridge";
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -40,7 +39,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           transition={{ duration: 0.16, ease: [0.2, 0.7, 0.3, 1] }}
         >
           <App />
-          <LearningPreferences />
           <OfflineSyncBridge />
         </MotionConfig>
       </ThemeProvider>

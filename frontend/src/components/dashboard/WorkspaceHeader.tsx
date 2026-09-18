@@ -1,3 +1,4 @@
+import { AccessibilityMenu } from "@/components/a11y/AccessibilityMenu";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
@@ -67,6 +68,7 @@ export function WorkspaceHeader({
           <ArrowUpRight size={16} />
         </button>
       </form>
+      <AccessibilityMenu />
       <Link to="/institutions" className="rd-labs-link" aria-label="Institution workspaces">
         <Building2 size={17} />
         <span>Campus</span>

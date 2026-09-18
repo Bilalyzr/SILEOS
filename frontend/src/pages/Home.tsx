@@ -2,30 +2,52 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSEO } from "@/hooks/use-seo";
 import { api } from "@/api/axios";
+import { useAuthStore } from "@/store/auth";
 import toast from "react-hot-toast";
 import { getMediaUrl } from "@/utils/media";
 import { IndependenceDayPopup } from "@/components/promotional/IndependenceDayPopup";
 import { OfferTimerWidget } from "@/components/promotional/OfferTimerWidget";
 import "./home.css";
+import "./home-modern.css";
 
-// Font Awesome 6 is loaded from the public CDN once on mount so the <i> icons render.
-function useFontAwesome() {
+type HomeStats = { courses: number; labs: number; subjects: number };
+
+function useHomeStats() {
+  const [stats, setStats] = useState<HomeStats | null>(null);
   useEffect(() => {
-    if (document.querySelector("link[data-sasha-fa]")) return;
-    const l = document.createElement("link");
-    l.rel = "stylesheet";
-    l.href =
-      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css";
-    l.setAttribute("data-sasha-fa", "true");
-    document.head.appendChild(l);
+    let live = true;
+    (async () => {
+      try {
+        const [coursesRes, labsRes] = await Promise.all([
+          api.get("/courses/?page=1&page_size=100"),
+          api.get("/virtual-labs"),
+        ]);
+        if (!live) return;
+        const courses = coursesRes.data?.courses ?? [];
+        const cats = new Set(
+          courses.map((c: any) => (c.category || "").trim()).filter(Boolean),
+        );
+        setStats({
+          courses: coursesRes.data?.total ?? courses.length,
+          labs: (labsRes.data?.labs ?? []).length,
+          subjects: cats.size,
+        });
+      } catch {
+        /* stats stay hidden on failure — never fabricated */
+      }
+    })();
+    return () => { live = false; };
   }, []);
+  return stats;
 }
 
-function HeroSection() {
+function HeroSection({ stats }: { stats: HomeStats | null }) {
   return (
-    <section className="rd-home-hero" id="home" data-testid="hero-section">
-      <div>
-        <span className="rd-eyebrow">Learn. Practice. Build.</span>
+    <section className="rd-home-hero hm-hero" id="home" data-testid="hero-section">
+      <div className="hm-hero-copy">
+        <span className="rd-eyebrow hm-fade" style={{ animationDelay: "80ms" }}>
+            Learn <i aria-hidden>•</i> Practice <i aria-hidden>•</i> Build
+          </span>
         <h1>
           Your next chapter
           <br />
@@ -60,6 +82,13 @@ function HeroSection() {
           </strong>
           <Link to="/labs">Open the lab library →</Link>
         </div>
+        {stats && (
+          <div className="hm-hero-chips" aria-label="Platform highlights">
+            <span className="hm-chip">{stats.courses}+ courses</span>
+            <span className="hm-chip">{stats.labs}+ interactive labs</span>
+            <span className="hm-chip">{stats.subjects} subjects</span>
+          </div>
+        )}
       </div>
     </section>
   );
@@ -882,23 +911,235 @@ export function NewsletterSection() {
   );
 }
 
+
+function FeaturedCoursesSection() {
+  const [courses, setCourses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    let live = true;
+    api
+      .get("/courses/?page=1&page_size=4&sort=latest")
+      .then((r) => { if (live) setCourses(r.data?.courses ?? []); })
+      .catch(() => {})
+      .finally(() => { if (live) setLoading(false); });
+    return () => { live = false; };
+  }, []);
+  return (
+    <section className="hm-section" aria-labelledby="hm-featured-title">
+      <div className="hm-section-head">
+        <div>
+          <span className="hm-kicker">Featured courses</span>
+          <h2 id="hm-featured-title">Learn from real, hands-on courses</h2>
+        </div>
+        <Link to="/courses" className="hm-ghost-link">
+          View all courses <span aria-hidden>→</span>
+        </Link>
+      </div>
+      <div className="hm-course-grid">
+        {loading
+          ? Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="hm-course-card hm-skeleton" aria-hidden>
+                <div className="hm-course-thumb" />
+                <div className="hm-skeleton-line" />
+                <div className="hm-skeleton-line short" />
+              </div>
+            ))
+          : courses.map((c) => (
+              <Link
+                key={c.id}
+                to={`/courses/${c.slug}`}
+                className="hm-course-card"
+              >
+                <div className="hm-course-thumb">
+                  {c.featured_image ? (
+                    <img src={c.featured_image} alt="" loading="lazy" />
+                  ) : null}
+                  <span className="hm-course-cat">{c.category}</span>
+                </div>
+                <div className="hm-course-body">
+                  <h3>{c.title}</h3>
+                  <p className="hm-course-meta">
+                    {c.instructor?.display_name || "SashaInfinity"} ·{" "}
+                    {c.level}
+                  </p>
+                  <div className="hm-course-foot">
+                    <span className="hm-price">
+                      {Number(c.price) > 0
+                        ? `₹${Number(c.price).toLocaleString("en-IN")}`
+                        : "Free"}
+                    </span>
+                    <span className="hm-go">View <span aria-hidden>→</span></span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+      </div>
+    </section>
+  );
+}
+
+function PlatformStatsSection({ stats }: { stats: HomeStats | null }) {
+  const items = stats
+    ? [
+        { value: stats.courses, label: "Courses" },
+        { value: stats.labs, label: "Interactive labs" },
+        { value: stats.subjects, label: "Subjects" },
+      ]
+    : [];
+  return (
+    <section className="hm-stats" aria-label="Platform statistics">
+      {items.map((it) => (
+        <CountUp key={it.label} value={it.value} label={it.label} />
+      ))}
+    </section>
+  );
+}
+
+function CountUp({ value, label }: { value: number; label: string }) {
+  const [n, setN] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const done = useRef(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const run = () => {
+      if (done.current) return;
+      done.current = true;
+      if (reduced) { setN(value); return; }
+      const t0 = performance.now();
+      const dur = 900;
+      const tick = (t: number) => {
+        const p = Math.min(1, (t - t0) / dur);
+        setN(Math.round(value * (1 - Math.pow(1 - p, 3))));
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+    const io = new IntersectionObserver((es) => es[0].isIntersecting && run(), { threshold: 0.4 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [value]);
+  return (
+    <div className="hm-stat" ref={ref}>
+      <strong>{n.toLocaleString("en-IN")}+</strong>
+      <span>{label}</span>
+    </div>
+  );
+}
+
+function LiveClassesSection() {
+  const { user } = useAuthStore();
+  const [classes, setClasses] = useState<any[] | null>(null);
+  useEffect(() => {
+    if (!user) return;
+    let live = true;
+    api
+      .get("/live/classes?scope=upcoming&page_size=3")
+      .then((r) => { if (live) setClasses(r.data?.items ?? []); })
+      .catch(() => {});
+    return () => { live = false; };
+  }, [user]);
+  return (
+    <section className="hm-section hm-live" aria-labelledby="hm-live-title">
+      <div className="hm-live-grid">
+        <div className="hm-live-copy">
+          <span className="hm-kicker">Live learning</span>
+          <h2 id="hm-live-title">Real-time classes with your instructors</h2>
+          <p>
+            Scheduled doubt-clearing sessions and live walkthroughs for
+            enrolled courses — ask questions and practice together.
+          </p>
+          <Link to={user ? "/dashboard" : "/register"} className="hm-primary-cta">
+            {user ? "View your schedule" : "Create free account"}
+          </Link>
+        </div>
+        <div className="hm-live-list">
+          {classes === null ? (
+            <div className="hm-live-card hm-skeleton">
+              <div className="hm-skeleton-line" />
+              <div className="hm-skeleton-line short" />
+            </div>
+          ) : classes.length === 0 ? (
+            <div className="hm-live-card">
+              <strong>No upcoming sessions right now</strong>
+              <span>New classes are scheduled with every course cycle.</span>
+            </div>
+          ) : (
+            classes.map((c) => (
+              <div key={c.id} className="hm-live-card">
+                <span className="hm-live-dot" aria-hidden />
+                <div>
+                  <strong>{c.title}</strong>
+                  <span>
+                    {new Date(c.scheduled_start).toLocaleString("en-IN", {
+                      weekday: "short",
+                      day: "numeric",
+                      month: "short",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const FAQS: Array<[string, string]> = [
+  ["Are the learning labs really interactive?", "Yes — the labs run directly in your browser: 60+ simulations across physics, chemistry, biology and maths. No installs, no special hardware."],
+  ["Do you offer live classes?", "Yes. Courses include scheduled live sessions with instructors for doubts and walkthroughs. Enrolled students see the schedule on their dashboard."],
+  ["Is content available in Tamil?", "Yes — several courses are taught in Tamil, and lab guidance includes Tamil explanations where authored."],
+  ["Will I get a certificate?", "Yes, completing a course makes you eligible for a certificate you can download and share."],
+  ["Can I try a course before paying?", "Yes — courses with preview lessons are free to sample, and several complete courses are free."],
+];
+
+function FaqSection() {
+  return (
+    <section className="hm-section" aria-labelledby="hm-faq-title">
+      <div className="hm-section-head">
+        <div>
+          <span className="hm-kicker">Questions</span>
+          <h2 id="hm-faq-title">Frequently asked</h2>
+        </div>
+      </div>
+      <div className="hm-faq-list">
+        {FAQS.map(([q, a]) => (
+          <details key={q} className="hm-faq">
+            <summary>{q}</summary>
+            <p>{a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export const HomePage = () => {
-  useFontAwesome();
   useSEO({
     title: "SashaInfinity | Learn, practice and build",
     description:
       "Explore expert-led courses, interactive learning labs and career opportunities.",
   });
+  const stats = useHomeStats();
   return (
     <div className="sasha-home rd-home">
-      <HeroSection />
+      <HeroSection stats={stats} />
       <StatsBar />
+      <FeaturedCoursesSection />
+      <PlatformStatsSection stats={stats} />
       <ScrollStackSection />
       <AboutSection />
       <CategoriesSection />
       <CardSwapSection />
       <TestimonialSection />
       <TeamSection />
+      <LiveClassesSection />
+      <FaqSection />
       <CTASection />
       <BlogPreviewSection />
       <PartnersSection />

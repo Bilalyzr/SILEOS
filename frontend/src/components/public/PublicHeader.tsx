@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Search, ShoppingCart, Menu, X, ChevronDown, User } from "lucide-react";
+import { AccessibilityMenu } from "@/components/a11y/AccessibilityMenu";
 import { useAuthStore } from "@/store/auth";
 import { useCart } from "@/contexts/CartContext";
 import { roleHomePath } from "@/utils/role-routing";
@@ -118,6 +119,7 @@ export default function PublicHeader() {
           />
           <button aria-label="Submit course search">Go</button>
         </form>
+        <AccessibilityMenu />
         <Link
           to="/cart"
           className="rd-cart"
