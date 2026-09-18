@@ -406,3 +406,169 @@
     animation: none;
   }
 }
+
+/* ============================================================
+   hm2 — fine-tuned sections ("What Makes Us Different",
+   "The Place Where You Can Achieve", "Discover Our Learning
+   Programs"). Same rules: existing tokens only.
+   ============================================================ */
+
+/* ---------- What Makes Us Different — bento feature cards ---------- */
+.hm2-feature-grid {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 18px;
+  padding: 0 30px 8px;
+}
+.hm2-feature-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px 22px;
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--sf-surface, #fff) 88%, transparent);
+  border: 1px solid var(--sf-line, rgba(127, 127, 127, 0.3));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: transform 220ms ease, box-shadow 220ms ease,
+    border-color 220ms ease, opacity 480ms ease;
+}
+.hm2-feature-card:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--sf-accent, #ff751f) 42%, transparent);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+}
+.hm2-feature-card h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--sf-ink, inherit);
+}
+.hm2-feature-card p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: color-mix(in srgb, var(--sf-ink, #333) 68%, transparent);
+}
+.hm2-feature-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  font-size: 19px;
+  color: var(--sf-accent, #ff751f);
+  background: color-mix(in srgb, var(--sf-accent, #ff751f) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--sf-accent, #ff751f) 26%, transparent);
+}
+.hm2-feature-stats {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 12px;
+}
+.hm2-stat-chip {
+  min-width: 72px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  text-align: center;
+  background: color-mix(in srgb, var(--sf-tint, #f5f5f5) 75%, transparent);
+  border: 1px solid var(--sf-line, rgba(127, 127, 127, 0.25));
+}
+.hm2-stat-num {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--sf-accent, #ff751f);
+}
+.hm2-stat-label {
+  font-size: 11px;
+  color: color-mix(in srgb, var(--sf-ink, #333) 60%, transparent);
+}
+/* scroll reveal */
+.hm2-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+}
+.hm2-reveal.hm2-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- About visual polish (brand glow, badge lift) ---------- */
+.hm2-about-visual {
+  box-shadow: 0 24px 60px
+    color-mix(in srgb, var(--sf-accent, #ff751f) 14%, transparent);
+}
+.hm2-about .about-exp-badge {
+  box-shadow: 0 12px 30px
+    color-mix(in srgb, var(--sf-accent, #ff751f) 24%, transparent);
+}
+
+/* ---------- Learning programs: clickable cards + dots ---------- */
+.hm2-swap-display {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.hm2-swap-display .swap-card-item {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.hm2-swap-display .swap-card-item:focus-visible {
+  outline: 2px solid var(--sf-accent, #ff751f);
+  outline-offset: 2px;
+}
+.hm2-swap-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+.hm2-dot {
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--sf-accent, #ff751f) 55%, transparent);
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 200ms ease, transform 200ms ease;
+}
+.hm2-dot.on {
+  background: var(--sf-accent, #ff751f);
+  transform: scale(1.15);
+}
+.hm2-dot:focus-visible {
+  outline: 2px solid var(--sf-accent, #ff751f);
+  outline-offset: 2px;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 640px) {
+  .hm2-feature-grid {
+    padding: 0 18px;
+    gap: 14px;
+  }
+  .hm2-feature-card { padding: 20px 18px; }
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .hm2-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .hm2-feature-card,
+  .hm2-dot {
+    transition: none;
+  }
+  .hm2-feature-card:hover {
+    transform: none;
+  }
+}

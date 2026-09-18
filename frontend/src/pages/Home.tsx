@@ -12,6 +12,23 @@ import "./home-modern.css";
 
 type HomeStats = { courses: number; labs: number; subjects: number };
 
+function useScrollReveal() {
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("hm2-in");
+            io.unobserve(e.target);
+          }
+        }),
+      { threshold: 0.18 },
+    );
+    document.querySelectorAll(".hm2-reveal").forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+}
+
 function useHomeStats() {
   const [stats, setStats] = useState<HomeStats | null>(null);
   useEffect(() => {
@@ -166,7 +183,7 @@ function ScrollStackSection() {
 
   return (
     <section
-      className="sasha-scroll-stack-section"
+      className="sasha-scroll-stack-section hm2-different"
       data-testid="scroll-stack-section"
     >
       <div className="scroll-stack-header" data-glass="content">
@@ -179,23 +196,25 @@ function ScrollStackSection() {
           and personalized learning.
         </p>
       </div>
-      <div className="astra-feature-grid">
+      <div className="hm2-feature-grid">
         {cards.map((card, i) => (
-          <article key={i}>
-            <div className="scroll-stack-card-content">
-              <div className="card-icon">
-                <i className={card.icon}></i>
-              </div>
-              <h3>{card.title}</h3>
-              <p>{card.desc}</p>
-              <div className="card-stats">
-                {card.stats.map((s, j) => (
-                  <div key={j}>
-                    <div className="card-stat-num">{s.n}</div>
-                    <div className="card-stat-label">{s.l}</div>
-                  </div>
-                ))}
-              </div>
+          <article
+            key={i}
+            className="hm2-feature-card hm2-reveal"
+            style={{ transitionDelay: `${i * 90}ms` }}
+          >
+            <div className="hm2-feature-icon">
+              <i className={card.icon}></i>
+            </div>
+            <h3>{card.title}</h3>
+            <p>{card.desc}</p>
+            <div className="hm2-feature-stats">
+              {card.stats.map((s, j) => (
+                <div key={j} className="hm2-stat-chip">
+                  <div className="hm2-stat-num">{s.n}</div>
+                  <div className="hm2-stat-label">{s.l}</div>
+                </div>
+              ))}
             </div>
           </article>
         ))}
@@ -205,7 +224,6 @@ function ScrollStackSection() {
 }
 
 function AboutSection() {
-  const morphIdx = 0;
   const texts = [
     "The Place Where You Can Achieve",
     "Immersive AR/VR Learning",
@@ -213,13 +231,22 @@ function AboutSection() {
     "Data-Driven Learning Paths",
     "Hybrid Tutoring Centers",
   ];
+  const [morphIdx, setMorphIdx] = useState(0);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setInterval(
+      () => setMorphIdx((i) => (i + 1) % texts.length),
+      3200,
+    );
+    return () => clearInterval(t);
+  }, [texts.length]);
 
   return (
-    <section className="sasha-about-section" id="about">
+    <section className="sasha-about-section hm2-about" id="about">
       <div className="sasha-container">
         <div className="about-grid">
           <div className="about-visual">
-            <div className="about-visual-placeholder">
+            <div className="about-visual-placeholder hm2-about-visual">
               <div className="about-exp-badge">
                 <div className="year">2+</div>
                 <div className="label">Years</div>
@@ -377,7 +404,8 @@ function CategoriesSection() {
 }
 
 function CardSwapSection() {
-  const activeIdx = 0;
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [paused, setPaused] = useState(false);
   const cards = [
     {
       icon: "fa-solid fa-vr-cardboard",
@@ -404,9 +432,18 @@ function CardSwapSection() {
       tag: "Data Driven",
     },
   ];
+  useEffect(() => {
+    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+      return;
+    const t = setInterval(
+      () => setActiveIdx((i) => (i + 1) % cards.length),
+      4000,
+    );
+    return () => clearInterval(t);
+  }, [paused, cards.length]);
 
   return (
-    <section className="sasha-card-swap-section">
+    <section className="sasha-card-swap-section hm2-swap">
       <div className="sasha-container">
         <div className="card-swap-layout">
           <div className="card-swap-content">
@@ -421,11 +458,18 @@ function CardSwapSection() {
               View All Programs <i className="fa-solid fa-arrow-right"></i>
             </Link>
           </div>
-          <div className="card-swap-display">
+          <div
+            className="card-swap-display hm2-swap-display"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+          >
             {cards.map((card, i) => (
-              <div
+              <button
+                type="button"
                 key={i}
+                aria-label={`Show program: ${card.title}`}
                 className={`swap-card-item ${i === activeIdx ? "active" : ""}`}
+                onClick={() => setActiveIdx(i)}
               >
                 <div className="swap-card-icon">
                   <i className={card.icon}></i>
@@ -438,8 +482,25 @@ function CardSwapSection() {
                     <i className="fa-solid fa-arrow-right"></i>
                   </div>
                 </div>
-              </div>
+              </button>
             ))}
+            <div
+              className="hm2-swap-dots"
+              role="tablist"
+              aria-label="Learning programs"
+            >
+              {cards.map((c, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  role="tab"
+                  aria-selected={i === activeIdx}
+                  aria-label={c.title}
+                  className={`hm2-dot ${i === activeIdx ? "on" : ""}`}
+                  onClick={() => setActiveIdx(i)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -1126,6 +1187,7 @@ export const HomePage = () => {
       "Explore expert-led courses, interactive learning labs and career opportunities.",
   });
   const stats = useHomeStats();
+  useScrollReveal();
   return (
     <div className="sasha-home rd-home">
       <HeroSection stats={stats} />
