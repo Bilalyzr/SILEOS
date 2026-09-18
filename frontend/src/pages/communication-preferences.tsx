@@ -234,7 +234,12 @@ export function WhatsAppPreferenceCard() {
 
       {!canWithdraw && (
         <form
-          className="campus-form mt-5 max-w-2xl"
+          className={`campus-form mt-5 max-w-2xl${available ? "" : " campus-form-unavailable"}`}
+          aria-label={
+            available
+              ? undefined
+              : "WhatsApp opt-in is unavailable until the provider connection is finished"
+          }
           onSubmit={(event) => {
             event.preventDefault();
             void submitOptIn(event.currentTarget);
@@ -255,9 +260,21 @@ export function WhatsAppPreferenceCard() {
               placeholder="+919876543210"
             />
           </label>
-          <label className="campus-check">
+          <label
+            className="campus-check"
+            title={
+              available
+                ? undefined
+                : "Not selectable yet — the WhatsApp business connection is not finished. Watch this page; it unlocks automatically when it is."
+            }
+          >
             <input type="checkbox" required disabled={!available} />
             I agree to receive useful SashaInfinity updates on WhatsApp.
+            {!available && (
+              <span className="campus-check-reason">
+                Unavailable until setup finishes — see the notice above.
+              </span>
+            )}
           </label>
           <p className="campus-notice">
             After continuing, send the prepared JOIN message from this number

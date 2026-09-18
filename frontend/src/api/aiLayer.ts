@@ -41,6 +41,8 @@ export interface ReviewQueue {
 }
 
 export const aiLayerAPI = {
+  config: async () =>
+    (await api.get<{ llm_configured: boolean; model: string | null }>('/ai/config')).data,
   adaptiveLesson: async (courseId: number, body: { mode?: AdaptiveMode; concept?: string; student_id?: number }) =>
     (await api.post<AdaptiveLesson>(`/ai/adaptive-lesson/${courseId}`, body)).data,
   checkQuestion: async (course_id: number, concept?: string) =>

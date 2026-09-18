@@ -4,7 +4,7 @@
  * one course. Draft for this learner only — never added to the curriculum.
  * Honest 503 when GLM_API_KEY is absent.
  */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { aiLayerAPI, errDetail, type AdaptiveLesson, type AdaptiveMode } from '@/api/aiLayer'
 
 const MODES: { id: AdaptiveMode | ''; label: string }[] = [
@@ -17,6 +17,16 @@ export function AdaptiveLessonPanel({ courseId, concept }: { courseId: number; c
   const [busy, setBusy] = useState(false)
   const [lesson, setLesson] = useState<AdaptiveLesson | null>(null)
   const [msg, setMsg] = useState<string | null>(null)
+  // null = unknown, false = deployment has no GLM_API_KEY (backend /ai/config).
+  const [configured, setConfigured] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    let live = true
+    aiLayerAPI.config()
+      .then((c) => { if (live) setConfigured(!!c.llm_configured) })
+      .catch(() => { if (live) setConfigured(null) })
+    return () => { live = false }
+  }, [courseId])
 
   const go = async () => {
     setBusy(true); setMsg(null)
@@ -26,6 +36,17 @@ export function AdaptiveLessonPanel({ courseId, concept }: { courseId: number; c
       const { status, detail } = errDetail(e, 'Could not build the lesson')
       setMsg(status === 503 ? `Not available yet: ${detail}` : detail)
     } finally { setBusy(false) }
+  }
+
+  // Quiet disabled state: without a provider key the generate call can only
+  // ever 503, so show why instead of a button that reliably errors.
+  if (configured === false) {
+    return (
+      <div className="rounded-xl border border-violet-200 bg-violet-50/50 p-4" data-testid="adaptive-lesson">
+        <p className="font-semibold text-gray-900">Adaptive mini-lesson</p>
+        <p className="text-xs text-gray-600 mt-2">Not available yet on this deployment — ask your instructor to enable it. Your mastery graph keeps recording evidence in the meantime.</p>
+      </div>
+    )
   }
 
   return (
