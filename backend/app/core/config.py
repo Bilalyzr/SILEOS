@@ -201,6 +201,11 @@ class Settings(BaseSettings):
     JITSI_PUBLIC_URL: str = Field(default="", env="JITSI_PUBLIC_URL")
     JITSI_JWT_APP_ID: str = Field(default="sashainfinity", env="JITSI_JWT_APP_ID")
     JITSI_JWT_SECRET: str = Field(default="", env="JITSI_JWT_SECRET")
+    # When the Jitsi server does NOT share our JWT secret (e.g. dev using
+    # the public meet.jit.si), sending our token makes prosody demand a
+    # password (connection.passwordRequired). Servers can't validate it, so
+    # omit it and join anonymously — room names are unguessable.
+    JITSI_SEND_JWT: bool = Field(default=True, env="JITSI_SEND_JWT")
     JITSI_RECORDINGS_DIR: str = Field(default="recordings_live", env="JITSI_RECORDINGS_DIR")
     # Recording lessons: the optional ASR runtime is separate from the API environment.
     TRANSCRIPTION_PROVIDER: str = "self_hosted"

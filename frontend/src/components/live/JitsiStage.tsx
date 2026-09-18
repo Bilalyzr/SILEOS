@@ -150,7 +150,7 @@ export const JitsiStage: React.FC<JitsiStageProps> = ({
 
         const api = new JitsiMeetExternalAPI(domain, {
           roomName,
-          jwt,
+          ...(jwt ? { jwt } : {}),
           parentNode: containerRef.current,
           userInfo: { displayName },
           configOverwrite: {

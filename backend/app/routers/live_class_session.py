@@ -324,7 +324,8 @@ async def join_token(
         class_summary=_to_out(db, live_class, current_user),
         room_name=live_class.room_name,
         jitsi_url=settings.JITSI_PUBLIC_URL,
-        jwt=token,
+        # Empty when JITSI_SEND_JWT=false — see config.py note.
+        jwt=(token if settings.JITSI_SEND_JWT else ""),
         expires_in=expires_in,
     )
 

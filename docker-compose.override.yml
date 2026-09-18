@@ -14,6 +14,9 @@ services:
     environment:
       - VIDEO_SECRET=${VIDEO_SECRET}
       - JITSI_JWT_SECRET=${JITSI_JWT_SECRET}
+      - JITSI_PUBLIC_URL=${JITSI_PUBLIC_URL:-https://meet.jit.si}
+      - JITSI_JWT_APP_ID=${JITSI_JWT_APP_ID:-sashainfinity}
+      - JITSI_SEND_JWT=${JITSI_SEND_JWT:-true}
       - INTERNAL_TOKEN=${INTERNAL_TOKEN}
 
   # The production nginx/conf.d has `listen 443 ssl` blocks pointing at aaPanel
