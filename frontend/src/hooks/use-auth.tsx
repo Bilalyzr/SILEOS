@@ -10,6 +10,7 @@ export const useAuth = () => {
     instructorProfile,
     isAuthenticated,
     isLoading,
+    hasResolvedAuth,
     error,
     login,
     register,
@@ -20,8 +21,12 @@ export const useAuth = () => {
   } = useAuthStore()
 
   // Check authentication on mount once (no checkAuth in deps since it's stable from Zustand)
+  // Runs whenever auth hasn't RESOLVED yet — not only when there's no user.
+  // A hard load with a persisted session (or a sibling-subdomain cookie
+  // restore) must complete checkAuth before ProtectedRoute decides, or the
+  // guard bounces to /login mid-restore.
   React.useEffect(() => {
-    if (!user && !isLoading) {
+    if (!hasResolvedAuth && !isLoading) {
       checkAuth().catch(console.error)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -68,6 +73,7 @@ export const useAuth = () => {
     instructorProfile,
     isAuthenticated,
     isLoading,
+    hasResolvedAuth,
     error,
     isInstructor,
     isStudent,

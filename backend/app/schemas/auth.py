@@ -89,7 +89,10 @@ class UserResponse(BaseModel):
     profile_completed: Optional[bool] = None
 
 class RefreshTokenRequest(BaseModel):
-    refresh_token: str
+    # Optional: sibling-subdomain session restore POSTs an empty body so the
+    # server falls back to the shared-domain refresh cookie (see
+    # /auth/refresh). A required field 422s before that fallback can run.
+    refresh_token: Optional[str] = None
 
 class PasswordResetRequest(BaseModel):
     email: EmailStr
