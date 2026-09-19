@@ -1,27 +1,38 @@
 # =============================================================================
-# docker-compose.backup.yml — nightly DB backup scheduler
+# docker-compose.backup.yml — DEVELOPMENT stack nightly DB backup scheduler
 # =============================================================================
+# Fully separate from the production backup (which lives in the production
+# workspace and runs as container "sasha-backup-cron"):
+#   - own container:   dev-backup-cron
+#   - own network:     development_tutor-network (reaches the dev postgres as
+#                      service name "postgres")
+#   - own backups dir: development/database/backups/ (dumps prefixed
+#                      dev_tutor_lms_* — never confused with prod files)
+#   - own log:         development/logs/backup.log
+#   - own schedule:    03:15 nightly (prod dumps at 02:30)
+#
 # The host has NO cron daemon, so the schedule runs as a tiny always-on
 # container (postgres:15-alpine ships busybox crond + a matching pg_dump).
-# Password comes from .env — this stack never hardcodes credentials.
+# Password comes from this directory's .env — never hardcoded.
 #
-#   docker compose -f docker-compose.backup.yml up -d      # start
-#   docker compose -f docker-compose.backup.yml logs -f    # observe
-#   docker exec sasha-backup-cron /scripts/backup-db.sh    # run now
+#   docker compose -f docker-compose.backup.yml up -d     # start
+#   docker compose -f docker-compose.backup.yml logs -f   # observe
+#   docker exec dev-backup-cron /scripts/backup-db.sh     # run now
 #
 # Backups land in database/backups/nightly (14 days) and /weekly (8 weeks).
 # =============================================================================
 services:
   backup-cron:
     image: postgres:15-alpine
-    container_name: sasha-backup-cron
+    container_name: dev-backup-cron
     restart: unless-stopped
     environment:
       - PGHOST=postgres
       - PGUSER=tutor
       - PGDATABASE=tutor_lms
-      - PGPASSWORD=${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      - PGPASSWORD=${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in development/.env}
       - BACKUP_DIR=/backups
+      - DUMP_PREFIX=dev_tutor_lms
       - TZ=${TZ:-Asia/Kolkata}
     volumes:
       - ./scripts/backup-db.sh:/scripts/backup-db.sh:ro
@@ -31,14 +42,18 @@ services:
       - /bin/sh
       - -c
       - |
-        # 02:30 every night; busybox crond in foreground
-        echo "30 2 * * * /scripts/backup-db.sh >> /var/log/sasha/backup.log 2>&1" | crontab -
-        echo "[backup-cron] scheduler up — nightly dump at 02:30 ${TZ:-UTC}"
+        # 03:15 every night (staggered after the 02:30 production dump);
+        # busybox crond in foreground
+        echo "15 3 * * * /scripts/backup-db.sh >> /var/log/sasha/backup.log 2>&1" | crontab -
+        echo "[dev-backup-cron] scheduler up — nightly DEV dump at 03:15 ${TZ:-UTC}"
+        pg_isready -h postgres -U "${PGUSER:-tutor}" -d "${PGDATABASE:-tutor_lms}" \
+          && echo "[dev-backup-cron] dev DB reachable at ${PGHOST}" \
+          || echo "[dev-backup-cron] WARNING: dev DB NOT reachable at ${PGHOST} — dumps will fail"
         exec crond -f -l 8
     networks:
       - tutor-network
 
 networks:
   tutor-network:
-    name: sasha_lms_tutor-network
+    name: development_tutor-network
     external: true
