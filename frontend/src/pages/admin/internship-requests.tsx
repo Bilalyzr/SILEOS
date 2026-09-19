@@ -9,6 +9,7 @@ import { PageLayout, PageHeader } from "@/components/design-system/PageLayout";
  */
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "@/api/axios";
 import toast from "react-hot-toast";
 import {
   Search,
@@ -25,7 +26,6 @@ import {
   approveInternshipRequest,
   rejectInternshipRequest,
   deleteInternshipRequest,
-  listInstructorOptions,
   type AdminInternshipRequestItem,
   type AdminInstructorOption,
 } from "@/api/admin";
@@ -453,11 +453,15 @@ function ApproveModal({
   const [spocId, setSpocId] = useState<number | "">("");
   const [price, setPrice] = useState(15000);
 
+  // SPOC options come from the strict /admin/spocs list (role='spoc' only) —
+  // the instructor list used here let any instructor/admin be made a SPOC,
+  // which the Listings form (same picker, strict source) would never allow.
   const { data: instructors = [], isLoading } = useQuery<
     AdminInstructorOption[]
   >({
-    queryKey: ["admin-instructor-options"],
-    queryFn: listInstructorOptions,
+    queryKey: ["admin-spoc-options"],
+    queryFn: async () =>
+      (await api.get<AdminInstructorOption[]>("/admin/spocs")).data,
   });
 
   const valid = typeof spocId === "number" && price > 0;
@@ -498,8 +502,7 @@ function ApproveModal({
               ))}
             </select>
             <p className="text-[10px] text-slate-400 mt-1">
-              Pulled from /admin/instructors/list (instructors + admins +
-              SPOCs).
+              SPOC accounts created under Admin → SPOCs.
             </p>
           </div>
           <div>

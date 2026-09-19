@@ -15,6 +15,8 @@ export function CampusAcademics({ data }: { data: InstitutionOverview }) {
   const [batch, setBatch] = useState(batches[0]?.id || 0);
   const [day, setDay] = useState(new Date().toLocaleDateString("en-CA"));
   const [dialog, setDialog] = useState<"term" | "assessment" | null>(null);
+  // Assessment being edited (Add vs Edit share the dialog).
+  const [editing, setEditing] = useState<number | null>(null);
   const [selected, setSelected] = useState<number>();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -136,7 +138,12 @@ export function CampusAcademics({ data }: { data: InstitutionOverview }) {
               <div className="campus-toolbar">
                 <h2>Batch gradebook</h2>
                 {staff && (
-                  <Button onClick={() => setDialog("assessment")}>
+                  <Button
+                    onClick={() => {
+                      setEditing(null);
+                      setDialog("assessment");
+                    }}
+                  >
                     Add assessment
                   </Button>
                 )}
@@ -158,6 +165,41 @@ export function CampusAcademics({ data }: { data: InstitutionOverview }) {
                   </option>
                 ))}
               </select>
+              {staff && selected && (
+                <div className="flex gap-2 mt-3">
+                  <Button
+                    variant="outline"
+                    disabled={busy}
+                    onClick={() => {
+                      setEditing(selected);
+                      setDialog("assessment");
+                    }}
+                  >
+                    Edit assessment
+                  </Button>
+                  <Button
+                    variant="outline"
+                    disabled={busy}
+                    onClick={() => {
+                      const a = query.data?.assessments.find(
+                        (x) => x.id === selected,
+                      );
+                      if (
+                        a &&
+                        window.confirm(
+                          `Delete "${a.title}" and its recorded scores?`,
+                        )
+                      ) {
+                        command(() =>
+                          campusApi.deleteAssessment(inst.id, selected),
+                        ).then(() => setSelected(undefined));
+                      }
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              )}
               {query.data.assessments.find((a) => a.id === selected) && (
                 <Scores
                   key={`${selected}-${query.dataUpdatedAt}`}
@@ -177,12 +219,17 @@ export function CampusAcademics({ data }: { data: InstitutionOverview }) {
       <GlassDialog
         open={!!dialog}
         onOpenChange={(v) => {
-          if (!v) setDialog(null);
+          if (!v) {
+            setDialog(null);
+            setEditing(null);
+          }
         }}
         title={
           dialog === "term"
             ? "Add a term or semester"
-            : "Create a classroom assessment"
+            : editing
+              ? "Edit assessment"
+              : "Create a classroom assessment"
         }
       >
         <form
@@ -196,6 +243,15 @@ export function CampusAcademics({ data }: { data: InstitutionOverview }) {
                   name: String(f.get("name")),
                   starts_on: String(f.get("starts")),
                   ends_on: String(f.get("ends")),
+                }),
+              );
+            else if (editing)
+              command(() =>
+                campusApi.editAssessment(inst.id, editing, {
+                  title: String(f.get("name")),
+                  max_score: Number(f.get("max")),
+                  term_id: Number(f.get("term")) || null,
+                  due_on: String(f.get("due")) || null,
                 }),
               );
             else
@@ -221,6 +277,11 @@ export function CampusAcademics({ data }: { data: InstitutionOverview }) {
               name="name"
               required
               maxLength={dialog === "term" ? 100 : 160}
+              defaultValue={
+                editing
+                  ? query.data?.assessments.find((a) => a.id === editing)?.title
+                  : undefined
+              }
             />
           </label>
           {dialog === "term" ? (
@@ -244,12 +305,27 @@ export function CampusAcademics({ data }: { data: InstitutionOverview }) {
                   min={1}
                   max={10000}
                   required
-                  defaultValue={100}
+                  defaultValue={
+                    editing
+                      ? query.data?.assessments.find((a) => a.id === editing)
+                          ?.max_score ?? 100
+                      : 100
+                  }
                 />
               </label>
               <label>
                 Term
-                <select name="term">
+                <select
+                  name="term"
+                  defaultValue={
+                    editing
+                      ? String(
+                          query.data?.assessments.find((a) => a.id === editing)
+                            ?.term_id ?? "",
+                        )
+                      : undefined
+                  }
+                >
                   <option value="">No term</option>
                   {query.data?.terms.map((t) => (
                     <option key={t.id} value={t.id}>
@@ -260,7 +336,16 @@ export function CampusAcademics({ data }: { data: InstitutionOverview }) {
               </label>
               <label>
                 Due date
-                <input type="date" name="due" />
+                <input
+                  type="date"
+                  name="due"
+                  defaultValue={
+                    editing
+                      ? query.data?.assessments.find((a) => a.id === editing)
+                          ?.due_on || undefined
+                      : undefined
+                  }
+                />
               </label>
             </>
           )}

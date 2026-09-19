@@ -34,7 +34,10 @@ class MembershipPlan(Base):
     interval = Column(Integer, nullable=False, default=1)
     price = Column(Numeric(10, 2), nullable=False)  # INR per cycle
     grace_days = Column(Integer, nullable=False, default=7)
-    razorpay_plan_id = Column(String(64), unique=True, nullable=False)
+    # Nullable: free plans (price 0) never get a gateway object, and a plan
+    # saved while the gateway was unconfigured used to die on NOT NULL here —
+    # the "Internal Error" on membership creation.
+    razorpay_plan_id = Column(String(64), unique=True, nullable=True)
     is_active = Column(Boolean, nullable=False, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(),

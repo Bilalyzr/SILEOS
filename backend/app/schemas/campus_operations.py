@@ -40,6 +40,15 @@ class AssessmentCreate(Command):
     due_on: date | None = None
 
 
+class AssessmentEdit(Command):
+    """Partial edit of a campus assessment (all fields optional)."""
+
+    title: str | None = Field(default=None, min_length=2, max_length=160)
+    max_score: float | None = Field(default=None, gt=0, le=10000, allow_inf_nan=False)
+    due_on: date | None = None
+    term_id: int | None = None
+
+
 class ScoreEntry(Command):
     member_id: int = Field(gt=0)
     score: float = Field(ge=0, le=10000, allow_inf_nan=False)

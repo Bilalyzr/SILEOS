@@ -66,7 +66,9 @@ def render_invoice_pdf(db, invoice) -> str:
     from app.core.config import get_settings
 
     settings = get_settings()
-    company = db.query(Company).filter(Company.id == invoice.company_id).one()
+    # .first() + name fallback: a deleted/missing company row used to raise
+    # NoResultFound and fail the whole invoice render with a 500.
+    company = db.query(Company).filter(Company.id == invoice.company_id).first()
     items = db.query(CompanyInvoiceItem).filter(
         CompanyInvoiceItem.invoice_id == invoice.id).all()
 
@@ -110,15 +112,15 @@ def render_invoice_pdf(db, invoice) -> str:
         seller_lines.append(f"GSTIN: {_xml_escape(settings.SELLER_GSTIN)}")
     seller_html = "<br/>".join(seller_lines)
 
-    buyer_name = company.legal_name or company.name
+    buyer_name = (company.legal_name or company.name) if company else "Company (record removed)"
     buyer_lines = [_xml_escape(buyer_name)]
-    if company.billing_address:
+    if company and company.billing_address:
         buyer_lines.append(_xml_escape(company.billing_address))
-    if company.gstin:
+    if company and company.gstin:
         buyer_lines.append(f"GSTIN: {_xml_escape(company.gstin)}")
     # Place-of-supply state code: what decides CGST+SGST vs IGST on this
     # invoice, so it belongs on the printed document next to the buyer GSTIN.
-    if (company.state_code or "").strip():
+    if company and (company.state_code or "").strip():
         buyer_lines.append(
             f"State code: {_xml_escape(company.state_code.strip())}")
     buyer_html = "<br/>".join(buyer_lines)

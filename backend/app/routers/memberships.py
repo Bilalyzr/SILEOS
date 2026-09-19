@@ -89,6 +89,29 @@ async def subscribe(
         MembershipPlan.is_active.is_(True)).first()
     if not plan:
         raise HTTPException(status_code=404, detail="Plan not found")
+    # Free plans (price 0) carry no gateway object — activate directly with no
+    # checkout. Passing razorpay_plan_id=None into the gateway subscription
+    # body would fail for exactly the tiers that cost nothing.
+    if float(plan.price or 0) == 0:
+        import uuid
+        from datetime import datetime, timedelta, timezone
+        if existing is not None:
+            existing.status = MembershipStatus.CANCELLED
+            db.flush()
+        row = Membership(
+            user_id=current_user.id,
+            plan_id=plan.id,
+            # Synthetic id: the column is NOT NULL + unique, and free tiers
+            # have no gateway subscription to name.
+            razorpay_subscription_id=f"free-{uuid.uuid4().hex[:20]}",
+            status=MembershipStatus.ACTIVE,
+            current_period_end=datetime.now(timezone.utc)
+            + timedelta(days=30 * int(plan.interval or 1)),
+        )
+        db.add(row)
+        db.commit()
+        return SubscribeResponse(
+            subscription_id=str(row.id), razorpay_key=None)
     existing = _primary_membership(db, current_user.id)
     if existing is not None and existing.status != MembershipStatus.PENDING:
         # ACTIVE / GRACE: a real, paid-for membership is in the way.

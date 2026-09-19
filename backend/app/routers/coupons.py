@@ -321,6 +321,17 @@ async def update_coupon(
         coupon.valid_from = coupon_data.valid_from
     if coupon_data.valid_until is not None:
         coupon.valid_until = coupon_data.valid_until
+    # Merged window check — the schema only sees fields in this payload, so a
+    # one-field update could still invert the window against stored values.
+    if (
+        coupon.valid_from is not None
+        and coupon.valid_until is not None
+        and coupon.valid_until < coupon.valid_from
+    ):
+        raise HTTPException(
+            status_code=422,
+            detail="valid_until cannot be earlier than valid_from",
+        )
     if coupon_data.is_active is not None:
         coupon.is_active = coupon_data.is_active
     if coupon_data.cohort_id is not None:

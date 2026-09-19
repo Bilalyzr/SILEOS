@@ -926,7 +926,7 @@ export default function InstitutionsPage() {
                       <span
                         className="campus-chip"
                         data-tone={
-                          c.status === "published" ? "success" : "muted"
+                          (c.status === "published" || c.status === "publish") ? "success" : "muted"
                         }
                       >
                         {c.status}
@@ -944,7 +944,7 @@ export default function InstitutionsPage() {
                       assigned batches
                     </p>
                     <div className="campus-actions" style={{ marginTop: 20 }}>
-                      {c.status === "published" && (
+                      {(c.status === "published" || c.status === "publish") && (
                         <Button asChild variant="outline" size="sm">
                           <Link to={`/courses/${c.course_id}`}>
                             View course

@@ -6,7 +6,7 @@ Handles assignment CRUD operations and submissions
 from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import json
 import logging
@@ -34,19 +34,29 @@ _UPLOAD_DIR = Path(get_settings().UPLOAD_DIR)
 MAX_RUBRIC_CRITERIA = 20
 
 
-def _parse_due_date(raw) -> datetime:
+def _parse_due_date(raw, allow_past=False) -> datetime:
     """Parse a caller-supplied dueDate string (B12). Raises 422 on anything
     that doesn't parse instead of silently discarding it — a bad dueDate
     used to be swallowed and stored as None (create) or left unchanged
-    (update) with no error back to the caller."""
+    (update) with no error back to the caller.
+
+    A due date in the past is rejected on create/update unless `allow_past`
+    is set (used when a caller re-reads a stored value): a deadline that
+    already lapsed can never be met, and accepting it silently publishes
+    assignments that are instantly overdue."""
     try:
-        return datetime.fromisoformat(str(raw).replace('Z', '+00:00'))
+        dt = datetime.fromisoformat(str(raw).replace('Z', '+00:00'))
     except (ValueError, TypeError):
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail=f"Invalid dueDate: {raw!r}. Expected an ISO-8601 datetime string.",
         )
-
+    if not allow_past and dt < datetime.now(dt.tzinfo or timezone.utc) - timedelta(minutes=5):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Due date cannot be in the past.",
+        )
+    return dt
 
 def _json_list(value):
     """Tolerant reader for JSON-column list fields (B9). Writers now assign

@@ -30,6 +30,28 @@ LIMITS = {
     "enterprise": {"members": 10000, "batches": 1000, "courses": 2000},
 }
 
+# Platform administrators (admin/superadmin) operate on EVERY institution —
+# without this they see zero campuses (list_mine is membership-scoped) and
+# every campus tool 404s for them, which is how "Bring your campus together",
+# fee-plan assignment and the trust/integrations tab all broke for QA.
+PLATFORM_ADMIN_ROLES = ("admin", "superadmin")
+
+
+class _PlatformAdminMember:
+    """Stand-in InstitutionMember for a platform admin without membership.
+
+    Grants manager-level ("admin") powers. Owner-only gates (e.g. inviting
+    administrators) still apply — a platform admin is not the campus owner.
+    """
+
+    id = None
+    role = "admin"
+    status = "active"
+
+    def __init__(self, institution_id, user_id):
+        self.institution_id = institution_id
+        self.user_id = user_id
+
 
 def utc(value):
     return value.replace(tzinfo=timezone.utc) if value.tzinfo is None else value
@@ -48,13 +70,16 @@ def scope(db, institution_id, user, roles=None, lock=False):
         .filter_by(institution_id=institution_id, user_id=user.id, status="active")
         .first()
     )
+    if not member and getattr(user, "role", None) in PLATFORM_ADMIN_ROLES:
+        member = _PlatformAdminMember(institution_id, user.id)
     if not member:
         raise HTTPException(404, "Institution not found.")
     q = db.query(Institution).filter_by(id=institution_id)
     institution = q.with_for_update().one() if lock else q.one()
-    if lock:
+    if lock and member.id is not None:
         # An access change may have committed while this command waited for the
         # institution lock. Re-read membership before authorizing the mutation.
+        # (Skipped for the platform-admin stand-in, which is not a DB row.)
         db.refresh(member)
         if member.status != "active":
             raise HTTPException(404, "Institution not found.")
@@ -166,6 +191,13 @@ def create(db, user, data):
 
 
 def list_mine(db, user):
+    # Platform admins see every campus (they manage/support all of them);
+    # everyone else sees only their active memberships.
+    if getattr(user, "role", None) in PLATFORM_ADMIN_ROLES:
+        return [
+            serialize(i, "admin")
+            for i in db.query(Institution).order_by(Institution.name).all()
+        ]
     return [
         serialize(i, m.role)
         for i, m in db.query(Institution, InstitutionMember)
@@ -412,7 +444,10 @@ def assign_course(db, institution_id, batch_id, user, data):
     if not linked:
         raise HTTPException(404, "Connected course not found.")
     course = db.query(Course).filter_by(id=linked.course_id).one()
-    if course.post_status != "published":
+    # Course creation stores "publish" while the publish endpoint stores
+    # "published" (see PUBLISHED_STATUSES in routers/courses.py) — accept both
+    # spellings, or every freshly created "published" course is rejected here.
+    if course.post_status not in ("publish", "published", "PUBLISH", "PUBLISHED"):
         raise HTTPException(409, "Publish this course before assigning it to a batch.")
     row = (
         db.query(InstitutionAssignment)
