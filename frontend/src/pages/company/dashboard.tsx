@@ -151,7 +151,7 @@ export function CompanyDashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-4">
           <Link to="/" className="flex items-center gap-2 flex-shrink-0 group">
             <img
-              src="https://res.cloudinary.com/dkjvfskhn/image/upload/v1759753621/cropped-sasha-logo-small_ejpceq.png"
+              src="/brand/sasha-logo-small.png"
               alt="SashaInfinity"
               className="h-9 w-auto group-hover:scale-105 transition-transform"
             />

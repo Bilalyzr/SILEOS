@@ -16,7 +16,7 @@ import { useAuthStore } from '@/store/auth'
 import { getAvatarUrl } from '@/utils/media'
 import { NotificationBell } from '@/components/notifications/NotificationBell'
 
-const SASHA_LOGO_URL = 'https://res.cloudinary.com/dkjvfskhn/image/upload/v1759753621/cropped-sasha-logo-small_ejpceq.png'
+const SASHA_LOGO_URL = '/brand/sasha-logo-small.png'
 
 export type Role = 'parent' | 'student' | 'instructor' | 'admin' | 'superadmin' | 'spoc' | 'company' | 'company_manager'
 

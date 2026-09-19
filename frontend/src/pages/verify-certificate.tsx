@@ -68,7 +68,7 @@ const VerifyCertificate: React.FC = () => {
           title: `Certificate: ${certificate.course_title} - ${certificate.student_name}`,
           description: `Verified certificate for ${certificate.course_title} issued to ${certificate.student_name}. Verification code: ${certificate.verification_code}`,
           image:
-            "https://res.cloudinary.com/dkjvfskhn/image/upload/v1759753621/cropped-sasha-logo-small_ejpceq.png",
+            "/brand/sasha-logo-small.png",
           url: window.location.href,
           type: "website",
         }
@@ -77,7 +77,7 @@ const VerifyCertificate: React.FC = () => {
           description:
             "Verify SashaInfinity Technology certificates instantly with our secure verification portal",
           image:
-            "https://res.cloudinary.com/dkjvfskhn/image/upload/v1759753621/cropped-sasha-logo-small_ejpceq.png",
+            "/brand/sasha-logo-small.png",
           url: window.location.href,
           type: "website",
         },

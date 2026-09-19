@@ -17,7 +17,7 @@ import {
   type LiveClassOut, type JoinTokenOut,
 } from '@/api/liveClasses'
 
-type Stage = 'loading' | 'precheck' | 'connecting' | 'in-call' | 'error'
+type Stage = 'loading' | 'precheck' | 'connecting' | 'in-call' | 'terminated' | 'error'
 
 export function InstructorLiveClassConsolePage() {
   const { id } = useParams<{ id: string }>()
@@ -40,7 +40,10 @@ export function InstructorLiveClassConsolePage() {
         const data = await getLiveClass(classId)
         if (cancelled) return
         setLiveClass(data)
-        setStage('precheck')
+        // Ended/cancelled classes are terminal — walking the user through
+        // the device check just to fail at /start with a raw 409
+        // ("Cannot start a class in status ended") is a dead end.
+        setStage(data.status === 'ended' || data.status === 'cancelled' ? 'terminated' : 'precheck')
       } catch (err: any) {
         if (cancelled) return
         setErrorMessage(err?.response?.data?.detail || err?.message || 'Failed to load this class')
@@ -62,6 +65,13 @@ export function InstructorLiveClassConsolePage() {
       setStage('in-call')
     } catch (err: any) {
       const detail = err?.response?.data?.detail || err?.message || 'Failed to start this class'
+      if (typeof detail === 'string' && /status (ended|cancelled)/i.test(detail)) {
+        // The class ended while this console was open (ended elsewhere or
+        // from another tab) — show the terminal state, not a raw 409.
+        setLiveClass((c) => (c ? { ...c, status: /ended/i.test(detail) ? 'ended' : 'cancelled' } : c))
+        setStage('terminated')
+        return
+      }
       setErrorMessage(typeof detail === 'string' ? detail : 'Failed to start this class')
       setStage('error')
     }
@@ -98,6 +108,28 @@ export function InstructorLiveClassConsolePage() {
     return (
       <div className="flex items-center justify-center min-h-[320px]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500" />
+      </div>
+    )
+  }
+
+  if (stage === 'terminated' && liveClass) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-4 min-h-[320px] text-center">
+        <h1 className="dash-h1 text-xl">{liveClass.title}</h1>
+        <p className="text-sm text-slate-600">
+          {liveClass.status === 'cancelled'
+            ? 'This class was cancelled and can no longer be joined.'
+            : 'This class has already ended.'}
+        </p>
+        <div className="flex gap-3">
+          <Button variant="outline" onClick={() => navigate('/instructor/live-classes')}>
+            <ArrowLeft className="h-4 w-4 mr-1.5" />
+            Back to live classes
+          </Button>
+          <Button onClick={() => navigate(`/instructor/live-classes/${liveClass.id}/report`)}>
+            View report
+          </Button>
+        </div>
       </div>
     )
   }
