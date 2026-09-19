@@ -170,6 +170,21 @@ export const JitsiStage: React.FC<JitsiStageProps> = ({
         apiRef.current = api
         onApiReady?.(api)
 
+        // Fullscreen: the ExternalAPI iframe's `allow` attribute does not
+        // include fullscreen by default, so the toolbar's fullscreen button
+        // silently did nothing (the browser blocks the request from an
+        // iframe without the permission). Append it, plus allowfullscreen.
+        const iframe: HTMLIFrameElement | undefined =
+          api._iframe ??
+          (containerRef.current?.querySelector('iframe') as HTMLIFrameElement | undefined)
+        if (iframe) {
+          const perms = iframe.getAttribute('allow') ?? ''
+          if (!iframe.allowFullscreen) iframe.setAttribute('allowfullscreen', 'true')
+          if (!/fullscreen/i.test(perms)) {
+            iframe.setAttribute('allow', `${perms ? perms + '; ' : ''}fullscreen`)
+          }
+        }
+
         api.addEventListener('videoConferenceJoined', () => {
           setConnectionStatus('connected')
           setIsReady(true)

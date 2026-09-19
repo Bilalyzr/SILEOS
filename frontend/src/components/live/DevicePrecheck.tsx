@@ -52,9 +52,10 @@ export const DevicePrecheck: React.FC<DevicePrecheckProps> = ({ onContinue, onRe
         setMicState(stream.getAudioTracks().length > 0 ? 'granted' : 'unavailable')
         setCamState(stream.getVideoTracks().length > 0 ? 'granted' : 'unavailable')
 
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream
-        }
+        // srcObject is attached by the effect below once the <video>
+        // element mounts (it only renders after camState flips to
+        // 'granted' — assigning here ran before that re-render, when
+        // videoRef.current was still null, so the preview never showed).
 
         if (stream.getAudioTracks().length > 0 && typeof AudioContext !== 'undefined') {
           const audioCtx = new AudioContext()
@@ -93,6 +94,17 @@ export const DevicePrecheck: React.FC<DevicePrecheckProps> = ({ onContinue, onRe
       if (streamRef.current) streamRef.current.getTracks().forEach((t) => t.stop())
     }
   }, [])
+
+  // Attach the granted stream once the <video> element exists.
+  React.useEffect(() => {
+    if (camState === 'granted' && videoRef.current && streamRef.current) {
+      videoRef.current.srcObject = streamRef.current
+      videoRef.current.play().catch(() => {
+        // autoplay can reject before user gesture; muted+playsInline
+        // makes this rare — the poster simply stays until it plays.
+      })
+    }
+  }, [camState])
 
   const playTestTone = () => {
     if (testingSpeaker) return

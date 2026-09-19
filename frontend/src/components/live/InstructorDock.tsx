@@ -51,6 +51,7 @@ export const InstructorDock: React.FC<InstructorDockProps> = ({ liveClass, jitsi
   const [elapsedSeconds, setElapsedSeconds] = React.useState(0)
 
   const isRecording = useLiveClassStore((s) => s.isRecording)
+  const connectionStatus = useLiveClassStore((s) => s.connectionStatus)
 
   // Participant count — 10s poll of the Jitsi API, per the plan's binding
   // behavior (getNumberOfParticipants), independent of the raise-hand store.
@@ -104,6 +105,13 @@ export const InstructorDock: React.FC<InstructorDockProps> = ({ liveClass, jitsi
 
   const handleToggleRecording = async () => {
     if (recordingBusy) return
+    // Without a connected conference the Jitsi command throws internally
+    // (null conference) — the old catch swallowed the API intent failure
+    // but the executeCommand TypeError crashed the dock's event handler.
+    if (!jitsiApi || connectionStatus !== 'connected') {
+      window.console.warn('Recording: conference not connected yet')
+      return
+    }
     setRecordingBusy(true)
     try {
       if (isRecording) {
