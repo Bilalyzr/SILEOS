@@ -47,6 +47,12 @@ export interface MyVoucher {
     is_completed: boolean
     completion_date: string | null
   } | null
+  // Whether the internship's own completion certificate has been issued.
+  certificate_issued?: boolean
+  // "active" | "completed" | ... — engagement state from the SPOC console.
+  engagement_status?: string
+  // Owning SPOC's display name, when the row carries it.
+  spoc_name?: string
 }
 
 // ---------------- Admin ----------------

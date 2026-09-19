@@ -76,6 +76,11 @@ services:
       - WHATSAPP_VERIFY_TOKEN=${WHATSAPP_VERIFY_TOKEN:-}
       - WHATSAPP_API_VERSION=${WHATSAPP_API_VERSION:-v23.0}
       - WHATSAPP_APPROVED_TEMPLATES=${WHATSAPP_APPROVED_TEMPLATES:-}
+      # AI provider (Zhipu GLM / bigmodel.cn) — powers adaptive mini-lessons,
+      # AI tutor and question generation. Empty = those features report "not
+      # configured" (honest 503) and the UI hides the generate controls.
+      - GLM_API_KEY=${GLM_API_KEY:-}
+      - GLM_MODEL=${GLM_MODEL:-glm-4.5}
       - ENVIRONMENT=${ENVIRONMENT:-production}
       - BACKGROUND_TASK_MODE=worker
       - OBSERVABILITY_TOKEN=${OBSERVABILITY_TOKEN:-}

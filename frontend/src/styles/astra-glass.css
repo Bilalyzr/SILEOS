@@ -1125,6 +1125,18 @@ body.astra-theme.lk-app {
   overflow: auto;
   margin-top: 8px;
 }
+/* Compact icon toggle (44x44) — the old wide text button blanketed the
+   lesson rail's "Mark as complete" control at this fixed corner. */
+.learning-preferences-toggle {
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
 body[data-high-contrast="true"] {
   --glass-1: #fff;
   --glass-2: #fff;

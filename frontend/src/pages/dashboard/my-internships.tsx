@@ -82,7 +82,7 @@ export const MyInternshipsPage: React.FC = () => {
         voucher_redeemed: redeemed,
         status: (completed ? 'completed' : redeemed ? 'in-progress' : 'pending') as InternshipStatus,
         progress: v.course_progress?.progress_percentage ?? 0,
-        certificate_issued: v.certificate_issued,
+        certificate_issued: !!v.certificate_issued,
         course_id: v.redeemed_course_id ?? undefined,
       }})
       setItems(mapped)

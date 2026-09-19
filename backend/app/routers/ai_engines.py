@@ -74,6 +74,18 @@ def _finish(db: Session, job: AiJob, output: Optional[dict] = None, error: Optio
     db.commit()
 
 
+@router.get("/config")
+def ai_feature_config(
+    current_user: User = Depends(AuthService.get_current_active_user),
+):
+    """Which optional AI features have a provider key configured.
+
+    Lets the UI show a quiet 'not enabled on this deployment' state instead
+    of a generate button that reliably 503s when GLM_API_KEY is absent.
+    """
+    return {"llm_configured": llm_configured(), "model": glm_model() if llm_configured() else None}
+
+
 # ---------------------------------------------------------------- Engine B
 
 class AdaptiveIn(BaseModel):

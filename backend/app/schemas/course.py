@@ -319,3 +319,8 @@ class CourseProgressResponse(BaseModel):
     last_accessed: Optional[datetime]
     completion_date: Optional[datetime]
     certificate_earned: bool
+    # Per-lesson completion list — the lesson player marks individual lessons
+    # (and their "Mark as complete" buttons) from this. The service already
+    # returned it; without the schema field pydantic silently stripped it and
+    # completed lessons rendered as incomplete.
+    completed_lesson_ids: List[int] = []

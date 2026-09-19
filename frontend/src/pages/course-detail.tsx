@@ -98,6 +98,7 @@ export const CourseDetailPage = () => {
   const [courseStatus, setCourseStatus] = React.useState<string>("");
   const [isCompleted, setIsCompleted] = React.useState(false);
   const [certPending, setCertPending] = React.useState(false);
+  const [certAvailable, setCertAvailable] = React.useState(false);
   const [isAdminPreview, setIsAdminPreview] = React.useState(false);
   const [isVideoModalOpen, setIsVideoModalOpen] = React.useState(false);
   // Public lesson preview (2026-09-05): any lesson type, real player, glass popup
@@ -354,12 +355,19 @@ export const CourseDetailPage = () => {
     const courseId = (course as any)?.id;
     if (!isCompleted || !courseId || !isAuthenticated) {
       setCertPending(false);
+      setCertAvailable(false);
       return;
     }
     api
       .get(`/certificates/course/${courseId}`)
-      .then(() => setCertPending(false))
-      .catch((err) => setCertPending(err?.response?.status === 404));
+      .then(() => {
+        setCertAvailable(true);
+        setCertPending(false);
+      })
+      .catch((err) => {
+        setCertAvailable(false);
+        setCertPending(err?.response?.status === 404);
+      });
   }, [isCompleted, course, isAuthenticated]);
 
   // Load reviews whenever the course changes.
@@ -833,6 +841,19 @@ export const CourseDetailPage = () => {
                                 Certificate pending instructor approval. You'll
                                 be notified once your submission is approved.
                               </div>
+                            )}
+                            {certAvailable && !certPending && (
+                              <Button
+                                size="lg"
+                                variant="outline"
+                                className="w-full mb-3 border-primary-300 text-primary-700 hover:bg-primary-50"
+                                asChild
+                              >
+                                <Link to={`/certificates/${course.id}`}>
+                                  <Award className="w-5 h-5 mr-2" />
+                                  Download Certificate
+                                </Link>
+                              </Button>
                             )}
                             <Button
                               size="lg"
