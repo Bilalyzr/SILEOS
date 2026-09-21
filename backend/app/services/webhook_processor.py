@@ -425,6 +425,13 @@ def _handle_payment_captured(db: Session, event: WebhookEvent) -> None:
     if not payment_id:
         raise UnrecoverableEvent("payment.captured without payment id")
 
+    from app.models.commercial import CommercialInvoice
+    from app.services.growth_billing import capture, capture_invoice
+    commercial_invoice = capture_invoice(db, entity)
+    if commercial_invoice:
+        capture(db, commercial_invoice, entity)
+        return
+
     if _is_edgyy_entity(entity):
         _handle_edgyy_payment_captured(db, event, entity)
         return
@@ -613,6 +620,9 @@ def _handle_refund_processed(db: Session, event: WebhookEvent) -> None:
     payment_id = entity.get("payment_id")
     if not payment_id:
         raise UnrecoverableEvent("refund.processed without payment_id")
+    from app.services.growth_billing import webhook_refund
+    if webhook_refund(db, entity):
+        return
     from app.services.exam_paper_service import revoke_payment
     revoke_payment(db, str(payment_id))
     payment = db.query(Payment).filter(

@@ -7,6 +7,7 @@ from fastapi import HTTPException
 from app.models.runtime import RuntimeJob, RuntimeRun
 
 SCHEDULES = {
+    "growth_maintenance": {"interval": 600, "label": "Commercial billing & sales follow-ups"},
     "payment_reconciliation": {"interval": 300, "label": "Payments & memberships"},
     "live_reminders": {"interval": 60, "label": "Live classes & learner reminders"},
     "campus_maintenance": {"interval": 60, "label": "Campus billing, email & WhatsApp"},

@@ -1,5 +1,5 @@
 {
-  "version": "2026-09-14-runtime-rc1",
+  "version": "2026-09-20-growth-rc1",
   "synthetic_data": "Run scripts/seed_saas_demo.py --seed; no database or passwords included",
   "files": [
     {
@@ -104,13 +104,13 @@
     },
     {
       "path": "BUILD.md",
-      "bytes": 10283,
-      "sha256": "894496f5b889f6f1cc3b7b712da9b5ead71548a746715dadbec69689beeedd35"
+      "bytes": 10344,
+      "sha256": "c26956d032d196e5b6d8fbad88fb8d8a6cda71b2dfec74102cc5759c7d0e4023"
     },
     {
       "path": "CLAUDE.md",
-      "bytes": 57348,
-      "sha256": "665c2fdcf480e7aa0412c0d361f89b20d3d31f4d169d31b1d2874596e4c311e9"
+      "bytes": 57396,
+      "sha256": "0538d0972db885702df3ac139e1f79ba0984beb789a57d97796871e9069ae5d5"
     },
     {
       "path": "CLEANUP-INSTRUCTIONS.md",
@@ -793,9 +793,14 @@
       "sha256": "0cf7a3f6bf79a8c4dde9f5619c7c2b8f6700ea6530008da763efcdf88066c323"
     },
     {
+      "path": "backend/alembic/versions/0051_growth_commerce.py",
+      "bytes": 23577,
+      "sha256": "83109c26197ac1dbfdcf93fa4f25044989d061fa7a2ab0975d85f7f48eacdf6e"
+    },
+    {
       "path": "backend/app/main.py",
-      "bytes": 64677,
-      "sha256": "118a5bc4c72b33867044ed0e61b2755280814c9ac083e1eb9454588b7a9ba37f"
+      "bytes": 64812,
+      "sha256": "79326e2c36783c1809ff5bc32c7bd376cfcfc64f1fc45b4009970174766c163b"
     },
     {
       "path": "backend/app/main_email_test.py",
@@ -999,8 +1004,8 @@
     },
     {
       "path": "backend/app/models/__init__.py",
-      "bytes": 9735,
-      "sha256": "f38e9bc43ee0598a5a9b01a0f186f63683de1bf7baac48199056915c9b9ad5f7"
+      "bytes": 9996,
+      "sha256": "080a3a70d7fba82151761cc4f502bf95dcfb63ea460ed6b3ba68ba98c2ef29da"
     },
     {
       "path": "backend/app/models/admin_message.py",
@@ -1206,6 +1211,11 @@
       "path": "backend/app/models/geogebra.py",
       "bytes": 3137,
       "sha256": "c27d39367e9ef5b8dee81e6e89d87c7eb476e39ab5ebfb7d7adde4becb0e85b2"
+    },
+    {
+      "path": "backend/app/models/growth.py",
+      "bytes": 9562,
+      "sha256": "9b4a49a44fd94189966f28d34d1e6e16a74ffe2f9574621417a416f9bb1991c7"
     },
     {
       "path": "backend/app/models/h5p.py",
@@ -1658,6 +1668,11 @@
       "sha256": "81925a571767f9ec161e0b6eb8966d98d4570bf4a6ddb3f9dda7c8ea9e287525"
     },
     {
+      "path": "backend/app/routers/growth.py",
+      "bytes": 10276,
+      "sha256": "bce8c9f86bcd0bd6986209b12940ff528e68ed7809dab8d21ecb83c83b5e33ee"
+    },
+    {
       "path": "backend/app/routers/h5p.py",
       "bytes": 24157,
       "sha256": "f1659a68c3954052eb535a285f42d4eee2de24d80060bee296fb5329a7f57a96"
@@ -1759,8 +1774,8 @@
     },
     {
       "path": "backend/app/routers/notifications.py",
-      "bytes": 5505,
-      "sha256": "c5381ddf3693bfda8895844d03ffe1d77efee8f4903f25dc2a14dd793756f07b"
+      "bytes": 5782,
+      "sha256": "63a2c71fe3eac2fc95dd3d93e17bc34bfd5403bca04193f938bc6b3b9f1a2665"
     },
     {
       "path": "backend/app/routers/observability.py",
@@ -1869,8 +1884,8 @@
     },
     {
       "path": "backend/app/routers/three_d.py",
-      "bytes": 10986,
-      "sha256": "1651d9fda274c4632e7516258bffaab1ff4aa77f1d4745def9e3a25012de6570"
+      "bytes": 11145,
+      "sha256": "59c5761f0cef8e7c1dcafa6f8064df771307e3ebe31acfb8481c894250a14b44"
     },
     {
       "path": "backend/app/routers/three_d_tasks.py",
@@ -2068,6 +2083,11 @@
       "sha256": "ecae495f1323d91c5e612fc3065d3de0b06a19dbdfca3a07462e8e73f0b1ec53"
     },
     {
+      "path": "backend/app/schemas/growth.py",
+      "bytes": 6851,
+      "sha256": "ee2c8ec394d26800765db655460bc56ea9ffa98ba460eb3116397c2c02bd096c"
+    },
+    {
       "path": "backend/app/schemas/institution.py",
       "bytes": 2024,
       "sha256": "51579d77a0c07a00879a6d6e5e6733198966612a4671391278123543d171296d"
@@ -2219,8 +2239,8 @@
     },
     {
       "path": "backend/app/services/campus_billing.py",
-      "bytes": 4816,
-      "sha256": "69499c12aabc531674f6230900c691ac3b931fba0a4b5e52e8f88dd99d153d0b"
+      "bytes": 5312,
+      "sha256": "b2fb5b5c865d3b1945a037365da7b7336f390e8bbe929799926605fcbb4d3727"
     },
     {
       "path": "backend/app/services/campus_control_plane.py",
@@ -2304,8 +2324,8 @@
     },
     {
       "path": "backend/app/services/commercial_service.py",
-      "bytes": 18580,
-      "sha256": "20b72b6b1b1a2b64de3e26e3a7768e0e28614b0a4061800b8a055863e33ecd95"
+      "bytes": 19860,
+      "sha256": "f9d72cc6688c342f5140bb302df19d2ccc0bd54af512ea1a398506893d8d4315"
     },
     {
       "path": "backend/app/services/company_scope.py",
@@ -2381,6 +2401,26 @@
       "path": "backend/app/services/gradebook_service.py",
       "bytes": 9645,
       "sha256": "001ae39f5a412e06614c3d34e88e3c8667727e803749d19c45a7edfab3c2e3eb"
+    },
+    {
+      "path": "backend/app/services/growth_billing.py",
+      "bytes": 25494,
+      "sha256": "0ba03d1e837e4df174dc23ed0031fbeaacd6a4309a1ee8ab13d97ebbeaa8c882"
+    },
+    {
+      "path": "backend/app/services/growth_campus_ledger.py",
+      "bytes": 3333,
+      "sha256": "6a7bdafac71f0b7911e7999da411c04d70071021ac83f0ac5d6c58859a979cdc"
+    },
+    {
+      "path": "backend/app/services/growth_fulfillment.py",
+      "bytes": 4617,
+      "sha256": "38f808c503809d8a9699bee96ac6e1431dd65cfaf17594d4c45aaccb54b5afd5"
+    },
+    {
+      "path": "backend/app/services/growth_service.py",
+      "bytes": 27380,
+      "sha256": "4e50a94f785652392a414599d6daa9478bdb7fbb90f5617f8d9ad51ecdc93e7a"
     },
     {
       "path": "backend/app/services/h5p_service.py",
@@ -2524,8 +2564,8 @@
     },
     {
       "path": "backend/app/services/platform_tenant_service.py",
-      "bytes": 15249,
-      "sha256": "e02a24609b3f7bb0bf04de41d9e4384eaaa327c9499842808e936af4b257b0b8"
+      "bytes": 15394,
+      "sha256": "3fd6c07eeb0cc49f91fc3b7d1b4f5e1dbb9840cbfd02b10249f2edcb7877eea2"
     },
     {
       "path": "backend/app/services/pricing.py",
@@ -2564,8 +2604,8 @@
     },
     {
       "path": "backend/app/services/runtime_service.py",
-      "bytes": 7526,
-      "sha256": "9ea6223d93114b33e0b386819e6086bf4f6b02552fb1603e21296dae69192ac3"
+      "bytes": 7621,
+      "sha256": "a03ef3faafc1d1cb33d877fad5f9709abe2451d360621ff906b228326f171f81"
     },
     {
       "path": "backend/app/services/studio_service.py",
@@ -2614,8 +2654,8 @@
     },
     {
       "path": "backend/app/services/webhook_processor.py",
-      "bytes": 29770,
-      "sha256": "981dbd8af83fb1658ad90cfcb2b341115f035c500a1b1d3173603704c1176cb4"
+      "bytes": 30148,
+      "sha256": "c4c574011d2c2ecd380a37546204ddee371ac85e6ab051fc8d85ec8133e72954"
     },
     {
       "path": "backend/app/services/whatsapp_campaigns.py",
@@ -2649,8 +2689,8 @@
     },
     {
       "path": "backend/app/workers/runtime.py",
-      "bytes": 7369,
-      "sha256": "8ac30bf79a3871bc8925e844359f2a139524bd1f892680f524f7c9e9724461ff"
+      "bytes": 7522,
+      "sha256": "bd8acdce2f43cce62c6e2f3e91503c02528bc9db5f405f0fa2a5a02b86155489"
     },
     {
       "path": "backend/migrations/20260906_operations_course_packages.sql",
@@ -3293,6 +3333,11 @@
       "sha256": "d360fcc6cb0cf36380f9160d8eb500274ef680ed6dce0ce4f979a3e59c418af0"
     },
     {
+      "path": "backend/tests/test_growth_os.py",
+      "bytes": 18310,
+      "sha256": "b682426a470726df407b45cba2e0787e2f2d7641ff36bc18e138e01de7b41ea4"
+    },
+    {
       "path": "backend/tests/test_h5p.py",
       "bytes": 60314,
       "sha256": "caead315daac245445e6cd0986d001a74227d929f2c6cd9c5a99d3088272ad01"
@@ -3530,7 +3575,7 @@
     {
       "path": "backend/tests/test_production_runtime.py",
       "bytes": 8784,
-      "sha256": "9023ed1fd902986234bd3049380b1ddb30eb052eacb91986b607c810109873b3"
+      "sha256": "e0d5e799b6fdfe5c699c1a31bd41cd81af74f7612d491f1107d5b70bd43dafdb"
     },
     {
       "path": "backend/tests/test_quiz_authoring.py",
@@ -3978,6 +4023,16 @@
       "sha256": "5f9db9de82d0196dd8cab3c7fb5596b9c055d1797cbbb63e432294946e6c6ade"
     },
     {
+      "path": "docs/GROWTH_OS_PRODUCT.md",
+      "bytes": 9305,
+      "sha256": "53dcaf0e4ca414f5d7c732a488cd4c9a8cc259be5185cac5c2c86f6389d7dd59"
+    },
+    {
+      "path": "docs/GROWTH_OS_VALIDATION_2026-09-20.md",
+      "bytes": 2238,
+      "sha256": "a5aa9a42cb32c1bae02a7d4cda1e149b65aca01466a743d2f00193e475765f66"
+    },
+    {
       "path": "docs/HANDOFF_NEXT_AGENT.md",
       "bytes": 12097,
       "sha256": "0a4982b8d71668ef11627825d766a344cf183273a326fcb41b68dfa1865e7447"
@@ -4054,8 +4109,8 @@
     },
     {
       "path": "docs/PRODUCTION_RUNTIME.md",
-      "bytes": 9465,
-      "sha256": "b25ee938848bd54ab5c149d9db51d50ffc6e0658f8af7b8f24c885222f19ab76"
+      "bytes": 9514,
+      "sha256": "f735ba94293aaeb11443dc63e88b7a918dc2ccc9901925ad2beb593551782a70"
     },
     {
       "path": "docs/RECORDING_LESSONS.md",
@@ -8889,8 +8944,8 @@
     },
     {
       "path": "frontend/src/App.tsx",
-      "bytes": 101520,
-      "sha256": "8e5089573695355ccc21944ec6ffe19ac476fd4684b84161de6b3bfd3b3e4d9e"
+      "bytes": 101839,
+      "sha256": "543357a90ae81105a025d5ff49ec4eea4502e03422babfb65e5e08635f3474d4"
     },
     {
       "path": "frontend/src/Sasha Certificate (Standalone).html",
@@ -9108,6 +9163,11 @@
       "sha256": "28aaa91d2e05573561572394c15f5ee4593f8c96957cf90cedb8c0096ec885b2"
     },
     {
+      "path": "frontend/src/api/growth.ts",
+      "bytes": 3141,
+      "sha256": "b5c47a5ea29e3d78336e941045a12fc4c4558901465e1a2c07db9487dbdc1bfd"
+    },
+    {
       "path": "frontend/src/api/h5p.ts",
       "bytes": 9034,
       "sha256": "df733d3f13fb12343f159b36bf6a04d6356f6a444d5f53d4b1a45ff4f3984863"
@@ -9283,6 +9343,11 @@
       "sha256": "c5e76a894f310407c3f539954888b833c80767276f9966243f3c29e0dd1260ba"
     },
     {
+      "path": "frontend/src/components/GrowthCustomerLifecycle.tsx",
+      "bytes": 6007,
+      "sha256": "7fa8d5cc0ebe30addc9d15ca2da81c74c7010267975cb79a824b9d14aa835699"
+    },
+    {
       "path": "frontend/src/components/SortableLecture.tsx",
       "bytes": 1016,
       "sha256": "4e77690716967d1e3e3a86c566701bfdf1aaf9b4a891b28b6ac975a11336940e"
@@ -9348,6 +9413,16 @@
       "sha256": "3b1df00084b33cce9116d13702fc3f4c41750e73ac365f38de056ad37a6007a2"
     },
     {
+      "path": "frontend/src/components/admin/GrowthControlPlane.tsx",
+      "bytes": 21852,
+      "sha256": "1b0c34c0cb306f41557f30dd406ee4ca35d5a0ddd4f24aebf40edf78a2545f6b"
+    },
+    {
+      "path": "frontend/src/components/admin/GrowthExecutionPanel.tsx",
+      "bytes": 5018,
+      "sha256": "f912678923da48b3acdd10b3f73810bc95a78a35443640fc9d743497eccdb3ff"
+    },
+    {
       "path": "frontend/src/components/admin/ImpersonationBanner.tsx",
       "bytes": 5904,
       "sha256": "55531a89b8de1da257c7196c1a0bf614633f289b2ec26ac1aaa1c40b221e1682"
@@ -9401,6 +9476,11 @@
       "path": "frontend/src/components/admin/heatmaps.tsx",
       "bytes": 18808,
       "sha256": "8150619bcd3c733b737235605a2093c4696877292f409520830021520406bcfc"
+    },
+    {
+      "path": "frontend/src/components/admin/__tests__/GrowthExecutionPanel.test.tsx",
+      "bytes": 2968,
+      "sha256": "b2454305d611dec5f6f17c865560b35a1c404e8be301cadf02d5ebe70e2e8b18"
     },
     {
       "path": "frontend/src/components/admin/__tests__/PasswordResetLinkAction.test.tsx",
@@ -9664,8 +9744,8 @@
     },
     {
       "path": "frontend/src/components/dashboard/DashboardSidebar.tsx",
-      "bytes": 20028,
-      "sha256": "b18a87e5075a1137387e12211a8431cdcbf5305a5803d3246c257bd52522fbbe"
+      "bytes": 20384,
+      "sha256": "d3fbb52c1b0b39b3ae761edd68fbf8a52e675f2a053e626021f5c28a471895d5"
     },
     {
       "path": "frontend/src/components/dashboard/DashboardWorkspace.tsx",
@@ -10908,6 +10988,11 @@
       "sha256": "f5fcdcea3ccea6849df7a8fdc7c7cdbf9e8d96678e36071cd37ac1a8536361c8"
     },
     {
+      "path": "frontend/src/pages/business-services.tsx",
+      "bytes": 9070,
+      "sha256": "06bf973f42faa7eb1e51f2704c03d6e8ec8caa3880e7c743ee8fb4d9960a9e90"
+    },
+    {
       "path": "frontend/src/pages/campus-for-institutions.tsx",
       "bytes": 11426,
       "sha256": "3698f21535e5e570f95079a018ccd79eebddc9dbb6c845b07f2c89770e0bcb34"
@@ -11349,8 +11434,8 @@
     },
     {
       "path": "frontend/src/pages/admin/operations.tsx",
-      "bytes": 25412,
-      "sha256": "d75805815e66000528ce8ed6c959d7b037a46ae87a0552055a8172f3340307fa"
+      "bytes": 25562,
+      "sha256": "b65e0c702ff1f99969eb75ae613669eb5f5fce5d9be0fab64023e36354e03b3d"
     },
     {
       "path": "frontend/src/pages/admin/orders.tsx",
@@ -12328,9 +12413,14 @@
       "sha256": "123645402cd98e742d2ef593035fe0332ca025960abddb8c5ee5c7d493de61da"
     },
     {
+      "path": "scripts/seed_growth_demo.py",
+      "bytes": 7089,
+      "sha256": "154aa21ca36ddb1cd91d2c24f061ef769ac55331c92401d8e4e0209944077e9d"
+    },
+    {
       "path": "scripts/seed_saas_demo.py",
-      "bytes": 26649,
-      "sha256": "f4a879761d4bf08ef2e686c28b9e9cba4b3c1ea39ec8508c1adcf3765945dab1"
+      "bytes": 27194,
+      "sha256": "7b1604f461b215f50a5935a5514f9f074f418aabe005e14417680044c14e147e"
     },
     {
       "path": "scripts/seo_smoke_check.py",
@@ -12356,6 +12446,11 @@
       "path": "scripts/start-recording-worker.ps1",
       "bytes": 1133,
       "sha256": "31bf54660536cd28208b532ea96b0f567ae80406011d9d69a4f765c26ff23bbf"
+    },
+    {
+      "path": "scripts/validate_growth_load.py",
+      "bytes": 3836,
+      "sha256": "faea2ccef037ee91f86f99c4e57c71b6c95c69841d61e45e9a847627310599a2"
     },
     {
       "path": "scripts/validate_saas_release.py",

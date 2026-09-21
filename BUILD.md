@@ -1,6 +1,6 @@
 # BUILD MANUAL — SashaInfinity LMS
 
-For the September 2026 runtime release, start with [the production runtime runbook](docs/PRODUCTION_RUNTIME.md) and [release status](docs/SAAS_RELEASE_2026-09-14.md). It adds Alembic head `0050`, a separate maintenance worker, admin MFA enrollment and explicit staging acceptance gates. Older commands below are not a production sign-off.
+For the September 2026 release, start with [Growth OS](docs/GROWTH_OS_PRODUCT.md), [validation evidence](docs/GROWTH_OS_VALIDATION_2026-09-20.md) and [the production runtime runbook](docs/PRODUCTION_RUNTIME.md). Current Alembic head is `0051`; a separate maintenance worker, admin MFA enrollment and explicit staging acceptance gates are required. Older commands below are not a production sign-off.
 
 Stack: React 18 + Vite frontend, FastAPI backend, PostgreSQL 15, Redis 7, yt-dlp streaming service, Nginx.
 

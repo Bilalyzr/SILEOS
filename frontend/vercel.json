@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "installCommand": "npm install --legacy-peer-deps",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/api/v1/:path*", "destination": "https://sashainfinity.com/api/v1/:path*" },
+    { "source": "/uploads/:path*", "destination": "https://sashainfinity.com/uploads/:path*" },
+    { "source": "/certificate-files/:path*", "destination": "https://sashainfinity.com/certificate-files/:path*" },
+    { "source": "/(.*)", "destination": "/" }
+  ]
+}

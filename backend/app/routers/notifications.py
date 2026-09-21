@@ -10,6 +10,12 @@ from app.models.notification import Notification
 router = APIRouter()
 
 TOPICS = {
+    "business_offers": {
+        "label": "Business offers",
+        "description": "Reviewed SashaInfinity service offers. Optional and off by default.",
+        "in_app_enabled": False, "email_enabled": False,
+        "push_enabled": False, "whatsapp_enabled": False,
+    },
     "learning_interventions": {
         "label": "Learning interventions",
         "description": "Instructor support notes, review tasks and understanding checks.",

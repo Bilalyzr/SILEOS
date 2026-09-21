@@ -54,7 +54,10 @@ def db_call(fn, *args):
 
 
 async def execute(name):
-    if name == "payment_reconciliation":
+    if name == "growth_maintenance":
+        from app.services.growth_service import maintenance
+        await asyncio.to_thread(db_call, maintenance)
+    elif name == "payment_reconciliation":
         from app.services.reconciliation import _run_cycle
         # Wall-clock slot survives process restarts; gateway diff runs every 30m.
         await asyncio.to_thread(_run_cycle, int(time.time() // 300))

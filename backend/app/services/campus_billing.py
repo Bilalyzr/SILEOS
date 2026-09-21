@@ -43,7 +43,11 @@ def effective_plan(db, institution_id):
         .order_by(CampusSubscription.paid_through.desc())
         .first()
     )
-    return row.plan if row else "starter"
+    from app.services.growth_fulfillment import institution_plan
+    institution = db.get(Institution, institution_id)
+    commercial = institution_plan(db, institution.tenant_id) if institution else 'starter'
+    plans = {commercial, row.plan if row else 'starter'}
+    return 'enterprise' if 'enterprise' in plans else 'campus' if 'campus' in plans else 'starter'
 
 
 def handle_event(db, event):
@@ -96,7 +100,9 @@ def handle_event(db, event):
                 "Campus charge needs a captured payment and billing period"
             )
         through = datetime.fromtimestamp(int(end), timezone.utc)
-        if not row.paid_through or through > utc(row.paid_through):
+        from app.services.growth_campus_ledger import record_charge
+        available_charge = record_charge(db, row, payment, through)
+        if available_charge is not False and (not row.paid_through or through > utc(row.paid_through)):
             row.paid_through = through
     if stamp >= row.last_event_at and row.status not in TERMINAL:
         statuses = {

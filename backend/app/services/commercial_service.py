@@ -241,7 +241,7 @@ def _next_invoice_number(db, due_on: date) -> str:
     return f"SI/{fiscal_year}/{sequence:06d}"
 
 
-def create_invoice(db, command, actor_id: int) -> dict:
+def create_invoice(db, command, actor_id: int, *, commit=True, subtotal_override=None, number_on=None) -> dict:
     contract = (
         db.query(CommercialContract)
         .filter_by(id=command.contract_id)
@@ -252,8 +252,11 @@ def create_invoice(db, command, actor_id: int) -> dict:
         raise HTTPException(404, "Contract not found.")
     if contract.status != "active":
         raise HTTPException(409, "Only an active contract can be invoiced.")
+    from app.models.growth import BillingPolicy
+    if commit and db.get(BillingPolicy, contract.id):
+        raise HTTPException(409, "Use Growth OS billing for this agreement so tax and period safeguards are preserved")
     offer = db.get(CommercialOffer, contract.offer_id)
-    subtotal = money(Decimal(contract.quantity) * Decimal(contract.unit_amount))
+    subtotal = money(subtotal_override if subtotal_override is not None else Decimal(contract.quantity) * Decimal(contract.unit_amount))
     tax = money(command.tax_amount)
     discount = money(command.discount_amount)
     total = subtotal + tax - discount
@@ -263,7 +266,7 @@ def create_invoice(db, command, actor_id: int) -> dict:
     row = CommercialInvoice(
         tenant_id=contract.tenant_id,
         contract_id=contract.id,
-        invoice_number=_next_invoice_number(db, command.due_on),
+        invoice_number=_next_invoice_number(db, number_on or command.due_on),
         status="issued",
         currency=contract.currency,
         subtotal=subtotal,
@@ -306,7 +309,8 @@ def create_invoice(db, command, actor_id: int) -> dict:
         payload={"invoice_id": row.id, "tenant_id": contract.tenant_id},
         idempotency_key=f"commercial:invoice:{row.id}:issued:v1",
     )
-    _commit(db)
+    if commit:
+        _commit(db)
     return _serialize_invoice(row)
 
 
@@ -363,7 +367,8 @@ def record_payment(db, invoice_id: int, command, actor_id: int) -> dict:
     gross = money(invoice.total_amount)
     tax = money(invoice.tax_amount)
     gateway_fee = money(command.gateway_fee)
-    partner_share = money(command.partner_share)
+    from app.services.growth_billing import invoice_partner_share, on_capture
+    partner_share = invoice_partner_share(db, invoice, gross - tax, money(command.partner_share))
     net = gross - tax - gateway_fee - partner_share
     if net < 0:
         raise HTTPException(422, "Tax, gateway fee, and partner share exceed the payment.")
@@ -388,9 +393,15 @@ def record_payment(db, invoice_id: int, command, actor_id: int) -> dict:
         recorded_by=actor_id,
     )
     db.add(event)
+    db.flush()
+    on_capture(db, invoice, event)
     invoice.status = "paid"
     invoice.paid_at = _utc(command.occurred_at)
-    _grant_entitlements(db, contract, offer, actor_id)
+    # Growth purchases are source-scoped and activated on fulfillment, never
+    # flattened into an indefinite tenant grant that could outlive a refund.
+    from app.services.growth_billing import invoice_snapshot
+    if not invoice_snapshot(db, invoice.id):
+        _grant_entitlements(db, contract, offer, actor_id)
     tenant_service.audit(
         db,
         tenant_id=invoice.tenant_id,
@@ -444,6 +455,10 @@ def record_refund(db, event_id: int, command, actor_id: int) -> dict:
     tax = money(command.tax_amount)
     if tax > amount:
         raise HTTPException(422, "Refunded tax cannot exceed the refund amount.")
+    previous_tax = sum((money(r.tax_amount) for r in db.query(RevenueLedgerEvent).filter_by(
+        reverses_event_id=capture.id, event_type="refund", status="posted")), Decimal(0))
+    if previous_tax + tax > money(capture.tax_amount):
+        raise HTTPException(422, "Refunded tax exceeds the tax captured")
     event = RevenueLedgerEvent(
         tenant_id=capture.tenant_id,
         business_vertical=capture.business_vertical,
@@ -466,6 +481,9 @@ def record_refund(db, event_id: int, command, actor_id: int) -> dict:
         reverses_event_id=capture.id,
     )
     db.add(event)
+    db.flush()
+    from app.services.growth_billing import on_refund
+    on_refund(db, capture, event, already_refunded + amount == money(capture.gross_amount))
     if capture.invoice_id and already_refunded + amount == money(capture.gross_amount):
         invoice = db.get(CommercialInvoice, capture.invoice_id)
         if invoice:

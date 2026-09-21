@@ -158,6 +158,9 @@ async def stream_model(
                    or (m.is_library and current_user.role == 'instructor')
                    or allows_anonymous(db, 'three_d_model_id', model_id))
         if not allowed:
+            from app.services.growth_fulfillment import asset_access
+            allowed = asset_access(db, current_user.id, model_id)
+        if not allowed:
             allowed = db.query(Lesson.id).join(Enrollment, Enrollment.course_id == Lesson.post_parent).filter(
                 Lesson.three_d_model_id == model_id, Enrollment.user_id == current_user.id,
                 Enrollment.enrollment_status.in_(('enrolled', 'completed'))).first() is not None

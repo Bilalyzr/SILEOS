@@ -7,7 +7,7 @@ This release extends the existing SashaInfinity LMS; it does not replace the thr
 | Process | Responsibility | Scale boundary |
 | --- | --- | --- |
 | API replicas | Authenticated HTTP, authoring, learning, admin reporting | Stateless app instances; shared PostgreSQL, Redis and asset storage |
-| `app.workers.runtime` | Payments/memberships every 300 seconds; learner reminders and campus maintenance every 60 seconds | Multiple standby replicas, one Redis scheduler leader; database claims per job |
+| `app.workers.runtime` | Payments/memberships every 300 seconds; learner reminders and campus maintenance every 60 seconds; Growth billing/follow-ups every 600 seconds | Multiple standby replicas, one Redis scheduler leader; database claims per job |
 | Recording worker | Existing recording-to-lesson pipeline | Optional `recording` staging profile; needs real recording/transcription setup |
 | Code judge worker | Existing queued coding assessment runner | Optional `coding` staging profile; isolated execution service required |
 | Prometheus | Private runtime/HTTP metrics and alert rules | Optional `observability` staging profile; never expose unauthenticated publicly |
@@ -19,7 +19,7 @@ Run the maintenance worker from `backend/` with `python -m app.workers.runtime`.
 1. Back up PostgreSQL and shared files, and prove restore in a separate environment. Never restore over the live database as a test.
 2. Set distinct persistent signing secrets, the AI vault encryption key, provider sandbox credentials, HTTPS origins and allowed hosts. Do not rotate encryption keys casually: existing encrypted provider keys would become unreadable.
 3. Build the release images with the included Docker ignore rules. Never put private keys in Vite build arguments or commit local environment files.
-4. Apply the historical SQL ledger where appropriate, then run `python -m alembic upgrade head` from the new backend image. Current head is `0050`, following the existing AI credentials and tutor-signal migrations. For a fresh installation, the staging migration service initializes the legacy schema before upgrading Alembic.
+4. Apply the historical SQL ledger where appropriate, then run `python -m alembic upgrade head` from the new backend image. Current head is `0051`, adding Growth billing and sales workflows after the runtime migration. For a fresh installation, the staging migration service initializes the legacy schema before upgrading Alembic.
 5. Start API, runtime worker and required optional workers. The blue/green deploy script now runs Alembic before starting the target and checks its maintenance worker before switching traffic.
 6. Verify `/health/ready`, release identity, admin **Operations → Runtime**, role isolation, provider sandbox flows and backup/restore. A green HTTP health check alone is insufficient.
 

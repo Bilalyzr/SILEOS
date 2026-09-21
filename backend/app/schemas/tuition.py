@@ -84,8 +84,6 @@ class InvoiceCreate(Command):
 
 class OnlineOrderCreate(Command):
     installment_id: int | None = Field(default=None, gt=0)
-    # Constraints live in Annotated so they bind to the Decimal branch —
-    # pydantic 2.4 rejects max_digits on a Decimal | None union via Field().
     amount: Annotated[MoneyInput, Field(gt=0, max_digits=13, decimal_places=2)] | None = None
 
 

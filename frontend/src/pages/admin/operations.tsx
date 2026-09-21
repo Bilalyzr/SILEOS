@@ -3,6 +3,7 @@ import {LaunchReadiness} from '@/components/admin/LaunchReadiness';
 import { RuntimeMonitor } from '@/components/admin/RuntimeMonitor';
 import { BusinessPortfolio } from "@/components/admin/BusinessPortfolio";
 import { CommercialControlPlane } from "@/components/admin/CommercialControlPlane";
+import { GrowthControlPlane } from "@/components/admin/GrowthControlPlane";
 import { TenantControlPlane } from "@/components/admin/TenantControlPlane";
 import { MeiporulOperationsPanel } from "@/components/admin/MeiporulOperationsPanel";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -56,6 +57,7 @@ export default function OperationsCenter() {
     ["portfolio", "Business portfolio"],
     ["tenants", "Tenants & access"],
     ["commercial", "Commercial"],
+    ["growth", "Growth OS"],
     ["meiporul", "Meiporul"],
     ["seyappaduporul", "Seyappaduporul"],
     ["utporul", "Utporul"],
@@ -121,7 +123,7 @@ export default function OperationsCenter() {
           minute
         </p>
       )}
-      {view === "runtime" ? <RuntimeMonitor /> : view === "portfolio" ? <BusinessPortfolio /> : view === "tenants" ? (
+      {view === "growth" ? <GrowthControlPlane /> : view === "runtime" ? <RuntimeMonitor /> : view === "portfolio" ? <BusinessPortfolio /> : view === "tenants" ? (
         <TenantControlPlane />
       ) : view === "commercial" ? (
         <CommercialControlPlane />

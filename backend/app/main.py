@@ -1497,6 +1497,11 @@ app.include_router(
     tags=["Platform commercial control plane"],
 )
 
+# Growth OS (2026-09-20 rc1): B2B commerce, CRM and experiments. Additive
+# module — mounted after the commercial control plane it extends.
+from app.routers import growth
+app.include_router(growth.router, prefix="/api/v1/platform/growth", tags=["Revenue growth operations"])
+
 from app.routers import coding_assessments, coding_judge_internal
 app.include_router(
     coding_assessments.router,

@@ -188,7 +188,7 @@ def test_runtime_migration_reentrant_and_roundtrip(tmp_path, monkeypatch):
         command.upgrade(cfg, "head")
         assert {"runtime_jobs", "runtime_runs"} <= set(inspect(engine).get_table_names())
         with engine.connect() as conn:
-            assert conn.execute(text("SELECT version_num FROM alembic_version")).scalar() == "0050"
+            assert conn.execute(text("SELECT version_num FROM alembic_version")).scalar() == "0051"
         command.downgrade(cfg, "0049")
         assert "runtime_jobs" not in inspect(engine).get_table_names()
         command.upgrade(cfg, "head")

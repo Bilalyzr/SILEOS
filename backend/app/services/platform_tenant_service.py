@@ -459,6 +459,9 @@ def is_entitled(db, tenant_id: int, vertical: str, feature_key: str) -> bool:
     canonical = normalize_vertical(vertical)
     if canonical is None:
         return False
+    from app.services.growth_fulfillment import feature_access
+    if feature_access(db, tenant_id, canonical, feature_key):
+        return True
     now = _utcnow()
     return (
         db.query(PlatformTenantEntitlement)

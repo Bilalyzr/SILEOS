@@ -164,11 +164,17 @@ def main():
         else:
             coverage = json.loads(marker.read_text(encoding="utf-8"))["coverage"]
         seed_learning_extras(api, db, teacher, student, admin, base, owner, now)
+        from seed_growth_demo import seed_growth
+        from app.models.platform_tenant import PlatformTenantMembership
+        billing_member = db.query(PlatformTenantMembership).filter_by(user_id=owner.id, role="owner", status="active").first()
+        if billing_member:
+            seed_growth(db, admin, owner, teacher, billing_member.tenant_id)
         table_counts = {}
         for name in inspect(db.bind).get_table_names():
             safe = '"' + name.replace('"', '""') + '"'
             table_counts[name] = db.execute(text("SELECT COUNT(*) FROM " + safe)).scalar()
     coverage.extend([
+        {"feature": "Growth OS: ten service types, billing policies, invoices, leads, experiments and launch evidence", "status": "synthetic_seeded", "route": "/admin/operations?view=growth"},
         {"feature": "Roles, tours, institutions, learner insights", "status": "seeded", "route": "/login"},
         {"feature": "Bundled 3D models, virtual labs, games, live schedule, notices and published exam results", "status": "seeded", "route": "/admin/content-libraries"},
         {"feature": "Physical AR/VR devices, GeoGebra remote embeds and H5P package import", "status": "manual_asset_acceptance"},
