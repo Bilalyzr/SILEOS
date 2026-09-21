@@ -207,6 +207,12 @@ services:
                  python /finalize-scripts/finalize_recordings.py --backend-url http://backend:8000 || true;
                  sleep 60;
                done"
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f app.workers.recording_lessons >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     init: true
     depends_on:
       backend:
@@ -218,29 +224,6 @@ services:
     restart: unless-stopped
 
   # YouTube Streaming Service (New Method)
-  runtime-worker:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    environment: *base-backend-environment
-    volumes: *base-backend-volumes
-    command: ["python", "-m", "app.workers.runtime"]
-    init: true
-    depends_on:
-      backend:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    networks: [tutor-network]
-    restart: unless-stopped
-    stop_grace_period: 120s
-    healthcheck:
-      test: ["CMD", "python", "-m", "app.workers.runtime", "--health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 45s
-
   streaming-service:
     build:
       context: ./streaming-service
