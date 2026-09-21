@@ -161,8 +161,15 @@ services:
       - EDGYY_WEBHOOK_SECRET=${EDGYY_WEBHOOK_SECRET}
       # Dedicated token for the isolated Utporul code-judge worker.
       - CODE_RUNNER_TOKEN=${CODE_RUNNER_TOKEN:-}
+      - TRANSCRIPTION_PROVIDER=${TRANSCRIPTION_PROVIDER:-}
+      - TRANSCRIPTION_PYTHON=${TRANSCRIPTION_PYTHON:-}
+      - TRANSCRIPTION_MODEL_PATH=${TRANSCRIPTION_MODEL_PATH:-}
+      - TRANSCRIPTION_DEVICE=${TRANSCRIPTION_DEVICE:-cpu}
+      - TRANSCRIPTION_COMPUTE_TYPE=${TRANSCRIPTION_COMPUTE_TYPE:-int8}
+      - JITSI_RECORDINGS_DIR=${JITSI_RECORDINGS_DIR:-/app/recordings}
     volumes: &base-backend-volumes
       - ./backend:/app
+      - ./recordings_live:/app/recordings
       - ./uploads:/app/uploads
       - ./certificates:/app/certificates
       - ./logs:/var/log/sasha_lms
@@ -181,6 +188,34 @@ services:
       timeout: 8s
       retries: 8
       start_period: 60s
+
+  # Recording-lessons transcription worker (faster-whisper) + Jibri
+  # finalize loop (scans the shared recordings dir and POSTs finished MP4s
+  # to the backend's internal ingest endpoint over the docker network).
+  recording-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment: *base-backend-environment
+    volumes:
+      - ./backend:/app
+      - ./recordings_live:/app/recordings
+      - ./deploy/scripts:/finalize-scripts:ro
+    command: >
+      bash -c "python -u -m app.workers.recording_lessons &
+               while true; do
+                 python /finalize-scripts/finalize_recordings.py --backend-url http://backend:8000 || true;
+                 sleep 60;
+               done"
+    init: true
+    depends_on:
+      backend:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tutor-network
+    restart: unless-stopped
 
   # YouTube Streaming Service (New Method)
   runtime-worker:
@@ -244,6 +279,12 @@ services:
     environment:
       - BACKEND_INTERNAL_URL=http://backend:8000/api/v1
       - CODE_RUNNER_TOKEN=${CODE_RUNNER_TOKEN:-}
+      - TRANSCRIPTION_PROVIDER=${TRANSCRIPTION_PROVIDER:-}
+      - TRANSCRIPTION_PYTHON=${TRANSCRIPTION_PYTHON:-}
+      - TRANSCRIPTION_MODEL_PATH=${TRANSCRIPTION_MODEL_PATH:-}
+      - TRANSCRIPTION_DEVICE=${TRANSCRIPTION_DEVICE:-cpu}
+      - TRANSCRIPTION_COMPUTE_TYPE=${TRANSCRIPTION_COMPUTE_TYPE:-int8}
+      - JITSI_RECORDINGS_DIR=${JITSI_RECORDINGS_DIR:-/app/recordings}
       - CODE_RUNNER_VERSION=${CODE_RUNNER_VERSION:-judge0-worker-1.0}
       - CODE_RUNNER_POLL_SECONDS=${CODE_RUNNER_POLL_SECONDS:-1}
       - JUDGE0_URL=${JUDGE0_URL:-}

@@ -19,6 +19,11 @@ services:
       - JITSI_SEND_JWT=${JITSI_SEND_JWT:-true}
       - INTERNAL_TOKEN=${INTERNAL_TOKEN}
 
+  # finalize loop inside recording-worker needs the internal ingest token
+  recording-worker:
+    environment:
+      - INTERNAL_TOKEN=${INTERNAL_TOKEN}
+
   # The production nginx/conf.d has `listen 443 ssl` blocks pointing at aaPanel
   # cert paths (/etc/panel-ssl/...) that don't exist on a dev box, which makes
   # nginx refuse to start. For local runs we swap in a plain-HTTP config dir

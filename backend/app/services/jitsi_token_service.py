@@ -95,13 +95,18 @@ def mint_jitsi_jwt(*, user: User, live_class: LiveClass, moderator: bool) -> tup
                 "name": user.display_name,
                 "email": user.user_email,
                 "avatar": "",
-                "moderator": "true" if moderator else "false",
+                # Booleans, not strings — prosody's JWT plugin type-checks
+                # these; "true" (string) silently grants nothing, so the
+                # instructor joined as a plain participant and every
+                # moderation command (startRecording, muteEveryone, lobby)
+                # was refused by Jicofo.
+                "moderator": moderator,
             },
             "features": {
-                "screen-sharing": "true" if moderator else "false",
-                "recording": "true" if moderator else "false",
-                "livestreaming": "false",
-                "transcription": "false",
+                "screen-sharing": moderator,
+                "recording": moderator,
+                "livestreaming": False,
+                "transcription": False,
             },
         },
     }
