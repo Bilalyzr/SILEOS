@@ -54,7 +54,7 @@ services:
       # (service DNS: backend:8000) and the host's system nginx reaches it via
       # 127.0.0.1, so nothing legitimate needs this on 0.0.0.0. Publishing it on
       # all interfaces exposed the API directly, bypassing nginx CORS/rate-limit.
-      - "127.0.0.1:8100:8000"
+      - "127.0.0.1:8000:8000"
     environment: &base-backend-environment
       - DATABASE_URL=postgresql://tutor:${POSTGRES_PASSWORD}@postgres:5432/tutor_lms
       - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
@@ -76,11 +76,6 @@ services:
       - WHATSAPP_VERIFY_TOKEN=${WHATSAPP_VERIFY_TOKEN:-}
       - WHATSAPP_API_VERSION=${WHATSAPP_API_VERSION:-v23.0}
       - WHATSAPP_APPROVED_TEMPLATES=${WHATSAPP_APPROVED_TEMPLATES:-}
-      # AI provider (Zhipu GLM / bigmodel.cn) — powers adaptive mini-lessons,
-      # AI tutor and question generation. Empty = those features report "not
-      # configured" (honest 503) and the UI hides the generate controls.
-      - GLM_API_KEY=${GLM_API_KEY:-}
-      - GLM_MODEL=${GLM_MODEL:-glm-4.5}
       - ENVIRONMENT=${ENVIRONMENT:-production}
       - BACKGROUND_TASK_MODE=worker
       - OBSERVABILITY_TOKEN=${OBSERVABILITY_TOKEN:-}
@@ -107,8 +102,8 @@ services:
       - ENABLE_API_RATE_LIMITING=${ENABLE_API_RATE_LIMITING:-true}
       - ENABLE_REQUEST_LOGGING=${ENABLE_REQUEST_LOGGING:-true}
       - ENABLE_SECURITY_HEADERS=${ENABLE_SECURITY_HEADERS:-true}
-      - RATE_LIMIT_REQUESTS_PER_MINUTE=${RATE_LIMIT_REQUESTS_PER_MINUTE:-200}
-      - RATE_LIMIT_REQUESTS_PER_HOUR=${RATE_LIMIT_REQUESTS_PER_HOUR:-4000}
+      - RATE_LIMIT_REQUESTS_PER_MINUTE=${RATE_LIMIT_REQUESTS_PER_MINUTE:-60}
+      - RATE_LIMIT_REQUESTS_PER_HOUR=${RATE_LIMIT_REQUESTS_PER_HOUR:-1000}
       - RATE_LIMIT_LOGIN_ATTEMPTS=${RATE_LIMIT_LOGIN_ATTEMPTS:-5}
       - MAX_LOGIN_ATTEMPTS=${MAX_LOGIN_ATTEMPTS:-5}
       - LOCKOUT_DURATION_MINUTES=${LOCKOUT_DURATION_MINUTES:-15}
@@ -214,7 +209,7 @@ services:
       # Loopback only — same reasoning as backend. The docker nginx reaches the
       # streaming service via the docker network; the host's system nginx (if it
       # proxies video) reaches it on 127.0.0.1. Not for direct public access.
-      - "127.0.0.1:8101:8001"
+      - "127.0.0.1:8001:8001"
     environment:
       - PYTHONIOENCODING=utf-8
       - PYTHONUTF8=1
@@ -275,9 +270,9 @@ services:
       # Publish to localhost only so host services
       # can reach this DB. Bound to 127.0.0.1 so it
       # is NOT exposed to the public internet.
-      - "127.0.0.1:15432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
-      - postgres_data_sileos:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./database/schemas:/docker-entrypoint-initdb.d/schemas
     networks:
@@ -295,7 +290,7 @@ services:
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
     volumes:
-      - redis_data_sileos:/data
+      - redis_data:/data
     networks:
       - tutor-network
     restart: unless-stopped
@@ -311,7 +306,7 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "127.0.0.1:4100:3100"   # DEV DEPLOYMENT: edge on 4100, loopback only (vhost dev.sashainfinity.com -> 4100)
+      - "3100:3100"   # keep for direct-IP fallback
     environment:
       - PRERENDER_TOKEN=${PRERENDER_TOKEN:-}
     volumes:
@@ -336,9 +331,9 @@ services:
     restart: unless-stopped
 
 volumes:
-  postgres_data_sileos:
+  postgres_data:
     driver: local
-  redis_data_sileos:
+  redis_data:
     driver: local
 
 networks:
@@ -346,4 +341,4 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.31.0.0/16
+        - subnet: 172.30.0.0/16
