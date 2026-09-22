@@ -1,5 +1,7 @@
 # BUILD MANUAL — SashaInfinity LMS
 
+For the September 2026 release, start with [Growth OS](docs/GROWTH_OS_PRODUCT.md), [validation evidence](docs/GROWTH_OS_VALIDATION_2026-09-20.md) and [the production runtime runbook](docs/PRODUCTION_RUNTIME.md). Current Alembic head is `0051`; a separate maintenance worker, admin MFA enrollment and explicit staging acceptance gates are required. Older commands below are not a production sign-off.
+
 Stack: React 18 + Vite frontend, FastAPI backend, PostgreSQL 15, Redis 7, yt-dlp streaming service, Nginx.
 
 ---
@@ -89,6 +91,22 @@ App: http://localhost:3100
 Health: http://localhost:8000/health
 API docs: http://localhost:8000/docs (only if `ENVIRONMENT=development`)
 
+### Production-mode local staging
+
+Use the isolated staging stack for a PostgreSQL migration and container-release
+rehearsal without colliding with the development preview:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\setup_staging.ps1
+```
+
+This generates unique local secrets beneath `.local/staging/`, validates the
+Compose model, builds immutable source images, initializes and migrates the
+database, waits for `/health/ready`, and creates a staging administrator. The
+application is served on `http://127.0.0.1:3200`. See
+`docs/STAGING_DEPLOYMENT.md` for validation-only, coding-worker, operations,
+and teardown commands.
+
 ---
 
 ## 3. Frontend build (host, outside Docker)
@@ -131,15 +149,38 @@ docker-compose up -d postgres redis
 
 Real entry point is `app/main.py`. The `main_simple.py` / `main_test.py` / `main_email_test.py` / `main_frontend_integration.py` / `main_payment_test.py` variants are experiments — editing them changes nothing in production.
 
-**No test suite exists.** pytest/black/isort/flake8/mypy are in `requirements.txt` but `backend/tests/` is absent. Don't run `pytest` expecting results.
+Run the backend regression suite from the workspace root with the project virtual
+environment (or from the backend container):
+
+```bash
+python -m pytest backend/tests
+# Docker equivalent
+docker-compose exec backend python -m pytest tests
+```
+
+The suite includes API, authorization, accounting, migration, vertical, and
+security regressions. Treat any failure as a release blocker.
 
 ---
 
 ## 5. Database
 
-No Alembic. `init_db()` in `app/core/database.py` runs from the `main.py` lifespan and creates tables from the SQLAlchemy models on startup. Models in `backend/app/models/` are the source of truth.
+SQLAlchemy models in `backend/app/models/` remain the schema source of truth.
+Alembic migrations in `backend/migrations/versions/` upgrade existing databases;
+`init_db()` in `app/core/database.py` still creates tables for a completely fresh
+development database. Before deploying an existing environment, apply and verify
+the migration head:
 
-Changed a model? Either extend init logic or write SQL and apply by hand:
+```bash
+docker-compose exec backend python -m alembic upgrade head
+docker-compose exec backend python -m alembic current
+```
+
+Do not rely on `create_all()` to alter an existing table. Every model change that
+affects persisted schema needs a new, idempotent Alembic revision. Legacy one-off
+SQL migrations remain under `backend/migrations/` for historical installs only;
+apply them manually only when their accompanying migration notes explicitly say
+the target deployment needs one:
 
 ```bash
 docker-compose exec -T postgres psql -U tutor -d tutor_lms < backend/migrations/add_coupons_tables.sql

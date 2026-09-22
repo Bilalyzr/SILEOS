@@ -58,6 +58,15 @@ class CouponCreate(BaseModel):
             raise ValueError("Discount type must be 'percentage' or 'fixed'")
         return v
 
+    @validator('valid_until')
+    def validate_window_order(cls, v, values):
+        # An inverted window (until before from) used to be stored happily;
+        # the coupon then never validates as usable. Reject it outright.
+        frm = values.get('valid_from')
+        if v is not None and frm is not None and v < frm:
+            raise ValueError('valid_until cannot be earlier than valid_from')
+        return v
+
 class CouponUpdate(BaseModel):
     """Schema for updating a coupon"""
     description: Optional[str] = None
@@ -92,6 +101,16 @@ class CouponUpdate(BaseModel):
             and (v <= 0 or v > 100)
         ):
             raise ValueError('Percentage discount must be between 0 and 100')
+        return v
+
+    @validator('valid_until')
+    def validate_window_order(cls, v, values):
+        # Same rule as create; on update the router merges with stored
+        # values, so this only catches both-fields-in-payload inversions —
+        # the router re-checks the merged result.
+        frm = values.get('valid_from')
+        if v is not None and frm is not None and v < frm:
+            raise ValueError('valid_until cannot be earlier than valid_from')
         return v
 
 class CouponResponse(BaseModel):

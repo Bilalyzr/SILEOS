@@ -1,13 +1,13 @@
 """
 Admin Messages Router - Send messages from admin to students
 """
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 from typing import List, Optional, Literal
 from sqlalchemy.orm import Session
 from datetime import datetime, timezone
 
-from app.core.database import get_db
+from app.core.database import get_db, SessionLocal
 from app.models.user import User
 from app.models.admin_message import AdminMessage
 from app.models.company import Company
@@ -89,9 +89,48 @@ async def get_sent_messages(
     return result
 
 
+def _deliver_emails_background(
+    message_ids: list[int],
+    recipients: list[tuple[str, str]],
+    subject: str,
+    body: str,
+    sender_name: str,
+):
+    """Send the emails after the HTTP response and stamp each row's status.
+
+    SMTP used to run inline: dozens of recipients × per-send latency made the
+    send request take minutes. Rows are already committed with
+    email_status="pending"; this owns its own session.
+    """
+    db = SessionLocal()
+    try:
+        results = EmailService.send_admin_message_emails(
+            recipients=recipients,
+            subject=subject,
+            body=body,
+            sender_name=sender_name,
+        )
+        for mid, (email, _name) in zip(message_ids, recipients):
+            row = db.query(AdminMessage).filter(AdminMessage.id == mid).first()
+            if not row:
+                continue
+            if not email:
+                row.email_status = "no_email"
+            elif results.get(email):
+                row.email_status = "sent"
+            else:
+                row.email_status = "failed"
+        db.commit()
+    except Exception:
+        db.rollback()
+    finally:
+        db.close()
+
+
 @router.post("/", status_code=201)
 async def send_message(
     payload: MessageCreate,
+    background: BackgroundTasks,
     current_user: User = Depends(AuthService.require_admin),
     db: Session = Depends(get_db),
 ):
@@ -119,23 +158,22 @@ async def send_message(
         subject=payload.subject,
         body=payload.body,
     )
-
-    # Deliver by email as well — the in-app row alone was why admins saw the
-    # message under "Recently sent" while the student never received anything.
-    if to_email:
-        delivered = EmailService.send_admin_message_email(
-            to_email=to_email,
-            recipient_name=to_name,
-            subject=payload.subject,
-            body=payload.body,
-            sender_name=_sender_name(current_user),
-        )
-        message.email_status = "sent" if delivered else "failed"
-    else:
-        message.email_status = "no_email"
+    # Email delivery happens after the response; the row lands immediately so
+    # the admin sees the message under "Recently sent" right away.
+    message.email_status = "pending" if to_email else "no_email"
 
     db.add(message)
     db.commit()
+
+    if to_email:
+        background.add_task(
+            _deliver_emails_background,
+            [message.id],
+            [(to_email, to_name)],
+            payload.subject,
+            payload.body,
+            _sender_name(current_user),
+        )
 
     return {"status": "sent", "id": message.id, "email_status": message.email_status}
 
@@ -143,15 +181,16 @@ async def send_message(
 @router.post("/bulk", status_code=201)
 async def send_bulk_message(
     payload: BulkMessageCreate,
+    background: BackgroundTasks,
     current_user: User = Depends(AuthService.require_admin),
     db: Session = Depends(get_db),
 ):
     """
     Send bulk message to multiple users or all interns in a company.
 
-    Each recipient gets an in-app message row *and* an email. Previously only
-    the row was written, so the admin saw the message under "Recently sent"
-    while nothing reached the student's inbox.
+    Each recipient gets an in-app message row immediately; the SMTP fan-out
+    runs in the background (it used to run inline, so a message to a whole
+    company held the request for the full per-recipient SMTP loop).
     """
     failed = []
 
@@ -189,56 +228,41 @@ async def send_bulk_message(
             "status": "sent",
             "sent_count": 0,
             "failed_count": len(failed),
-            "email_sent_count": 0,
-            "email_failed_count": 0,
             "failed": failed,
         }
 
-    # One SMTP connection for the whole batch.
-    recipients = [
-        (u.user_email or "", _recipient_name(u))
-        for u in target_users.values()
-    ]
-    email_results = EmailService.send_admin_message_emails(
-        recipients=recipients,
-        subject=payload.subject,
-        body=payload.body,
-        sender_name=_sender_name(current_user),
-    )
-
-    email_sent = 0
-    email_failed = 0
+    message_ids: list[int] = []
+    recipients: list[tuple[str, str]] = []
     for user_id, user in target_users.items():
-        email = user.user_email or ""
-        if not email:
-            status = "no_email"
-            email_failed += 1
-        elif email_results.get(email):
-            status = "sent"
-            email_sent += 1
-        else:
-            status = "failed"
-            email_failed += 1
-
-        db.add(AdminMessage(
+        message = AdminMessage(
             sender_id=current_user.id,
             recipient_type="user",  # Messages always go to individual users
             recipient_id=user_id,
             subject=payload.subject,
             body=payload.body,
-            email_status=status,
-        ))
+            email_status="pending" if (user.user_email or "") else "no_email",
+        )
+        db.add(message)
+        db.flush()  # assign message.id for the background status stamp
+        message_ids.append(message.id)
+        recipients.append((user.user_email or "", _recipient_name(user)))
 
     db.commit()
+
+    background.add_task(
+        _deliver_emails_background,
+        message_ids,
+        recipients,
+        payload.subject,
+        payload.body,
+        _sender_name(current_user),
+    )
 
     return {
         "status": "sent",
         "sent_count": len(target_users),
         "failed_count": len(failed),
-        # Delivery is reported separately: the in-app message always lands, the
-        # email may not (bad address, SMTP down).
-        "email_sent_count": email_sent,
-        "email_failed_count": email_failed,
+        "email_status": "pending",
         "failed": failed,
     }
 

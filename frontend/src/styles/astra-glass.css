@@ -1117,10 +1117,18 @@ body.astra-theme.lk-app {
   position: fixed;
   right: 16px;
   bottom: 16px;
-  z-index: 80;
+  /* Above page chrome and corner widgets (scroll-top z-90, promo cards z-95),
+     below dialogs (scrim z-90/content z-100) so an open modal still wins. */
+  z-index: 96;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   max-width: min(360px, calc(100vw - 32px));
 }
 .learning-preferences > .sf-surface {
+  /* Explicit width: the collapsed control is a 44px icon, and the opened
+     panel must not inherit that narrow width. */
+  width: min(360px, calc(100vw - 32px));
   max-height: 70vh;
   overflow: auto;
   margin-top: 8px;

@@ -162,7 +162,7 @@ export function InstitutionDialog({
     (state.kind === "connect" && !courses.length) ||
     (state.kind === "students" && !selected.length) ||
     (state.kind === "assign" &&
-      !data?.courses.some((c) => c.status === "published"));
+      !data?.courses.some((c) => c.status === "published" || c.status === "publish"));
   return (
     <GlassDialog
       open
@@ -362,7 +362,7 @@ export function InstitutionDialog({
                   Select a course
                 </option>
                 {data?.courses
-                  .filter((c) => c.status === "published")
+                  .filter((c) => c.status === "published" || c.status === "publish")
                   .map((c) => (
                     <option key={c.id} value={c.id}>
                       {c.title}

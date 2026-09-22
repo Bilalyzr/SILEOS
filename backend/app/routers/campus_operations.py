@@ -39,6 +39,7 @@ from app.schemas.campus_operations import (
     TermCreate,
     AttendanceSave,
     AssessmentCreate,
+    AssessmentEdit,
     ScoresSave,
     BrandingSave,
 )
@@ -436,6 +437,79 @@ def scores(
     svc.audit(db, institution_id, user, "scores.saved", a.title)
     svc.save(db)
     return {"saved": len(data.entries)}
+
+
+def _scoped_assessment(db, institution_id, assessment_id, user):
+    """Assessment within this institution, with staff write scope applied."""
+    svc.scope(db, institution_id, user, svc.STAFF, lock=True)
+    a = (
+        db.query(CampusAssessment)
+        .join(InstitutionBatch, InstitutionBatch.id == CampusAssessment.batch_id)
+        .filter(
+            CampusAssessment.id == assessment_id,
+            InstitutionBatch.institution_id == institution_id,
+        )
+        .first()
+    )
+    if not a:
+        raise HTTPException(404, "Assessment not found.")
+    return a
+
+
+@router.put("/{institution_id}/assessments/{assessment_id}")
+def edit_assessment(
+    institution_id: int,
+    assessment_id: int,
+    data: AssessmentEdit,
+    db: Session = Depends(get_db),
+    user=Current,
+):
+    """Edit an assessment's title/max score/due date/term. Assessments used
+    to be create-only; the only "edit" was overwriting scores."""
+    a = _scoped_assessment(db, institution_id, assessment_id, user)
+    if (
+        data.term_id is not None
+        and not db.query(CampusTerm)
+        .filter_by(id=data.term_id, institution_id=institution_id)
+        .first()
+    ):
+        raise HTTPException(404, "Term not found.")
+    before = a.title
+    if data.title is not None:
+        a.title = data.title
+    if data.max_score is not None:
+        if db.query(CampusScore).filter(
+            CampusScore.assessment_id == a.id, CampusScore.score > data.max_score
+        ).first():
+            raise HTTPException(
+                422, "A recorded score exceeds the new maximum. Adjust scores first."
+            )
+        a.max_score = data.max_score
+    if data.due_on is not None:
+        a.due_on = data.due_on
+    if data.term_id is not None:
+        a.term_id = data.term_id
+    svc.audit(db, institution_id, user, "assessment.edited", f"{before} → {a.title}")
+    svc.save(db)
+    return {"id": a.id}
+
+
+@router.delete("/{institution_id}/assessments/{assessment_id}")
+def delete_assessment(
+    institution_id: int,
+    assessment_id: int,
+    db: Session = Depends(get_db),
+    user=Current,
+):
+    """Delete an assessment with its scores. Score rows are removed first —
+    the FK has no ondelete cascade and orphaned scores would linger."""
+    a = _scoped_assessment(db, institution_id, assessment_id, user)
+    db.query(CampusScore).filter(CampusScore.assessment_id == a.id).delete()
+    title = a.title
+    db.delete(a)
+    svc.audit(db, institution_id, user, "assessment.deleted", title)
+    svc.save(db)
+    return {"deleted": assessment_id}
 
 
 def resource_scope(db, institution_id, user):

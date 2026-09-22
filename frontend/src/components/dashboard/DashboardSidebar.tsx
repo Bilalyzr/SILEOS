@@ -370,6 +370,15 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
               >
                 <Settings className="w-4 h-4 text-slate-500" /> Profile settings
               </Link>
+              {/* Growth OS (2026-09-20 rc1): account-menu entry to the
+                  customer services/billing surface. */}
+              <Link
+                to="/business-services"
+                onClick={() => setMenuOpen(false)}
+                className="flex items-center gap-2 px-3 py-2 text-sm text-secondary-800 rounded-md hover:bg-orange-50"
+              >
+                <ExternalLink className="w-4 h-4 text-orange-600" /> Services & billing
+              </Link>
               <Link
                 to="/communication-preferences"
                 onClick={() => setMenuOpen(false)}

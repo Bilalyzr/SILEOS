@@ -1,0 +1,45 @@
+import { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { growthAPI, type GrowthInvoice, type GrowthOffer } from '@/api/growth';
+import { plannerError } from '@/api/planner';
+import { openRazorpay } from '@/lib/razorpayCheckout';
+import type { OnlineCheckout } from '@/api/campus-os';
+import { PageLayout, PageHeader } from '@/components/design-system/PageLayout';
+import { GrowthCustomerLifecycle } from '@/components/GrowthCustomerLifecycle';
+
+const button = 'rounded-xl bg-gradient-to-r from-orange-600 to-amber-500 px-4 py-2 font-semibold text-white disabled:opacity-50';
+type Quote = GrowthOffer & { quoted_amount: number; experiences: { assignment_id: number; kind: string; headline: string; message: string }[] };
+export default function BusinessServicesPage() {
+  const [offers, setOffers] = useState<GrowthOffer[]>([]);
+  const [billing, setBilling] = useState<{ tenants: { id: number; name: string }[]; invoices: GrowthInvoice[] }>({ tenants: [], invoices: [] });
+  const [tenant, setTenant] = useState(''); const [quote, setQuote] = useState<Quote | null>(null);
+  const [error, setError] = useState(''); const [notice, setNotice] = useState(''); const [busy, setBusy] = useState(false);
+  const [consent, setConsent] = useState(false);
+  const refresh = useCallback(async () => { const [o, b] = await Promise.all([growthAPI.offers(), growthAPI.get<typeof billing>('/my-billing')]); setOffers(o); setBilling(b); }, []);
+  useEffect(() => { refresh().catch(e => setError(plannerError(e))); }, [refresh]);
+  const run = async (fn: () => Promise<unknown>) => { setBusy(true); setError(''); setNotice(''); try { await fn(); } catch (e) { setError(plannerError(e)); } finally { setBusy(false); } };
+  const inspect = async (offer: GrowthOffer) => {
+    if (consent) {
+      const query = new URLSearchParams(window.location.search);
+      await growthAPI.post('/touches', { event_key: crypto.randomUUID(), kind: 'offer_view', source: query.get('utm_source')?.slice(0, 80) || 'direct', medium: query.get('utm_medium')?.slice(0, 80) || '', campaign: query.get('utm_campaign')?.slice(0, 100) || '', offer_id: offer.id, consent: true });
+    }
+    setQuote(await growthAPI.post(`/offers/${offer.id}/quote`));
+  };
+  const pay = async (id: number) => {
+    const checkout: OnlineCheckout = await growthAPI.post(`/invoices/${id}/checkout`);
+    await openRazorpay(checkout, { onDismiss: () => setNotice('Checkout closed. You can safely return to this invoice.'), onSuccess: result => { void run(async () => { await growthAPI.post(`/invoices/${id}/verify`, result); await refresh(); setNotice('Payment verified. Your service is queued for fulfillment.'); }); } });
+  };
+  return <PageLayout header={<PageHeader><div><p className="text-xs font-bold uppercase tracking-widest text-orange-600">SashaInfinity Business</p><h1 className="mt-2 text-3xl font-bold">Build your learning advantage.</h1><p className="mt-2 text-slate-600">Immersive experiences, institution operations and career-ready skills.</p></div></PageHeader>}>
+    <div className="space-y-6">
+      {error && <p role="alert" className="rounded-xl bg-red-50 p-4 text-red-800">{error}</p>}{notice && <p role="status" className="rounded-xl bg-orange-50 p-4 text-orange-900">{notice}</p>}
+      <div className="rounded-2xl bg-gradient-to-r from-orange-600 to-amber-500 p-6 text-white"><h2 className="text-2xl font-bold">One account. Three possibilities.</h2><p className="mt-2">Choose a service, review your agreement, and pay a finalized invoice securely.</p></div>
+      <label className="block text-sm text-slate-600"><input className="mr-2 accent-orange-500" type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} />Allow campaign attribution for this visit. Purchasing does not require marketing tracking.</label>
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">{offers.map(o => <article key={o.id} className="flex flex-col rounded-2xl border border-orange-100 bg-white p-6 shadow-sm"><p className="text-xs font-bold uppercase tracking-widest text-orange-600">{o.business_vertical}</p><h2 className="mt-3 text-xl font-bold">{o.name}</h2><p className="my-3 flex-1 text-sm text-slate-600">{o.description}</p><p className="mb-4 font-semibold">{o.currency} {o.unit_amount.toLocaleString('en-IN')} <span className="text-xs font-normal text-slate-500">· {o.billing_model} · taxes reviewed separately</span></p><button className={button} disabled={busy} onClick={() => run(() => inspect(o))}>Review service</button></article>)}</div>
+      {offers.length === 0 && <p>Services will appear here when published by the SashaInfinity team.</p>}
+      {quote && <section aria-label="Service agreement" className="rounded-2xl border-2 border-orange-300 bg-orange-50/50 p-6"><h2 className="text-xl font-bold">{quote.name}</h2>{quote.experiences.map(e => <div key={e.assignment_id} className="mt-3"><h3 className="font-semibold">{e.headline}</h3><p>{e.message}</p></div>)}<p className="my-4 font-semibold">Quoted base amount: {quote.currency} {quote.quoted_amount.toLocaleString('en-IN')}</p><p className="mb-4 text-sm text-slate-600">The agreement snapshots your price when accepted. A reviewed tax invoice must be issued before payment. Physical services and licenses require fulfillment confirmation.</p><label className="block text-sm">Billing workspace<select className="my-2 block rounded-xl border p-3" value={tenant} onChange={e => setTenant(e.target.value)}><option value="">Choose workspace</option>{billing.tenants.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}</select></label>{billing.tenants.length === 0 && <p className="mb-3 text-sm">You need owner or finance access to a customer workspace. <Link className="text-orange-700 underline" to="/institutions">Open institutions</Link> or request a consultation below.</p>}<button className={button} disabled={busy || !tenant} onClick={() => run(async () => { await growthAPI.post(`/offers/${quote.id}/accept`, { tenant_id: Number(tenant), billing_interval: quote.billing_model === 'subscription' ? 'monthly' : null }); setNotice('Agreement recorded. The team will review tax and fulfillment details before issuing your invoice.'); setQuote(null); })}>Accept agreement{quote.billing_model === 'subscription' ? ' · monthly billing' : ''}</button></section>}
+      <section className="rounded-2xl border border-orange-100 bg-white p-6"><h2 className="mb-4 text-xl font-bold">Your invoices</h2>{billing.invoices.length === 0 && <p>No invoices for your billing workspaces.</p>}{billing.invoices.map(i => <div key={i.id} className="flex flex-wrap items-center justify-between gap-3 border-t py-4"><div className="text-sm"><p className="font-semibold">{i.invoice_number}</p><p>{i.currency} {i.total_amount} · {i.status} · Due {i.due_on}</p></div><div className="flex flex-wrap gap-2"><button className="rounded-xl border px-3 py-2 text-sm" disabled={busy} onClick={() => run(() => growthAPI.invoice(i.id))}>Download invoice</button>{['issued', 'overdue'].includes(i.status) && <><button className="rounded-xl border px-3 py-2 text-sm" disabled={busy} onClick={() => run(async () => { await growthAPI.post(`/invoices/${i.id}/reconcile`); await refresh(); setNotice('Payment status refreshed.'); })}>Check payment</button><button className={button} disabled={busy} onClick={() => run(() => pay(i.id))}>Pay securely</button></>}</div></div>)}</section>
+      <section className="rounded-2xl border border-orange-100 bg-white p-6"><h2 className="mb-4 text-xl font-bold">Plan with our team</h2><form className="grid gap-3 sm:grid-cols-2" onSubmit={e => { e.preventDefault(); const f = Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>; void run(async () => { await growthAPI.post('/leads', { name: f.name, email: f.email, company: f.company, business_vertical: f.business_vertical, consent: true, tenant_id: tenant ? Number(tenant) : null }); setNotice('Your request is in the SashaInfinity sales inbox.'); }); }}><input aria-label="Your name" name="name" required minLength={2} maxLength={120} className="rounded-xl border p-3" placeholder="Your name" /><input aria-label="Work email" name="email" type="email" required className="rounded-xl border p-3" placeholder="Work email" /><input aria-label="Institution or company" name="company" maxLength={180} className="rounded-xl border p-3" placeholder="Institution / company" /><select aria-label="Interested pillar" name="business_vertical" className="rounded-xl border p-3"><option value="meiporul">Meiporul · Immersive learning</option><option value="seyappaduporul">Seyappaduporul · Institution operations</option><option value="utporul">Utporul · Skills & careers</option></select><label className="text-sm"><input type="checkbox" required className="mr-2 accent-orange-500" />I agree to be contacted about this request.</label><button className={button} disabled={busy}>Request consultation</button></form></section>
+      <GrowthCustomerLifecycle />
+    </div>
+  </PageLayout>;
+}

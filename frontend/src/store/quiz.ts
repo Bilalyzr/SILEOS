@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { Quiz, QuizAttempt, QuizQuestion, QuizQuestionAnswer } from '@/types'
+import { Quiz, QuizAttempt, QuizQuestion } from '@/types'
 import { quizAPI } from '@/api/quiz'
 
 interface QuizState {
@@ -35,6 +35,11 @@ interface QuizState {
   getQuizResults: (attemptId: number) => Promise<QuizAttempt>
   retakeQuiz: () => Promise<void>
   clearError: () => void
+
+  // Timer management
+  startTimer: () => void
+  stopTimer: () => void
+  timer: NodeJS.Timeout | null
 }
 
 export const useQuizStore = create<QuizState>((set, get) => ({
@@ -373,7 +378,7 @@ export const useQuizSelectors = () => {
       : '',
 
     // Quiz completion status
-    isQuizComplete: store.answeredQuestions === store.questions.length,
+    isQuizComplete: Object.keys(store.answers).length === store.questions.length,
 
     // Results summary (if available)
     resultsSummary: store.quizResults ? {

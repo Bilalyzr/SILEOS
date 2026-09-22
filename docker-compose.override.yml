@@ -6,13 +6,14 @@ services:
     ports:
       - "3000:3000"
 
-  # The base compose never passes these into the backend container, but the
-  # 2026-09-12 snapshot's fail-fast guards (routers/player.py VIDEO_SECRET,
-  # main.py JITSI_JWT_SECRET + INTERNAL_TOKEN) refuse to boot in
-  # ENVIRONMENT=production without them. Values come from the root .env.
+  # Vars the app reads via plain os.getenv()/config but the base compose file
+  # never passes into the container (the root .env is only used for compose
+  # substitution, it is not mounted into /app). VIDEO_SECRET is boot-critical
+  # in ENVIRONMENT=production — player.py refuses to start without it.
   backend:
     environment:
       - VIDEO_SECRET=${VIDEO_SECRET}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
       - JITSI_JWT_SECRET=${JITSI_JWT_SECRET}
       - JITSI_PUBLIC_URL=${JITSI_PUBLIC_URL:-https://meet.jit.si}
       - JITSI_JWT_APP_ID=${JITSI_JWT_APP_ID:-sashainfinity}
@@ -23,6 +24,15 @@ services:
   recording-worker:
     environment:
       - INTERNAL_TOKEN=${INTERNAL_TOKEN}
+      - JITSI_PUBLIC_URL=${JITSI_PUBLIC_URL:-}
+
+  runtime-worker:
+    environment:
+      - VIDEO_SECRET=${VIDEO_SECRET}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - JITSI_JWT_SECRET=${JITSI_JWT_SECRET}
+      - INTERNAL_TOKEN=${INTERNAL_TOKEN}
+      - JITSI_PUBLIC_URL=${JITSI_PUBLIC_URL:-}
 
   # The production nginx/conf.d has `listen 443 ssl` blocks pointing at aaPanel
   # cert paths (/etc/panel-ssl/...) that don't exist on a dev box, which makes

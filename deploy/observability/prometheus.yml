@@ -1,0 +1,15 @@
+global:
+  scrape_interval: 30s
+  evaluation_interval: 30s
+rule_files:
+  - /etc/prometheus/alerts.yml
+scrape_configs:
+  - job_name: sasha-runtime
+    metrics_path: /api/v1/internal/observability/metrics
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/metrics-token
+    static_configs:
+      - targets: [backend:8000]
+# Configure an Alertmanager target and receiver before enabling notifications.
+# Rules can be inspected locally in Prometheus without sending any messages.

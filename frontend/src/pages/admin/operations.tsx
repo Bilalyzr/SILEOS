@@ -1,5 +1,11 @@
 import { PageLayout, PageHeader } from "@/components/design-system/PageLayout";
 import {LaunchReadiness} from '@/components/admin/LaunchReadiness';
+import { RuntimeMonitor } from '@/components/admin/RuntimeMonitor';
+import { BusinessPortfolio } from "@/components/admin/BusinessPortfolio";
+import { CommercialControlPlane } from "@/components/admin/CommercialControlPlane";
+import { GrowthControlPlane } from "@/components/admin/GrowthControlPlane";
+import { TenantControlPlane } from "@/components/admin/TenantControlPlane";
+import { MeiporulOperationsPanel } from "@/components/admin/MeiporulOperationsPanel";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Activity, Download, RefreshCw } from "lucide-react";
@@ -11,15 +17,15 @@ import {
   type AdminRows,
 } from "@/api/operations";
 import { plannerError } from "@/api/planner";
+import { businessDate } from "@/utils/businessTime";
 
 const input = "rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm";
 const button = input + " font-medium disabled:opacity-40";
 const box = "rounded-xl border bg-white p-5";
-const dateString = (date: Date) => date.toISOString().slice(0, 10);
 
 export default function OperationsCenter() {
   const [params, setParams] = useSearchParams();
-  const view = params.get("view") || "daily";
+  const view = params.get("view") || "portfolio";
   const [summary, setSummary] = useState<OperationsSummary | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -48,11 +54,19 @@ export default function OperationsCenter() {
     };
   }, [load]);
   const tabs = [
+    ["portfolio", "Business portfolio"],
+    ["tenants", "Tenants & access"],
+    ["commercial", "Commercial"],
+    ["growth", "Growth OS"],
+    ["meiporul", "Meiporul"],
+    ["seyappaduporul", "Seyappaduporul"],
+    ["utporul", "Utporul"],
     ["daily", "Daily operations"],
-    ["tables", "People & courses"],
+    ["tables", "Platform inventory"],
     ["outcomes", "Learning outcomes"],
     ["revenue", "Revenue"],
     ["health", "System health"],
+    ["runtime", "Runtime monitor"],
     ["readiness", "Launch readiness"],
   ];
   return (
@@ -63,10 +77,10 @@ export default function OperationsCenter() {
             <p className="text-xs font-semibold uppercase tracking-widest text-orange-700">
               Administration
             </p>
-            <h1 className="mt-2 text-3xl font-bold">Operations Center</h1>
+            <h1 className="mt-2 text-3xl font-bold">Sasha Control Center</h1>
             <p className="mt-2 text-slate-600">
-              Priorities, learning results, revenue and service health in one
-              workspace.
+              Control all three business pillars with one reporting, people,
+              content, revenue, and service-health layer.
             </p>
           </div>
           <button
@@ -109,7 +123,20 @@ export default function OperationsCenter() {
           minute
         </p>
       )}
-      {view === "readiness" ? <LaunchReadiness/> : view === "tables" ? (
+      {view === "growth" ? <GrowthControlPlane /> : view === "runtime" ? <RuntimeMonitor /> : view === "portfolio" ? <BusinessPortfolio /> : view === "tenants" ? (
+        <TenantControlPlane />
+      ) : view === "commercial" ? (
+        <CommercialControlPlane />
+      ) : view === "meiporul" ? (
+        <div className="space-y-6">
+          <BusinessPortfolio focus="meiporul" />
+          <MeiporulOperationsPanel />
+        </div>
+      ) : view === "seyappaduporul" ? (
+        <BusinessPortfolio focus="seyappaduporul" />
+      ) : view === "utporul" ? (
+        <BusinessPortfolio focus="utporul" />
+      ) : view === "readiness" ? <LaunchReadiness/> : view === "tables" ? (
         <AdminDataTable />
       ) : view === "revenue" ? (
         <RevenueView />
@@ -383,7 +410,23 @@ function AdminDataTable() {
           ]
         : dataset === "enrollments"
           ? ["enrolled", "completed", "cancelled", "suspended"]
-          : ["active", "inactive"];
+          : dataset === "students" || dataset === "instructors"
+            ? ["active", "inactive"]
+            : dataset === "ebooks"
+              ? ["draft", "published"]
+              : dataset === "three_d_models"
+                ? ["library", "private"]
+                : dataset === "virtual_labs"
+                  ? ["published", "draft"]
+                  : dataset === "geogebra"
+                    ? ["available"]
+                    : dataset === "certificates"
+                      ? ["valid", "invalid"]
+                      : dataset === "live_classes"
+                        ? ["scheduled", "live", "ended", "cancelled"]
+                        : dataset === "exam_papers"
+                          ? ["awaiting_payment", "queued", "processing", "ready", "failed"]
+                          : ["draft", "pending", "publish", "published"];
   async function exportCsv() {
     try {
       downloadBlob(
@@ -410,6 +453,15 @@ function AdminDataTable() {
           >
             {[
               "courses",
+              "lessons",
+              "ebooks",
+              "three_d_models",
+              "virtual_labs",
+              "geogebra",
+              "live_classes",
+              "quizzes",
+              "certificates",
+              "exam_papers",
               "students",
               "instructors",
               "orders",
@@ -559,9 +611,9 @@ function AdminDataTable() {
 
 function RevenueView() {
   const [start, setStart] = useState(
-    dateString(new Date(Date.now() - 30 * 86400000)),
+    businessDate(-30),
   );
-  const [end, setEnd] = useState(dateString(new Date()));
+  const [end, setEnd] = useState(businessDate());
   const [report, setReport] = useState<RevenueReport | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);

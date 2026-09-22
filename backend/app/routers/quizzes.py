@@ -353,17 +353,29 @@ def _not_retired():
     return or_(QuizQuestion.is_retired.is_(None), QuizQuestion.is_retired.is_(False))
 
 
-def _parse_window(value):
-    """ISO string / '' / None -> aware datetime or None (422 on garbage)."""
+def _parse_window(value, field_name="date/time"):
+    """ISO string / '' / None -> aware datetime or None (422 on garbage).
+
+    A *close* time in the past is rejected: a quiz that already closed can
+    never be attempted, and silently saving one publishes a dead window.
+    Open times may be in the past (a quiz that is already open is valid)."""
     if value in (None, "", 0):
         return None
     if isinstance(value, datetime):
-        return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
-    try:
-        dt = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
-    except ValueError:
-        raise HTTPException(status_code=422, detail=f"Invalid date/time: {value!r}")
-    return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
+        dt = value if value.tzinfo else value.replace(tzinfo=timezone.utc)
+    else:
+        try:
+            dt = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        except ValueError:
+            raise HTTPException(status_code=422, detail=f"Invalid {field_name}: {value!r}")
+        dt = dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
+    if field_name == "quiz_available_until":
+        if dt < datetime.now(dt.tzinfo) - timedelta(minutes=5):
+            raise HTTPException(
+                status_code=422,
+                detail="Close time cannot be in the past.",
+            )
+    return dt
 
 
 def _iso(dt):
@@ -444,7 +456,7 @@ async def create_quiz(
         quiz_questions_order=quiz_data.get("randomizeQuestions", False) and "rand" or "asc",
         quiz_max_questions_for_take=int(quiz_data.get("maxQuestionsForTake") or 0),
         quiz_available_from=_parse_window(quiz_data.get("availableFrom")),
-        quiz_available_until=_parse_window(quiz_data.get("availableUntil")),
+        quiz_available_until=_parse_window(quiz_data.get("availableUntil"), field_name="quiz_available_until"),
         quiz_feedback_mode=normalize_feedback_mode(quiz_data.get("feedbackMode")),
         interactive_modules=validated_modules,
     )
@@ -855,7 +867,7 @@ async def update_quiz(
         if "availableFrom" in quiz_data:
             quiz.quiz_available_from = _parse_window(quiz_data.get("availableFrom"))
         if "availableUntil" in quiz_data:
-            quiz.quiz_available_until = _parse_window(quiz_data.get("availableUntil"))
+            quiz.quiz_available_until = _parse_window(quiz_data.get("availableUntil"), field_name="quiz_available_until")
         # Preserve-on-absent: only touch the feedback policy when the caller
         # actually sent `feedbackMode`. A PUT that omits the key must not
         # silently reset an existing policy back to the default (same
@@ -1139,6 +1151,15 @@ async def _submit_quiz_impl(
     # attempt_info bookkeeping (_pause, _graded_answers, _manual_feedback)
     # and must never be settable by a student's answer payload.
     raw_answers_data = submission_data.get("answers", {}) or {}
+    # answers must map question_id -> answer. Anything else (a list, a
+    # string, ...) used to blow up below with AttributeError → 500; reject
+    # it as a 422 instead so a malformed client payload is never a server
+    # error.
+    if not isinstance(raw_answers_data, dict):
+        raise HTTPException(
+            status_code=422,
+            detail="'answers' must be an object mapping question ids to answers",
+        )
     answers_data = {
         k: v for k, v in raw_answers_data.items() if not str(k).startswith("_")
     }

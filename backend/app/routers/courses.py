@@ -453,6 +453,26 @@ def course_slug_availability(slug: str, exclude_course_id: Optional[int] = None,
     return {'available': available, 'slug': normalized, 'message': 'Available' if available else 'This course link is already in use.'}
 
 
+# NOTE: this literal route MUST stay above @router.get("/{course_ref}").
+# FastAPI matches in registration order and course_ref is a str, so while
+# /categories sat below it every request was answered by get_course(), which
+# looked for a course whose slug is literally "categories" and returned 404.
+@router.get("/categories", response_model=List[Dict[str, Any]])
+def get_categories(db: Session = Depends(get_db)):
+    """Get all course categories"""
+    categories = db.query(CourseCategory).order_by(CourseCategory.term_order, CourseCategory.name).all()
+    result = []
+    for cat in categories:
+        result.append({
+            "id": cat.id,
+            "name": cat.name,
+            "slug": cat.slug,
+            "description": cat.description,
+            "parent_id": cat.parent_id,
+        })
+    return result
+
+
 @router.get("/{course_ref}", response_model=CourseResponse)
 async def get_course(
     course_ref: str,
@@ -1186,7 +1206,28 @@ async def get_course_lessons(
         Lesson.post_parent == course_id
     ).order_by(Lesson.menu_order).all()
 
-    return [CourseService.format_lesson_response(lesson) for lesson in lessons]
+    # Public-preview lock — same rule as get_course() above: anyone not
+    # enrolled (and not owner/admin) gets non-preview lessons WITHOUT
+    # content/media handles, is_locked=True. Before this, the standalone
+    # lessons endpoint returned full bodies (incl. paid-course content) to
+    # anonymous visitors while the course-detail endpoint locked correctly.
+    is_enrolled = False
+    if current_user:
+        enrollment = db.query(Enrollment).filter(
+            Enrollment.course_id == course_id,
+            Enrollment.user_id == current_user.id
+        ).first()
+        is_enrolled = enrollment is not None and enrollment.enrollment_status not in ['cancelled', 'suspended']
+    full_access = is_enrolled or bool(
+        current_user and (current_user.role in ("admin", "superadmin") or current_user.id == course.post_author)
+    ) or (current_user is not None and can_edit(db, course, current_user))
+
+    formatted = [CourseService.format_lesson_response(lesson) for lesson in lessons]
+    if not full_access:
+        for lesson, lesson_data in zip(lessons, formatted):
+            if not lesson.lesson_preview:
+                CourseService.lock_lesson(lesson_data)
+    return formatted
 
 async def _resolve_youtube_media(
     youtube_url: str,
@@ -2519,22 +2560,6 @@ async def create_course_review(
 
 
 # ==================== CATEGORIES ENDPOINTS ====================
-
-@router.get("/categories", response_model=List[Dict[str, Any]])
-def get_categories(db: Session = Depends(get_db)):
-    """Get all course categories"""
-    categories = db.query(CourseCategory).order_by(CourseCategory.term_order, CourseCategory.name).all()
-    result = []
-    for cat in categories:
-        result.append({
-            "id": cat.id,
-            "name": cat.name,
-            "slug": cat.slug,
-            "description": cat.description,
-            "parent_id": cat.parent_id,
-        })
-    return result
-
 
 @router.get("/categories/{category_id}/courses")
 def get_courses_by_category(

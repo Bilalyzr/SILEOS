@@ -236,6 +236,38 @@ from .institution import (
     InstitutionAudit,
     InstitutionPlanRequest,
 )  # noqa: F401
+from .platform_tenant import (  # noqa: F401
+    PlatformTenant,
+    PlatformTenantMembership,
+    PlatformTenantDomain,
+    PlatformTenantEntitlement,
+    PlatformAuditEvent,
+    PlatformOutboxEvent,
+)
+from .commercial import (  # noqa: F401
+    CommercialInvoiceCounter,
+    CommercialOffer,
+    CommercialContract,
+    CommercialInvoice,
+    RevenueLedgerEvent,
+)
+from .coding_assessment import (  # noqa: F401
+    CodingChallenge,
+    CodingTestCase,
+    CodingSubmission,
+    CodingCaseResult,
+    CodingJudgeJob,
+)
+from .meiporul_operations import (  # noqa: F401
+    ImmersiveLabSite,
+    ImmersiveDevice,
+    ImmersiveSafetyInspection,
+    ImmersiveDeploymentMilestone,
+    ImmersiveServiceTicket,
+)
+from .ai_provider import AiProviderCredential  # noqa: F401
+from .ai_provider_usage import AiProviderUsageEvent  # noqa: F401
+from .tutor_learning_signal import TutorLearningSignal  # noqa: F401
 
 from .campus_operations import (
     CampusTerm,
@@ -266,6 +298,13 @@ from .whatsapp import (  # noqa: F401
     WhatsAppContact,
     WhatsAppMessage,
     WhatsAppStatusReceipt,
+)
+from .communication_automation import (  # noqa: F401
+    AutomationDispatch,
+    CommunicationOutbox,
+    CommunicationProfile,
+    CommunicationTopicPreference,
+    InstitutionAutomationRule,
 )
 from .campus_growth import CampusLead  # noqa: F401
 from .campus_action_center import CampusActionItem  # noqa: F401
@@ -320,3 +359,7 @@ from .campus_hostel import (  # noqa: F401
     CampusHostelVisitor,
 )
 from .tuition_collection import TuitionInvoice, TuitionOnlineOrder  # noqa: F401
+from .runtime import RuntimeJob, RuntimeRun  # noqa: F401
+from .growth import (BillingPolicy, BillingOccurrence, CommercialDelivery, PartnerAccrual, PartnerSettlement,
+    GrowthLead, GrowthTask, MarketingSpend, GrowthTouch, GrowthExperiment, GrowthAssignment,
+    GrowthRecommendation, GrowthValidation)  # noqa: F401

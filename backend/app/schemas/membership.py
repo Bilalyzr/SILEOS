@@ -22,7 +22,8 @@ class SubscribeRequest(BaseModel):
 
 class SubscribeResponse(BaseModel):
     subscription_id: str
-    razorpay_key: str
+    # None when a free tier activated directly (no gateway checkout).
+    razorpay_key: str | None = None
 
 
 class MembershipOut(BaseModel):
@@ -41,7 +42,9 @@ class PlanCreate(BaseModel):
     course_ids: list[int] = []
     period: str = Field(pattern=r"^(daily|weekly|monthly|yearly)$")
     interval: int = Field(default=1, ge=1, le=12)
-    price: float = Field(gt=0)
+    # ge=0: free tiers (price 0) are legitimate — QA assigns "free plans" —
+    # and the router skips the Razorpay plan for them.
+    price: float = Field(ge=0)
     grace_days: int = Field(default=7, ge=0, le=90)
 
 
@@ -56,7 +59,8 @@ class PlanUpdate(BaseModel):
 
 class AdminPlanOut(PlanOut):
     grace_days: int
-    razorpay_plan_id: str
+    # None for free plans, which never get a gateway object.
+    razorpay_plan_id: str | None = None
     is_active: bool
     course_ids: list[int] = []
 

@@ -4,6 +4,7 @@ import { AstraRouteTheme } from "@/components/design-system/AstraRouteTheme";
 import React from "react";
 const LabsPage = lazyPage(() => import("@/pages/labs"));
 const InstitutionsPage = lazyPage(() => import("@/pages/institutions"));
+const BusinessServicesPage = lazyPage(() => import("@/pages/business-services"));
 const CampusForInstitutionsPage = lazyPage(() => import("@/pages/campus-for-institutions"));
 const HelpPage = lazyPage(() => import("@/pages/help"));
 const LabWorkspace = lazyPage(() => import("@/pages/lab-workspace"));
@@ -1209,6 +1210,13 @@ function App() {
                               </AutoRoleLayout>
                             </ProtectedRoute>
                           }
+                        />
+                        {/* Growth OS (2026-09-20 rc1): customer-facing services,
+                            agreements and billing. Same protection shape as
+                            /settings above. */}
+                        <Route
+                          path="/business-services"
+                          element={<ProtectedRoute><AutoRoleLayout><BusinessServicesPage /></AutoRoleLayout></ProtectedRoute>}
                         />
                         <Route
                           path="/communication-preferences"

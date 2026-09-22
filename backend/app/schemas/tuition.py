@@ -9,9 +9,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 from app.schemas.institution import Command
 
 
-# Constraints must live on the Decimal leaf: Field(max_digits=...) applied to
-# `MoneyInput | None` unions raises "Unknown constraint max_digits" on import.
-MoneyInput = Annotated[Decimal, Field(gt=0, max_digits=13, decimal_places=2)]
+MoneyInput = Decimal
 
 
 class FeeComponentCreate(Command):
@@ -19,7 +17,7 @@ class FeeComponentCreate(Command):
         min_length=1, max_length=40, pattern=r"^[A-Za-z0-9][A-Za-z0-9_-]*$"
     )
     name: str = Field(min_length=2, max_length=120)
-    amount: MoneyInput
+    amount: MoneyInput = Field(gt=0, max_digits=13, decimal_places=2)
 
     @field_validator("code")
     @classmethod
@@ -30,7 +28,7 @@ class FeeComponentCreate(Command):
 class InstallmentTemplateCreate(Command):
     name: str = Field(min_length=2, max_length=120)
     due_on: date
-    amount: MoneyInput
+    amount: MoneyInput = Field(gt=0, max_digits=13, decimal_places=2)
 
 
 class FeePlanCreate(Command):
@@ -67,7 +65,7 @@ class FeeAssignmentCreate(Command):
 
 
 class TuitionPaymentCreate(Command):
-    amount: MoneyInput
+    amount: MoneyInput = Field(gt=0, max_digits=13, decimal_places=2)
     paid_at: datetime | None = None
     method: Literal["cash", "bank_transfer", "card", "upi", "cheque", "online"]
     reference: str = Field(default="", max_length=120)
@@ -86,7 +84,7 @@ class InvoiceCreate(Command):
 
 class OnlineOrderCreate(Command):
     installment_id: int | None = Field(default=None, gt=0)
-    amount: MoneyInput | None = None
+    amount: Annotated[MoneyInput, Field(gt=0, max_digits=13, decimal_places=2)] | None = None
 
 
 class OnlineVerify(Command):
@@ -97,7 +95,7 @@ class OnlineVerify(Command):
 
 class TuitionAdjustmentCreate(Command):
     kind: Literal["discount", "waiver"]
-    amount: MoneyInput
+    amount: MoneyInput = Field(gt=0, max_digits=13, decimal_places=2)
     reason: str = Field(min_length=3, max_length=500)
     installment_id: int | None = Field(default=None, gt=0)
 

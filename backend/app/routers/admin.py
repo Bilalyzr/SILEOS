@@ -206,27 +206,56 @@ async def create_membership_plan(
     db: Session = Depends(get_db),
     current_user: User = Depends(AuthService.require_admin),
 ):
-    client = memberships._rzp_client()
-    rzp_plan = client.plan.create({
-        "period": request.period,
-        "interval": request.interval,
-        "item": {
-            "name": request.name,
-            "amount": int(round(request.price * 100)),
-            "currency": "INR",
-        },
-    })
+    # Validate course ids BEFORE any gateway call — a stale id used to hit the
+    # FK on commit and surface as a bare "Internal server error".
+    if not request.all_access:
+        missing = [
+            cid
+            for cid in dict.fromkeys(request.course_ids)
+            if not db.query(Course.id).filter(Course.id == cid).first()
+        ]
+        if missing:
+            raise HTTPException(
+                status_code=400,
+                detail=f"course_ids not found: {missing}",
+            )
+
+    # A free plan needs no gateway object; and an unconfigured/unreachable
+    # gateway must produce a clean 503, not a raw razorpay error -> 500.
+    razorpay_plan_id = None
+    if request.price and request.price > 0:
+        try:
+            client = memberships._rzp_client()
+            rzp_plan = client.plan.create({
+                "period": request.period,
+                "interval": request.interval,
+                "item": {
+                    "name": request.name,
+                    "amount": int(round(request.price * 100)),
+                    "currency": "INR",
+                },
+            })
+            razorpay_plan_id = str(rzp_plan["id"])
+        except HTTPException:
+            raise
+        except Exception as exc:
+            logger.error("Razorpay plan creation failed: %s", exc)
+            raise HTTPException(
+                status_code=502,
+                detail="Payment gateway rejected the plan. Check the Razorpay keys and try again.",
+            )
+
     plan = MembershipPlan(
         name=request.name, description=request.description,
         all_access=request.all_access, period=request.period,
         interval=request.interval, price=request.price,
         grace_days=request.grace_days,
-        razorpay_plan_id=str(rzp_plan["id"]),
+        razorpay_plan_id=razorpay_plan_id,
     )
     db.add(plan)
     db.flush()
     if not request.all_access:
-        for cid in request.course_ids:
+        for cid in dict.fromkeys(request.course_ids):
             db.add(MembershipPlanCourse(plan_id=plan.id, course_id=cid))
     db.commit()
     db.refresh(plan)
@@ -342,21 +371,23 @@ def _admin_bundle_out(db: Session, bundle: Bundle) -> AdminBundleOut:
 
 
 def _validate_paid_course_ids(db: Session, course_ids: list[int]) -> list[int]:
-    """Dedupe (order-preserving) and confirm every id is a PAID course.
+    """Dedupe (order-preserving) and confirm every id is a real, publishable
+    course. Requiring course_price_type == "paid" made every id fail on
+    catalogs whose courses carry the default 'free' price type — the admin
+    picker lists all courses, so the whole feature was unusable. Paid-only
+    bundling is a pricing decision, not an integrity constraint.
     BundleCourse has no unique constraint on (bundle_id, course_id), so this
     is the only guard against duplicate rows / bogus ids reaching the table."""
     deduped = list(dict.fromkeys(course_ids))
-    found_ids = {
-        r[0]
-        for r in db.query(Course.id)
-        .filter(Course.id.in_(deduped), Course.course_price_type == "paid")
-        .all()
-    }
-    missing = [cid for cid in deduped if cid not in found_ids]
+    missing = [
+        cid
+        for cid in deduped
+        if not db.query(Course.id).filter(Course.id == cid).first()
+    ]
     if missing:
         raise HTTPException(
             status_code=400,
-            detail=f"course_ids not found as paid courses: {missing}",
+            detail=f"course_ids not found: {missing}",
         )
     return deduped
 
@@ -448,7 +479,7 @@ def _invoice_out(db: Session, invoice: CompanyInvoice) -> InvoiceOut:
         id=invoice.id,
         invoice_number=invoice.invoice_number,
         company_id=invoice.company_id,
-        company_name=company.name if company else "",
+        company_name=company.name if company else f"Company #{invoice.company_id} (record removed)",
         status=invoice.status.value,
         subtotal=float(invoice.subtotal or 0),
         cgst=float(invoice.cgst or 0),
@@ -4999,7 +5030,7 @@ async def list_internship_requests(
         items.append(InternshipRequestItem(
             id=r.id,
             company_id=r.company_id,
-            company_name=company.name if company else "",
+            company_name=company.name if company else f"Company #{invoice.company_id} (record removed)",
             requested_by=r.requested_by,
             requester_name=requester.display_name if requester else "",
             title=r.title,

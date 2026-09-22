@@ -50,8 +50,54 @@ export interface RevenueReport {
   refunds_missing_timestamp: number;
   note: string;
 }
+export interface PortfolioCurrency {
+  currency: string;
+  captured: number;
+  refunded: number;
+  net_cash: number;
+}
+export interface PortfolioRevenueStream {
+  key: string;
+  label: string;
+  currencies: PortfolioCurrency[];
+}
+export interface BusinessPortfolioReport {
+  from: string;
+  to: string;
+  as_of: string;
+  verticals: {
+    key: "meiporul" | "seyappaduporul" | "utporul";
+    code: string;
+    label: string;
+    tamil: string;
+    subdomain: string;
+    mission: string;
+    business_model: string;
+    inventory: { key: string; label: string; value: number }[];
+    revenue: {
+      currencies: PortfolioCurrency[];
+      streams: PortfolioRevenueStream[];
+    };
+  }[];
+  unallocated: {
+    currencies: PortfolioCurrency[];
+    payment_count: number;
+    course_count: number;
+  };
+  resilience: {
+    currency: string;
+    leader: "meiporul" | "seyappaduporul" | "utporul" | null;
+    largest_share_percent: number | null;
+    remaining_if_leader_pauses: number;
+    status: "concentrated" | "balanced_mix" | "no_revenue";
+  }[];
+  reporting_contract: {
+    operating_sources: string[];
+    rule: string;
+  };
+}
 export interface AdminRow {
-  id: number;
+  id: number | string;
   name: string;
   detail: string;
   status: string;
@@ -71,6 +117,12 @@ export const operationsAPI = {
   revenue: async (start: string, end: string) =>
     (
       await api.get<RevenueReport>("/admin/operations/revenue", {
+        params: { start, end },
+      })
+    ).data,
+  portfolio: async (start: string, end: string) =>
+    (
+      await api.get<BusinessPortfolioReport>("/admin/operations/portfolio", {
         params: { start, end },
       })
     ).data,

@@ -85,15 +85,11 @@ export function AdminMessagesPage() {
         subject: subject.trim(),
         body: body.trim(),
       });
-      // Report the email outcome separately — the in-app message always saves,
-      // but the email is what the student actually notices.
-      if (result.email_failed_count > 0) {
-        toast.error(
-          `Sent to ${result.sent_count} recipients, but ${result.email_failed_count} email${result.email_failed_count !== 1 ? "s" : ""} could not be delivered`,
-        );
-      } else {
+      // Email delivery now runs in the background — the in-app rows are saved
+      // instantly and each row's Emailing… badge updates when delivery lands.
+      {
         toast.success(
-          `Sent and emailed to ${result.sent_count} recipient${result.sent_count !== 1 ? "s" : ""}${result.failed_count > 0 ? ` (${result.failed_count} skipped)` : ""}`,
+          `Sent to ${result.sent_count} recipient${result.sent_count !== 1 ? "s" : ""}${result.failed_count > 0 ? ` (${result.failed_count} skipped)` : ""} — emailing in the background`,
         );
       }
       setSubject("");
@@ -328,19 +324,25 @@ export function AdminMessagesPage() {
                           className={`text-[11px] px-1.5 py-0.5 rounded-full font-medium ${
                             msg.email_status === "sent"
                               ? "bg-green-100 text-green-700"
-                              : "bg-red-100 text-red-700"
+                              : msg.email_status === "pending"
+                                ? "bg-amber-100 text-amber-700"
+                                : "bg-red-100 text-red-700"
                           }`}
                           title={
                             msg.email_status === "sent"
                               ? "Email delivered to the recipient"
-                              : msg.email_status === "no_email"
-                                ? "Recipient has no email address on file"
-                                : "Email delivery failed"
+                              : msg.email_status === "pending"
+                                ? "Email is being delivered in the background"
+                                : msg.email_status === "no_email"
+                                  ? "Recipient has no email address on file"
+                                  : "Email delivery failed"
                           }
                         >
                           {msg.email_status === "sent"
                             ? "Emailed"
-                            : "Email failed"}
+                            : msg.email_status === "pending"
+                              ? "Emailing…"
+                              : "Email failed"}
                         </span>
                       )}
                     </div>

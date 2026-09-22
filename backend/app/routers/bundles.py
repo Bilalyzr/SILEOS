@@ -24,16 +24,17 @@ router = APIRouter()
 
 
 def _bundle_out(db: Session, bundle: Bundle) -> BundleOut:
-    """Build the public course list for a bundle from currently published,
-    paid courses only — a course pulled from sale or unpublished after the
-    bundle was created silently drops out of the catalog view (fulfillment
-    is unaffected; it reads the order-notes snapshot)."""
+    """Build the public course list for a bundle from currently published
+    courses — a course unpublished after the bundle was created silently
+    drops out of the catalog view (fulfillment is unaffected; it reads the
+    order-notes snapshot). The former extra course_price_type == "paid"
+    filter hid every bundle member on catalogs whose courses carry the
+    default 'free' price type."""
     rows = (
         db.query(Course)
         .join(BundleCourse, BundleCourse.course_id == Course.id)
         .filter(
             BundleCourse.bundle_id == bundle.id,
-            Course.course_price_type == "paid",
             Course.post_status.in_(PUBLISHED_STATUSES),
         )
         .all()
