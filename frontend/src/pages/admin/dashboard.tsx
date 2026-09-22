@@ -26,13 +26,11 @@ import {
   ArrowUpRight,
   Activity,
   Sparkles,
-  AlertTriangle,
 } from "lucide-react";
 import {
   dashboardAPI,
   AdminDashboardData,
   RevenuePoint,
-  type AiProviderUsageReport,
 } from "@/api/dashboard";
 import { useAuth } from "@/hooks/use-auth";
 import {
@@ -69,7 +67,6 @@ const REV_PERIODS: { value: RevPeriod; label: string; days: number }[] = [
   { value: "90d", label: "Quarter", days: 90 },
   { value: "1y", label: "Year", days: 365 },
 ];
-const AI_USAGE_WINDOW_DAYS = 14;
 
 export const AdminDashboard: React.FC = () => {
   const { fullName } = useAuth();
@@ -79,12 +76,11 @@ export const AdminDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [revUpdatedAt, setRevUpdatedAt] = useState<Date | null>(null);
-  const [aiUsage, setAiUsage] = useState<AiProviderUsageReport | null>(null);
-  const [aiUsageLoading, setAiUsageLoading] = useState(true);
 
   const periodDays = REV_PERIODS.find((p) => p.value === revPeriod)?.days ?? 30;
 
-  // Pull the real daily net-cash series by business pillar. Silent: used for both
+  // Pull the REAL daily revenue series (completed course payments + internship
+  // vouchers, bucketed by the day each order was paid). Silent: used for both
   // the first load and the background poll, so refreshing never flickers the
   // chart or shows a skeleton.
   const loadRevenue = useCallback(async () => {
@@ -98,18 +94,6 @@ export const AdminDashboard: React.FC = () => {
       setRevPoints((prev) => prev ?? []);
     }
   }, [revPeriod]);
-
-  const loadAiUsage = useCallback(async () => {
-    setAiUsageLoading(true);
-    try {
-      const report = await dashboardAPI.getAiProviderUsage(AI_USAGE_WINDOW_DAYS);
-      setAiUsage(report);
-    } catch {
-      setAiUsage((prev) => prev ?? null);
-    } finally {
-      setAiUsageLoading(false);
-    }
-  }, []);
 
   const fetchDashboard = useCallback(async () => {
     try {
@@ -129,8 +113,7 @@ export const AdminDashboard: React.FC = () => {
 
   useEffect(() => {
     fetchDashboard();
-    loadAiUsage();
-  }, [fetchDashboard, loadAiUsage]);
+  }, [fetchDashboard]);
 
   // Load the revenue series on mount and whenever the period filter changes.
   useEffect(() => {
@@ -146,7 +129,6 @@ export const AdminDashboard: React.FC = () => {
         .getAdminDashboard()
         .then(setData)
         .catch(() => {});
-      loadAiUsage();
     };
     const id = window.setInterval(refresh, REVENUE_REFRESH_MS);
     const onVisible = () => {
@@ -157,28 +139,24 @@ export const AdminDashboard: React.FC = () => {
       window.clearInterval(id);
       document.removeEventListener("visibilitychange", onVisible);
     };
-  }, [loadRevenue, loadAiUsage]);
+  }, [loadRevenue]);
 
   // ----- Revenue chart: real daily series from /admin/revenue-timeseries,
-  // allocated through the same reporting contract as the Control Center.
+  // allocated by source (Courses = COMPLETED orders, Internships = vouchers).
   // When there are genuinely no orders yet (or a brief API hiccup) we draw a
   // true ZERO line across the last 30 real dates — never a mock/random curve. -----
   const revRow = React.useMemo(() => {
     if (revPoints && revPoints.length > 0) {
       return revPoints.map((p) => ({
         x: p.label,
-        meiporul: p.meiporul ?? 0,
-        seyappaduporul: p.seyappaduporul ?? 0,
-        utporul: p.utporul ?? 0,
-        unallocated: p.unallocated ?? 0,
+        courses: p.courses ?? 0,
+        internships: p.internships ?? 0,
       }));
     }
     return lastNDayLabels(periodDays).map((label) => ({
       x: label,
-      meiporul: 0,
-      seyappaduporul: 0,
-      utporul: 0,
-      unallocated: 0,
+      courses: 0,
+      internships: 0,
     }));
   }, [revPoints, periodDays]);
   // Real API values; default to 0 when a stat is absent.
@@ -222,16 +200,6 @@ export const AdminDashboard: React.FC = () => {
   // states (handled below) rather than fabricated sample rows.
   const recentCourses = data?.course_stats?.recent_courses ?? [];
   const recentEnrollments = data?.enrollment_stats?.recent_enrollments ?? [];
-
-  const aiUsageSummary = {
-    attempts: aiUsage?.total_attempts ?? 0,
-    successRate: aiUsage?.success_rate ?? 0,
-    failures: aiUsage?.total_failures ?? 0,
-    totalProviders: aiUsage?.by_provider?.length ?? 0,
-    recentFailures: aiUsage?.recent_failures?.length ?? 0,
-  };
-
-  const topAiProvider = aiUsage?.by_provider?.[0] ?? null;
 
   return (
     <PageLayout
@@ -308,7 +276,7 @@ export const AdminDashboard: React.FC = () => {
       </StaggerGrid>
       <StaggerGrid className="grid grid-cols-1">
         <SectionCard title="Quick actions" icon={Award}>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <QuickAction
               to="/admin/students"
               icon={UserPlus}
@@ -337,13 +305,6 @@ export const AdminDashboard: React.FC = () => {
               label="Analytics"
               sub="Performance"
             />
-            <QuickAction
-              to="/admin/ai-providers"
-              icon={Sparkles}
-              tone="amber"
-              label="AI vault"
-              sub="Providers & health"
-            />
           </div>
         </SectionCard>
       </StaggerGrid>
@@ -352,8 +313,8 @@ export const AdminDashboard: React.FC = () => {
           title={`Revenue, last ${periodDays} days`}
           description={
             revUpdatedAt
-              ? `Live net cash by pillar · updated ${revUpdatedAt.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}`
-              : "Daily consolidated net cash across all business pillars"
+              ? `Live · course + internship orders · updated ${revUpdatedAt.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}`
+              : "Daily revenue trend across all courses and internships"
           }
           icon={Activity}
           action={{ label: "View orders", to: "/admin/orders" }}
@@ -385,24 +346,14 @@ export const AdminDashboard: React.FC = () => {
               data={revRow}
               series={[
                 {
-                  key: "meiporul",
-                  label: "Meiporul (₹)",
+                  key: "courses",
+                  label: "Courses (₹)",
                   color: CHART_COLORS.orange,
                 },
                 {
-                  key: "seyappaduporul",
-                  label: "Seyappaduporul (₹)",
+                  key: "internships",
+                  label: "Internships (₹)",
                   color: CHART_COLORS.sky,
-                },
-                {
-                  key: "utporul",
-                  label: "Utporul (₹)",
-                  color: CHART_COLORS.emerald,
-                },
-                {
-                  key: "unallocated",
-                  label: "Needs classification (₹)",
-                  color: CHART_COLORS.slate,
                 },
               ]}
               xKey="x"
@@ -411,96 +362,7 @@ export const AdminDashboard: React.FC = () => {
             />
           )}
         </SectionCard>
-      </StaggerGrid>
-      <StaggerGrid className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <SectionCard
-          title={`AI routing health (${AI_USAGE_WINDOW_DAYS}d)`}
-          description="Live provider reliability for AI-generated tutoring, quizzes, and suggestions."
-          icon={Activity}
-          action={{ label: "Open vault", to: "/admin/ai-providers" }}
-        >
-          {aiUsageLoading ? (
-            <SkeletonChart />
-          ) : (
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                  <p className="text-2xl font-semibold text-slate-900">
-                    {aiUsageSummary.attempts}
-                  </p>
-                  <p className="mt-1 text-xs text-slate-500">Attempted calls</p>
-                </div>
-                <div className="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
-                  <p className="text-2xl font-semibold text-emerald-700">
-                    {aiUsageSummary.successRate}%
-                  </p>
-                  <p className="mt-1 text-xs text-emerald-700">Success rate</p>
-                </div>
-                <div className="rounded-xl border border-rose-100 bg-rose-50 p-4">
-                  <p className="text-2xl font-semibold text-rose-700">
-                    {aiUsageSummary.failures}
-                  </p>
-                  <p className="mt-1 text-xs text-rose-700">Failed calls</p>
-                </div>
-              </div>
-              {aiUsageSummary.attempts > 0 ? (
-                <>
-                  <p className="text-sm text-slate-600">
-                    Top provider in this window:{" "}
-                    <span className="font-semibold text-slate-900">
-                      {topAiProvider?.provider || "n/a"} · {topAiProvider?.model || "n/a"}
-                    </span>{" "}
-                    ({topAiProvider?.success_rate ?? 0}% success)
-                  </p>
-                  {aiUsageSummary.successRate < 95 ? (
-                    <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-md px-3 py-2 flex items-center gap-1.5">
-                      <AlertTriangle className="w-3.5 h-3.5" />
-                      Review failed provider attempts and rotate keys if needed.
-                    </p>
-                  ) : null}
-                </>
-              ) : (
-                <p className="text-sm text-slate-500">
-                  No attempts were recorded in the last {AI_USAGE_WINDOW_DAYS} days.
-                </p>
-              )}
-              <div className="pt-1">
-                <h4 className="text-sm font-semibold text-slate-700 mb-2">
-                  Recent failures ({aiUsageSummary.recentFailures})
-                </h4>
-                <div className="space-y-2">
-                  {(aiUsage?.recent_failures ?? []).slice(0, 4).map((failure) => (
-                    <p
-                      key={failure.id}
-                      className="text-xs leading-5 rounded-lg bg-slate-50 border border-slate-200 p-2"
-                    >
-                      <span className="font-medium text-slate-700">
-                        {failure.feature}
-                      </span>{" "}
-                      · {failure.provider} · {failure.model}
-                      <span className="ml-2 text-slate-500">
-                        {new Date(failure.created_at).toLocaleString("en-IN", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          day: "2-digit",
-                          month: "short",
-                        })}
-                      </span>
-                      <span className="block text-rose-700 mt-0.5">
-                        {failure.error}
-                      </span>
-                    </p>
-                  ))}
-                  {(aiUsage?.recent_failures ?? []).length === 0 && (
-                    <p className="text-sm text-slate-500">
-                      No recent failures in this period.
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-        </SectionCard>
+
         <SectionCard
           title="Users by role"
           description="Active accounts on the platform"

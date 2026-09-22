@@ -504,14 +504,6 @@ function TaskCard({
               Mark studied
             </button>
           </>
-        ) : task.kind === "review" ? (
-          <button
-            className="si-btn-primary"
-            disabled={busy}
-            onClick={() => onAction("done")}
-          >
-            Mark reviewed
-          </button>
         ) : (
           <button className="si-btn-primary" disabled={busy} onClick={onCheck}>
             {task.session_id ? "Resume check" : "Start check"}

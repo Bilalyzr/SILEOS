@@ -640,6 +640,7 @@ const AssignmentBuilder: React.FC = () => {
                 </label>
                 <input
                   type="datetime-local"
+                  min={new Date().toISOString().slice(0, 16)}
                   value={settings.dueDate}
                   onChange={(e) =>
                     setSettings({ ...settings, dueDate: e.target.value })

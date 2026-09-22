@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Accessibility } from "lucide-react";
 export type LearningLanguage = "en" | "ta";
 export function useLearningLanguage() {
   const [language, setLanguage] = useState<LearningLanguage>(() =>
@@ -26,6 +27,22 @@ export function LearningPreferences() {
   const [motion, setMotion] = useState(
     () => localStorage.getItem("si.reduceMotion") === "1",
   );
+  const rootRef = useRef<HTMLElement | null>(null);
+
+  // The panel floats over page content; an OPEN panel must never permanently
+  // cover controls under it (it sat on the lesson page's "Mark as complete").
+  // Clicking/tapping outside closes it.
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: PointerEvent) => {
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("pointerdown", onDown);
+    return () => document.removeEventListener("pointerdown", onDown);
+  }, [open]);
+
   useEffect(() => {
     document.body.dataset.highContrast = String(contrast);
     document.body.dataset.largeText = String(large);
@@ -35,18 +52,22 @@ export function LearningPreferences() {
     localStorage.setItem("si.reduceMotion", motion ? "1" : "0");
   }, [contrast, large, motion]);
   return (
-    <aside className="learning-preferences" aria-label="Learning preferences">
+    <aside className="learning-preferences" aria-label="Learning preferences" ref={rootRef}>
+      {/* Compact icon toggle: the old wide text button (~200px) covered most
+          of the lesson rail's Mark-as-complete control underneath it. */}
       <button
         type="button"
-        className="sf-secondary"
+        className="sf-secondary learning-preferences-toggle"
         aria-expanded={open}
+        aria-label="Accessibility / அணுகல்தன்மை"
+        title="Accessibility / அணுகல்தன்மை"
         onClick={() => setOpen(!open)}
       >
-        Accessibility / அணுகல்தன்மை
+        <Accessibility aria-hidden="true" />
       </button>
       {open && (
         <div className="sf-surface space-y-3">
-          <h2>Learning preferences</h2>
+          <h2>Accessibility / அணுகல்தன்மை</h2>
           <label className="sf-field">
             Lab & offline language
             <select

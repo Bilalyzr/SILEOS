@@ -1,5 +1,5 @@
 """
-Manual SEO smoke check. Run explicitly with backend on PYTHONPATH, never during pytest collection.
+Isolated smoke test for the SEO block added to app/main.py.
 
 Cannot import the full app on this machine (razorpay etc. are Docker-only),
 so this extracts the SEO helpers straight from main.py's source and runs

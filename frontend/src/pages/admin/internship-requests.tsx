@@ -9,6 +9,7 @@ import { PageLayout, PageHeader } from "@/components/design-system/PageLayout";
  */
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "@/api/axios";
 import toast from "react-hot-toast";
 import {
   Search,
@@ -25,7 +26,6 @@ import {
   approveInternshipRequest,
   rejectInternshipRequest,
   deleteInternshipRequest,
-  listInstructorOptions,
   type AdminInternshipRequestItem,
   type AdminInstructorOption,
 } from "@/api/admin";
@@ -351,7 +351,7 @@ function DetailDrawer({
   onClose: () => void;
 }) {
   return (
-    <div className="fixed inset-0 z-modal flex justify-end" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex justify-end" onClick={onClose}>
       <div className="bg-black/30 absolute inset-0" />
       <div
         onClick={(e) => e.stopPropagation()}
@@ -453,24 +453,28 @@ function ApproveModal({
   const [spocId, setSpocId] = useState<number | "">("");
   const [price, setPrice] = useState(15000);
 
+  // SPOC options come from the strict /admin/spocs list (role='spoc' only) —
+  // the instructor list used here let any instructor/admin be made a SPOC,
+  // which the Listings form (same picker, strict source) would never allow.
   const { data: instructors = [], isLoading } = useQuery<
     AdminInstructorOption[]
   >({
-    queryKey: ["admin-instructor-options"],
-    queryFn: listInstructorOptions,
+    queryKey: ["admin-spoc-options"],
+    queryFn: async () =>
+      (await api.get<AdminInstructorOption[]>("/admin/spocs")).data,
   });
 
   const valid = typeof spocId === "number" && price > 0;
 
   return (
     <div
-      className="fixed inset-0 z-modal flex items-center justify-center"
+      className="fixed inset-0 z-50 flex items-center justify-center"
       onClick={onCancel}
     >
       <div className="bg-black/40 absolute inset-0" />
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative bg-white rounded-xl shadow-2xl p-6 w-[440px] max-w-[calc(100vw-2rem)]"
+        className="relative bg-white rounded-xl shadow-2xl p-6 w-[440px]"
         data-glass="work"
       >
         <h3 className="font-bold text-slate-900 mb-1">Approve &amp; publish</h3>
@@ -498,8 +502,7 @@ function ApproveModal({
               ))}
             </select>
             <p className="text-[10px] text-slate-400 mt-1">
-              Pulled from /admin/instructors/list (instructors + admins +
-              SPOCs).
+              SPOC accounts created under Admin → SPOCs.
             </p>
           </div>
           <div>
@@ -549,13 +552,13 @@ function RejectModal({
   const valid = reason.trim().length >= 10;
   return (
     <div
-      className="fixed inset-0 z-modal flex items-center justify-center"
+      className="fixed inset-0 z-50 flex items-center justify-center"
       onClick={onCancel}
     >
       <div className="bg-black/40 absolute inset-0" />
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative bg-white rounded-xl shadow-2xl p-6 w-[480px] max-w-[calc(100vw-2rem)]"
+        className="relative bg-white rounded-xl shadow-2xl p-6 w-[480px]"
         data-glass="work"
       >
         <h3 className="font-bold text-slate-900 mb-1">Return to company</h3>
@@ -604,13 +607,13 @@ function DeleteModal({
 }) {
   return (
     <div
-      className="fixed inset-0 z-modal flex items-center justify-center"
+      className="fixed inset-0 z-50 flex items-center justify-center"
       onClick={onCancel}
     >
       <div className="bg-black/40 absolute inset-0" />
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative bg-white rounded-xl shadow-2xl p-6 w-[420px] max-w-[calc(100vw-2rem)]"
+        className="relative bg-white rounded-xl shadow-2xl p-6 w-[420px]"
         data-glass="content"
       >
         <h3 className="font-bold text-slate-900 mb-1">

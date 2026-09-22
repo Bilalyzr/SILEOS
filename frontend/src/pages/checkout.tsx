@@ -22,7 +22,6 @@ export function CheckoutPage() {
     appliedCoupon,
     getFinalTotal,
     checkout: cartCheckout,
-    clearCart,
   } = useCart();
   const user = useAuthStore((s) => s.user);
   const [couponCode, setCouponCode] = useState("");
@@ -167,22 +166,12 @@ export function CheckoutPage() {
   };
 
   const runRazorpay = async () => {
-    if (isDirectCheckout && !directCourse) return;
-    const cartCourseIds = items.map((item) => item.courseId);
-    const target = isDirectCheckout
-      ? {
-          course_id: directCourse.course_id,
-          coupon_code: trimmedCode || undefined,
-        }
-      : {
-          course_ids: cartCourseIds,
-          coupon_code: appliedCoupon?.code || undefined,
-        };
-    track(
-      "checkout_start",
-      isDirectCheckout ? directCourse.course_id : cartCourseIds[0],
-    ); // R1 funnel
-    const orderResp = await api.post("/payments/create-order", target);
+    if (!directCourse) return;
+    track("checkout_start", directCourse.course_id); // R1 funnel
+    const orderResp = await api.post("/payments/create-order", {
+      course_id: directCourse.course_id,
+      coupon_code: trimmedCode || undefined,
+    });
     const orderData = orderResp.data;
 
     await ensureRazorpayLoaded();
@@ -192,9 +181,7 @@ export function CheckoutPage() {
       amount: orderData.amount,
       currency: orderData.currency || "INR",
       name: "SashaInfinity LMS",
-      description: isDirectCheckout
-        ? directCourse.title
-        : `${cartCourseIds.length} course${cartCourseIds.length === 1 ? "" : "s"}`,
+      description: directCourse.title,
       order_id: orderData.order_id,
       handler: async (paymentResponse: any) => {
         try {
@@ -202,19 +189,13 @@ export function CheckoutPage() {
             razorpay_order_id: paymentResponse.razorpay_order_id,
             razorpay_payment_id: paymentResponse.razorpay_payment_id,
             razorpay_signature: paymentResponse.razorpay_signature,
-            ...(isDirectCheckout
-              ? { course_id: directCourse.course_id }
-              : { course_ids: cartCourseIds }),
+            course_id: directCourse.course_id,
+            coupon_code: trimmedCode || undefined,
           });
           // Only flip orderComplete AFTER verified server-side success.
-          if (!isDirectCheckout) clearCart();
           setRedeemedViaCode(false);
           setOrderComplete(true);
-          toast.success(
-            isDirectCheckout
-              ? "Payment successful! You are now enrolled."
-              : "Payment successful! Your courses are now unlocked.",
-          );
+          toast.success("Payment successful! You are now enrolled.");
         } catch (verifyErr: any) {
           console.error("Payment verification failed:", verifyErr);
           const msg =
@@ -281,19 +262,14 @@ export function CheckoutPage() {
     setProcessing(true);
 
     try {
-      // A zero-value cart is completed locally through /orders. Any amount
-      // due uses the same signed Razorpay flow as direct course checkout.
+      // Cart checkout path — unchanged.
       if (!isDirectCheckout) {
-        if (total === 0) {
-          const createdOrder = await cartCheckout();
-          setOrderId(createdOrder.id);
-          setRedeemedViaCode(false);
-          setOrderComplete(true);
-          toast.success("Order completed successfully!");
-          setProcessing(false);
-        } else {
-          await runRazorpay();
-        }
+        const createdOrder = await cartCheckout();
+        setOrderId(createdOrder.id);
+        setRedeemedViaCode(false);
+        setOrderComplete(true);
+        toast.success("Order completed successfully!");
+        setProcessing(false);
         return;
       }
 
@@ -476,6 +452,9 @@ export function CheckoutPage() {
   // Derive primary CTA label.
   const isFree = isDirectCheckout && directCourse?.is_free;
   const isZeroTotal = total === 0;
+  // S-H3: cart-mode checkout with any amount due is not processable
+  // server-side (orders.py 402s). Free carts still go through cartCheckout.
+  const isPaidCart = !isDirectCheckout && total > 0;
   const ctaLabel = looksLikeVoucher
     ? "Redeem Voucher"
     : isZeroTotal
@@ -484,7 +463,7 @@ export function CheckoutPage() {
         ? "Complete Enrollment"
         : isDirectCheckout
           ? `Proceed to Pay ₹${total.toFixed(2)}`
-          : `Proceed to Pay ₹${total.toFixed(2)}`;
+          : `Complete Order - ₹${total.toFixed(2)}`;
 
   return (
     <div className="min-h-screen si-hero py-8">
@@ -585,31 +564,71 @@ export function CheckoutPage() {
                 </Card>
               )}
 
-              <Card tier="work" className="p-6">
-                <p className="text-sm text-gray-600 mb-4 flex items-center">
-                  <Lock className="h-4 w-4 mr-2" />
-                  Payments are processed securely by Razorpay. Card details
-                  are entered inside the Razorpay window — never on this page.
-                </p>
-                <Button
-                  type="submit"
-                  className="w-full"
-                  size="lg"
-                  disabled={processing}
+              {isPaidCart ? (
+                // S-H3: the cart checkout endpoint (orders.py) hard-402s
+                // "Cart checkout cannot process paid orders yet", so a
+                // "Complete Order" CTA here was a broken promise. Hide it
+                // for paid carts and route buyers to per-course checkout
+                // instead; free carts (total == 0) keep the existing flow.
+                <Card
+                  tier="work"
+                  className="p-6 border-amber-200 bg-amber-50/60"
+                  data-testid="paid-cart-notice"
                 >
-                  {processing ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      <Lock className="h-4 w-4 mr-2" />
-                      {ctaLabel}
-                    </>
-                  )}
-                </Button>
-              </Card>
+                  <p className="text-sm font-medium text-amber-900 mb-2">
+                    Paid courses are purchased individually — open each course
+                    to enroll.
+                  </p>
+                  <p className="text-xs text-amber-800 mb-4">
+                    Multi-course card payment isn't available yet. Each paid
+                    course below has its own secure Razorpay checkout.
+                  </p>
+                  <ul className="space-y-2">
+                    {items.map((item) => (
+                      <li
+                        key={item.courseId}
+                        className="flex items-center justify-between gap-3 text-sm"
+                      >
+                        <span className="text-gray-800 line-clamp-1">
+                          {item.title}
+                        </span>
+                        <Link
+                          to={`/courses/${item.courseId}`}
+                          className="shrink-0 text-blue-600 hover:text-blue-700 font-medium"
+                        >
+                          Open course →
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+              ) : (
+                <Card tier="work" className="p-6">
+                  <p className="text-sm text-gray-600 mb-4 flex items-center">
+                    <Lock className="h-4 w-4 mr-2" />
+                    Payments are processed securely by Razorpay. Card details
+                    are entered inside the Razorpay window — never on this page.
+                  </p>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    size="lg"
+                    disabled={processing}
+                  >
+                    {processing ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <Lock className="h-4 w-4 mr-2" />
+                        {ctaLabel}
+                      </>
+                    )}
+                  </Button>
+                </Card>
+              )}
             </form>
           </div>
 

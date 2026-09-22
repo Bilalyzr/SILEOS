@@ -17,7 +17,7 @@ services:
     container_name: sasha-backup-cron
     restart: unless-stopped
     environment:
-      - PGHOST=${BACKUP_PGHOST:-sasha-postgres}
+      - PGHOST=postgres
       - PGUSER=tutor
       - PGDATABASE=tutor_lms
       - PGPASSWORD=${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
@@ -36,9 +36,9 @@ services:
         echo "[backup-cron] scheduler up — nightly dump at 02:30 ${TZ:-UTC}"
         exec crond -f -l 8
     networks:
-      - sasha-net
+      - tutor-network
 
 networks:
-  sasha-net:
-    name: ${BACKUP_NETWORK:-sasha-net}
+  tutor-network:
+    name: sasha_lms_tutor-network
     external: true

@@ -6,40 +6,15 @@ export interface PageGuideInfo {
   fallback: string;
 }
 type Rule = [RegExp, string, string, [string, string, string], string];
-/** Main navigation destinations already have their own header and menu. */
-export function needsPageBack(pathname: string, search = ""): boolean {
+/** Home has nothing before it. Every other page gets the shared Back button,
+ * except players/editors that already place their own return control in their
+ * header (lesson player, lab workspace, course editors) — kept excluded so
+ * the page never renders two back controls. */
+export function needsPageBack(pathname: string, _search = ""): boolean {
   const path = pathname.replace(/\/$/, "") || "/";
-  if (path === "/" || path === "/courses" || path === "/labs") return false;
-  // These players/editors already place a return control in their own header.
+  if (path === "/") return false;
   if (/^\/labs\/[^/]+$/.test(path) || /^\/courses\/[^/]+\/(learn|lessons)(\/|$)/.test(path) || /^\/(instructor|admin)\/courses\/[^/]+\/(edit|quiz-builder|assignment-builder)(\/|$)/.test(path)) return false;
-  if (
-    /^\/(login|register|forgot-password|reset-password|verify-email|checkout|cart)$/.test(
-      path,
-    )
-  )
-    return true;
-  if (
-    /^\/(courses|labs|blog|bundles|internships|instructors|lesson|lessons|learn|quiz|assignment|recordings)\/[^/]+/.test(
-      path,
-    )
-  )
-    return true;
-  if (
-    /\/(new|create|edit|join|console|report|grade|recording)(\/|$)/.test(path)
-  )
-    return true;
-  if (
-    /\/(courses|students|instructors|assignments|quizzes|cohorts|cohort|internship|blogs)\/[^/]+/.test(
-      path,
-    )
-  )
-    return true;
-  if (
-    new URLSearchParams(search).has("chapter") ||
-    new URLSearchParams(search).has("template")
-  )
-    return true;
-  return false;
+  return true;
 }
 const rules: Rule[] = [
   [

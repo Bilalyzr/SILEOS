@@ -33,14 +33,10 @@ export interface MyVoucher {
   internship_id: number
   internship_title: string
   internship_slug: string | null
-  spoc_name: string | null
   redeemed_course_id: number | null
   redeemed_course_title: string | null
   company_name: string | null
   attendance_count?: number
-  engagement_status: 'active' | 'completed' | 'closed'
-  certificate_issued: boolean
-  issued_certificate_id: number | null
   created_at: string
   redeemed_at: string | null
   // Issue 6: progress of the course this voucher was redeemed for.
@@ -51,6 +47,12 @@ export interface MyVoucher {
     is_completed: boolean
     completion_date: string | null
   } | null
+  // Whether the internship's own completion certificate has been issued.
+  certificate_issued?: boolean
+  // "active" | "completed" | ... — engagement state from the SPOC console.
+  engagement_status?: string
+  // Owning SPOC's display name, when the row carries it.
+  spoc_name?: string
 }
 
 // ---------------- Admin ----------------

@@ -217,6 +217,10 @@ export const useAuthStore = create<AuthState>()(
         refreshInFlight = (async () => {
           try {
             const { refreshToken } = get()
+            if (!refreshToken) {
+              throw new Error('No refresh token available')
+            }
+
             const response = await authAPI.refreshToken(refreshToken)
 
             set({
@@ -301,14 +305,7 @@ export const useAuthStore = create<AuthState>()(
           const { accessToken } = get()
 
           if (!accessToken) {
-            // localStorage is origin-scoped. Restore a Sasha-wide session from
-            // the HttpOnly refresh cookie when entering a sibling subdomain.
-            try {
-              await get().refreshAccessToken()
-            } catch {
-              set({ isLoading: false })
-              return
-            }
+            return
           }
 
           // Proceed even without a refresh token — /auth/me only needs the
@@ -320,7 +317,7 @@ export const useAuthStore = create<AuthState>()(
 
           try {
             // Try to get current user with access token
-            const response = await authAPI.getCurrentUser(get().accessToken || '')
+            const response = await authAPI.getCurrentUser(accessToken)
 
             set({
               user: response.user,

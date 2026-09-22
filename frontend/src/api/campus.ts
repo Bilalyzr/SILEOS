@@ -234,6 +234,18 @@ export const campusApi = {
     assessment: number,
     entries: { member_id: number; score: number; feedback: string }[],
   ) => api.put(`${root(id)}/assessments/${assessment}/scores`, { entries }),
+  editAssessment: (
+    id: number,
+    assessment: number,
+    data: {
+      title?: string;
+      max_score?: number;
+      term_id?: number | null;
+      due_on?: string | null;
+    },
+  ) => api.put(`${root(id)}/assessments/${assessment}`, data),
+  deleteAssessment: (id: number, assessment: number) =>
+    api.delete(`${root(id)}/assessments/${assessment}`),
   importPeople: async (id: number, csv: string, commit = false) =>
     (await api.post<ImportResult>(`${root(id)}/people/import`, { csv, commit }))
       .data,

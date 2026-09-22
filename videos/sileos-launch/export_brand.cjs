@@ -1,0 +1,20 @@
+const { chromium } = require('../../.toolchains/lab-qa/node_modules/playwright');
+const fs = require('fs');
+const path = require('path');
+(async()=>{
+  const root=__dirname;
+  const browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});
+  const page=await browser.newPage({viewport:{width:1024,height:1024},deviceScaleFactor:1});
+  await page.goto('file:///'+path.join(root,'brand/SILeos-app-icon.svg').replace(/\\/g,'/'));
+  await page.screenshot({path:path.join(root,'brand/SILeos-app-icon.png'),omitBackground:true});
+  const font=fs.readFileSync(path.join(root,'assets/fonts/PlusJakartaSans.ttf')).toString('base64');
+  const mark=fs.readFileSync(path.join(root,'assets/sileos-mark.svg'),'utf8').replace(/^<svg[^>]+>/,'').replace(/<\/svg>\s*$/,'');
+  const lockup=`<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="600" viewBox="0 0 1800 600"><style>@font-face{font-family:Jakarta;src:url(data:font/ttf;base64,${font});font-weight:100 900}text{font-family:Jakarta;font-weight:800}</style><g transform="translate(30,25)">${mark}</g><text x="570" y="347" font-size="252" letter-spacing="-12" fill="#17233a">SILeos</text><text x="580" y="432" font-size="36" letter-spacing="7" fill="#3d4c68">SASHA INFINITY</text></svg>`;
+  fs.writeFileSync(path.join(root,'brand/SILeos-wordmark.svg'),lockup);
+  await page.setViewportSize({width:1800,height:600});
+  await page.goto('file:///'+path.join(root,'brand/SILeos-wordmark.svg').replace(/\\/g,'/'));
+  await page.evaluate(()=>document.fonts.ready);
+  await page.screenshot({path:path.join(root,'brand/SILeos-wordmark.png'),omitBackground:true});
+  await browser.close();
+  console.log('Exported transparent PNG app icon and self-contained SVG/PNG wordmark.');
+})().catch(e=>{console.error(e);process.exit(1)});

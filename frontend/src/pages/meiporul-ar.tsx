@@ -1,5 +1,4 @@
 import { PageLayout, PageHeader } from "@/components/design-system/PageLayout";
-import { GlassDialog } from "@/components/ui/dialog";
 import React from "react";
 import { Box, AlertTriangle } from "lucide-react";
 
@@ -335,19 +334,8 @@ function LazyModelPreview({
   );
 }
 
-const CATEGORY_RULES: Array<[string, RegExp]> = [
-  ["Fractals", /fractal|sierpinski|menger|hilbert|julia/i],
-  ["Surfaces", /surface|minimal|helicoid|catenoid|hyperboloid|paraboloid|gyroid|enneper|scherk|cross cap|klein|boys/i],
-  ["Solids", /polyhedron|dodecahedron|octahedron|cube|platon|archimedean|snub|oloid|sphericon|rhombic/i],
-  ["Curves & Knots", /mobius|borromean|rings|horned|penrose/i],
-  ["Calculus", /divergence|dot product|vector|sine/i],
-];
-const categoryOf = (model: (typeof models)[0]) => CATEGORY_RULES.find(([, pattern]) => pattern.test(`${model.name} ${model.description}`))?.[0] || "Foundations";
-const CATEGORIES = ["All", ...CATEGORY_RULES.map(([label]) => label), "Foundations"];
-
 export function MeiporulARPage() {
   const [search, setSearch] = React.useState("");
-  const [category, setCategory] = React.useState("All");
   const [selected, setSelected] = React.useState<(typeof models)[0] | null>(
     null,
   );
@@ -398,25 +386,13 @@ export function MeiporulARPage() {
   // "fractal" finds the relevant models even when the word isn't in the name.
   const filtered = React.useMemo(() => {
     const q = search.trim().toLowerCase();
+    if (!q) return models;
     return models.filter(
       (m) =>
-        (category === "All" || categoryOf(m) === category) &&
-        (!q || m.name.toLowerCase().includes(q) || m.description.toLowerCase().includes(q)),
+        m.name.toLowerCase().includes(q) ||
+        m.description.toLowerCase().includes(q),
     );
-  }, [search, category]);
-  const selectedIndex = selected ? filtered.findIndex(m => m.file === selected.file) : -1;
-  const stepModel = React.useCallback((direction: number) => {
-    if (selectedIndex >= 0 && filtered.length > 1) setSelected(filtered[(selectedIndex + direction + filtered.length) % filtered.length]);
-  }, [selectedIndex, filtered]);
-  React.useEffect(() => {
-    if (!selected) return;
-    const handleKey = (event: KeyboardEvent) => {
-      if (event.key === "ArrowRight") stepModel(1);
-      else if (event.key === "ArrowLeft") stepModel(-1);
-    };
-    document.addEventListener("keydown", handleKey);
-    return () => { document.removeEventListener("keydown", handleKey); };
-  }, [selected, stepModel]);
+  }, [search]);
 
   return (
     <PageLayout
@@ -430,7 +406,7 @@ export function MeiporulARPage() {
       }
       className="rd-screen rd-screen-meiporul-ar"
     >
-      <div className="container mx-auto px-4 py-6 flex flex-col items-center gap-3">
+      <div className="container mx-auto px-4 py-6 flex justify-center">
         <input
           type="text"
           placeholder="Search models..."
@@ -438,12 +414,6 @@ export function MeiporulARPage() {
           onChange={(e) => setSearch(e.target.value)}
           className="w-full max-w-md px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:border-orange-500"
         />
-        <div className="flex flex-wrap justify-center gap-2" aria-label="Model categories">{CATEGORIES.map(label => {
-          const count = label === "All" ? models.length : models.filter(model => categoryOf(model) === label).length;
-          return count > 0 && <button key={label} type="button" aria-pressed={category === label}
-            className={category === label ? "aurum-primary" : "aurum-secondary"} onClick={() => setCategory(label)}>{label} ({count})</button>;
-        })}</div>
-        <p className="text-sm text-gray-500">Showing {filtered.length} of {models.length} models</p>
       </div>
       <div className="container mx-auto px-4 pb-12">
         {filtered.length === 0 ? (
@@ -491,14 +461,24 @@ export function MeiporulARPage() {
         )}
       </div>
       {selected && (
-        <GlassDialog open onOpenChange={(open) => { if (!open) setSelected(null); }}
-          title={selected.name} description={selected.description}
-          eyebrow="Meiporul immersive library" size="xl" tone="dark">
-            {filtered.length > 1 && <div className="flex items-center justify-between gap-3 p-3">
-              <button className="aurum-secondary" aria-label="Previous model" onClick={() => stepModel(-1)}>← Previous</button>
-              <span>{selectedIndex + 1} / {filtered.length}</span>
-              <button className="aurum-secondary" aria-label="Next model" onClick={() => stepModel(1)}>Next →</button>
-            </div>}
+        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-4xl bg-gray-900 rounded-2xl overflow-hidden">
+            <div className="flex items-start justify-between gap-4 p-4 border-b border-gray-700">
+              <div className="min-w-0">
+                <h2 className="text-xl font-bold">{selected.name}</h2>
+                <p className="text-sm text-gray-400 mt-1">
+                  {selected.description}
+                </p>
+              </div>
+              <button
+                onClick={() => setSelected(null)}
+                className="text-gray-400 hover:text-white text-2xl leading-none flex-shrink-0"
+                aria-label="Close model viewer"
+              >
+                ✕
+              </button>
+            </div>
+
             {viewerStatus === "ready" ? (
               <model-viewer
                 src={`/models/ar/${selected.file}`}
@@ -508,14 +488,14 @@ export function MeiporulARPage() {
                 ar-modes="webxr scene-viewer quick-look"
                 style={{
                   width: "100%",
-                  height: "min(62vh, 560px)",
+                  height: "500px",
                   background: "#111827",
                 }}
               />
             ) : viewerStatus === "error" ? (
               <div
                 className="flex flex-col items-center justify-center text-center gap-3 px-6"
-                style={{ height: "min(62vh, 560px)" }}
+                style={{ height: 500 }}
               >
                 <AlertTriangle className="w-10 h-10 text-orange-400" />
                 <p className="font-semibold">The 3D viewer couldn't load</p>
@@ -535,13 +515,14 @@ export function MeiporulARPage() {
             ) : (
               <div
                 className="flex flex-col items-center justify-center gap-4"
-                style={{ height: "min(62vh, 560px)" }}
+                style={{ height: 500 }}
               >
                 <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500" />
                 <p className="text-gray-400">Loading 3D viewer…</p>
               </div>
             )}
-        </GlassDialog>
+          </div>
+        </div>
       )}
     </PageLayout>
   );

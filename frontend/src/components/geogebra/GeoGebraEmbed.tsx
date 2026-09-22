@@ -25,34 +25,16 @@ let scriptPromise: Promise<void> | null = null
 function loadDeployGgb(): Promise<void> {
   if (typeof window === 'undefined') return Promise.reject(new Error('no window'))
   if (window.GGBApplet) return Promise.resolve()
-  if (scriptPromise) return scriptPromise
-  scriptPromise = new Promise<void>((resolve, reject) => {
+  scriptPromise ??= new Promise<void>((resolve, reject) => {
     const existing = document.querySelector<HTMLScriptElement>(`script[src="${DEPLOY_URL}"]`)
     const script = existing ?? document.createElement('script')
-    const timeout = window.setTimeout(() => {
-      if (!window.GGBApplet) script.remove()
-      reject(new Error('GeoGebra timed out while loading'))
-    }, 15000)
-    const loaded = () => {
-      window.clearTimeout(timeout)
-      if (window.GGBApplet) resolve()
-      else reject(new Error('GeoGebra loaded without the Apps API'))
-    }
-    const failed = () => {
-      window.clearTimeout(timeout)
-      script.remove()
-      reject(new Error('deployggb.js failed to load'))
-    }
-    script.addEventListener('load', loaded, { once: true })
-    script.addEventListener('error', failed, { once: true })
+    script.addEventListener('load', () => resolve())
+    script.addEventListener('error', () => reject(new Error('deployggb.js failed to load')))
     if (!existing) {
       script.src = DEPLOY_URL
       script.async = true
       document.head.appendChild(script)
     }
-  }).catch((error) => {
-    scriptPromise = null
-    throw error
   })
   return scriptPromise
 }
@@ -66,16 +48,13 @@ export function GeoGebraEmbed({
   lessonId?: number
   height?: number
 }) {
-  const container = useRef<HTMLDivElement>(null)
+  const containerId = `geogebra-container-${appletId}`
   const injected = useRef(false)
   const [error, setError] = useState<string | null>(null)
-  const [attempt, setAttempt] = useState(0)
 
   useEffect(() => {
     let cancelled = false
     injected.current = false
-    setError(null)
-    if (container.current) container.current.replaceChildren()
 
     loadDeployGgb()
       .then(() => geogebraAPI.embed(appletId))
@@ -83,9 +62,9 @@ export function GeoGebraEmbed({
         if (cancelled) return
         const params = { ...embed.applet_parameters, height }
         const applet = new window.GGBApplet!(params, true)
-        const el = container.current
+        const el = document.getElementById(containerId)
         if (el) {
-          applet.inject(el)
+          applet.inject(containerId)
           injected.current = true
           // one statement per launch — best-effort, never blocks the player
           api.post('/xapi/statements', {
@@ -101,21 +80,19 @@ export function GeoGebraEmbed({
       })
 
     return () => { cancelled = true }
-  }, [appletId, lessonId, height, attempt])
+  }, [appletId, containerId, lessonId, height])
 
   if (error) {
     return (
       <div role="alert" className="p-4 border border-amber-200 bg-amber-50 rounded-lg text-sm text-amber-800">
-        <p>GeoGebra could not load ({error}). Check your connection — the applet script is served from geogebra.org.</p>
-        <button type="button" className="mt-3 rounded-md border border-amber-300 bg-white px-3 py-1.5 font-medium" onClick={() => setAttempt((value) => value + 1)}>
-          Try again
-        </button>
+        GeoGebra could not load ({error}). Check your connection — the applet
+        script is served from geogebra.org.
       </div>
     )
   }
   return (
     <div
-      ref={container}
+      id={containerId}
       className="w-full rounded-xl overflow-hidden border border-gray-200 bg-white"
       style={{ minHeight: height }}
       aria-label="GeoGebra interactive applet"

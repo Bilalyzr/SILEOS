@@ -45,6 +45,7 @@ import {
   FadeUp,
   StaggerGrid,
   SectionCard,
+  ErrorState,
   type StatTone,
 } from "@/components/dashboard/primitives";
 import { getAvatarUrl } from "@/utils/media";
@@ -113,6 +114,7 @@ export function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [stats, setStats] = useState<UserStats>({});
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState<UserProfile | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -212,6 +214,8 @@ export function ProfilePage() {
 
   const fetchProfile = async () => {
     try {
+      setLoading(true);
+      setLoadError(null);
       const response = await api.get("/users/profile");
       setProfile(response.data);
       setEditForm(response.data);
@@ -223,8 +227,13 @@ export function ProfilePage() {
         setIsEditing(true);
         toast("Please complete your profile information", { icon: <AstraSymbol value="ℹ️" /> });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching profile:", error);
+      // Keep the server's reason (e.g. a rate-limit message) so the error
+      // state below can show it instead of a silent endless spinner.
+      setLoadError(
+        error?.response?.data?.detail || "Failed to load your profile.",
+      );
       toast.error("Failed to load profile");
     } finally {
       setLoading(false);
@@ -343,7 +352,7 @@ export function ProfilePage() {
     }
   };
 
-  if (loading || !profile) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center py-24">
         <div className="text-center">
@@ -351,6 +360,29 @@ export function ProfilePage() {
           <p className="mt-4 text-slate-600">Loading profile...</p>
         </div>
       </div>
+    );
+  }
+
+  // A failed profile fetch used to fall through to the spinner above forever
+  // (loading done, profile still null). Show a recoverable error instead.
+  if (!profile) {
+    return (
+      <PageLayout
+        header={
+          <Greeting
+            chip="MY PROFILE"
+            subtitle="Manage your account information and personal details."
+            className="mb-6"
+          />
+        }
+      >
+        <ErrorState
+          title="Couldn't load your profile"
+          description={loadError || "Something went wrong while loading your profile."}
+          onRetry={fetchProfile}
+          className="dash-card"
+        />
+      </PageLayout>
     );
   }
 

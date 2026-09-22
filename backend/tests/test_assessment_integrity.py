@@ -374,11 +374,14 @@ class TestServerTimer:
         assert attempt.attempt_status == "attempt_ended"
         assert attempt.attempt_ended_at is not None
 
-        # No wedge: the ended attempt is not resumed. The exact 50% pass
-        # now triggers the upstream no-passed-retakes rule at /start.
+        # No wedge: /start no longer resumes this attempt (it's ended) —
+        # calling it again creates a genuinely fresh attempt (or is blocked
+        # by max_attempts, but here max_attempts=0/unlimited so it succeeds
+        # fresh) rather than returning the same dead row forever.
         r2 = client.post(f"/api/v1/quizzes/{quiz.id}/start", headers=headers)
-        assert r2.status_code == 403, r2.text
-        assert "retakes are not allowed" in r2.json()["detail"]
+        assert r2.status_code == 200, r2.text
+        assert r2.json()["attempt_id"] != attempt_id
+        assert r2.json()["resumed"] is False
 
     def test_submit_within_deadline_succeeds(self, client, db, make_user, auth_headers):
         instructor = make_user(role="instructor", email="timer_instr2@example.com")

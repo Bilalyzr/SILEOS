@@ -150,15 +150,8 @@ def validate_and_compute(
 
     if coupon.applicability == 'specific_courses':
         applicable_ids = {r.course_id for r in coupon.course_restrictions}
-        selected_ids = set(course_ids)
-        # A cart-level discount is computed against the whole total.  Applying
-        # it when only one line is eligible would silently discount unrelated
-        # courses as well, so every selected line must be covered.  A buyer can
-        # still purchase the eligible course separately.
-        if not selected_ids or not selected_ids.issubset(applicable_ids):
-            raise CouponError(
-                "This coupon is not applicable to every selected course"
-            )
+        if not any(cid in applicable_ids for cid in course_ids):
+            raise CouponError("This coupon is not applicable to the selected courses")
 
     if coupon.discount_type == 'percentage':
         # Clamp defensive: a percentage above 100 (e.g. a legacy or

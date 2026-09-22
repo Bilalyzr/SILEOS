@@ -26,6 +26,7 @@ interface Coupon {
   usage_count: number;
   usage_limit: number | null;
   is_active: boolean;
+  valid_from: string | null;
   valid_until: string | null;
   created_at: string;
 }
@@ -452,8 +453,15 @@ function CouponFormModal({ coupon, onClose, onSuccess }: CouponFormModalProps) {
     usage_limit: coupon?.usage_limit || null,
     per_user_limit: 1,
     minimum_purchase_amount: 0,
-    valid_from: new Date().toISOString().slice(0, 16),
-    valid_until: "",
+    // Editing keeps the stored window; only a NEW coupon starts at "now".
+    // (This used to reset valid_from to now on every edit, silently shifting
+    // the coupon's start date.)
+    valid_from: coupon?.valid_from
+      ? new Date(coupon.valid_from).toISOString().slice(0, 16)
+      : new Date().toISOString().slice(0, 16),
+    valid_until: coupon?.valid_until
+      ? new Date(coupon.valid_until).toISOString().slice(0, 16)
+      : "",
     is_active: coupon?.is_active ?? true,
   });
   const [loading, setLoading] = useState(false);
@@ -476,6 +484,16 @@ function CouponFormModal({ coupon, onClose, onSuccess }: CouponFormModalProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Client-side window check — the backend enforces it too, but catching it
+    // here shows the problem before a round trip.
+    if (
+      formData.valid_from &&
+      formData.valid_until &&
+      formData.valid_until < formData.valid_from
+    ) {
+      toast.error("Valid until cannot be earlier than valid from");
+      return;
+    }
     setLoading(true);
 
     try {
@@ -504,7 +522,7 @@ function CouponFormModal({ coupon, onClose, onSuccess }: CouponFormModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-modal p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div
         className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
         data-glass="work"
@@ -728,6 +746,7 @@ function CouponFormModal({ coupon, onClose, onSuccess }: CouponFormModalProps) {
                 </label>
                 <input
                   type="datetime-local"
+                    min={new Date().toISOString().slice(0, 16)}
                   value={formData.valid_from}
                   onChange={(e) =>
                     setFormData({ ...formData, valid_from: e.target.value })
@@ -742,6 +761,7 @@ function CouponFormModal({ coupon, onClose, onSuccess }: CouponFormModalProps) {
                 </label>
                 <input
                   type="datetime-local"
+                    min={new Date().toISOString().slice(0, 16)}
                   value={formData.valid_until}
                   onChange={(e) =>
                     setFormData({ ...formData, valid_until: e.target.value })

@@ -3,7 +3,6 @@ from datetime import timedelta, timezone
 import hashlib
 import html
 from pathlib import Path
-import logging
 import shutil
 import uuid
 import zipfile
@@ -21,7 +20,6 @@ from app.services import course_package_service as svc
 from sqlalchemy import or_
 
 router = APIRouter()
-logger = logging.getLogger(__name__)
 
 
 class RestoreIn(BaseModel):
@@ -136,11 +134,5 @@ def restore(ident: str, body: RestoreIn, db: Session = Depends(get_db), user=Dep
     try: course = svc.restore(db, row, user, body.title)
     except Exception as exc:
         db.rollback()
-        logger.exception(
-            "Course package restore failed (preview=%s owner=%s kind=%s)",
-            ident,
-            user.id,
-            row.kind,
-        )
         raise HTTPException(422, str(exc) if isinstance(exc, ValueError) else 'Restore failed. No course was created; check the backup and try again.')
     return {'course_id': course.id, 'status':course.post_status, 'already_restored':False}

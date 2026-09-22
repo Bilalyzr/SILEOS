@@ -1,0 +1,40 @@
+{
+  "voices": [
+    {
+      "frame": 1,
+      "path": "assets/audio/history.wav",
+      "start": 0.7,
+      "duration": 6.426122448979592
+    },
+    {
+      "frame": 1,
+      "path": "assets/audio/expansion.wav",
+      "start": 7.6,
+      "duration": 4.989387755102041
+    },
+    {
+      "frame": 1,
+      "path": "assets/audio/name.wav",
+      "start": 13.35,
+      "duration": 4.048979591836734
+    },
+    {
+      "frame": 2,
+      "path": "assets/audio/features.wav",
+      "start": 18.8,
+      "duration": 11.415510204081633
+    },
+    {
+      "frame": 3,
+      "path": "assets/audio/close.wav",
+      "start": 37.0,
+      "duration": 5.250612244897959
+    }
+  ],
+  "bgm": {
+    "path": "assets/audio/music.wav",
+    "provider": "HeyGen catalog",
+    "id": "11c8bc0136fb4a1ca0d820ae11739288"
+  },
+  "captions": "designed titles; no duplicate caption strip"
+}

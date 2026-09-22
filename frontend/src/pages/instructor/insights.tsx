@@ -16,7 +16,6 @@ import { BarChart3, AlertTriangle } from "lucide-react";
 import toast from "react-hot-toast";
 import { api } from "@/api/axios";
 import { signalsAPI, type CourseHotspots } from "@/api/signals";
-import { SashaInstructorInsights } from "@/components/ai/SashaInstructorInsights";
 
 interface RiskResult {
   user_id: number;
@@ -37,13 +36,12 @@ interface BankItem {
 
 export default function InsightsPage() {
   const [tab, setTab] = useState<
-    "sasha" | "risk" | "items" | "flywheel" | "funnel" | "earnings" | "hotspots"
-  >(() => {
-    const requested = new URLSearchParams(window.location.search).get("tab");
-    return requested === "risk" || requested === "items" || requested === "flywheel" || requested === "funnel" || requested === "earnings" || requested === "hotspots"
-      ? requested
-      : "sasha";
-  });
+    "risk" | "items" | "flywheel" | "funnel" | "earnings" | "hotspots"
+  >(() =>
+    new URLSearchParams(window.location.search).get("tab") === "hotspots"
+      ? "hotspots"
+      : "risk",
+  );
   const [courses, setCourses] = useState<{ id: number; title: string }[]>([]);
   const [courseId, setCourseId] = useState<number | null>(null);
   const [risk, setRisk] = useState<RiskResult[]>([]);
@@ -119,7 +117,7 @@ export default function InsightsPage() {
               <BarChart3 className="h-7 w-7 text-primary" /> Insights
             </h1>
             <p className="text-slate-600 text-sm mt-1 mb-6">
-              See where learners lag, why they struggle, and what needs action.
+              Who needs help, and which questions are broken.
             </p>
           </div>
         </PageHeader>
@@ -129,7 +127,6 @@ export default function InsightsPage() {
       <div className="flex gap-2 mb-6">
         {(
           [
-            ["sasha", "Sasha Monitor"],
             ["risk", "At-Risk Students"],
             ["items", "Item Analysis"],
             ["flywheel", "Next Class & 3D Insights"],
@@ -141,7 +138,7 @@ export default function InsightsPage() {
           <button
             key={v}
             onClick={() => setTab(v)}
-            className={`px-4 py-2 rounded-full text-sm font-semibold border transition ${tab === v ? "border-orange-600 bg-gradient-to-r from-orange-600 to-amber-500 text-white shadow-md shadow-orange-200" : "border-orange-100 bg-white text-slate-700 hover:border-orange-300 hover:bg-orange-50"}`}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium border ${tab === v ? "bg-blue-600 text-white border-blue-600" : "bg-white text-gray-700 border-gray-300"}`}
           >
             {v === "risk" ? (
               <AlertTriangle className="inline h-3.5 w-3.5 mr-1" />
@@ -159,25 +156,6 @@ export default function InsightsPage() {
             />
           ))}
         </div>
-      ) : tab === "sasha" ? (
-        <>
-          <label className="mb-5 flex max-w-md items-center gap-3 rounded-2xl border border-orange-100 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm">
-            Course
-            <select
-              aria-label="Sasha monitor course"
-              value={courseId ?? ""}
-              onChange={(e) => setCourseId(Number(e.target.value))}
-              className="min-w-0 flex-1 rounded-xl border border-orange-200 bg-orange-50 px-3 py-2 text-sm text-slate-950 outline-none focus:ring-2 focus:ring-orange-400"
-            >
-              {courses.map((c) => (
-                <option key={c.id} value={c.id}>{c.title}</option>
-              ))}
-            </select>
-          </label>
-          {courseId == null ? (
-            <p className="rounded-3xl border border-dashed border-orange-300 bg-orange-50 p-8 text-center text-sm text-slate-600">Create a course to start receiving Sasha learning insights.</p>
-          ) : <SashaInstructorInsights courseId={courseId} />}
-        </>
       ) : tab === "hotspots" ? (
         <>
           <label className="block mb-4">

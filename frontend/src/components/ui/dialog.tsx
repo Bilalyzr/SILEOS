@@ -56,12 +56,12 @@ export function GlassDialog({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="astra-scrim fixed inset-0 z-overlay bg-neutral-950/60 backdrop-blur-sm data-[state=open]:animate-in data-[state=open]:fade-in-0" />
+        <Dialog.Overlay className="astra-scrim fixed inset-0 z-[90] bg-neutral-950/60 backdrop-blur-sm data-[state=open]:animate-in data-[state=open]:fade-in-0" />
         <Dialog.Content
           {...(!description ? { "aria-describedby": undefined } : {})}
           data-testid={testId}
           data-media-tone={tone}
-          className={`fixed left-1/2 top-1/2 z-dialog w-[calc(100vw-1.5rem)] ${SIZES[size]} -translate-x-1/2 -translate-y-1/2 outline-none`}
+          className={`fixed left-1/2 top-1/2 z-[100] w-[calc(100vw-1.5rem)] ${SIZES[size]} -translate-x-1/2 -translate-y-1/2 outline-none`}
         >
           <div className="si-glass-halo">
             <div

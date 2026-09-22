@@ -50,7 +50,7 @@ it("returns to the preceding route including filters and hash", async () => {
     ),
   );
 });
-it("gives direct entries a usable parent destination and workflow", () => {
+it("gives direct entries a usable parent destination", () => {
   window.history.replaceState({ idx: 0 }, "", "/courses/12");
   render(
     <BrowserRouter>
@@ -58,8 +58,9 @@ it("gives direct entries a usable parent destination and workflow", () => {
       <Location />
     </BrowserRouter>,
   );
-  expect(screen.getByText("How this page works")).toBeVisible();
-  expect(screen.getAllByRole("listitem", { hidden: true })).toHaveLength(3);
+  expect(
+    screen.getByRole("button", { name: "Go back to previous page" }),
+  ).toBeVisible();
   fireEvent.click(
     screen.getByRole("button", { name: "Go back to previous page" }),
   );
@@ -75,6 +76,15 @@ it("keeps direct-entry fallbacks within the user role and covers unknown pages",
 });
 it.each([
   "/",
+  '/courses/12/learn',
+  '/courses/12/lessons/4',
+  '/instructor/courses/12/edit',
+  '/instructor/courses/12/quiz-builder',
+  '/labs/own-1',
+])("keeps page %s free of the shared Back control (home or self-managed)", (path) => {
+  expect(needsPageBack(path)).toBe(false);
+});
+it.each([
   "/courses",
   "/labs",
   "/dashboard",
@@ -82,23 +92,16 @@ it.each([
   "/admin/courses",
   "/admin/exam-pricing",
   "/instructor/lab-studio",
-  '/instructor/courses/12/edit',
-  '/labs/own-1',
-  '/courses/12/lessons/4',
-])("does not add a Back banner to main navigation page %s", (path) => {
-  expect(needsPageBack(path)).toBe(false);
-});
-it.each([
   "/courses/12",
   "/student/live-classes/8/join",
-])("keeps Back on detail or task page %s", (path) =>
+  "/login",
+])("shows the shared Back control on page %s", (path) =>
   expect(needsPageBack(path)).toBe(true),
 );
 it('reuses the lab header return control without a duplicate banner',()=>{
   window.history.replaceState({idx:0},'', '/labs/own-1');
   render(<BrowserRouter><PageGuide/><PageBackButton/><Location/></BrowserRouter>);
   expect(screen.getAllByRole('button',{name:'Go back to previous page'})).toHaveLength(1);
-  expect(screen.queryByText('How this page works')).not.toBeInTheDocument();
   fireEvent.click(screen.getByRole('button',{name:'Go back to previous page'}));
   expect(screen.getByTestId('location')).toHaveTextContent('/labs');
 });

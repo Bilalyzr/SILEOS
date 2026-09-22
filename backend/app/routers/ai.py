@@ -115,7 +115,7 @@ def generate_questions(
     )
 
     try:
-        text = call_glm(SYSTEM_PROMPT, prompt, feature="AI question generation")
+        text = call_glm(SYSTEM_PROMPT, prompt)
         raw_questions = _parse_questions(text)
     except Exception as exc:  # noqa: BLE001 — job audit row carries the failure
         job.status = "failed"

@@ -59,6 +59,12 @@ RUN npm install -g serve
 # Copy built assets
 COPY --from=build /app/dist ./dist
 
+# Static + API-proxy server. `serve -s dist` cannot proxy /api/v1, so the
+# published :3000 port answered API calls with the SPA's index.html and every
+# data page broke when the container was browsed directly. nginx (:3100 /
+# the production edge) still fronts this container for static files.
+COPY server.js ./
+
 EXPOSE 3000
 
-CMD ["serve", "-s", "dist", "-l", "tcp://0.0.0.0:3000", "-n"]
+CMD ["node", "server.js"]

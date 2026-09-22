@@ -569,6 +569,41 @@ export const campusOsApi = {
         `${root(institutionId)}/admissions/intakes`,
       )
     ).data,
+  createAdmissionProgram: async (
+    institutionId: number,
+    input: {
+      name: string;
+      code: string;
+      level: string;
+      department?: string;
+      duration_months: number;
+      status: string;
+    },
+  ) =>
+    (
+      await api.post<AdmissionProgram>(
+        `${root(institutionId)}/admissions/programs`,
+        input,
+      )
+    ).data,
+  createAdmissionIntake: async (
+    institutionId: number,
+    input: {
+      program_id: number;
+      name: string;
+      academic_year: string;
+      starts_on: string;
+      closes_on: string;
+      capacity: number;
+      status: string;
+    },
+  ) =>
+    (
+      await api.post<AdmissionIntake>(
+        `${root(institutionId)}/admissions/intakes`,
+        input,
+      )
+    ).data,
   createAdmissionApplication: async (
     institutionId: number,
     input: CreateAdmissionApplication,

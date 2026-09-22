@@ -36,7 +36,7 @@ export const roleSatisfies = (currentRole: AppRole, requiredRole: AppRole): bool
 /** Role → its dashboard landing route. */
 const ROLE_HOME: Record<string, string> = {
   superadmin: '/superadmin/dashboard',
-  admin: '/admin/operations',
+  admin: '/admin/dashboard',
   instructor: '/instructor/dashboard',
   company: '/company/dashboard',
   company_manager: '/company/dashboard',

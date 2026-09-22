@@ -6,7 +6,6 @@ import toast from "react-hot-toast";
 import { getMediaUrl } from "@/utils/media";
 import { IndependenceDayPopup } from "@/components/promotional/IndependenceDayPopup";
 import { OfferTimerWidget } from "@/components/promotional/OfferTimerWidget";
-import { verticalPublicHref } from "@/config/businessVerticals";
 import "./home.css";
 
 // Font Awesome 6 is loaded from the public CDN once on mount so the <i> icons render.
@@ -320,27 +319,27 @@ function CategoriesSection() {
             </Link>
           </div>
           <div className="categories-grid">
-            <a href={verticalPublicHref("meiporul")} className="category-card">
+            <Link to="/courses/meiporul" className="category-card">
               <div className="category-icon">
                 <i className="fa-solid fa-rocket"></i>
               </div>
               <h3>Meiporul</h3>
-              <span>3D · AR · VR · Labs</span>
-            </a>
-            <a href={verticalPublicHref("seyappaduporul")} className="category-card">
+              <span>06 Courses</span>
+            </Link>
+            <Link to="/courses" className="category-card">
               <div className="category-icon">
                 <i className="fa-solid fa-sun"></i>
               </div>
               <h3>Seyappaduporul</h3>
-              <span>Tutoring · Campus · Fees</span>
-            </a>
-            <a href={verticalPublicHref("utporul")} className="category-card">
+              <span>08 Courses</span>
+            </Link>
+            <Link to="/courses" className="category-card">
               <div className="category-icon">
                 <i className="fa-solid fa-lightbulb"></i>
               </div>
               <h3>Utporul</h3>
-              <span>Skills · Assessments · Careers</span>
-            </a>
+              <span>13 Courses</span>
+            </Link>
           </div>
         </div>
       </div>

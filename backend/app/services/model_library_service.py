@@ -4,7 +4,6 @@ No user accounts, passwords or original owner IDs are transferred.
 """
 import hashlib
 import json
-import os
 from pathlib import Path
 
 from app.models.three_d import ThreeDModel
@@ -43,10 +42,6 @@ def install_library(db, owner, source=None):
             destination.parent.mkdir(parents=True, exist_ok=True)
             if destination.resolve().parent != Path(BASE_DIR).resolve() / str(owner.id):
                 raise ValueError('Model destination escaped storage.')
-            if os.name == 'nt':
-                # Apply only after the storage-boundary check. Long downloaded
-                # workspace names plus content-addressed GLB names exceed MAX_PATH.
-                destination = Path('\\\\?\\' + str(destination.resolve()))
             if not destination.exists():
                 destination.write_bytes(raw)
                 created.append(destination)

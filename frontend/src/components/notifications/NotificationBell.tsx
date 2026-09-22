@@ -54,8 +54,8 @@ export const NotificationBell: React.FC = () => {
       </button>
       {open && (
         <>
-          <div className="fixed inset-0 z-modal" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto bg-white rounded-lg shadow-lg border border-gray-200 z-overlay">
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+          <div className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto bg-white rounded-lg shadow-lg border border-gray-200 z-50">
             <div className="px-4 py-2 text-sm font-semibold text-gray-700 border-b">Notifications</div>
             {items.length === 0 ? (
               <div className="px-4 py-8 text-center text-sm text-gray-500">No notifications</div>

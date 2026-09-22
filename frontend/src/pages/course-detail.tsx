@@ -67,10 +67,8 @@ import {
   MessageSquare,
   Eye,
   X,
-  ShoppingCart,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
-import { useCart } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -92,7 +90,6 @@ export const CourseDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
-  const { addToCart, isInCart } = useCart();
   const [isEnrolled, setIsEnrolled] = React.useState(false);
   const [isInWishlist, setIsInWishlist] = React.useState(false);
   const [course, setCourse] = React.useState<Course | null>(null);
@@ -101,6 +98,7 @@ export const CourseDetailPage = () => {
   const [courseStatus, setCourseStatus] = React.useState<string>("");
   const [isCompleted, setIsCompleted] = React.useState(false);
   const [certPending, setCertPending] = React.useState(false);
+  const [certAvailable, setCertAvailable] = React.useState(false);
   const [isAdminPreview, setIsAdminPreview] = React.useState(false);
   const [isVideoModalOpen, setIsVideoModalOpen] = React.useState(false);
   // Public lesson preview (2026-09-05): any lesson type, real player, glass popup
@@ -324,16 +322,6 @@ export const CourseDetailPage = () => {
     }
   };
 
-  const handleAddToCart = () => {
-    if (!course) return;
-    addToCart({ courseId: course.id, title: course.post_title,
-      instructor: (course as any).instructor?.display_name || "SashaInfinity",
-      price: course.course_price,
-      salePrice: course.course_sale_price != null && course.course_sale_price > 0 && course.course_sale_price < course.course_price ? course.course_sale_price : undefined,
-      thumbnail: course.course_thumbnail || "", level: course.course_level || "Beginner",
-      rating: course.average_rating || undefined });
-  };
-
   // Build share payload. `shareUrl` is always absolute & slug-based when
   // a slug is available so receivers (WhatsApp, X, …) land on the pretty
   // URL and the crawler can fetch our OG tags on that same URL.
@@ -367,12 +355,19 @@ export const CourseDetailPage = () => {
     const courseId = (course as any)?.id;
     if (!isCompleted || !courseId || !isAuthenticated) {
       setCertPending(false);
+      setCertAvailable(false);
       return;
     }
     api
       .get(`/certificates/course/${courseId}`)
-      .then(() => setCertPending(false))
-      .catch((err) => setCertPending(err?.response?.status === 404));
+      .then(() => {
+        setCertAvailable(true);
+        setCertPending(false);
+      })
+      .catch((err) => {
+        setCertAvailable(false);
+        setCertPending(err?.response?.status === 404);
+      });
   }, [isCompleted, course, isAuthenticated]);
 
   // Load reviews whenever the course changes.
@@ -847,6 +842,19 @@ export const CourseDetailPage = () => {
                                 be notified once your submission is approved.
                               </div>
                             )}
+                            {certAvailable && !certPending && (
+                              <Button
+                                size="lg"
+                                variant="outline"
+                                className="w-full mb-3 border-primary-300 text-primary-700 hover:bg-primary-50"
+                                asChild
+                              >
+                                <Link to={`/certificates/${course.id}`}>
+                                  <Award className="w-5 h-5 mr-2" />
+                                  Download Certificate
+                                </Link>
+                              </Button>
+                            )}
                             <Button
                               size="lg"
                               className="w-full bg-gradient-to-r from-success-600 to-success-700 hover:from-success-700 hover:to-success-800 shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
@@ -900,11 +908,10 @@ export const CourseDetailPage = () => {
                           )}
                         </Button>
 
-                        <Button size="lg" variant="outline" className="w-full mt-2 border-orange-300 text-orange-700"
-                          onClick={handleAddToCart} disabled={isInCart(course.id)}>
-                          <ShoppingCart className="w-5 h-5 mr-2" />
-                          {isInCart(course.id) ? "Already in Cart" : "Add to Cart"}
-                        </Button>
+                        {/* Paid courses go through single-course Razorpay checkout
+                            ("Enroll Now" above). Cart checkout has no multi-course
+                            gateway yet and rejects paid orders, so we don't offer
+                            "Add to Cart" for paid courses — it would dead-end. */}
                       </>
                     )}
 
@@ -1542,7 +1549,7 @@ export const CourseDetailPage = () => {
       {/* Video Modal */}
       {isVideoModalOpen && previewVideoUrl && (
         <div
-          className="fixed inset-0 z-modal flex items-center justify-center bg-black/90 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
           onClick={() => {
             setIsVideoModalOpen(false);
             setPreviewVideoUrl("");

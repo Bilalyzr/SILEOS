@@ -7,16 +7,14 @@ aids *within* a type; they can never replace or override the type.
 
 from typing import Optional, Union
 
-from app.core.business_verticals import VERTICAL_KEYS, VERTICALS
+COURSE_TYPES = ("meiporul", "seyappaduporul", "utporul")
 
-COURSE_TYPES = VERTICAL_KEYS
-
-# A course with no specialist choice belongs to the shared skills/authoring
-# pillar. Meiporul and Seyappaduporul are explicit delivery decisions.
-DEFAULT_COURSE_TYPE = "utporul"
+DEFAULT_COURSE_TYPE = "meiporul"
 
 COURSE_TYPE_LABELS = {
-    key: f"{item['label']} - {item['mission']}" for key, item in VERTICALS.items()
+    "meiporul": "Meiporul (AR/VR)",
+    "seyappaduporul": "Seyappaduporul (Skill)",
+    "utporul": "Utporul (Tech)",
 }
 
 
@@ -57,19 +55,17 @@ TOOL_AVAILABILITY = {
     "live_classes": "live", "virtual_labs": "live",        # Phase 4: PhET embeds
 }
 TYPE_CAPABILITIES = {
-    "meiporul": {  # MP - immersive curriculum and experiential learning
-        "label": "Meiporul (Immersive)",
-        "capabilities": ["video", "quiz", "games", "h5p", "geogebra",
-                         "three_d_models", "virtual_labs", "live_classes",
-                         "learning_paths", "rewards"],
+    "meiporul": {  # MP — 3D/AR/VR focused
+        "label": "Meiporul (AR/VR)",
+        "capabilities": ["video", "quiz", "three_d_models", "geogebra", "h5p", "virtual_labs"],
     },
-    "seyappaduporul": {  # SP - tutoring and school operations
-        "label": "Seyappaduporul (Tutoring)",
+    "seyappaduporul": {  # SP — school students, recorded + live + games
+        "label": "Seyappaduporul (School)",
         "capabilities": ["video", "quiz", "games", "h5p", "live_classes",
-                         "learning_paths", "rewards", "virtual_labs", "geogebra"],
+                         "learning_paths", "rewards", "virtual_labs"],
     },
-    "utporul": {  # UP - course creation, skills, assessment, credentials
-        "label": "Utporul (Skills)",
+    "utporul": {  # UP — skill oriented, everything enabled
+        "label": "Utporul (Skill)",
         "capabilities": ["video", "quiz", "games", "h5p", "live_classes",
                          "learning_paths", "rewards", "geogebra",
                          "three_d_models", "virtual_labs"],

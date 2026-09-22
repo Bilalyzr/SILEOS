@@ -729,7 +729,7 @@ class TestMinorsGuardsAndStatusCodes:
         monkeypatch.setattr(library_storage, "MAX_FILE_BYTES", 16)
         with pytest.raises(HTTPException) as exc:
             library_storage.save_ebook_file(7, _upload("big.pdf", PDF_BYTES), db)
-        assert exc.value.status_code == 413
+        assert exc.value.status_code == fastapi_status.HTTP_413_CONTENT_TOO_LARGE
 
     def test_quota_check_always_runs_even_when_owner_has_zero_usage(self, ebooks_root, db, monkeypatch):
         # The cap check is unconditional now (no `if db is not None` skip

@@ -14,7 +14,6 @@ const mocks = vi.hoisted(() => ({
   rows: vi.fn(),
   csv: vi.fn(),
   revenue: vi.fn(),
-  portfolio: vi.fn(),
   download: vi.fn(),
 }));
 vi.mock("@/api/operations", () => ({
@@ -40,34 +39,6 @@ beforeEach(() => {
     page_size: 25,
   });
   mocks.csv.mockResolvedValue(new Blob(["csv"]));
-  mocks.portfolio.mockResolvedValue({
-    from: "2026-08-12",
-    to: "2026-09-12",
-    as_of: "2026-09-12T00:00:00Z",
-    verticals: [
-      {
-        key: "meiporul",
-        code: "MA1",
-        label: "Meiporul",
-        tamil: "மெய்ப்பொருள்",
-        subdomain: "meiporul",
-        mission: "Immersive learning",
-        business_model: "Experiences",
-        inventory: [{ key: "courses", label: "Courses", value: 3 }],
-        revenue: {
-          currencies: [{ currency: "INR", captured: 100, refunded: 0, net_cash: 100 }],
-          streams: [{ key: "immersive_courses", label: "Immersive course sales", currencies: [{ currency: "INR", captured: 100, refunded: 0, net_cash: 100 }] }],
-        },
-      },
-    ],
-    unallocated: {
-      payment_count: 1,
-      course_count: 0,
-      currencies: [{ currency: "INR", captured: 20, refunded: 0, net_cash: 20 }],
-    },
-    resilience: [{ currency: "INR", leader: "meiporul", largest_share_percent: 100, remaining_if_leader_pauses: 0, status: "concentrated" }],
-    reporting_contract: { operating_sources: ["commerce payments"], rule: "Sources stay authoritative." },
-  });
 });
 afterEach(cleanup);
 it("uses the same search and status filters for pages and CSV", async () => {
@@ -117,17 +88,6 @@ it("shows unknown learning evidence instead of an invented gain", async () => {
     </MemoryRouter>,
   );
   expect(await screen.findByText("Not enough evidence")).toBeInTheDocument();
-});
-
-it("uses the consolidated business portfolio as the default control view", async () => {
-  render(
-    <MemoryRouter>
-      <OperationsCenter />
-    </MemoryRouter>,
-  );
-  expect(await screen.findByText("Pillar revenue concentration")).toBeInTheDocument();
-  expect(screen.getByText(/1 payment need a pillar classification/)).toBeInTheDocument();
-  expect(mocks.portfolio).toHaveBeenCalled();
 });
 
 it('keeps the latest date-window report when an older request finishes later', async () => {

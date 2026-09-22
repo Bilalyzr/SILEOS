@@ -1,0 +1,131 @@
+<template>
+  <style>
+    @font-face{font-family:'Plus Jakarta Sans';src:url('assets/fonts/PlusJakartaSans.ttf') format('truetype');font-weight:200 800;font-display:block}
+    @font-face{font-family:'JetBrains Mono';src:url('assets/fonts/JetBrainsMono.ttf') format('truetype');font-weight:100 800;font-display:block}
+    #root{position:relative;width:1080px;height:1920px;overflow:hidden;color:#17233a;font-family:'Plus Jakarta Sans';font-weight:500}
+    [id="features-ground"]{position:absolute;inset:0;background:radial-gradient(ellipse at 13% 26%,rgba(255,117,31,.21),transparent 51%),radial-gradient(ellipse at 100% 72%,rgba(251,191,36,.20),transparent 55%),linear-gradient(135deg,#fffaf4 0%,#f6f8fc 57%,#fff4e4 100%)}
+    #features-content{position:absolute;inset:0}
+    [id="features-light"]{position:absolute;left:332px;top:292px;width:416px;height:840px;border-radius:208px;background:linear-gradient(180deg,rgba(251,191,36,0),rgba(255,117,31,.30) 38%,rgba(251,191,36,.16) 64%,rgba(251,191,36,0));filter:blur(65px)}
+    [id="features-brand"]{position:absolute;left:88px;top:180px;display:flex;align-items:center;gap:22px;height:68px}
+    [id="features-brand"] img{width:62px;height:62px;object-fit:contain}
+    [id="features-brand"] span{font-size:35px;font-weight:800;letter-spacing:-1.5px}
+    [id="features-eyebrow"]{position:absolute;right:86px;top:204px;font-family:'JetBrains Mono';font-size:20px;font-weight:500;letter-spacing:2px;color:#3d4c68}
+    [id="features-line"]{position:absolute;left:88px;right:88px;top:296px;height:1px;background:rgba(178,60,5,.17)}
+    [id="features-tile"]{position:absolute;left:350px;top:450px;width:380px;height:380px;border-radius:76px;background:linear-gradient(130deg,rgba(255,255,255,.93),rgba(255,255,255,.46));border:2px solid rgba(255,255,255,.92);box-shadow:0 36px 90px rgba(178,60,5,.12),inset 0 2px 0 #fff;box-sizing:border-box}
+    [id="features-tile"]:after{content:'';position:absolute;inset:17px;border:1px solid rgba(255,255,255,.7);border-radius:60px}
+    [id="features-shots"]{position:absolute;inset:0}
+    [data-features-shot]{position:absolute;inset:0;visibility:hidden}
+    .features02-hero-icon{position:absolute;left:418px;top:518px;width:244px;height:244px;color:#b23c05}
+    .features02-hero-icon svg{display:block;width:100%;height:100%;overflow:visible}
+    .features02-title{position:absolute;left:70px;top:914px;width:940px;margin:0;text-align:center;font-size:76px;line-height:1.06;font-weight:800;letter-spacing:-3.7px;white-space:nowrap}
+    .features02-support{position:absolute;top:1120px;width:420px;height:257px;box-sizing:border-box;padding:29px 28px;border-radius:28px;border:1px solid rgba(255,255,255,.9);background:rgba(255,255,255,.70);box-shadow:0 16px 50px rgba(23,35,58,.035)}
+    .features02-support:first-of-type{left:100px}
+    .features02-support:last-of-type{left:560px}
+    .features02-support-icon{width:58px;height:58px;margin-bottom:18px;color:#b23c05}
+    .features02-support-icon svg{display:block;width:100%;height:100%}
+    .features02-support-label{font-size:36px;line-height:1.16;font-weight:700;letter-spacing:-1.2px}
+    .features02-counter{position:absolute;left:100px;top:1524px;font-family:'JetBrains Mono';font-size:24px;color:#3d4c68;letter-spacing:2px}
+    .features02-counter strong{font-weight:500;color:#b23c05}
+    [id="features-progress-track"]{position:absolute;left:276px;top:1540px;width:704px;height:5px;border-radius:3px;background:rgba(178,60,5,.10);overflow:hidden}
+    [id="features-progress"]{width:100%;height:100%;background:linear-gradient(90deg,#ff751f,#fbbf24);transform-origin:left center}
+  </style>
+  <div data-hf-id="hf-dfnf" id="root" data-composition-id="02-features" data-width="1080" data-height="1920">
+    <div data-hf-id="hf-1w0v" id="features-ground" class="clip" data-start="0" data-duration="17" data-track-index="0"></div>
+    <div data-hf-id="hf-bb9k" id="features-content">
+      <div data-hf-id="hf-r48z" id="features-light"></div>
+      <div data-hf-id="hf-gaco" id="features-brand"><img data-hf-id="hf-99wv" src="assets/sileos-mark.svg" alt=""><span data-hf-id="hf-0lak">SILeos</span></div>
+      <div data-hf-id="hf-h58p" id="features-eyebrow">ONE CONNECTED WORLD</div>
+      <div data-hf-id="hf-kcz3" id="features-line"></div>
+      <div data-hf-id="hf-ljn5" id="features-tile"></div>
+      <div data-hf-id="hf-xy3o" id="features-shots"></div>
+      <div data-hf-id="hf-15dm" id="features-progress-track"><div data-hf-id="hf-ombk" id="features-progress"></div></div>
+    </div>
+  </div>
+  <script>
+    (()=>{
+      const root=document.querySelector('[data-composition-id="02-features"]');
+      const paths={
+        course:'<path d="M12 15h18c8 0 14 4 18 10 4-6 10-10 18-10h18v64H66c-8 0-14 3-18 8-4-5-10-8-18-8H12z"/><path d="M48 25v62M23 30h10M23 41h10M62 31h11M62 42h11"/>',
+        link:'<path d="M39 60 28 71a16 16 0 0 1-23-23l19-19a16 16 0 0 1 23 0M57 36l11-11a16 16 0 0 1 23 23L72 67a16 16 0 0 1-23 0M30 66l36-36"/>',
+        backup:'<path d="M25 29a32 32 0 1 1-9 32M25 12v20H5M34 46l14-13 14 13M48 34v32"/>',
+        live:'<rect x="10" y="24" width="53" height="49" rx="10"/><path d="m63 39 23-13v45L63 58M18 12h35M18 85h35"/>',
+        liveaccess:'<path d="m40 29 28 19-28 19zM24 20a40 40 0 0 0 0 56M72 20a40 40 0 0 1 0 56M15 11a53 53 0 0 0 0 74M81 11a53 53 0 0 1 0 74"/>',
+        attendance:'<rect x="14" y="21" width="68" height="64" rx="8"/><path d="M14 38h68M30 12v18M66 12v18m-33 31 10 10 20-22"/>',
+        video:'<rect x="8" y="17" width="80" height="61" rx="11"/><path d="m40 33 23 15-23 15zM24 88h48"/>',
+        recording:'<rect x="13" y="25" width="70" height="58" rx="8"/><path d="M21 15h54M29 6h38"/><circle cx="48" cy="54" r="14"/>',
+        transcript:'<rect x="35" y="10" width="26" height="41" rx="13"/><path d="M24 38v3a24 24 0 0 0 48 0v-3M48 65v12M34 77h28M13 88h70"/>',
+        lab:'<path d="M34 11h28M39 11v29L15 77a8 8 0 0 0 7 12h52a8 8 0 0 0 7-12L57 40V11M29 59h38"/><circle cx="44" cy="70" r="3"/><circle cx="58" cy="80" r="3"/>',
+        supplied:'<path d="M10 24 30 13l20 11-20 12zM10 24v24l20 11 20-11V24M30 36v23M52 57l17-10 17 10-17 10zM52 57v22l17 10 17-10V57M69 67v22"/>',
+        exchange:'<path d="M10 30h68L64 16M78 30 64 44M86 66H18l14-14M18 66l14 14"/>',
+        xr:'<path d="M16 33h64l9 27-6 14H62L51 63h-6L34 74H13L7 60zM30 32l8-13h20l8 13"/><rect x="19" y="44" width="20" height="16" rx="5"/><rect x="57" y="44" width="20" height="16" rx="5"/>',
+        upload:'<path d="M13 65v19h70V65M48 65V11M28 31l20-20 20 20"/>',
+        hotspot:'<path d="m48 8 35 20v40L48 88 13 68V28zM13 28l35 20 35-20M48 48v40"/><circle cx="48" cy="48" r="10"/><path d="M68 11h20M78 1v20"/>',
+        guided:'<path d="M12 81V55c0-12 8-21 20-21h33M53 20l15 14-15 14"/><circle cx="12" cy="82" r="7"/><rect x="68" y="58" width="20" height="25" rx="4"/><path d="m72 69 5 5 8-10"/>',
+        investigate:'<circle cx="39" cy="38" r="24"/><path d="m57 57 26 26M28 39l8 8 16-18"/>',
+        labcheck:'<path d="M34 11h28M39 11v28L15 77a8 8 0 0 0 7 12h52a8 8 0 0 0 7-12L57 39V11m-26 59 11 10 22-23"/>',
+        exam:'<path d="M22 11h40l15 15v59H22zM62 11v16h15M33 39h27M33 53h20M33 67h14M68 64l13-13 8 8-13 13-12 4z"/>',
+        jee:'<path d="M15 20h66v64H15zM29 9v22M67 9v22M15 39h66M29 52h10v18H29zM54 52h12M54 64h12"/>',
+        pdf:'<path d="M21 10h38l18 18v58H21zM59 10v19h18M31 43h35M31 54h35M31 65h18"/>',
+        assessment:'<rect x="22" y="19" width="57" height="69" rx="6"/><path d="M35 19v-8h28v8M7 41l7 7 14-17M37 43h27M7 64l7 7 14-17M37 66h27"/>',
+        quiz:'<path d="M14 12h52v60H14zM26 28l5 5 8-10M45 29h9M26 47l5 5 8-10M45 48h9M76 35h9v49H33v-7"/>',
+        gradebook:'<path d="M12 17h69v67H12zM29 17v67M12 35h69M12 55h69M48 35v49M64 35v49M18 10v14M40 10v14M64 10v14"/>',
+        library:'<path d="M11 82h76M15 16h14v58H15zM37 16h14v58H37zM60 23l13-4 16 53-13 4zM15 29h14M37 29h14M67 42l14-4"/>',
+        ebook:'<rect x="22" y="8" width="52" height="80" rx="7"/><path d="M34 24h28M34 37h28M34 50h19M42 76h12"/>',
+        assets:'<path d="M9 29V17h29l10 12h39v55H9zM10 41h76M25 56h17v15H25zM56 56h16M56 66h16"/>',
+        personal:'<circle cx="48" cy="24" r="15"/><path d="M15 77v-8c0-16 14-28 33-28s33 12 33 28v8M28 87h40"/>',
+        progress:'<path d="M13 12v73h73M25 67l17-22 17 8 26-34M68 19h17v17"/>',
+        certificate:'<path d="M13 13h70v51H60M35 64H13V13M26 27h45M26 40h32"/><circle cx="48" cy="61" r="15"/><path d="m39 73-5 18 14-7 14 7-5-18"/>',
+        offline:'<path d="M18 61a20 20 0 0 1-1-40 30 30 0 0 1 56 7 17 17 0 0 1 6 33M48 44v43M33 73l15 14 15-14"/>',
+        saved:'<path d="M21 11h54v77L48 72 21 88zM34 34l10 10 20-21"/>',
+        language:'<path d="M8 22h45M30 9v13M18 22c3 21 15 35 35 43M47 22C41 43 28 60 9 69M54 85l17-44 17 44M60 70h22"/>',
+        campus:'<path d="m8 31 40-22 40 22M15 35h66M20 35v41M38 35v41M58 35v41M76 35v41M10 77h76M5 88h86"/>',
+        company:'<path d="M19 86V12h47v74M66 39h17v47M9 86h83M31 27h6M49 27h6M31 42h6M49 42h6M31 57h6M49 57h6M37 86V72h12v14"/>',
+        controls:'<path d="M19 12v72M48 12v72M77 12v72M11 30h16M40 62h16M69 40h16"/><circle cx="19" cy="30" r="8"/><circle cx="48" cy="62" r="8"/><circle cx="77" cy="40" r="8"/>'
+      };
+      const icon=(name)=>'<svg viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+paths[name]+'</svg>';
+      const shots=[
+        ['Course Studio','course','Custom course links','link','Course backup &amp; restore','backup'],
+        ['Live Classrooms','live','Live-now access','liveaccess','Attendance','attendance'],
+        ['Video Learning','video','Recordings','recording','Local transcription','transcript'],
+        ['Virtual Labs','lab','59 supplied labs','supplied','Lab import &amp; export','exchange'],
+        ['3D · AR · VR','xr','GLB uploads','upload','Interactive hotspots','hotspot'],
+        ['Guided Learning','guided','Investigations','investigate','Lab assessments','labcheck'],
+        ['Exam Studio','exam','JEE &amp; NEET papers','jee','Staff text &amp; PDF inputs','pdf'],
+        ['Assessments','assessment','Quizzes &amp; assignments','quiz','Gradebook','gradebook'],
+        ['Learning Library','library','E-books','ebook','Categorized assets','assets'],
+        ['Personal Learning','personal','Progress &amp; mastery','progress','Certificates','certificate'],
+        ['Offline Learning','offline','Saved courses','saved','English &amp; Tamil','language'],
+        ['Campus &amp; Control','campus','Company portal','company','Payments &amp; admin controls','controls']
+      ];
+      const mount=root.querySelector('[id="features-shots"]');
+      shots.forEach((s,i)=>{
+        const group=document.createElement('section');
+        group.id='features-shot-'+i;group.dataset.featuresShot=String(i);
+        group.innerHTML='<div class="features02-hero-icon">'+icon(s[1])+'</div><h2 class="features02-title">'+s[0]+'</h2><article class="features02-support"><div class="features02-support-icon">'+icon(s[3])+'</div><div class="features02-support-label">'+s[2]+'</div></article><article class="features02-support"><div class="features02-support-icon">'+icon(s[5])+'</div><div class="features02-support-label">'+s[4]+'</div></article><div class="features02-counter"><strong>'+String(i+1).padStart(2,'0')+'</strong> / 12</div>';
+        mount.appendChild(group);
+      });
+      const tl=gsap.timeline({paused:true});
+      const groups=root.querySelectorAll('[data-features-shot]');
+      gsap.set(groups,{autoAlpha:0});tl.set(groups,{autoAlpha:0},0);
+      groups.forEach((group,i)=>{
+        const at=i*1.4;
+        if(i>0)tl.set(groups[i-1],{autoAlpha:0},at);
+        tl.set(group,{autoAlpha:1},at);
+        tl.fromTo(group.querySelector('.features02-hero-icon'),{x:42},{x:0,duration:.12,ease:'power2.out',immediateRender:false},at);
+        tl.fromTo(group.querySelector('.features02-title'),{x:48},{x:0,duration:.12,ease:'power2.out',immediateRender:false},at);
+        const strokes=group.querySelectorAll('.features02-hero-icon path,.features02-hero-icon rect,.features02-hero-icon circle');
+        strokes.forEach(el=>el.setAttribute('pathLength','1'));
+        tl.fromTo(strokes,{strokeDasharray:1,strokeDashoffset:1},{strokeDashoffset:0,duration:.35,ease:'power1.out',immediateRender:false},at);
+        const supports=group.querySelectorAll('.features02-support');
+        tl.set(supports,{autoAlpha:0},at);
+        tl.set(supports,{autoAlpha:1},at+.2);
+        tl.fromTo(supports,{y:16},{y:0,duration:.2,ease:'power2.out',stagger:.035,immediateRender:false},at+.2);
+        tl.fromTo(root.querySelector('[id="features-tile"]'),{scale:1},{scale:.97,duration:.07,ease:'power1.in',immediateRender:false},at);
+        tl.fromTo(root.querySelector('[id="features-tile"]'),{scale:.97},{scale:1,duration:.11,ease:'power2.out',immediateRender:false},at+.07);
+      });
+      tl.fromTo(root.querySelector('[id="features-progress"]'),{scaleX:0},{scaleX:1,duration:17,ease:'none'},0);
+      window.__timelines=window.__timelines||{};
+      window.__timelines['02-features']=tl;
+    })();
+  </script>
+</template>

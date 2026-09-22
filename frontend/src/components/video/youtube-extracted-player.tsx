@@ -34,14 +34,22 @@ function useVideoExtraction(videoId: string | null, src: string) {
         queryKey: ['video-extraction', videoId],
         queryFn: async () => {
             const response = await api.get('/extract/video', {
-                params: { url: src, quality: '720' }
+                params: { url: src, quality: '720' },
+                // The backend spawns yt-dlp with a 90s timeout; when YouTube
+                // throttles it (bot checks, common in production) every lesson
+                // open sat on the "Preparing Video" spinner for that whole
+                // window before falling back to the embed. Bound the client
+                // wait so the always-working YouTube embed takes over fast;
+                // a successful server-side extraction still lands in the
+                // shared cache for the next open.
+                timeout: 8000,
             })
             return response.data
         },
         enabled: !!videoId,
         staleTime: 4 * 60 * 60 * 1000, // 4 hours
         gcTime: 4 * 60 * 60 * 1000,
-        retry: 1
+        retry: false
     })
 }
 

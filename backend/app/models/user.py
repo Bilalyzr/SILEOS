@@ -21,9 +21,7 @@ class User(Base):
     user_url = Column(String(100), default="")
     user_registered = Column(DateTime(timezone=True), server_default=func.now())
     user_activation_key = Column(String(255), default="")
-    # Legacy WordPress-compatible mirror. Runtime authorization and active-user
-    # reporting use is_active; keep new rows aligned for older integrations.
-    user_status = Column(Integer, default=1, server_default="1")
+    user_status = Column(Integer, default=0)
     display_name = Column(String(250), nullable=False)
 
     # Additional fields for LMS functionality

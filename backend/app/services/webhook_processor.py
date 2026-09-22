@@ -11,8 +11,7 @@ from app.models.course import Course
 from app.models.payment import Payment, PaymentStatus
 from app.models.user import User
 from app.models.webhook_event import WebhookEvent, WebhookEventStatus
-from app.services.fulfillment_service import fulfill_cart_purchase, fulfill_course_purchase
-from app.services.cart_checkout import CartSnapshotError, parse_cart_notes
+from app.services.fulfillment_service import fulfill_course_purchase
 from app.services.email_service import EmailService
 from app.services.pricing import resolve_expected_purchase
 
@@ -266,63 +265,6 @@ def _fulfill_bundle_from_notes(db: Session, entity: dict, notes: dict) -> None:
         currency=str(entity.get("currency") or "INR"))
 
 
-def _fulfill_cart_from_notes(db: Session, entity: dict, notes: dict) -> None:
-    """Webhook convergence for a paid multi-course cart."""
-    from app.models.coupon import Coupon
-
-    payment_id = str(entity.get("id"))
-    if db.query(Payment).filter(Payment.gateway_payment_id == payment_id).first():
-        return
-    try:
-        user_id = int(notes.get("user_id"))
-        snapshot = parse_cart_notes(notes)
-    except (TypeError, ValueError, CartSnapshotError) as exc:
-        raise UnrecoverableEvent(
-            f"unusable cart notes on payment {payment_id}: {exc}"
-        )
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        raise UnrecoverableEvent(
-            f"user {user_id} not found for cart payment {payment_id}"
-        )
-    captured_paise = int(entity.get("amount") or 0)
-    if captured_paise != snapshot.total_paise:
-        EmailService.send_payment_alert(
-            f"captured amount mismatch for cart payment {payment_id}",
-            f"user_id={user_id} expected_paise={snapshot.total_paise} "
-            f"captured_paise={captured_paise} course_ids={snapshot.course_ids}. "
-            "Not fulfilled — investigate and refund or hand-grant manually.",
-        )
-        raise UnrecoverableEvent(
-            f"cart payment {payment_id} amount does not match its snapshot"
-        )
-
-    coupon = None
-    if snapshot.coupon_id is not None:
-        candidate = db.query(Coupon).filter(Coupon.id == snapshot.coupon_id).first()
-        if candidate is not None and candidate.code.upper() == snapshot.coupon_code:
-            coupon = candidate
-        else:
-            EmailService.send_payment_alert(
-                f"cart coupon snapshot missing for payment {payment_id}",
-                f"coupon_id={snapshot.coupon_id} code={snapshot.coupon_code}. "
-                "The purchase was fulfilled and its discount preserved, but "
-                "coupon usage could not be linked.",
-            )
-
-    fulfill_cart_purchase(
-        db,
-        user=user,
-        line_prices_paise=snapshot.line_prices_paise,
-        razorpay_order_id=str(entity.get("order_id") or ""),
-        razorpay_payment_id=payment_id,
-        paid_amount=captured_paise / 100.0,
-        coupon_discount=snapshot.discount_paise / 100.0,
-        currency=str(entity.get("currency") or "INR"),
-        coupon=coupon,
-    )
-
-
 def _fulfill_ebook_from_notes(db: Session, entity: dict, notes: dict) -> None:
     """Webhook leg of the ebook triple-redundancy. Converges on the same
     `fulfill_ebook_purchase` as /verify and the sweeper, and prices the
@@ -476,8 +418,7 @@ def _handle_payment_captured(db: Session, event: WebhookEvent) -> None:
 
     notes = entity.get("notes") or {}
     ids = _extract_ids(notes)
-    is_cart = notes.get("checkout_type") == "cart" or bool(notes.get("cart_lines"))
-    if (ids is None and not is_cart and not notes.get("bundle_id")
+    if (ids is None and not notes.get("bundle_id")
             and not notes.get("invoice_id") and not notes.get("ebook_id")):
         # Spec fallback: the payment entity's notes can be empty even though
         # the ORDER carries them. Ask the gateway before giving up. The order's
@@ -486,17 +427,9 @@ def _handle_payment_captured(db: Session, event: WebhookEvent) -> None:
         # way as entity notes).
         order_notes = _fetch_order_notes(entity.get("order_id"))
         ids = _extract_ids(order_notes)
-        order_is_cart = (
-            order_notes.get("checkout_type") == "cart"
-            or bool(order_notes.get("cart_lines"))
-        )
-        if (ids is not None or order_is_cart or order_notes.get("bundle_id")
+        if (ids is not None or order_notes.get("bundle_id")
                 or order_notes.get("invoice_id") or order_notes.get("ebook_id")):
             notes = order_notes
-
-    if notes.get("checkout_type") == "cart" or notes.get("cart_lines"):
-        _fulfill_cart_from_notes(db, entity, notes)
-        return
 
     if notes.get("bundle_id"):
         _fulfill_bundle_from_notes(db, entity, notes)

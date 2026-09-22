@@ -282,7 +282,7 @@ function ResultsDrawer({
 
   return (
     <div
-      className="fixed inset-0 z-modal bg-black/50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-[100] bg-black/50 flex items-center justify-center p-4"
       onClick={onClose}
     >
       <div
@@ -601,7 +601,7 @@ export default function InstructorGamesPage() {
       </section>
       {confirmDeleteId != null && (
         <div
-          className="fixed inset-0 z-modal bg-black/50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-[100] bg-black/50 flex items-center justify-center p-4"
           onClick={() => setConfirmDeleteId(null)}
         >
           <div

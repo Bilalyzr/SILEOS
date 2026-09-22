@@ -221,7 +221,7 @@ export interface CertificateTemplateCreate {
   background: TemplateBackground
   dimensions: TemplateDimensions
   elements: TemplateElement[]
-  orientation?: 'landscape' | 'portrait'
+  orientation?: string
   is_default?: boolean
 }
 
@@ -230,7 +230,7 @@ export interface UploadedTemplateCreate {
   description?: string
   file_url: string
   file_type?: 'image' | 'pdf'
-  orientation?: 'landscape' | 'portrait'
+  orientation?: string
 }
 
 export interface TemplatePreviewResponse {

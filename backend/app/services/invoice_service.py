@@ -16,8 +16,6 @@ from app.models.company_invoice import (
     InvoiceStatus,
 )
 from app.models.payment import Order, OrderItem, OrderStatus, Payment, PaymentStatus
-from app.models.course import Course
-from app.core.business_verticals import revenue_metadata
 
 logger = logging.getLogger(__name__)
 
@@ -124,13 +122,11 @@ def settle_invoice(db: Session, invoice: CompanyInvoice, *, via: str,
         # this mirrors the existing precedent for subscription/membership
         # orders, which likewise have no per-line OrderItem breakdown.
         if it.course_id:
-            course = db.get(Course, it.course_id)
             db.add(OrderItem(order_id=order.id, course_id=it.course_id,
                              order_item_name=it.description,
                              order_item_type="invoice_item",
                              quantity=it.quantity,
-                             subtotal=it.line_total, total=it.line_total,
-                             product_data=revenue_metadata(course.course_type) if course else {}))
+                             subtotal=it.line_total, total=it.line_total))
         if it.course_id or it.bundle_id:
             db.add(CompanySeatPool(
                 company_id=company.id, invoice_id=invoice.id,

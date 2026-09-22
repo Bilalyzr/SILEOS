@@ -253,11 +253,6 @@ run_migrations() {
     if ! DEPLOY_LOG="$DEPLOY_LOG" RELEASE_TAG="$RELEASE_TAG" "$SCRIPT_DIR/migrate.sh"; then
         die "migrations failed — aborting before any traffic change"
     fi
-    # The SQL ledger covers historical migrations; newer releases also use
-    # Alembic. Run the NEW image once, without starting another API/scheduler.
-    if ! dc_app "$TARGET" run --rm --no-deps backend python -m alembic upgrade head >>"$DEPLOY_LOG" 2>&1; then
-        die "Alembic migrations failed — aborting before starting the target"
-    fi
 }
 
 start_target() {

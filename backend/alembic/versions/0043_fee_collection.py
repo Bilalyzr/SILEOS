@@ -18,19 +18,8 @@ def upgrade():
     bind = op.get_bind()
     inspector = sa.inspect(bind)
 
-    payment_columns = (
-        {c["name"] for c in inspector.get_columns("tuition_payments")}
-        if inspector.has_table("tuition_payments")
-        else set()
-    )
-    # A bare Alembic test database intentionally has no pre-existing users
-    # table. Avoid a SQLite batch reflection through missing FK targets; the
-    # normal create_all-first and production schemas both have users.
-    if (
-        inspector.has_table("tuition_payments")
-        and inspector.has_table("users")
-        and "verification_status" not in payment_columns
-    ):
+    payment_columns = {c["name"] for c in inspector.get_columns("tuition_payments")}
+    if "verification_status" not in payment_columns:
         with op.batch_alter_table("tuition_payments") as batch:
             batch.add_column(sa.Column("received_by", sa.Integer(), nullable=True))
             batch.add_column(
@@ -156,31 +145,15 @@ def upgrade():
 
 
 def downgrade():
-    bind = op.get_bind()
-    inspector = sa.inspect(bind)
-    if inspector.has_table("tuition_online_orders"):
-        op.drop_table("tuition_online_orders")
-    if inspector.has_table("tuition_invoices"):
-        op.drop_table("tuition_invoices")
-    inspector = sa.inspect(bind)
-    if not inspector.has_table("tuition_payments"):
-        return
-    columns = {c["name"] for c in inspector.get_columns("tuition_payments")}
-    if "verification_status" not in columns:
-        return
-    indexes = {row["name"] for row in inspector.get_indexes("tuition_payments")}
-    if "ix_tuition_payment_verification" in indexes:
-        op.drop_index("ix_tuition_payment_verification", table_name="tuition_payments")
-    checks = {row.get("name") for row in inspector.get_check_constraints("tuition_payments")}
+    op.drop_table("tuition_online_orders")
+    op.drop_table("tuition_invoices")
+    op.drop_index("ix_tuition_payment_verification", table_name="tuition_payments")
     with op.batch_alter_table("tuition_payments") as batch:
-        if "ck_tuition_payment_verification" in checks:
-            batch.drop_constraint("ck_tuition_payment_verification", type_="check")
-        for column in (
-            "verification_note",
-            "verified_at",
-            "verified_by",
-            "verification_status",
-            "received_by",
-        ):
-            if column in columns:
-                batch.drop_column(column)
+        batch.drop_constraint("ck_tuition_payment_verification", type_="check")
+        batch.drop_constraint("fk_tuition_payment_verified_by", type_="foreignkey")
+        batch.drop_constraint("fk_tuition_payment_received_by", type_="foreignkey")
+        batch.drop_column("verification_note")
+        batch.drop_column("verified_at")
+        batch.drop_column("verified_by")
+        batch.drop_column("verification_status")
+        batch.drop_column("received_by")

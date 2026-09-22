@@ -154,10 +154,8 @@ export const LoginForm: React.FC = () => {
         // button below the form has a target.
         const attempted = getValues("email")
         if (attempted) setUnverifiedEmail(attempted)
-      } else if (error.includes("No account found")) {
+      } else if (error.includes("No account found") || error.includes("email")) {
         setError("email", { message: "No account found with this email address" })
-      } else if (error.includes("Invalid email or password")) {
-        setError("password", { message: "Incorrect email or password" })
       } else if (error.includes("Incorrect password") || error.includes("password")) {
         setError("password", { message: "Incorrect password. Please try again" })
       } else if (error.includes("pending approval")) {

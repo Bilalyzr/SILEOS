@@ -55,8 +55,6 @@ RUN apt-get update && apt-get install -y \
     && mkdir -p /app/certificates \
     && mkdir -p /app/streaming/cache
 
-RUN groupadd --system appuser && useradd --system --gid appuser --home-dir /app appuser
-
 # Copy Python dependencies and backend code from backend-builder
 COPY --from=backend-builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY --from=backend-builder /usr/local/bin /usr/local/bin
@@ -78,12 +76,6 @@ COPY --from=backend-builder /app/backend /app/backend
 # Copy entrypoint script
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-
-# Only runtime data is writable by the application processes. Source and
-# configuration remain root-owned and read-only to the non-root workers.
-RUN mkdir -p /var/log/supervisor /var/log/sashainfinity /app/backend/invoices /app/backend/ebooks \
-    && chown -R appuser:appuser /app/uploads /app/certificates /app/streaming/cache \
-       /app/backend/invoices /app/backend/ebooks /var/log/supervisor /var/log/sashainfinity
 
 # Environment variables
 ENV PYTHONPATH=/app/backend

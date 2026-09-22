@@ -13,9 +13,8 @@
   right: 28px;
   /* clears the homepage .scroll-top-btn (bottom: 28px, 46px tall) */
   bottom: 88px;
-  /* below the pop-up overlay (.idp-overlay sits at the modal tier) and below
-     every modal scrim, so dialogs always dim it */
-  z-index: var(--z-fab, 70);
+  /* below the pop-up overlay (.idp-overlay is 100) so it dims behind it */
+  z-index: 95;
   width: 296px;
   max-width: calc(100vw - 24px);
   padding: 2px;

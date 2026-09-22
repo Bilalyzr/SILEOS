@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" preserveAspectRatio="xMidYMax slice">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d3cabf"/>
+      <stop offset="1" stop-color="#c3b9ab"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e9caa2"/>
+      <stop offset="1" stop-color="#d8b485"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e7ecef"/>
+      <stop offset="1" stop-color="#cdd6db"/>
+    </linearGradient>
+  </defs>
+
+  <!-- WALL -->
+  <rect width="400" height="214" fill="url(#wall)"/>
+  <!-- baseboard -->
+  <rect y="210" width="400" height="9" fill="#f1ede7"/>
+
+  <!-- FLOOR -->
+  <rect y="219" width="400" height="101" fill="url(#floor)"/>
+  <!-- floor plank perspective lines -->
+  <g stroke="#caa074" stroke-width="1.4" opacity=".55">
+    <line x1="60"  y1="219" x2="-40"  y2="320"/>
+    <line x1="150" y1="219" x2="110"  y2="320"/>
+    <line x1="250" y1="219" x2="290"  y2="320"/>
+    <line x1="340" y1="219" x2="440"  y2="320"/>
+  </g>
+  <g stroke="#e7c9a2" stroke-width="2" opacity=".5">
+    <line x1="0" y1="250" x2="400" y2="250"/>
+    <line x1="0" y1="285" x2="400" y2="285"/>
+  </g>
+
+  <!-- NOTICE BOARD (right wall) -->
+  <g>
+    <!-- wooden frame -->
+    <rect x="316" y="40" width="78" height="104" rx="5" fill="#8a5a32"/>
+    <!-- cork surface -->
+    <rect x="323" y="47" width="64" height="90" rx="3" fill="#cda36a"/>
+    <rect x="323" y="47" width="64" height="90" rx="3" fill="#000" opacity=".05"/>
+    <!-- pinned notes -->
+    <g>
+      <rect x="330" y="55" width="26" height="22" rx="2" fill="#fff6cf" transform="rotate(-5 343 66)"/>
+      <circle cx="343" cy="57" r="2.2" fill="#e0457b"/>
+      <rect x="360" y="60" width="22" height="20" rx="2" fill="#d8ecff" transform="rotate(4 371 70)"/>
+      <circle cx="371" cy="62" r="2.2" fill="#2d6fb3"/>
+      <rect x="332" y="88" width="24" height="20" rx="2" fill="#ffe0d2" transform="rotate(3 344 98)"/>
+      <circle cx="344" cy="90" r="2.2" fill="#ed7d2b"/>
+      <rect x="360" y="92" width="24" height="22" rx="2" fill="#d9f7e8" transform="rotate(-4 372 103)"/>
+      <circle cx="372" cy="94" r="2.2" fill="#2e9e7b"/>
+    </g>
+    <!-- faint lines on notes -->
+    <g stroke="#b9b08f" stroke-width="1" opacity=".5">
+      <line x1="334" y1="63" x2="352" y2="61"/>
+      <line x1="334" y1="68" x2="350" y2="66"/>
+      <line x1="336" y1="96" x2="352" y2="98"/>
+    </g>
+  </g>
+
+  <!-- SIDE TABLE (right) -->
+  <g>
+    <rect x="300" y="150" width="96" height="12" rx="3" fill="#a06a38"/>
+    <rect x="308" y="162" width="9" height="58" fill="#8a5a30"/>
+    <rect x="380" y="162" width="9" height="58" fill="#8a5a30"/>
+    <!-- candle -->
+    <rect x="338" y="132" width="22" height="14" rx="4" fill="#bcd2d8"/>
+    <rect x="345" y="123" width="8" height="11" rx="3" fill="#f3ead2"/>
+    <ellipse cx="349" cy="122" rx="3" ry="4" fill="#f6a623"/>
+  </g>
+
+  <!-- MONSTERA PLANT (left) -->
+  <g>
+    <!-- wooden stand -->
+    <rect x="22"  y="186" width="8" height="40" fill="#9c6b3f"/>
+    <rect x="74"  y="186" width="8" height="40" fill="#9c6b3f"/>
+    <rect x="18"  y="182" width="68" height="7" rx="2" fill="#a8744a"/>
+    <!-- pot -->
+    <path d="M28 140 h48 l-6 46 h-36 z" fill="#f1f1ee"/>
+    <path d="M28 140 h48 l-1.5 11 h-45 z" fill="#e4e4df"/>
+    <!-- leaves -->
+    <g fill="#3f9d4f" stroke="#2f7d3c" stroke-width="1.5">
+      <path d="M52 140 C 20 120 8 80 26 52 C 44 78 50 110 52 140 Z"/>
+      <path d="M52 140 C 84 122 96 84 80 54 C 60 80 54 112 52 140 Z"/>
+      <path d="M52 140 C 38 108 40 70 52 44 C 66 72 60 112 52 140 Z"/>
+    </g>
+    <!-- leaf splits -->
+    <g stroke="#2f7d3c" stroke-width="2" opacity=".7" fill="none">
+      <path d="M30 64 l8 6 M28 84 l9 5 M30 104 l9 4"/>
+      <path d="M74 66 l-8 6 M76 86 l-9 5 M74 106 l-9 4"/>
+      <path d="M52 60 v60"/>
+    </g>
+  </g>
+
+  <!-- soft floor highlight -->
+  <ellipse cx="200" cy="300" rx="160" ry="26" fill="#f3dab6" opacity=".4"/>
+</svg>

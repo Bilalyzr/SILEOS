@@ -96,7 +96,7 @@ export const AwardToaster: React.FC = () => {
   if (queue.length === 0) return null
 
   return (
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-toast flex flex-col gap-2 pointer-events-none items-center" data-testid="award-toaster">
+    <div className="fixed top-4 right-4 z-[9998] flex flex-col gap-2 pointer-events-none" data-testid="award-toaster">
       {queue.map((t) => {
         const Icon = toastIcon(t.kind)
         return (

@@ -1236,6 +1236,7 @@ const QuizBuilder: React.FC = () => {
                 </label>
                 <input
                   type="datetime-local"
+                  min={new Date().toISOString().slice(0, 16)}
                   value={
                     settings.availableFrom
                       ? new Date(settings.availableFrom)
@@ -1261,6 +1262,7 @@ const QuizBuilder: React.FC = () => {
                 </label>
                 <input
                   type="datetime-local"
+                  min={new Date().toISOString().slice(0, 16)}
                   value={
                     settings.availableUntil
                       ? new Date(settings.availableUntil)

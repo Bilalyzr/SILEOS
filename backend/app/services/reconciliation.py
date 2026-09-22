@@ -24,12 +24,7 @@ from app.models.payment import Payment
 from app.models.user import User
 from app.models.webhook_event import WebhookEvent, WebhookEventStatus
 from app.services.email_service import EmailService
-from app.services.fulfillment_service import (
-    fulfill_bundle_purchase,
-    fulfill_cart_purchase,
-    fulfill_course_purchase,
-)
-from app.services.cart_checkout import CartSnapshotError, parse_cart_notes
+from app.services.fulfillment_service import fulfill_bundle_purchase, fulfill_course_purchase
 from app.services.invoice_service import settle_invoice
 from app.services.pricing import resolve_expected_purchase
 from app.services.membership_access import (
@@ -126,73 +121,6 @@ def reconcile_gateway_orders(db: Session, client, lookback_hours: int = 24) -> i
             # Edgyy proxy orders never get a local Payment row; they are
             # reconciled through their own webhook_events path. Alerting here
             # would page on every Edgyy sale for 24h.
-            continue
-
-        if notes.get("checkout_type") == "cart" or notes.get("cart_lines"):
-            from app.models.coupon import Coupon
-
-            try:
-                user_id = int(notes.get("user_id"))
-                snapshot = parse_cart_notes(notes)
-            except (TypeError, ValueError, CartSnapshotError) as exc:
-                EmailService.send_payment_alert(
-                    f"orphaned cart capture {pay_id} — unusable notes",
-                    f"gateway order {order.get('id')} notes={notes!r} "
-                    f"error={exc}. Fulfil manually.",
-                )
-                continue
-            user = db.query(User).filter(User.id == user_id).first()
-            if not user:
-                EmailService.send_payment_alert(
-                    f"orphaned cart capture {pay_id} — user missing",
-                    f"user_id={user_id} gateway order {order.get('id')}. "
-                    "Fulfil manually.",
-                )
-                continue
-            captured_paise = int(captured.get("amount") or 0)
-            if captured_paise != snapshot.total_paise:
-                EmailService.send_payment_alert(
-                    f"orphaned cart capture {pay_id} — amount mismatch",
-                    f"expected_paise={snapshot.total_paise} "
-                    f"captured_paise={captured_paise} "
-                    f"course_ids={snapshot.course_ids}. Fulfil manually.",
-                )
-                continue
-            coupon = None
-            if snapshot.coupon_id is not None:
-                candidate = db.query(Coupon).filter(
-                    Coupon.id == snapshot.coupon_id
-                ).first()
-                if candidate is not None and candidate.code.upper() == snapshot.coupon_code:
-                    coupon = candidate
-            try:
-                fulfill_cart_purchase(
-                    db,
-                    user=user,
-                    line_prices_paise=snapshot.line_prices_paise,
-                    razorpay_order_id=str(order["id"]),
-                    razorpay_payment_id=pay_id,
-                    paid_amount=captured_paise / 100.0,
-                    coupon_discount=snapshot.discount_paise / 100.0,
-                    currency=str(captured.get("currency") or "INR"),
-                    coupon=coupon,
-                )
-                db.commit()
-                fulfilled += 1
-                logger.warning(
-                    "reconciliation fulfilled orphaned cart capture %s "
-                    "(user %s, courses %s)",
-                    pay_id, user_id, snapshot.course_ids,
-                )
-            except Exception as exc:
-                db.rollback()
-                logger.exception(
-                    "reconciliation cart fulfillment failed for %s", pay_id
-                )
-                EmailService.send_payment_alert(
-                    f"reconciliation failed for cart capture {pay_id}",
-                    f"error: {exc}. Fulfil manually.",
-                )
             continue
 
         if notes.get("bundle_id"):

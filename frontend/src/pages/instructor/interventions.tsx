@@ -181,21 +181,12 @@ export default function InterventionsPage() {
                   Instructor note: {i.instructor_note}
                 </p>
               )}
-              {i.evidence?.basis === "at_risk" ? (
-                <Link
-                  className="si-btn-ghost inline-flex mt-4 mr-2"
-                  to={`/instructor/insights?tab=risk&course_id=${i.course_id}`}
-                >
-                  Review risk signal
-                </Link>
-              ) : (
-                <Link
-                  className="si-btn-ghost inline-flex mt-4 mr-2"
-                  to={`/instructor/assessment-studio?course_id=${i.course_id}&concept=${encodeURIComponent(i.concept)}`}
-                >
-                  Fix assessment gap
-                </Link>
-              )}
+              <Link
+                className="si-btn-ghost inline-flex mt-4 mr-2"
+                to={`/instructor/assessment-studio?course_id=${i.course_id}&concept=${encodeURIComponent(i.concept)}`}
+              >
+                Fix assessment gap
+              </Link>
               <button
                 className="si-btn-primary mt-4"
                 disabled={i.goal_status === "paused"}

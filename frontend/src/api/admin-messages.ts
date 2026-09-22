@@ -10,7 +10,7 @@ export interface AdminMessage {
   sent_at: string
   read_at: string | null
   /** Email delivery outcome; null on messages stored before emailing existed. */
-  email_status: 'sent' | 'failed' | 'no_email' | null
+  email_status: 'sent' | 'failed' | 'no_email' | 'pending' | null
 }
 
 export interface CompanyRecipient {
@@ -44,10 +44,8 @@ export interface BulkSendResult {
   status: string
   sent_count: number
   failed_count: number
-  /** Emails actually accepted by the SMTP server. */
-  email_sent_count: number
-  /** Recipients whose email bounced at send time or who have no address. */
-  email_failed_count: number
+  /** Bulk sends now deliver email in the background ("pending"). */
+  email_status?: 'pending'
   failed: Array<{ id: number; reason: string }>
 }
 

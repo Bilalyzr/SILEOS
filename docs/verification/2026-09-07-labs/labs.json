@@ -1,0 +1,1187 @@
+{
+  "root": "frontend",
+  "cases": 118,
+  "failed": 0,
+  "results": [
+    {
+      "slug": "cbse-fractions-explorer",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-pythagoras-explorer",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-line-explorer",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-quadratic-explorer",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-probability-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-plant-animal-cell",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": false,
+      "domStage": true,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-electric-circuits",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-acids-bases-ph",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-light-optics",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-motion-graphs",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-predator-prey",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-projectile-motion",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-simple-pendulum",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-wave-motion",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-titration-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-ideal-gas-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-genetics-punnett",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": false,
+      "domStage": true,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-photosynthesis-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-solar-system-3d",
+      "viewport": 1440,
+      "webgl": true,
+      "drawCalls": 37,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-atom-builder-3d",
+      "viewport": 1440,
+      "webgl": true,
+      "drawCalls": 23,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-dna-helix-3d",
+      "viewport": 1440,
+      "webgl": true,
+      "drawCalls": 157,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-molecule-viewer-3d",
+      "viewport": 1440,
+      "webgl": true,
+      "drawCalls": 9,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-magnet-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-heat-transfer-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-force-pressure-friction",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-solids-3d",
+      "viewport": 1440,
+      "webgl": true,
+      "drawCalls": 3,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-balance-equations",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": false,
+      "domStage": true,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-reactivity-series",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-human-eye-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-magnetism-current",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-trigonometry-explorer",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-statistics-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-unit-circle-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-conic-sections-3d",
+      "viewport": 1440,
+      "webgl": true,
+      "drawCalls": 11,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-faraday-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-kinetics-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-water-states-3d",
+      "viewport": 1440,
+      "webgl": true,
+      "drawCalls": 182,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-earth-moon-sun-3d",
+      "viewport": 1440,
+      "webgl": true,
+      "drawCalls": 1,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-symmetry-3d",
+      "viewport": 1440,
+      "webgl": true,
+      "drawCalls": 3,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-sundial-3d",
+      "viewport": 1440,
+      "webgl": true,
+      "drawCalls": 6,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-wind-pressure-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-number-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-progressions-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-triangles-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-circles-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-venn-sets-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-limits-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-matrix-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-neuron-reflex-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-reproduction-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-separation-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-periodic-table-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": false,
+      "domStage": true,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-electrostatics-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-photoelectric-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-radioactivity-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-heart-circulation-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-biotech-pcr-lab",
+      "viewport": 1440,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-solar-system-xr",
+      "viewport": 1440,
+      "webgl": true,
+      "drawCalls": 37,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-molecule-viewer-xr",
+      "viewport": 1440,
+      "webgl": true,
+      "drawCalls": 7,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-fractions-explorer",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-pythagoras-explorer",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-line-explorer",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-quadratic-explorer",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-probability-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-plant-animal-cell",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": false,
+      "domStage": true,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-electric-circuits",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-acids-bases-ph",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-light-optics",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-motion-graphs",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-predator-prey",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-projectile-motion",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-simple-pendulum",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-wave-motion",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-titration-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-ideal-gas-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-genetics-punnett",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": false,
+      "domStage": true,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-photosynthesis-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-solar-system-3d",
+      "viewport": 390,
+      "webgl": true,
+      "drawCalls": 33,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-atom-builder-3d",
+      "viewport": 390,
+      "webgl": true,
+      "drawCalls": 23,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-dna-helix-3d",
+      "viewport": 390,
+      "webgl": true,
+      "drawCalls": 157,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-molecule-viewer-3d",
+      "viewport": 390,
+      "webgl": true,
+      "drawCalls": 9,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-magnet-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-heat-transfer-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-force-pressure-friction",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-solids-3d",
+      "viewport": 390,
+      "webgl": true,
+      "drawCalls": 3,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-balance-equations",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": false,
+      "domStage": true,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-reactivity-series",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-human-eye-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-magnetism-current",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-trigonometry-explorer",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-statistics-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-unit-circle-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-conic-sections-3d",
+      "viewport": 390,
+      "webgl": true,
+      "drawCalls": 11,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-faraday-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-kinetics-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-water-states-3d",
+      "viewport": 390,
+      "webgl": true,
+      "drawCalls": 182,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-earth-moon-sun-3d",
+      "viewport": 390,
+      "webgl": true,
+      "drawCalls": 1,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-symmetry-3d",
+      "viewport": 390,
+      "webgl": true,
+      "drawCalls": 3,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-sundial-3d",
+      "viewport": 390,
+      "webgl": true,
+      "drawCalls": 6,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-wind-pressure-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-number-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-progressions-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-triangles-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-circles-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-venn-sets-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-limits-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-matrix-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-neuron-reflex-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-reproduction-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-separation-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-periodic-table-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": false,
+      "domStage": true,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-electrostatics-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-photoelectric-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-radioactivity-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-heart-circulation-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-biotech-pcr-lab",
+      "viewport": 390,
+      "webgl": false,
+      "drawCalls": 0,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-solar-system-xr",
+      "viewport": 390,
+      "webgl": true,
+      "drawCalls": 36,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "slug": "cbse-molecule-viewer-xr",
+      "viewport": 390,
+      "webgl": true,
+      "drawCalls": 7,
+      "canvas": true,
+      "domStage": false,
+      "overflow": false,
+      "errors": []
+    }
+  ]
+}

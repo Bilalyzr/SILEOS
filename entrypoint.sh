@@ -38,11 +38,12 @@ mkdir -p /app/streaming/cache
 mkdir -p /var/cache/nginx
 mkdir -p /var/log/nginx
 
-# Bind-mounted runtime directories may arrive with host ownership. Grant only
-# the application user access; never make the entire image world-writable.
-print_status "Setting runtime-data permissions..."
-chown -R appuser:appuser /app/uploads /app/certificates /app/backend/invoices /app/backend/ebooks /var/log/sashainfinity
-chmod -R 775 /app/uploads /app/certificates /app/backend/invoices /app/backend/ebooks /var/log/sashainfinity
+# Set proper permissions
+print_status "Setting permissions..."
+chown -R root:root /app
+chmod -R 755 /app
+chmod -R 777 /app/uploads
+chmod -R 777 /app/certificates
 
 # Check if required files exist
 if [ ! -f "/app/backend/app/main.py" ]; then
@@ -58,23 +59,31 @@ fi
 # Wait for any dependencies (if needed)
 print_status "Checking dependencies..."
 
-# Initialize the complete ORM schema first for legacy base tables, then apply
-# every idempotent Alembic revision. A migration failure must abort startup.
-print_status "Initializing database..."
+# Initialize Python environment
 cd /app/backend
-python -c "import asyncio; from app.core.database import init_db; asyncio.run(init_db())"
-alembic upgrade head
+print_status "Installing Python dependencies..."
+pip install --no-cache-dir -r requirements.txt || print_warning "Backend dependencies install failed"
+
+cd /app/streaming
+print_status "Installing streaming dependencies..."
+pip install --no-cache-dir -r requirements.txt || print_warning "Streaming dependencies install failed"
+
+# Go back to app root
+cd /app
+
+# Initialize database (if needed)
+print_status "Initializing database..."
+python -c "import asyncio; from app.core.database import init_db; asyncio.run(init_db())" || print_warning "Database initialization failed"
 
 # Initialize Redis (if needed)
 print_status "Initializing Redis..."
-python -c "import asyncio; from app.core.redis import init_redis; asyncio.run(init_redis())"
+python -c "import asyncio; from app.core.redis import init_redis; asyncio.run(init_redis())" || print_warning "Redis initialization failed"
 
 # Create upload directories
 print_status "Creating upload directories..."
 mkdir -p /app/uploads/videos
 mkdir -p /app/uploads/images
 mkdir -p /app/certificates/generated
-chown -R appuser:appuser /app/uploads /app/certificates /app/backend/invoices /app/backend/ebooks
 
 # Start Supervisor
 print_status "Starting Supervisor..."

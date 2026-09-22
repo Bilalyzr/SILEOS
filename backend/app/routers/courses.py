@@ -453,10 +453,10 @@ def course_slug_availability(slug: str, exclude_course_id: Optional[int] = None,
     return {'available': available, 'slug': normalized, 'message': 'Available' if available else 'This course link is already in use.'}
 
 
-# Must be registered BEFORE /{course_ref}: a single-segment static path added
-# after the str catch-all is shadowed by it (GET /courses/categories used to
-# resolve to get_course("categories") → 404). Same trap /pending escaped by
-# being hoisted above — see the comment there.
+# NOTE: this literal route MUST stay above @router.get("/{course_ref}").
+# FastAPI matches in registration order and course_ref is a str, so while
+# /categories sat below it every request was answered by get_course(), which
+# looked for a course whose slug is literally "categories" and returned 404.
 @router.get("/categories", response_model=List[Dict[str, Any]])
 def get_categories(db: Session = Depends(get_db)):
     """Get all course categories"""
@@ -1206,28 +1206,7 @@ async def get_course_lessons(
         Lesson.post_parent == course_id
     ).order_by(Lesson.menu_order).all()
 
-    # Public-preview lock — same rule as get_course() above: anyone not
-    # enrolled (and not owner/admin) gets non-preview lessons WITHOUT
-    # content/media handles, is_locked=True. Before this, the standalone
-    # lessons endpoint returned full bodies (incl. paid-course content) to
-    # anonymous visitors while the course-detail endpoint locked correctly.
-    is_enrolled = False
-    if current_user:
-        enrollment = db.query(Enrollment).filter(
-            Enrollment.course_id == course_id,
-            Enrollment.user_id == current_user.id
-        ).first()
-        is_enrolled = enrollment is not None and enrollment.enrollment_status not in ['cancelled', 'suspended']
-    full_access = is_enrolled or bool(
-        current_user and (current_user.role in ("admin", "superadmin") or current_user.id == course.post_author)
-    ) or (current_user is not None and can_edit(db, course, current_user))
-
-    formatted = [CourseService.format_lesson_response(lesson) for lesson in lessons]
-    if not full_access:
-        for lesson, lesson_data in zip(lessons, formatted):
-            if not lesson.lesson_preview:
-                CourseService.lock_lesson(lesson_data)
-    return formatted
+    return [CourseService.format_lesson_response(lesson) for lesson in lessons]
 
 async def _resolve_youtube_media(
     youtube_url: str,
@@ -2318,25 +2297,17 @@ async def enroll_in_course(
         db.commit()
         db.refresh(new_enrollment)
 
-        # Send enrollment confirmation email. Fire-and-forget: awaiting SMTP
-        # inline held one enroll response for 40s while the mail server
-        # dawdled. The mail is best-effort (logged, never fails the request),
-        # so it must not sit in the request path.
-        import asyncio as _asyncio
-
-        async def _send_enrollment_email() -> None:
-            try:
-                await send_enrollment_confirmation_email(
-                    email=current_user.user_email,
-                    user_name=current_user.display_name or current_user.user_email,
-                    course_title=course.post_title,
-                    course_id=course_id
-                )
-                logger.info(f"✅ Enrollment confirmation email sent to {current_user.user_email} for course {course.post_title}")
-            except Exception as email_err:
-                logger.warning(f"⚠️ Failed to send enrollment confirmation email to {current_user.user_email}: {email_err}")
-
-        _asyncio.create_task(_send_enrollment_email())
+        # Send enrollment confirmation email
+        try:
+            await send_enrollment_confirmation_email(
+                email=current_user.user_email,
+                user_name=current_user.display_name or current_user.user_email,
+                course_title=course.post_title,
+                course_id=course_id
+            )
+            logger.info(f"✅ Enrollment confirmation email sent to {current_user.user_email} for course {course.post_title}")
+        except Exception as email_err:
+            logger.warning(f"⚠️ Failed to send enrollment confirmation email to {current_user.user_email}: {email_err}")
     except HTTPException:
         db.rollback()
         raise
@@ -2406,22 +2377,15 @@ async def get_course_progress(
     ).first()
 
     if not enrollment:
-        return {
-            "course_id": course_id, "student_id": current_user.id,
-            "total_lessons": 0, "completed_lessons": 0,
-            "total_quizzes": 0, "completed_quizzes": 0,
-            "total_assignments": 0, "completed_assignments": 0,
-            "overall_progress": 0.0, "last_accessed": None, "completion_date": None,
-            "certificate_earned": False, "completed_lesson_ids": [],
-            "passed_quiz_ids": [], "completed_assignment_ids": [], "enrolled": False,
-        }
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Not enrolled in this course"
+        )
 
     # Read-only: recompute the numbers WITHOUT persisting anything — no
     # tracker-column writes, no completion/regression transitions, and no
     # certificate issuance as a side effect of a GET.
-    result = CourseService.calculate_course_progress(db, enrollment, commit=False)
-    result["enrolled"] = True
-    return result
+    return CourseService.calculate_course_progress(db, enrollment, commit=False)
 
 
 # ---------------------------------------------------------------------------
@@ -2575,9 +2539,6 @@ async def create_course_review(
 
 
 # ==================== CATEGORIES ENDPOINTS ====================
-# (get_categories moved above /{course_ref} — single-segment static paths
-# registered after the catch-all never match.)
-
 
 @router.get("/categories/{category_id}/courses")
 def get_courses_by_category(

@@ -11,7 +11,6 @@ from app.models.exam_paper import ExamPaper, ExamPriceSlab
 from app.models.payment import Order, OrderStatus, Payment, PaymentStatus
 from app.models.sileos_pack import AiJob, BankQuestion, QuestionBank
 from app.services import llm_provider
-from app.core.business_verticals import revenue_metadata
 
 STAFF = {'instructor', 'admin', 'superadmin'}
 
@@ -45,32 +44,82 @@ def slab_out(row):
     return {key: getattr(row, key) for key in ('id', 'exam', 'title', 'min_questions', 'max_questions', 'price_paise', 'active')}
 
 
+def _extract_pdf(content):
+    if not content.startswith(b'%PDF-'):
+        raise ValueError('This file is not a PDF.')
+    from PyPDF2 import PdfReader
+    reader = PdfReader(io.BytesIO(content))
+    if reader.is_encrypted:
+        raise ValueError('Unlock this PDF before uploading.')
+    if len(reader.pages) > 120:
+        raise ValueError('Use a PDF with at most 120 pages.')
+    parts = []
+    size = 0
+    for page in reader.pages:
+        part = page.extract_text() or ''
+        size += len(part)
+        if size > 80000:
+            raise ValueError('Source exceeds 80,000 characters. Upload selected chapters.')
+        parts.append(part)
+    return '\n\n'.join(parts)
+
+
+def _extract_zip(content):
+    """Text and PDF files from an uploaded ZIP archive.
+
+    Teachers routinely export question banks as a ZIP of chapter files; the
+    upload used to reject archives outright. Encrypted archives and archive
+    bombs are refused: entries are capped per-file and total, and paths are
+    not extracted to disk.
+    """
+    import zipfile
+    try:
+        archive = zipfile.ZipFile(io.BytesIO(content))
+    except zipfile.BadZipFile:
+        raise ValueError('This file is not a valid ZIP archive.')
+    if archive.testzip() is not None or any(zi.flag_bits & 0x1 for zi in archive.infolist()):
+        raise ValueError('Unlock the ZIP before uploading (password-protected entries).')
+    names = [n for n in archive.namelist() if not n.endswith('/')]
+    if len(names) > 40:
+        raise ValueError('Use a ZIP with at most 40 files.')
+    parts = []
+    total = 0
+    for name in names:
+        lowered = name.lower()
+        if lowered.endswith(('.txt', '.md')):
+            data = archive.read(name)
+            if len(data) > 5 * 1024 * 1024:
+                raise ValueError(f'{name} exceeds 5 MB.')
+            part = data.decode('utf-8-sig', errors='replace')
+        elif lowered.endswith('.pdf'):
+            data = archive.read(name)
+            if len(data) > 5 * 1024 * 1024:
+                raise ValueError(f'{name} exceeds 5 MB.')
+            part = _extract_pdf(data)
+        else:
+            continue  # skip non-source files (images, __MACOSX metadata, etc.)
+        total += len(part)
+        if total > 80000:
+            raise ValueError('Source exceeds 80,000 characters. Upload selected chapters.')
+        if part.strip():
+            parts.append(part)
+    if not parts:
+        raise ValueError('The ZIP contains no TXT, Markdown or PDF files.')
+    return '\n\n'.join(parts)
+
+
 def extract_source(content, filename):
     if not content or len(content) > 10 * 1024 * 1024:
-        raise ValueError('Choose a text file or PDF up to 10 MB.')
+        raise ValueError('Choose a text file, PDF or ZIP up to 10 MB.')
     name = filename.lower()
     if name.endswith('.pdf'):
-        if not content.startswith(b'%PDF-'):
-            raise ValueError('This file is not a PDF.')
-        from PyPDF2 import PdfReader
-        reader = PdfReader(io.BytesIO(content))
-        if reader.is_encrypted:
-            raise ValueError('Unlock this PDF before uploading.')
-        if len(reader.pages) > 120:
-            raise ValueError('Use a PDF with at most 120 pages.')
-        parts = []
-        size = 0
-        for page in reader.pages:
-            part = page.extract_text() or ''
-            size += len(part)
-            if size > 80000:
-                raise ValueError('Source exceeds 80,000 characters. Upload selected chapters.')
-            parts.append(part)
-        text = '\n\n'.join(parts)
+        text = _extract_pdf(content)
+    elif name.endswith(('.zip', '.h5p')):
+        text = _extract_zip(content)
     elif name.endswith(('.txt', '.md')):
         text = content.decode('utf-8-sig')
     else:
-        raise ValueError('Supported sources: PDF, TXT and Markdown.')
+        raise ValueError('Supported sources: PDF, TXT, Markdown or ZIP.')
     if not text.strip():
         raise ValueError('No readable text found. Scanned PDFs need OCR before upload.')
     if len(text) > 80000 or '\x00' in text:
@@ -100,8 +149,7 @@ def fulfill_capture(db, row, entity):
     db.add(order); db.flush()
     from app.models.payment import OrderItem
     db.add(OrderItem(order_id=order.id, order_item_name=row.title, quantity=1, subtotal=amount, total=amount,
-                     product_data={'kind': 'exam_paper', 'exam_paper_id': row.id, 'question_count': row.question_count,
-                                   **revenue_metadata('seyappaduporul', 'paper_generation')}))
+                     product_data={'kind': 'exam_paper', 'exam_paper_id': row.id, 'question_count': row.question_count}))
     db.add(Payment(order_id=order.id, user_id=row.user_id, payment_method='razorpay', gateway_payment_id=payment_id,
                    gateway_transaction_id=payment_id, gateway_order_id=row.gateway_order_id, amount=amount,
                    currency='INR', payment_status=PaymentStatus.COMPLETED,

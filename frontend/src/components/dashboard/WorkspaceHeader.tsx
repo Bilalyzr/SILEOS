@@ -8,7 +8,6 @@ import {
   ArrowUpRight,
   Building2,
 } from "lucide-react";
-import { AurumDisplayControls } from "@/components/brand/AurumDisplayControls";
 import { activeWorkspaceLink } from "./WorkspaceNavigation";
 import type { SidebarItem } from "./DashboardSidebar";
 
@@ -68,7 +67,6 @@ export function WorkspaceHeader({
           <ArrowUpRight size={16} />
         </button>
       </form>
-      <AurumDisplayControls />
       <Link to="/institutions" className="rd-labs-link" aria-label="Institution workspaces">
         <Building2 size={17} />
         <span>Campus</span>

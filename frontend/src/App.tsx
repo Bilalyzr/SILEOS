@@ -47,11 +47,10 @@ import { Toaster } from "react-hot-toast";
 import ScrollToTop from "@/components/common/scroll-to-top";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary";
 import { usePageViewTracker } from "@/hooks/use-page-view-tracker";
-import { ProductTourProvider } from "@/components/onboarding/ProductTourProvider";
 
 // Pages
 const HomePage = lazyPage(() =>
-  import("@/components/verticals/SubdomainHome").then((m) => ({ default: m.SubdomainHome })),
+  import("@/pages/Home").then((m) => ({ default: m.HomePage })),
 );
 const CoursesPage = lazyPage(() =>
   import("@/pages/courses").then((m) => ({ default: m.CoursesPage })),
@@ -88,7 +87,6 @@ const ResetPasswordPage = lazyPage(() =>
 const DashboardPage = lazyPage(() =>
   import("@/pages/dashboard").then((m) => ({ default: m.DashboardPage })),
 );
-const LearnWithSashaPage = lazyPage(() => import("@/pages/learn-with-sasha"));
 const StudentAnalyticsPage = lazyPage(() =>
   import("@/pages/dashboard/analytics").then((m) => ({
     default: m.StudentAnalyticsPage,
@@ -239,15 +237,6 @@ const InterventionsPage = lazyPage(
 const AssessmentStudio = lazyPage(
   () => import("@/pages/instructor/assessment-studio"),
 );
-const CodingStudioPage = lazyPage(
-  () => import("@/pages/instructor/coding-studio"),
-);
-const CodePracticePage = lazyPage(
-  () => import("@/pages/student/code-practice"),
-);
-const CodingWorkspacePage = lazyPage(
-  () => import("@/pages/student/coding-workspace"),
-);
 const RecordingLessons = lazyPage(
   () => import("@/pages/instructor/recording-lessons"),
 );
@@ -277,9 +266,6 @@ const InstructorAnalytics = lazyPage(() =>
   import("@/pages/instructor/analytics").then((m) => ({
     default: m.InstructorAnalytics,
   })),
-);
-const InstructorPayoutsPage = lazyPage(
-  () => import("@/pages/instructor/payouts"),
 );
 const QuizBuilder = lazyPage(() => import("@/pages/instructor/quiz-builder"));
 const AssignmentBuilder = lazyPage(
@@ -425,7 +411,6 @@ const AdminAnalytics = lazyPage(() =>
 const AdminOrders = lazyPage(() =>
   import("@/pages/admin/orders").then((m) => ({ default: m.AdminOrders })),
 );
-const AdminPayoutsPage = lazyPage(() => import("@/pages/admin/payouts"));
 const AdminLessons = lazyPage(() =>
   import("@/pages/admin/lessons").then((m) => ({ default: m.AdminLessons })),
 );
@@ -440,7 +425,6 @@ const AdminCertificates = lazyPage(() =>
 const AdminSettings = lazyPage(() =>
   import("@/pages/admin/settings").then((m) => ({ default: m.AdminSettings })),
 );
-const AdminAiProvidersPage = lazyPage(() => import("@/pages/admin/ai-providers"));
 const CouponsPage = lazyPage(() =>
   import("@/pages/admin/coupons").then((m) => ({ default: m.CouponsPage })),
 );
@@ -697,7 +681,6 @@ function App() {
       <ErrorBoundary>
         <Router>
           <AuthProvider>
-            <ProductTourProvider>
             <StudentLiveProvider><CartProvider>
               <ConfirmProvider>
                 <ProfileCompletionGuard>
@@ -929,30 +912,6 @@ function App() {
 
                         {/* Category Pages */}
                         <Route
-                          path="/utporul"
-                          element={
-                            <MainLayout>
-                              <UtporulPage />
-                            </MainLayout>
-                          }
-                        />
-                        <Route
-                          path="/meiporul"
-                          element={
-                            <MainLayout>
-                              <MeiporulPage />
-                            </MainLayout>
-                          }
-                        />
-                        <Route
-                          path="/seyappaduporul"
-                          element={
-                            <MainLayout>
-                              <SeyappaduporulPage />
-                            </MainLayout>
-                          }
-                        />
-                        <Route
                           path="/courses/utporul"
                           element={
                             <MainLayout>
@@ -1080,16 +1039,6 @@ function App() {
                                   <StudentAnalyticsPage />
                                 </StudentLayout>
                               </StudentRoute>
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="/learn-with-sasha"
-                          element={
-                            <ProtectedRoute>
-                              <AutoRoleLayout>
-                                <LearnWithSashaPage />
-                              </AutoRoleLayout>
                             </ProtectedRoute>
                           }
                         />
@@ -1565,34 +1514,6 @@ function App() {
                           }
                         />
                         <Route
-                          path="/instructor/coding-studio"
-                          element={
-                            <ProtectedRoute requiredRole="instructor">
-                              <InstructorLayout>
-                                <CodingStudioPage />
-                              </InstructorLayout>
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="/coding"
-                          element={
-                            <ProtectedRoute>
-                              <StudentLayout>
-                                <CodePracticePage />
-                              </StudentLayout>
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="/coding/:slug"
-                          element={
-                            <ProtectedRoute>
-                              <CodingWorkspacePage />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
                           path="/instructor/interventions"
                           element={
                             <ProtectedRoute requiredRole="instructor">
@@ -1726,16 +1647,6 @@ function App() {
                             <ProtectedRoute requiredRole="instructor">
                               <InstructorLayout>
                                 <InstructorAnalytics />
-                              </InstructorLayout>
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="/instructor/payouts"
-                          element={
-                            <ProtectedRoute requiredRole="instructor">
-                              <InstructorLayout>
-                                <InstructorPayoutsPage />
                               </InstructorLayout>
                             </ProtectedRoute>
                           }
@@ -2174,16 +2085,6 @@ function App() {
                           }
                         />
                         <Route
-                          path="/admin/payouts"
-                          element={
-                            <ProtectedRoute requiredRole="admin">
-                              <AdminLayout>
-                                <AdminPayoutsPage />
-                              </AdminLayout>
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
                           path="/admin/lessons"
                           element={
                             <ProtectedRoute requiredRole="admin">
@@ -2269,16 +2170,6 @@ function App() {
                             <ProtectedRoute requiredRole="admin">
                               <AdminLayout>
                                 <AdminSettings />
-                              </AdminLayout>
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="/admin/ai-providers"
-                          element={
-                            <ProtectedRoute requiredRole="admin">
-                              <AdminLayout>
-                                <AdminAiProvidersPage />
                               </AdminLayout>
                             </ProtectedRoute>
                           }
@@ -2535,22 +2426,18 @@ function App() {
                     {/* Global Toast Notifications */}
                     <Toaster
                       position="top-right"
-                      containerStyle={{ zIndex: 200 }}
                       toastOptions={{
                         duration: 4000,
-                        // 2026-09-05 UI system: frosted toasts that match the
-                        // glass dialogs. Colors read the Aurum tokens from
-                        // <body class="astra-theme"> so toasts follow the
-                        // light/dark surface toggle instead of staying white.
+                        // 2026-09-05 UI system: frosted toasts that match the glass dialogs
                         style: {
-                          background: "var(--wb, rgba(255,255,255,0.92))",
+                          background: "rgba(255,255,255,0.78)",
                           backdropFilter: "blur(16px)",
                           WebkitBackdropFilter: "blur(16px)",
-                          color: "var(--txt, #1f2937)",
-                          border: "1px solid var(--pd, rgba(23,35,58,0.12))",
+                          color: "#1f2937",
+                          border: "1px solid rgba(255,255,255,0.8)",
                           borderRadius: "0.9rem",
                           boxShadow:
-                            "0 12px 32px rgba(249, 115, 22, 0.14), var(--pl, 0 1px 0 rgba(255,255,255,0.9) inset)",
+                            "0 12px 32px rgba(249, 115, 22, 0.14), 0 1px 0 rgba(255,255,255,0.9) inset",
                           fontWeight: 500,
                         },
                         success: {
@@ -2564,7 +2451,6 @@ function App() {
                 </ProfileCompletionGuard>
               </ConfirmProvider>
             </CartProvider></StudentLiveProvider>
-            </ProductTourProvider>
           </AuthProvider>
         </Router>
       </ErrorBoundary>

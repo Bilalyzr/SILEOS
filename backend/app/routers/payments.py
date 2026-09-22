@@ -40,7 +40,6 @@ import hashlib
 import hmac
 import json
 import logging
-import uuid
 
 import razorpay
 from fastapi import APIRouter, Depends, HTTPException, Request, status
@@ -50,7 +49,6 @@ from sqlalchemy.orm import Session
 from app.core.config import get_settings
 from app.core.database import get_db
 from app.models.course import Course
-from app.models.coupon import Coupon
 from app.models.enrollment import Enrollment
 from app.models.cohort import Cohort
 from app.models.user import User
@@ -65,18 +63,10 @@ from app.services.email_service import EmailService
 from app.services.coupon_service import (
     CouponError,
     resolve_checkout_code,
-    validate_and_compute,
 )
 from app.services.fulfillment_service import (
     fulfill_bundle_purchase,
-    fulfill_cart_purchase,
     fulfill_course_purchase,
-)
-from app.services.cart_checkout import (
-    CartSnapshotError,
-    build_cart_snapshot,
-    canonical_course_ids,
-    parse_cart_notes,
 )
 from app.services.pricing import effective_course_price, resolve_expected_purchase
 from app.services.webhook_processor import process_webhook_event
@@ -116,120 +106,6 @@ def _razorpay_client() -> razorpay.Client:
             detail="Payment gateway not configured",
         )
     return razorpay.Client(auth=(key_id, key_secret))
-
-
-async def _create_cart_order(request, db, current_user):
-    """Create one immutable Razorpay order for up to ten courses."""
-    try:
-        requested_ids = canonical_course_ids(request.course_ids or [])
-    except CartSnapshotError as exc:
-        raise HTTPException(status_code=400, detail=str(exc))
-
-    courses = db.query(Course).filter(Course.id.in_(requested_ids)).all()
-    by_id = {course.id: course for course in courses}
-    missing = [course_id for course_id in requested_ids if course_id not in by_id]
-    if missing:
-        raise HTTPException(
-            status_code=404,
-            detail=f"Courses not found: {', '.join(map(str, missing))}",
-        )
-    unavailable = [
-        course.id for course in courses
-        if course.post_status not in ("publish", "published")
-    ]
-    if unavailable:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Courses are not available for enrollment: {', '.join(map(str, unavailable))}",
-        )
-
-    owned = {
-        row.course_id for row in db.query(Enrollment).filter(
-            Enrollment.user_id == current_user.id,
-            Enrollment.course_id.in_(requested_ids),
-            Enrollment.enrollment_status == "enrolled",
-        ).all()
-    }
-    if owned:
-        raise HTTPException(
-            status_code=409,
-            detail=("Remove already-owned courses before checkout: "
-                    + ", ".join(map(str, sorted(owned)))),
-        )
-
-    line_prices = {
-        course_id: int(round(float(effective_course_price(by_id[course_id])) * 100))
-        for course_id in requested_ids
-    }
-    subtotal = sum(line_prices.values()) / 100.0
-    if subtotal <= 0:
-        raise HTTPException(
-            status_code=400,
-            detail="Free carts do not require a payment order — complete the free order.",
-        )
-
-    coupon = None
-    discount_paise = 0
-    if request.coupon_code:
-        try:
-            result = validate_and_compute(
-                db,
-                code=str(request.coupon_code).strip(),
-                user_id=current_user.id,
-                course_ids=requested_ids,
-                total_amount=subtotal,
-            )
-        except CouponError as exc:
-            raise HTTPException(status_code=400, detail=exc.message)
-        coupon = result.coupon
-        discount_paise = int(round(float(result.discount_amount) * 100))
-
-    try:
-        snapshot = build_cart_snapshot(
-            line_prices,
-            discount_paise=discount_paise,
-            coupon_id=coupon.id if coupon else None,
-            coupon_code=coupon.code if coupon else None,
-        )
-    except CartSnapshotError as exc:
-        raise HTTPException(status_code=400, detail=str(exc))
-
-    notes = snapshot.to_notes(user_id=current_user.id)
-    client = _razorpay_client()
-    try:
-        order = client.order.create({
-            "amount": snapshot.total_paise,
-            "currency": "INR",
-            "receipt": f"cart_{current_user.id}_{uuid.uuid4().hex[:12]}",
-            "notes": notes,
-        })
-    except razorpay.errors.BadRequestError as exc:
-        logger.exception(
-            "Razorpay rejected cart order (user=%s courses=%s)",
-            current_user.id, requested_ids,
-        )
-        raise HTTPException(
-            status_code=status.HTTP_502_BAD_GATEWAY,
-            detail=f"Payment gateway rejected the order: {exc}",
-        )
-    except Exception:
-        logger.exception(
-            "Razorpay cart order failed (user=%s courses=%s)",
-            current_user.id, requested_ids,
-        )
-        raise HTTPException(
-            status_code=status.HTTP_502_BAD_GATEWAY,
-            detail="Could not reach the payment gateway. Please try again in a moment.",
-        )
-
-    key_id, _ = _razorpay_creds()
-    return {
-        "order_id": order["id"],
-        "amount": order["amount"],
-        "currency": order.get("currency") or "INR",
-        "key_id": key_id,
-        "course_ids": requested_ids,
-    }
 
 
 async def _create_bundle_order(request, db, current_user):
@@ -449,9 +325,6 @@ async def create_razorpay_order(
     still pays the full course price and the cohort mapping is applied
     on successful verify. A discount Coupon reduces the amount here.
     """
-    if request.course_ids is not None:
-        return await _create_cart_order(request, db, current_user)
-
     if request.bundle_id is not None:
         return await _create_bundle_order(request, db, current_user)
 
@@ -595,107 +468,6 @@ async def create_razorpay_order(
         "amount": order["amount"],
         "currency": order["currency"],
         "key_id": key_id,
-    }
-
-
-async def _verify_cart_payment(request, db, current_user):
-    """Verify and fulfill a paid cart from its immutable order snapshot."""
-    razorpay_order_id = request.razorpay_order_id
-    razorpay_payment_id = request.razorpay_payment_id
-
-    _, key_secret = _razorpay_creds()
-    if not key_secret:
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=("Payment gateway not configured — payment captured but not "
-                    "verified. Contact support."),
-        )
-    message = f"{razorpay_order_id}|{razorpay_payment_id}".encode()
-    expected_signature = hmac.new(
-        key_secret.encode(), message, hashlib.sha256
-    ).hexdigest()
-    if not hmac.compare_digest(expected_signature, request.razorpay_signature):
-        raise HTTPException(status_code=400, detail="Invalid payment signature")
-
-    try:
-        requested_ids = canonical_course_ids(request.course_ids or [])
-    except CartSnapshotError as exc:
-        raise HTTPException(status_code=400, detail=str(exc))
-
-    client = _razorpay_client()
-    try:
-        order = client.order.fetch(razorpay_order_id)
-    except Exception:
-        raise HTTPException(status_code=400, detail="Order not found at gateway")
-
-    notes = order.get("notes") or {}
-    try:
-        snapshot = parse_cart_notes(notes)
-    except CartSnapshotError as exc:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Order has an invalid cart snapshot: {exc}",
-        )
-    if snapshot.course_ids != requested_ids:
-        raise HTTPException(status_code=400, detail="Order does not match this cart")
-    if str(notes.get("user_id")) != str(current_user.id):
-        raise HTTPException(status_code=403, detail="Order does not belong to this user")
-    if (
-        int(order.get("amount", 0)) != snapshot.total_paise
-        or int(order.get("amount_paid", 0)) < snapshot.total_paise
-    ):
-        raise HTTPException(status_code=400, detail="Order amount does not match this cart")
-
-    coupon = None
-    if snapshot.coupon_id is not None:
-        coupon = db.query(Coupon).filter(Coupon.id == snapshot.coupon_id).first()
-        if coupon is None or coupon.code.upper() != snapshot.coupon_code:
-            # The gateway has already captured the immutable discounted amount.
-            # A coupon deleted/renamed between checkout and callback must not
-            # strand a paid learner. Fulfil from the signed price snapshot and
-            # alert operations; there is simply no coupon row left to consume.
-            EmailService.send_payment_alert(
-                "cart coupon changed after capture",
-                f"user_id={current_user.id} payment_id={razorpay_payment_id} "
-                f"order_id={razorpay_order_id} coupon_id={snapshot.coupon_id} "
-                f"snapshot_code={snapshot.coupon_code}. "
-                "Fulfilling the captured cart without a coupon usage row.",
-            )
-            coupon = None
-
-    try:
-        fulfill_cart_purchase(
-            db,
-            user=current_user,
-            line_prices_paise=snapshot.line_prices_paise,
-            razorpay_order_id=razorpay_order_id,
-            razorpay_payment_id=razorpay_payment_id,
-            paid_amount=snapshot.total_paise / 100.0,
-            coupon_discount=snapshot.discount_paise / 100.0,
-            currency=order.get("currency") or "INR",
-            coupon=coupon,
-        )
-        db.commit()
-    except Exception:
-        db.rollback()
-        logger.exception(
-            "Payment verified but cart fulfillment failed "
-            "(user=%s courses=%s payment=%s order=%s)",
-            current_user.id, requested_ids, razorpay_payment_id, razorpay_order_id,
-        )
-        raise HTTPException(
-            status_code=500,
-            detail=(
-                "Your payment was received. Course access will complete "
-                "automatically within a few minutes — do not pay again. "
-                f"Contact support with payment ID {razorpay_payment_id} if needed."
-            ),
-        )
-
-    return {
-        "success": True,
-        "message": "Payment verified — all cart courses unlocked",
-        "cohort_id": None,
     }
 
 
@@ -1062,9 +834,6 @@ async def verify_razorpay_payment(
     is what purchase history, /admin/orders and revenue read; without it they
     fall back to course.course_price and report the pre-discount price.
     """
-    if request.course_ids is not None:
-        return await _verify_cart_payment(request, db, current_user)
-
     if request.bundle_id is not None:
         return await _verify_bundle_payment(request, db, current_user)
 

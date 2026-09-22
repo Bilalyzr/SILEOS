@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   Plus,
   Upload,
@@ -48,6 +48,11 @@ const TemplateManagement: React.FC<TemplateManagementProps> = ({ onClose }) => {
     is_default: false
   })
 
+  const showMessage = useCallback((type: 'success' | 'error', text: string) => {
+    setMessage({ type, text })
+    setTimeout(() => setMessage(null), 5000)
+  }, [])
+
   const loadTemplates = useCallback(async () => {
     try {
       setLoading(true)
@@ -59,16 +64,11 @@ const TemplateManagement: React.FC<TemplateManagementProps> = ({ onClose }) => {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [showMessage])
 
   useEffect(() => {
     loadTemplates()
   }, [loadTemplates])
-
-  const showMessage = (type: 'success' | 'error', text: string) => {
-    setMessage({ type, text })
-    setTimeout(() => setMessage(null), 5000)
-  }
 
   const handleCreateTemplate = async () => {
     if (!newTemplate.name.trim()) {
@@ -480,7 +480,7 @@ const TemplateManagement: React.FC<TemplateManagementProps> = ({ onClose }) => {
             background={editingTemplate ? editingTemplate.background : newTemplate.background}
             dimensions={editingTemplate ? editingTemplate.dimensions : newTemplate.dimensions}
             elements={editingTemplate ? editingTemplate.elements : newTemplate.elements}
-            orientation={editingTemplate ? editingTemplate.orientation : newTemplate.orientation || 'landscape'}
+            orientation={editingTemplate ? editingTemplate.orientation : (newTemplate.orientation || 'landscape') as 'landscape' | 'portrait'}
             onChange={(data) => {
               if (editingTemplate) {
                 setEditingTemplate({

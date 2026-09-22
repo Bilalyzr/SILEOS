@@ -25,7 +25,7 @@ class UserService:
             "email": user.user_email,
             "display_name": user.display_name,
             "role": user.role,
-            "status": "active" if user.is_active else "suspended" if user.user_status == 2 else "inactive",
+            "status": "active" if user.user_status == 0 else "inactive",
             "profile_completed": user.profile_completed,
             "first_name": profile.first_name or "",
             "last_name": profile.last_name or "",
@@ -185,8 +185,7 @@ class UserService:
         """
         user = db.query(User).filter(User.id == user_id).first()
         if user:
-            user.is_active = False
-            user.user_status = 0
+            user.user_status = "inactive"
             db.commit()
             return True
         return False

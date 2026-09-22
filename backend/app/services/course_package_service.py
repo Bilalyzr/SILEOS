@@ -366,11 +366,6 @@ def restore(db, transfer, user, title):
     validate_data(data)
     created_paths = []
     mapping = {}
-    # Keep restored media paths comfortably below Windows MAX_PATH even when
-    # the repository itself lives in a deeply nested folder. The transfer id
-    # still supplies a 64-bit namespace and each asset receives a fresh
-    # 64-bit filename; neither value is exposed as an authorization token.
-    restore_namespace = f'course-restores/{transfer.id.replace("-", "")[:16]}'
     try:
         if transfer.kind == 'backup':
             path = safe_path(root(), f'{transfer.id}/upload.bin')
@@ -383,11 +378,7 @@ def restore(db, transfer, user, title):
             with zipfile.ZipFile(path) as archive:
                 for asset in manifest.get('assets', []):
                     if not asset['original'].startswith('/uploads/'): continue
-                    suffix = PurePosixPath(asset["path"]).suffix.lower()[:12]
-                    dest = safe_path(
-                        Path(get_settings().UPLOAD_DIR).resolve(),
-                        f'{restore_namespace}/{uuid.uuid4().hex[:16]}{suffix}',
-                    )
+                    dest = safe_path(Path(get_settings().UPLOAD_DIR).resolve(), f'course-restores/{transfer.id}/{PurePosixPath(asset["path"]).name}')
                     dest.parent.mkdir(parents=True, exist_ok=True); created_paths.append(dest)
                     with archive.open(asset['path']) as source, dest.open('wb') as target: shutil.copyfileobj(source, target)
                     mapping[asset['original']] = '/uploads/' + dest.relative_to(Path(get_settings().UPLOAD_DIR).resolve()).as_posix()
@@ -409,10 +400,7 @@ def restore(db, transfer, user, title):
                     db.add(model); db.flush()
                     dependency_map['models', media['lesson_id']] = model.id
                     continue
-                dest = safe_path(
-                    Path(get_settings().UPLOAD_DIR).resolve(),
-                    f'{restore_namespace}/{uuid.uuid4().hex[:16]}{media["extension"]}',
-                )
+                dest = safe_path(Path(get_settings().UPLOAD_DIR).resolve(), f'course-restores/{transfer.id}/{uuid.uuid4().hex}{media["extension"]}')
                 dest.parent.mkdir(parents=True, exist_ok=True); created_paths.append(dest)
                 shutil.copyfile(source, dest)
                 mapping[media['original']] = '/uploads/' + dest.relative_to(Path(get_settings().UPLOAD_DIR).resolve()).as_posix()
@@ -561,13 +549,7 @@ def restore_dependencies(db, data, archive, user, transfer_id, created_paths):
                     obj = ThreeDModel(**typed(ThreeDModel, item['data'], ('title',)), owner_id=user.id, file_path=relative, file_size_bytes=dest.stat().st_size)
                 else:
                     public_id = generate_public_id(); dest = safe_path(Path(get_settings().UPLOAD_DIR).resolve() / 'h5p', public_id); created_paths.append(dest)
-                    # Keep the temporary filename out of the already-deep transfer
-                    # directory. On Windows, nesting two UUIDs under a long install
-                    # path can exceed MAX_PATH even though the staged backup itself
-                    # is readable. The random filename remains private and collision
-                    # resistant while staying inside the service staging root.
-                    temp = safe_path(root(), f'restore-{uuid.uuid4().hex[:16]}.h5p')
-                    temp.parent.mkdir(parents=True, exist_ok=True)
+                    temp = safe_path(root(), f'{transfer_id}/{public_id}.h5p')
                     try:
                         with archive.open(asset) as source, temp.open('wb') as target: shutil.copyfileobj(source, target)
                         result = validate_and_extract(temp, dest)

@@ -59,9 +59,7 @@ def ensure_schema():
         "ALTER TABLE courses ADD COLUMN IF NOT EXISTS num_offline_workshops INTEGER DEFAULT 0",
         "ALTER TABLE courses ADD COLUMN IF NOT EXISTS num_hours INTEGER DEFAULT 0",
         "ALTER TABLE courses ADD COLUMN IF NOT EXISTS institution VARCHAR(255) DEFAULT ''",
-        "ALTER TABLE courses ADD COLUMN IF NOT EXISTS course_type VARCHAR(50) DEFAULT 'utporul'",
-        "ALTER TABLE courses ALTER COLUMN course_type SET DEFAULT 'utporul'",
-        "ALTER TABLE users ALTER COLUMN user_status SET DEFAULT 1",
+        "ALTER TABLE courses ADD COLUMN IF NOT EXISTS course_type VARCHAR(50) DEFAULT ''",
         "ALTER TABLE lessons ADD COLUMN IF NOT EXISTS geogebra_applet_id INTEGER",
         "ALTER TABLE lessons ADD COLUMN IF NOT EXISTS three_d_model_id INTEGER",
         "ALTER TABLE lessons ADD COLUMN IF NOT EXISTS virtual_lab_sim VARCHAR(50)",
@@ -110,45 +108,11 @@ def ensure_schema():
             print(f"[ensure_schema] skipped ({e}): {stmt[:70]}")
 
 
-def reconcile_business_verticals():
-    """Normalize legacy course classifications without guessing specialist intent.
-
-    A blank type means the author never made a Meiporul/Seyappaduporul delivery
-    choice, so it belongs to the documented default authoring pillar, Utporul.
-    Known aliases are canonicalized; genuinely unknown non-blank values remain
-    untouched and are surfaced by the Control Center for manual classification.
-    """
-    statements = [
-        "UPDATE courses SET course_type = 'utporul' WHERE course_type IS NULL OR TRIM(course_type) = ''",
-        "UPDATE courses SET course_type = 'meiporul' WHERE LOWER(TRIM(course_type)) = 'ma1'",
-        "UPDATE courses SET course_type = 'seyappaduporul' WHERE LOWER(TRIM(course_type)) IN ('ma2', 'seyappadu-porul', 'seyappadu porul', 'seyappadu_porul')",
-        "UPDATE courses SET course_type = 'utporul' WHERE LOWER(TRIM(course_type)) IN ('ma3', 'upporul')",
-        # is_active is the access-control source of truth. Keep the old integer
-        # column as a compatibility mirror, preserving 2 for suspended users.
-        "UPDATE users SET user_status = 1 WHERE is_active = TRUE AND COALESCE(user_status, 0) <> 1",
-        "UPDATE users SET user_status = 0 WHERE is_active = FALSE AND COALESCE(user_status, 0) <> 2",
-    ]
-    for stmt in statements:
-        try:
-            with engine.begin() as conn:
-                conn.execute(text(stmt))
-        except Exception as e:
-            print(f"[reconcile_business_verticals] skipped ({e}): {stmt[:70]}")
-
-    if is_postgres:
-        try:
-            with engine.begin() as conn:
-                conn.execute(text("ALTER TABLE courses ALTER COLUMN course_type SET NOT NULL"))
-        except Exception as e:
-            print(f"[reconcile_business_verticals] skipped ({e}): course_type NOT NULL")
-
-
 async def init_db():
     print("Initializing database...")
     Base.metadata.create_all(bind=engine)
     # Self-heal known column drift on existing tables (create_all won't).
     ensure_schema()
-    reconcile_business_verticals()
     print("Database initialized successfully")
 
 def create_tables():

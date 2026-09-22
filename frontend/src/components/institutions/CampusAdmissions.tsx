@@ -77,6 +77,9 @@ export function CampusAdmissions({
   const [intakeId, setIntakeId] = useState(0);
   const [offset, setOffset] = useState(0);
   const [createOpen, setCreateOpen] = useState(false);
+  const [programOpen, setProgramOpen] = useState(false);
+  const [intakeOpen, setIntakeOpen] = useState(false);
+  const [setupError, setSetupError] = useState("");
   const [selectedProgram, setSelectedProgram] = useState(0);
   const [formError, setFormError] = useState("");
 
@@ -200,9 +203,17 @@ export function CampusAdmissions({
           shareTitle={`${data.institution.name} admissions`}
           shareDescription={`Explore programmes and admissions at ${data.institution.name}.`}
           actions={
-            <Button leftIcon={<UserPlus size={16} />} onClick={() => setCreateOpen(true)}>
-              Add application
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button variant="outline" onClick={() => { setSetupError(""); setProgramOpen(true); }}>
+                Add programme
+              </Button>
+              <Button variant="outline" onClick={() => { setSetupError(""); setIntakeOpen(true); }}>
+                Add intake
+              </Button>
+              <Button leftIcon={<UserPlus size={16} />} onClick={() => setCreateOpen(true)}>
+                Add application
+              </Button>
+            </div>
           }
         />
       </div>
@@ -419,6 +430,121 @@ export function CampusAdmissions({
           <div className="flex justify-end gap-2">
             <Button type="button" variant="ghost" onClick={() => setCreateOpen(false)}>Cancel</Button>
             <Button type="submit" loading={createApplication.isPending}>Create application</Button>
+          </div>
+        </form>
+      </GlassDialog>
+
+      <GlassDialog
+        open={programOpen}
+        onOpenChange={(open) => { setProgramOpen(open); if (!open) setSetupError(""); }}
+        title="Add a programme"
+        eyebrow="Admissions setup"
+        description="Applications need a programme to point at. Create one here first — it becomes selectable immediately."
+      >
+        <form
+          className="campus-form"
+          onSubmit={async (event) => {
+            event.preventDefault();
+            setSetupError("");
+            const f = new FormData(event.currentTarget);
+            try {
+              await campusOsApi.createAdmissionProgram(institutionId, {
+                name: String(f.get("name")),
+                code: String(f.get("code")),
+                level: String(f.get("level")),
+                department: String(f.get("department")) || "",
+                duration_months: Number(f.get("duration_months")),
+                status: "active",
+              });
+              await Promise.all([programs.refetch(), intakes.refetch()]);
+              setProgramOpen(false);
+            } catch (e: any) {
+              setSetupError(e?.response?.data?.detail || "Could not create the programme.");
+            }
+          }}
+        >
+          {setupError && <p className="campus-error" role="alert">{setupError}</p>}
+          <div className="campus-form-grid">
+            <label>Programme name<input name="name" required minLength={2} maxLength={160} placeholder="B.Sc. Physics" /></label>
+            <label>Code<input name="code" required minLength={2} maxLength={24} pattern="[A-Za-z0-9][A-Za-z0-9_-]*" placeholder="BSC-PHY" /></label>
+          </div>
+          <div className="campus-form-grid">
+            <label>Level
+              <select name="level" defaultValue="other">
+                <option value="school">School</option>
+                <option value="undergraduate">Undergraduate</option>
+                <option value="postgraduate">Postgraduate</option>
+                <option value="diploma">Diploma</option>
+                <option value="certificate">Certificate</option>
+                <option value="other">Other</option>
+              </select>
+            </label>
+            <label>Duration (months)<input name="duration_months" type="number" min={1} max={240} defaultValue={36} required /></label>
+          </div>
+          <label>Department (optional)<input name="department" maxLength={100} /></label>
+          <div className="flex justify-end gap-2">
+            <Button type="button" variant="ghost" onClick={() => setProgramOpen(false)}>Cancel</Button>
+            <Button type="submit">Create programme</Button>
+          </div>
+        </form>
+      </GlassDialog>
+
+      <GlassDialog
+        open={intakeOpen}
+        onOpenChange={(open) => { setIntakeOpen(open); if (!open) setSetupError(""); }}
+        title="Add an intake"
+        eyebrow="Admissions setup"
+        description="An intake is the batch students apply to within a programme. It opens as soon as you save it."
+      >
+        <form
+          className="campus-form"
+          onSubmit={async (event) => {
+            event.preventDefault();
+            setSetupError("");
+            const f = new FormData(event.currentTarget);
+            const programId = Number(f.get("program_id"));
+            if (!programId) {
+              setSetupError("Create a programme first.");
+              return;
+            }
+            try {
+              await campusOsApi.createAdmissionIntake(institutionId, {
+                program_id: programId,
+                name: String(f.get("name")),
+                academic_year: String(f.get("academic_year")),
+                starts_on: String(f.get("starts_on")),
+                closes_on: String(f.get("closes_on")),
+                capacity: Number(f.get("capacity")),
+                status: "open",
+              });
+              await intakes.refetch();
+              setIntakeOpen(false);
+            } catch (e: any) {
+              setSetupError(e?.response?.data?.detail || "Could not create the intake.");
+            }
+          }}
+        >
+          {setupError && <p className="campus-error" role="alert">{setupError}</p>}
+          <label>Programme
+            <select name="program_id" required defaultValue={0}>
+              <option value={0}>Choose programme</option>
+              {programs.data?.map((program) => (
+                <option key={program.id} value={program.id}>{program.name}</option>
+              ))}
+            </select>
+          </label>
+          <div className="campus-form-grid">
+            <label>Intake name<input name="name" required minLength={2} maxLength={120} placeholder="Fall 2026" /></label>
+            <label>Academic year<input name="academic_year" required minLength={4} maxLength={32} placeholder="2026-27" /></label>
+          </div>
+          <div className="campus-form-grid">
+            <label>Opens<input name="starts_on" type="date" required /></label>
+            <label>Closes<input name="closes_on" type="date" required /></label>
+          </div>
+          <label>Capacity<input name="capacity" type="number" min={1} max={100000} defaultValue={60} required /></label>
+          <div className="flex justify-end gap-2">
+            <Button type="button" variant="ghost" onClick={() => setIntakeOpen(false)}>Cancel</Button>
+            <Button type="submit">Create intake</Button>
           </div>
         </form>
       </GlassDialog>

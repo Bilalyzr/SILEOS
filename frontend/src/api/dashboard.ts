@@ -124,11 +124,9 @@ export interface AdminDashboardData {
 export interface RevenuePoint {
   date: string         // YYYY-MM-DD
   label: string        // e.g. "26 Jun"
-  revenue: number      // consolidated net cash for the day
-  meiporul: number
-  seyappaduporul: number
-  utporul: number
-  unallocated: number
+  revenue: number      // total = courses + internships
+  courses?: number     // COMPLETED orders that day
+  internships?: number // internship voucher revenue that day
 }
 
 export interface RevenueTimeseries {
@@ -136,41 +134,6 @@ export interface RevenueTimeseries {
   currency: string
   total: number
   points: RevenuePoint[]
-  note?: string
-}
-
-export interface AiProviderUsageAggregate {
-  scope: string
-  provider: string
-  model: string
-  feature: string | null
-  attempts: number
-  success: number
-  failure: number
-  success_rate: number
-  avg_latency_ms: number | null
-  last_used_at: string | null
-}
-
-export interface AiRecentFailure {
-  id: number
-  credential_id: number | null
-  provider: string
-  model: string
-  feature: string
-  error: string
-  created_at: string
-}
-
-export interface AiProviderUsageReport {
-  period_days: number
-  total_attempts: number
-  total_success: number
-  total_failures: number
-  success_rate: number
-  by_provider: AiProviderUsageAggregate[]
-  by_feature: AiProviderUsageAggregate[]
-  recent_failures: AiRecentFailure[]
 }
 
 // ---------------------------------------------------------------------------
@@ -325,13 +288,6 @@ export const dashboardAPI = {
     period: '7d' | '30d' | '90d' | '1y' = '30d'
   ): Promise<RevenueTimeseries> => {
     const response = await api.get('/admin/revenue-timeseries', { params: { period } })
-    return response.data
-  },
-
-  getAiProviderUsage: async (days: number = 14): Promise<AiProviderUsageReport> => {
-    const response = await api.get('/ai/providers/usage', {
-      params: { days },
-    })
     return response.data
   },
 }

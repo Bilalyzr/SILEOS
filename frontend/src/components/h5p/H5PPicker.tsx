@@ -175,7 +175,7 @@ export const H5PPicker: React.FC<H5PPickerProps> = ({ value, onChange, className
 
       {previewOpen && selectedContent && (
         <div
-          className="fixed inset-0 z-modal bg-black/70 flex items-center justify-center p-4"
+          className="fixed inset-0 z-[100] bg-black/70 flex items-center justify-center p-4"
           onClick={() => setPreviewOpen(false)}
         >
           <div

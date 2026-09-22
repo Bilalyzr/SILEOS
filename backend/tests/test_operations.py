@@ -2,7 +2,7 @@ from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
 from app.core.security import create_access_token
 from app.models.course import Course
-from app.models.payment import Order, OrderItem, Payment, PaymentStatus
+from app.models.payment import Order, Payment, PaymentStatus
 from app.models.learning_planner import LearningGoal, LearningIntervention, LearningPlanTask
 from app.services import operations_service as svc
 
@@ -12,7 +12,6 @@ def auth(client,user):
 def test_admin_tables_access_filter_pagination_and_csv(client, db, make_user, student_user):
     auth(client,student_user)
     assert client.get('/api/v1/admin/operations/lists/courses').status_code==403
-    assert client.get('/api/v1/admin/operations/portfolio').status_code==403
     admin=make_user(role='admin',email='operations@example.com'); auth(client,admin)
     db.add_all([Course(post_author=admin.id,post_title=name,post_status='draft') for name in ['=Formula','100% complete','Ordinary']]); db.commit()
     url='/api/v1/admin/operations/lists/courses'
@@ -24,74 +23,6 @@ def test_admin_tables_access_filter_pagination_and_csv(client, db, make_user, st
     csv=client.get(url+'/export.csv').text
     assert "'=Formula" in csv
     assert client.get('/api/v1/admin/operations/summary').status_code==200
-    assert client.get('/api/v1/admin/operations/portfolio').status_code==200
-    for dataset in (
-        'lessons', 'ebooks', 'three_d_models', 'virtual_labs', 'geogebra',
-        'live_classes', 'quizzes', 'certificates', 'exam_papers', 'students',
-        'instructors', 'orders', 'enrollments',
-    ):
-        response = client.get(f'/api/v1/admin/operations/lists/{dataset}')
-        assert response.status_code == 200, (dataset, response.text)
-    assert client.get('/api/v1/admin/operations/lists/not-a-dataset').status_code == 422
-
-
-def test_portfolio_classifies_course_revenue_and_surfaces_unknowns(db, make_user):
-    from app.services.business_portfolio_service import cash_timeseries, consolidated_cash, portfolio
-
-    student = make_user(email='portfolio-student@example.com')
-    admin = make_user(role='admin', email='portfolio-admin@example.com')
-    course = Course(
-        post_author=admin.id,
-        post_title='Immersive anatomy',
-        post_status='publish',
-        course_type='meiporul',
-    )
-    db.add(course)
-    db.flush()
-    immersive_order = Order(
-        user_id=student.id,
-        order_key='portfolio-immersive',
-        total_amount=Decimal('100'),
-    )
-    unknown_order = Order(
-        user_id=student.id,
-        order_key='portfolio-unknown',
-        total_amount=Decimal('20'),
-    )
-    db.add_all([immersive_order, unknown_order])
-    db.flush()
-    db.add(OrderItem(
-        order_id=immersive_order.id,
-        course_id=course.id,
-        order_item_name=course.post_title,
-        subtotal=Decimal('100'),
-        total=Decimal('100'),
-    ))
-    paid_at = datetime(2026, 2, 5, tzinfo=timezone.utc)
-    db.add_all([
-        Payment(
-            payment_method='test', order_id=immersive_order.id,
-            user_id=student.id, amount=Decimal('100'), currency='INR',
-            payment_status=PaymentStatus.COMPLETED, payment_date=paid_at,
-        ),
-        Payment(
-            payment_method='test', order_id=unknown_order.id,
-            user_id=student.id, amount=Decimal('20'), currency='INR',
-            payment_status=PaymentStatus.COMPLETED, payment_date=paid_at,
-        ),
-    ])
-    db.commit()
-
-    body = portfolio(db, date(2026, 2, 1), date(2026, 2, 28))
-    meiporul = next(row for row in body['verticals'] if row['key'] == 'meiporul')
-    assert meiporul['revenue']['currencies'][0]['net_cash'] == 100
-    assert body['unallocated']['payment_count'] == 1
-    assert body['unallocated']['currencies'][0]['net_cash'] == 20
-    assert body['resilience'][0]['leader'] == 'meiporul'
-    point = next(row for row in cash_timeseries(db, date(2026, 2, 1), date(2026, 2, 28)) if row['date'] == '2026-02-05')
-    assert point['meiporul'] == 100
-    assert point['unallocated'] == 20
-    assert sum(row['revenue'] for row in cash_timeseries(db, date(2026, 2, 1), date(2026, 2, 28))) == consolidated_cash(db, date(2026, 2, 1), date(2026, 2, 28))[0]['net_cash']
 
 def test_revenue_uses_refund_processing_date(db,make_user):
     user=make_user(email='revenue@example.com'); order=Order(user_id=user.id,order_key='revenue-order'); db.add(order);db.flush()

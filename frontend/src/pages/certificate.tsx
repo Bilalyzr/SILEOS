@@ -45,7 +45,23 @@ export const CertificatePage: React.FC = () => {
       try {
         const res = await api.get(`/certificates/course/${courseId}`);
         setCertificate(res.data);
-      } catch (err) {
+      } catch (err: any) {
+        // A completed course can legitimately lack its IssuedCertificate row:
+        // issuance on completion is best-effort and silently rolls back on a
+        // transient failure, and admin/imported completions never run the
+        // hook. The remediation endpoint is idempotent, so retry the fetch
+        // once after asking the backend to (re)issue before declaring the
+        // certificate missing.
+        if (err?.response?.status === 404) {
+          try {
+            await api.post(`/certificates/generate/${courseId}`);
+            const retry = await api.get(`/certificates/course/${courseId}`);
+            setCertificate(retry.data);
+            return;
+          } catch (genErr: any) {
+            console.error("Certificate auto-issue failed:", genErr);
+          }
+        }
         console.error("Failed to load certificate:", err);
       } finally {
         setIsLoading(false);

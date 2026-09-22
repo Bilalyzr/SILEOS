@@ -530,6 +530,22 @@ body.astra-theme::before {
   width: 17px;
   height: 17px;
 }
+/* A disabled control must LOOK disabled — an untickable checkbox with no
+   visual cue reads as broken (reported: "cannot be selected"). */
+.campus-form-unavailable input:disabled,
+.campus-form-unavailable button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.campus-form-unavailable .campus-check {
+  background: #f6f4f0;
+  color: var(--sf-muted, #67748a);
+}
+.campus-check-reason {
+  display: block;
+  font-size: 11.5px;
+  color: #8a6d3b;
+}
 .campus-search {
   max-width: 310px;
 }

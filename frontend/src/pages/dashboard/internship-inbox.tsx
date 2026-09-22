@@ -10,13 +10,17 @@ import { companyAPI, InterestCandidateView } from "@/api/company";
 export function InternshipInboxPage() {
   const [rows, setRows] = useState<InterestCandidateView[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const load = async () => {
     setLoading(true);
+    setError(null);
     try {
-      setRows(await companyAPI.myInbox());
+      const data = await companyAPI.myInbox();
+      setRows(Array.isArray(data) ? data : []);
     } catch (e: any) {
-      toast.error(e?.response?.data?.detail || "Failed to load inbox");
+      setError(e?.response?.data?.detail || "Failed to load inbox");
+      setRows([]);
     } finally {
       setLoading(false);
     }
@@ -55,6 +59,19 @@ export function InternshipInboxPage() {
     >
       {loading ? (
         <div className="py-10 text-center text-slate-500">Loading…</div>
+      ) : error ? (
+        <div
+          role="alert"
+          className="py-10 text-center bg-white rounded-xl border border-rose-200"
+        >
+          <p className="text-sm text-rose-600">{error}</p>
+          <button
+            onClick={load}
+            className="mt-3 px-4 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-semibold hover:bg-slate-700"
+          >
+            Try again
+          </button>
+        </div>
       ) : rows.length === 0 ? (
         <div
           className="py-16 text-center text-slate-500 bg-white rounded-xl border border-slate-200"

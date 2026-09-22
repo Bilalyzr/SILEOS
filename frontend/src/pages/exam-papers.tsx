@@ -228,11 +228,11 @@ export default function ExamPapers() {
           {staff ? (
             <div className="space-y-3">
               <label className="block">
-                Import source text (PDF, TXT or MD, up to 10 MB)
+                Import source text (PDF, TXT, MD or ZIP, up to 10 MB)
                 <input
                   className="block w-full"
                   type="file"
-                  accept=".pdf,.txt,.md"
+                  accept=".pdf,.txt,.md,.zip"
                   disabled={busy}
                   onChange={(e) => {
                     const file = e.target.files?.[0];

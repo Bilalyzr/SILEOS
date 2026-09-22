@@ -15,12 +15,6 @@ from app.core.database import Base
 class Institution(Base):
     __tablename__ = "institutions"
     id = Column(Integer, primary_key=True)
-    # Commercial/customer boundary. An institution remains the campus-domain
-    # aggregate while the tenant connects it to shared identity, entitlements,
-    # domains, revenue, and platform-wide governance.
-    tenant_id = Column(
-        Integer, ForeignKey("platform_tenants.id", ondelete="RESTRICT"), nullable=True, index=True
-    )
     name = Column(String(160), nullable=False)
     slug = Column(String(100), nullable=False, unique=True)
     kind = Column(String(20), nullable=False, default="school")

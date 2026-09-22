@@ -1,11 +1,10 @@
 /**
  * AI Tutor drawer (Engine C) — floating assistant on the lesson player.
- * Honest 503 handling: if the backend has no active provider credential the
- * drawer directs administrators to the encrypted provider vault.
+ * Honest 503 handling: if the backend has no ANTHROPIC_API_KEY the drawer
+ * says exactly that instead of pretending.
  */
 import { useEffect, useRef, useState } from 'react'
-import { Sparkles, X, Send, Maximize2 } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Sparkles, X, Send } from 'lucide-react'
 import { api } from '@/api/axios'
 import { aiLayerAPI, errDetail, type ErrorKind } from '@/api/aiLayer'
 
@@ -25,7 +24,6 @@ export function TutorDrawer({ courseId }: { courseId?: number }) {
   const [reportKind, setReportKind] = useState<ErrorKind>('lesson')
   const [reportText, setReportText] = useState('')
   const endRef = useRef<HTMLDivElement>(null)
-  const sessionId = useRef(crypto.randomUUID())
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages])
 
@@ -39,7 +37,6 @@ export function TutorDrawer({ courseId }: { courseId?: number }) {
       const r = await api.post('/ai/tutor/chat', {
         message: text,
         course_id: courseId,
-        session_id: sessionId.current,
         history: messages.slice(-6),
       })
       setMessages((m) => [...m, { role: 'assistant', content: r.data.reply }])
@@ -103,24 +100,23 @@ export function TutorDrawer({ courseId }: { courseId?: number }) {
       <button
         onClick={() => setOpen((v) => !v)}
         aria-label="AI Tutor"
-        className="fixed bottom-5 right-5 z-40 grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br from-orange-600 to-amber-400 text-white shadow-lg shadow-orange-300/40 hover:from-orange-700 hover:to-orange-500"
+        className="fixed bottom-5 right-5 z-40 h-12 w-12 rounded-full bg-violet-600 text-white shadow-lg hover:bg-violet-700 grid place-items-center"
       >
         {open ? <X className="h-5 w-5" /> : <Sparkles className="h-5 w-5" />}
       </button>
 
       {open && (
         <div className="fixed bottom-20 right-5 z-40 w-[22rem] max-w-[90vw] h-[26rem] rounded-2xl border border-gray-200 bg-white shadow-2xl flex flex-col overflow-hidden">
-          <div className="bg-gradient-to-r from-orange-700 via-orange-600 to-amber-500 px-4 py-3 text-white">
+          <div className="px-4 py-3 bg-violet-600 text-white">
             <p className="text-sm font-semibold flex items-center gap-2">
               <Sparkles className="h-4 w-4" /> AI Tutor
-              <span className="ml-auto text-xs font-normal opacity-90">Socratic · course-scoped</span>
-              <Link to="/learn-with-sasha" className="rounded-md p-1 hover:bg-white/15" aria-label="Open Learn with Sasha studio"><Maximize2 className="h-3.5 w-3.5" /></Link>
+              <span className="text-[10px] font-normal opacity-80 ml-auto">Socratic · course-scoped</span>
             </p>
           </div>
           <div className="flex-1 overflow-y-auto p-3 space-y-2">
             {messages.map((m, i) => (
               <div key={i} className={`text-sm rounded-xl px-3 py-2 max-w-[85%] ${
-                m.role === 'user' ? 'ml-auto bg-gradient-to-br from-orange-600 to-amber-500 text-white' : 'bg-orange-50 text-gray-800'
+                m.role === 'user' ? 'ml-auto bg-blue-600 text-white' : 'bg-gray-100 text-gray-800'
               }`}>
                 {m.content}
               </div>
@@ -129,18 +125,15 @@ export function TutorDrawer({ courseId }: { courseId?: number }) {
             <div ref={endRef} />
           </div>
           {notConfigured && (
-            <p className="border-t border-amber-100 bg-amber-50 px-3 py-2 text-xs text-amber-700">
-              Add an active GLM or Gemini credential in the Admin AI Provider Vault to enable the tutor.
+            <p className="px-3 py-2 text-[11px] bg-amber-50 text-amber-700 border-t border-amber-100">
+              The server needs a <code>GLM_API_KEY</code> (Zhipu GLM) to enable the tutor — ask the admin.
             </p>
           )}
           {courseId && (
-            <div className="border-t border-orange-100 bg-orange-50/40 px-2 pt-2">
-              <p className="mb-2 px-1 text-xs leading-5 text-orange-800">Course insight is on: your question can help your instructor support you. Sasha's reply is excluded.</p>
-              <div className="flex flex-wrap gap-1">
-              <button type="button" onClick={escalate} disabled={busy} className="rounded-full border border-orange-200 px-2 py-1 text-xs hover:bg-orange-50 disabled:opacity-40">Ask my instructor</button>
-              <button type="button" onClick={checkMe} disabled={busy} className="rounded-full border border-orange-200 px-2 py-1 text-xs hover:bg-orange-50 disabled:opacity-40">Check my understanding</button>
-              <button type="button" onClick={() => setReporting((v) => !v)} className="rounded-full border border-orange-200 px-2 py-1 text-xs hover:bg-orange-50">Report an error</button>
-              </div>
+            <div className="px-2 pt-2 border-t border-gray-100 flex flex-wrap gap-1">
+              <button type="button" onClick={escalate} disabled={busy} className="px-2 py-1 text-[11px] rounded-full border border-gray-300 hover:bg-gray-50 disabled:opacity-40">Ask my instructor</button>
+              <button type="button" onClick={checkMe} disabled={busy} className="px-2 py-1 text-[11px] rounded-full border border-gray-300 hover:bg-gray-50 disabled:opacity-40">Check my understanding</button>
+              <button type="button" onClick={() => setReporting((v) => !v)} className="px-2 py-1 text-[11px] rounded-full border border-gray-300 hover:bg-gray-50">Report an error</button>
             </div>
           )}
           {reporting && courseId && (
@@ -166,7 +159,7 @@ export function TutorDrawer({ courseId }: { courseId?: number }) {
             <button
               onClick={send}
               disabled={busy || !input.trim()}
-              className="rounded-lg bg-gradient-to-br from-orange-600 to-amber-500 px-3 py-2 text-white disabled:opacity-40"
+              className="px-3 py-2 bg-violet-600 text-white rounded-lg disabled:opacity-40"
               aria-label="Send"
             >
               <Send className="h-4 w-4" />

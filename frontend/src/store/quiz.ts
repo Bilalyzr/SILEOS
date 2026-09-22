@@ -14,7 +14,6 @@ interface QuizState {
   isLoading: boolean
   error: string | null
   quizResults: QuizAttempt | null
-  timer: ReturnType<typeof setInterval> | null
 
   // Quiz settings
   isReviewMode: boolean
@@ -36,8 +35,11 @@ interface QuizState {
   getQuizResults: (attemptId: number) => Promise<QuizAttempt>
   retakeQuiz: () => Promise<void>
   clearError: () => void
+
+  // Timer management
   startTimer: () => void
   stopTimer: () => void
+  timer: NodeJS.Timeout | null
 }
 
 export const useQuizStore = create<QuizState>((set, get) => ({
@@ -302,11 +304,11 @@ export const useQuizStore = create<QuizState>((set, get) => ({
 
   clearError: () => set({ error: null }),
 
-  // Timer management
-  timer: null,
+  // Timer management (not exposed in interface)
+  timer: null as NodeJS.Timeout | null,
 
   startTimer: () => {
-    const state = get()
+    const state = get() as any
 
     // Clear existing timer
     if (state.timer) {
@@ -330,7 +332,7 @@ export const useQuizStore = create<QuizState>((set, get) => ({
   },
 
   stopTimer: () => {
-    const state = get()
+    const state = get() as any
     if (state.timer) {
       clearInterval(state.timer)
       set({ timer: null })

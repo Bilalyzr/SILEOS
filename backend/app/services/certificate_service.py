@@ -801,6 +801,26 @@ class CertificateService:
                 tid = int(raw_tpl)
                 if db.query(_CertTemplate.id).filter(_CertTemplate.id == tid).first():
                     template_id = tid
+            if not db.query(_CertTemplate.id).filter(_CertTemplate.id == template_id).first():
+                # The default template row is missing (fresh database, seed
+                # not run). The FK on IssuedCertificate.certificate_id would
+                # reject the insert and issuance would silently fail for
+                # EVERY course — the "Certificate not found" trap. Use any
+                # existing template, and if the table is empty create a
+                # default row so issuance can never deadlock on seed data.
+                any_tpl = db.query(_CertTemplate.id).order_by(_CertTemplate.id).first()
+                if any_tpl:
+                    template_id = any_tpl[0]
+                else:
+                    fallback = _CertTemplate(
+                        post_author=enrollment.user_id,
+                        post_title="Certificate of Completion",
+                        post_name="certificate-of-completion",
+                        post_content="",
+                    )
+                    db.add(fallback)
+                    db.flush()
+                    template_id = fallback.id
 
             certificate_hash = CertificateService.generate_verification_code()
             secure_cert_id = CertificateService.generate_secure_certificate_id(

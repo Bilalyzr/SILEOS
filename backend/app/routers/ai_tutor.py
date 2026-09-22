@@ -16,7 +16,6 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.models.sileos_pack import AiJob, BankQuestion, QuestionBank
 from app.services.auth_service import AuthService
-from app.services.course_access import can_edit
 from app.services.llm_provider import (call_glm, glm_api_key, glm_model,
                                        llm_configured, missing_key_detail)
 
@@ -118,9 +117,7 @@ async def curate_lesson(
             CURATE_SYSTEM,
             f"COURSE: {course.post_title}" + chr(10) +
             "MATERIAL:" + chr(10) + material + chr(10) +
-            "QUIZ TOPICS:" + chr(10) + quiz_ctx,
-            feature="Lesson curation",
-        )
+            "QUIZ TOPICS:" + chr(10) + quiz_ctx)
         cleaned = text.strip()
         if cleaned.startswith("```"):
             cleaned = cleaned.split("```")[1]
@@ -198,35 +195,12 @@ async def tutor_chat(
     current_user=Depends(AuthService.get_current_active_user),
 ):
     """Engine C: Socratic tutor scoped to the course's lesson content.
-
-    Course-linked learner questions emit privacy-bounded, explainable learning
-    signals for that course's instructors. General-learning questions do not.
-    """
+    History is client-held; this endpoint is stateless per turn."""
     message = (payload.get("message") or "").strip()
     course_id = payload.get("course_id")
-    session_key = str(payload.get("session_id") or "")[:64]
     history = payload.get("history") or []
     if not message:
         raise HTTPException(status_code=422, detail="message is required")
-    course = None
-    if course_id is not None:
-        from app.models.course import Course
-        from app.models.enrollment import Enrollment
-        try:
-            course_id = int(course_id)
-        except (TypeError, ValueError):
-            raise HTTPException(status_code=422, detail="course_id must be an integer")
-        course = db.query(Course).filter(Course.id == course_id).first()
-        if not course:
-            raise HTTPException(status_code=404, detail="Course not found")
-        if not can_edit(db, course, current_user):
-            enrolled = db.query(Enrollment.id).filter(
-                Enrollment.user_id == current_user.id,
-                Enrollment.course_id == course_id,
-                Enrollment.enrollment_status.in_(["enrolled", "completed"]),
-            ).first()
-            if not enrolled:
-                raise HTTPException(status_code=403, detail="Enrol in the course first")
     # v2.0 §9.4 (WP7): graded-item answer guard — deterministic, before any
     # LLM call, works without a key. Audited like every other tutor turn.
     from app.services import ai_layer_service as ai_svc
@@ -237,24 +211,7 @@ async def tutor_chat(
                     output_json={"guarded": guarded}, finished_at=datetime.now(timezone.utc))
         db.add(job)
         db.commit()
-        learning_signal = None
-        if course_id and str(getattr(current_user, "role", "")).lower() == "student":
-            from app.services.tutor_insights_service import record_course_question
-            learning_signal = record_course_question(
-                db, user_id=current_user.id, course_id=course_id,
-                session_key=session_key, message=message, guarded=True,
-            )
-        return {
-            "reply": ai_svc.GUARD_REPLY,
-            "guarded": True,
-            "job_id": job.id,
-            "learning_signal": ({
-                "concept": learning_signal.concept,
-                "score": learning_signal.struggle_score,
-                "severity": learning_signal.severity,
-                "likely_gap": learning_signal.likely_gap.replace("_", " ").title(),
-            } if learning_signal else None),
-        }
+        return {"reply": ai_svc.GUARD_REPLY, "guarded": True, "job_id": job.id}
     if not llm_configured():
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
@@ -263,13 +220,14 @@ async def tutor_chat(
 
     # RAG scope: pull this course's lesson text (titles + content) so the
     # tutor answers from the course, not the world.
-    from app.models.course import Lesson
+    from app.models.course import Course, Lesson
     scope = ""
     language_hint = ""
     if course_id:
-        if course and course.course_language and course.course_language.lower() not in ("english", "en"):
+        course_row = db.query(Course.course_language, Course.post_title).filter(Course.id == course_id).first()
+        if course_row and course_row[0] and course_row[0].lower() not in ("english", "en"):
             # R2: Tamil-medium (and other) courses get answers in their own language
-            language_hint = f"\nLANGUAGE: reply in {course.course_language} (technical terms may stay in English)."
+            language_hint = f"\nLANGUAGE: reply in {course_row[0]} (technical terms may stay in English)."
         lessons = (db.query(Lesson)
                    .filter(Lesson.post_parent == course_id)
                    .order_by(Lesson.menu_order).limit(50).all())
@@ -298,7 +256,7 @@ async def tutor_chat(
             context = "; ".join(f"{c['concept']} ({', '.join(c['why'])})" for c in struggling)
             system = f"This learner is currently struggling with: {context}. Prefer worked examples on these.\n" + system
     try:
-        reply = call_glm(system, prompt, feature="Tutor chat")
+        reply = call_glm(system, prompt)
     except Exception as exc:
         job.status = "failed"
         job.error = str(exc)[:2000]
@@ -310,23 +268,7 @@ async def tutor_chat(
     job.output_json = {"reply": reply}
     job.finished_at = datetime.now(timezone.utc)
     db.commit()
-    learning_signal = None
-    if course_id and str(getattr(current_user, "role", "")).lower() == "student":
-        from app.services.tutor_insights_service import record_course_question
-        learning_signal = record_course_question(
-            db, user_id=current_user.id, course_id=course_id,
-            session_key=session_key, message=message,
-        )
-    return {
-        "reply": reply,
-        "job_id": job.id,
-        "learning_signal": ({
-            "concept": learning_signal.concept,
-            "score": learning_signal.struggle_score,
-            "severity": learning_signal.severity,
-            "likely_gap": learning_signal.likely_gap.replace("_", " ").title(),
-        } if learning_signal else None),
-    }
+    return {"reply": reply, "job_id": job.id}
 
 
 @router.post("/generate-exam-paper", status_code=status.HTTP_200_OK)
@@ -389,7 +331,7 @@ async def generate_exam_paper(
     try:
         text = call_glm(
             "You are an expert Indian competitive-exam paper setter. Output "
-            "ONLY the JSON array — no prose.", prompt, feature="Exam paper generation")
+            "ONLY the JSON array — no prose.", prompt)
         raw = _parse_json_array(text)
     except Exception as exc:
         job.status = "failed"

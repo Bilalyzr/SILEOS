@@ -4,16 +4,13 @@ import { Search, ShoppingCart, Menu, X, ChevronDown, User } from "lucide-react";
 import { useAuthStore } from "@/store/auth";
 import { useCart } from "@/contexts/CartContext";
 import { roleHomePath } from "@/utils/role-routing";
-import { verticalPublicHref } from "@/config/businessVerticals";
 
 const learnLinks = [
-  [verticalPublicHref("meiporul"), "Meiporul · Immersive"],
-  [verticalPublicHref("seyappaduporul"), "Seyappaduporul · Tutoring"],
-  [verticalPublicHref("utporul"), "Utporul · Skills"],
   ["/courses", "Courses"],
   ["/labs", "Learning labs"],
   ["/library", "Digital library"],
   ["/categories", "Subjects"],
+  ["/meiporul-ar", "Meiporul AR"],
   ["/bundles", "Course bundles"],
   ["/membership", "Membership"],
 ];
@@ -89,13 +86,11 @@ export default function PublicHeader() {
               Learn <ChevronDown size={13} />
             </summary>
             <div>
-              {learnLinks.map(([to, label]) =>
-                to.startsWith("http") ? (
-                  <a key={to} href={to}>{label}</a>
-                ) : (
-                  <NavLink key={to} to={to}>{label}</NavLink>
-                ),
-              )}
+              {learnLinks.map(([to, label]) => (
+                <NavLink key={to} to={to}>
+                  {label}
+                </NavLink>
+              ))}
             </div>
           </details>
           <NavLink to="/campus">For institutions</NavLink>
@@ -188,13 +183,11 @@ export default function PublicHeader() {
           <div>
             <section>
               <h2>Learn</h2>
-              {learnLinks.map(([to, label]) =>
-                to.startsWith("http") ? (
-                  <a key={to} href={to}>{label}</a>
-                ) : (
-                  <Link key={to} to={to}>{label}</Link>
-                ),
-              )}
+              {learnLinks.map(([to, label]) => (
+                <Link key={to} to={to}>
+                  {label}
+                </Link>
+              ))}
             </section>
             <section>
               <h2>Discover</h2>

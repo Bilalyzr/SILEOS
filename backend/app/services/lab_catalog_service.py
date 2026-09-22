@@ -7,11 +7,36 @@ PACK_ROOT = Path(__file__).resolve().parents[2] / 'seed_packs'
 
 # Existing lessons/backups retain old identifiers. Resolve these to supplied
 # simulations of the same concept without reintroducing retired catalog entries.
+# Complete map of the retired PhET/native built-ins (see virtual_labs.py
+# RETIRED_SLUGS): every legacy slug a lesson or bookmark can still carry
+# redirects to the closest supplied CBSE lab so old content keeps working
+# instead of 404ing in the lab player.
 LEGACY_LAB_REPLACEMENTS = {
     'projectile-motion': 'cbse-projectile-motion',
     'cell-biology-identify': 'cbse-plant-animal-cell',
     'reaction-lab-basics': 'cbse-balance-equations',
     'neuron': 'cbse-neuron-reflex-lab',
+    # physics
+    'forces-and-motion-basics': 'cbse-force-pressure-friction',
+    'circuit-construction-kit-dc': 'cbse-electric-circuits',
+    'energy-forms-and-changes': 'cbse-heat-transfer-lab',
+    'gravity-and-orbits': 'cbse-earth-moon-sun-3d',
+    # chemistry
+    'molecule-shapes': 'cbse-molecule-viewer-3d',
+    'acids-and-bases': 'cbse-acids-bases-ph',
+    'balancing-chemical-equations': 'cbse-balance-equations',
+    'build-a-molecule': 'cbse-atom-builder-3d',
+    'ph-scale': 'cbse-acids-bases-ph',
+    'concentration': 'cbse-titration-lab',
+    'states-of-matter': 'cbse-water-states-3d',
+    # biology
+    'natural-selection': 'cbse-predator-prey',
+    'gene-expression-essentials': 'cbse-genetics-punnett',
+    'photosynthesis': 'cbse-photosynthesis-lab',
+    # mathematics
+    'area-builder': 'cbse-triangles-lab',
+    'graphing-lines': 'cbse-line-explorer',
+    'fraction-matcher': 'cbse-fractions-explorer',
 }
 
 

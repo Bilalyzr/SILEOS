@@ -1172,15 +1172,12 @@ body.astra-theme.lk-app {
   }
 }
 
-/* Product-wide learning controls, including standalone offline reader.
-   Bottom-LEFT: the bottom-right corner is crowded on the homepage
-   (.scroll-top-btn at 28px, .otw-card above it) and z-fab keeps the panel
-   under every modal scrim. */
+/* Product-wide learning controls, including standalone offline reader. */
 .learning-preferences {
   position: fixed;
-  left: 16px;
+  right: 16px;
   bottom: 16px;
-  z-index: var(--z-fab, 70);
+  z-index: 80;
   max-width: min(360px, calc(100vw - 32px));
 }
 .learning-preferences > .sf-surface {

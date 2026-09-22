@@ -188,20 +188,3 @@ async def course_hotspots(course_id: int, days: int = Query(30, ge=1, le=365), d
                           current_user: User = Depends(AuthService.get_current_active_user)):
     _course_editor(db, course_id, current_user)
     return svc.course_hotspots(db, course_id, days)
-
-
-@router.get("/courses/{course_id}/sasha-insights")
-async def sasha_course_insights(
-    course_id: int,
-    days: int = Query(30, ge=7, le=90),
-    db: Session = Depends(get_db),
-    current_user: User = Depends(AuthService.get_current_active_user),
-):
-    """Course-bounded instructor monitor for Sasha learning signals.
-
-    General chats and AI replies are never stored in this signal table or
-    returned here.
-    """
-    _course_editor(db, course_id, current_user)
-    from app.services.tutor_insights_service import course_insights
-    return course_insights(db, course_id, days)

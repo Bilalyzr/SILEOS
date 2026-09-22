@@ -130,6 +130,16 @@
   margin: 0;
   color: var(--sf-ink);
 }
+/* Personalised welcome: the user's name gets the accent colour plus a
+   highlighter-style tint bar so the greeting reads as highlighted text.
+   Theme tokens keep it readable under both base and astra/sunrise layers. */
+.rd-page-heading h1 .greeting-name {
+  color: var(--sf-accent);
+  background: linear-gradient(transparent 68%, var(--sf-tint) 0);
+  border-radius: 4px;
+  padding: 0 3px;
+  margin-left: 2px;
+}
 .rd-page-heading p {
   color: var(--sf-muted);
   font-size: 13px;

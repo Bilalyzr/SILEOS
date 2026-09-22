@@ -191,7 +191,7 @@ function EditClassModal({
 
   return (
     <div
-      className="fixed inset-0 z-modal bg-black/50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-[100] bg-black/50 flex items-center justify-center p-4"
       onClick={onClose}
     >
       <div
@@ -334,7 +334,7 @@ function CancelClassModal({
 
   return (
     <div
-      className="fixed inset-0 z-modal bg-black/50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-[100] bg-black/50 flex items-center justify-center p-4"
       onClick={onClose}
     >
       <div
