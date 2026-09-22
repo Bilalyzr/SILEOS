@@ -9,7 +9,7 @@ from jose import JWTError
 from typing import Optional
 
 from app.core.database import get_db
-from app.core.security import verify_password, verify_token
+from app.core.security import verify_password, verify_token, is_token_revoked
 from app.models.user import User
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
@@ -79,6 +79,11 @@ class AuthService:
         except JWTError:
             raise credentials_exception
 
+        # Logout denylist: a token the user explicitly logged out of must
+        # not keep working until natural expiry.
+        if is_token_revoked(token):
+            raise credentials_exception
+
         user = db.query(User).filter(User.id == int(user_id)).first()
         if user is None:
             raise credentials_exception
@@ -113,6 +118,11 @@ class AuthService:
             payload = verify_token(token)
             user_id: str = payload.get("sub")
             if user_id is None:
+                return None
+
+            # Logout denylist (see get_current_user): a revoked token is
+            # treated as anonymous here, not as an error.
+            if is_token_revoked(token):
                 return None
 
             user = db.query(User).filter(User.id == int(user_id)).first()

@@ -1206,7 +1206,28 @@ async def get_course_lessons(
         Lesson.post_parent == course_id
     ).order_by(Lesson.menu_order).all()
 
-    return [CourseService.format_lesson_response(lesson) for lesson in lessons]
+    # Public-preview lock — same rule as get_course() above: anyone not
+    # enrolled (and not owner/admin) gets non-preview lessons WITHOUT
+    # content/media handles, is_locked=True. Before this, the standalone
+    # lessons endpoint returned full bodies (incl. paid-course content) to
+    # anonymous visitors while the course-detail endpoint locked correctly.
+    is_enrolled = False
+    if current_user:
+        enrollment = db.query(Enrollment).filter(
+            Enrollment.course_id == course_id,
+            Enrollment.user_id == current_user.id
+        ).first()
+        is_enrolled = enrollment is not None and enrollment.enrollment_status not in ['cancelled', 'suspended']
+    full_access = is_enrolled or bool(
+        current_user and (current_user.role in ("admin", "superadmin") or current_user.id == course.post_author)
+    ) or (current_user is not None and can_edit(db, course, current_user))
+
+    formatted = [CourseService.format_lesson_response(lesson) for lesson in lessons]
+    if not full_access:
+        for lesson, lesson_data in zip(lessons, formatted):
+            if not lesson.lesson_preview:
+                CourseService.lock_lesson(lesson_data)
+    return formatted
 
 async def _resolve_youtube_media(
     youtube_url: str,

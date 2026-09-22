@@ -1151,6 +1151,15 @@ async def _submit_quiz_impl(
     # attempt_info bookkeeping (_pause, _graded_answers, _manual_feedback)
     # and must never be settable by a student's answer payload.
     raw_answers_data = submission_data.get("answers", {}) or {}
+    # answers must map question_id -> answer. Anything else (a list, a
+    # string, ...) used to blow up below with AttributeError → 500; reject
+    # it as a 422 instead so a malformed client payload is never a server
+    # error.
+    if not isinstance(raw_answers_data, dict):
+        raise HTTPException(
+            status_code=422,
+            detail="'answers' must be an object mapping question ids to answers",
+        )
     answers_data = {
         k: v for k, v in raw_answers_data.items() if not str(k).startswith("_")
     }
