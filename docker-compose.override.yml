@@ -26,13 +26,6 @@ services:
       - INTERNAL_TOKEN=${INTERNAL_TOKEN}
       - JITSI_PUBLIC_URL=${JITSI_PUBLIC_URL:-}
 
-  runtime-worker:
-    environment:
-      - VIDEO_SECRET=${VIDEO_SECRET}
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
-      - JITSI_JWT_SECRET=${JITSI_JWT_SECRET}
-      - INTERNAL_TOKEN=${INTERNAL_TOKEN}
-      - JITSI_PUBLIC_URL=${JITSI_PUBLIC_URL:-}
 
   # The production nginx/conf.d has `listen 443 ssl` blocks pointing at aaPanel
   # cert paths (/etc/panel-ssl/...) that don't exist on a dev box, which makes
