@@ -181,6 +181,11 @@ const RefundPolicyPage = lazyPage(() =>
 const TermsPage = lazyPage(() =>
   import("@/pages/terms").then((m) => ({ default: m.TermsPage })),
 );
+const AccessibilityPage = lazyPage(() =>
+  import("@/pages/accessibility").then((m) => ({
+    default: m.AccessibilityPage,
+  })),
+);
 const PrivacyPage = lazyPage(() =>
   import("@/pages/privacy").then((m) => ({ default: m.PrivacyPage })),
 );
@@ -957,6 +962,14 @@ function App() {
                           element={
                             <MainLayout>
                               <TermsPage />
+                            </MainLayout>
+                          }
+                        />
+                        <Route
+                          path="/accessibility"
+                          element={
+                            <MainLayout>
+                              <AccessibilityPage />
                             </MainLayout>
                           }
                         />

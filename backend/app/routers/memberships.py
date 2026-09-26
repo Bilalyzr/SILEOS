@@ -92,9 +92,14 @@ async def subscribe(
     # Free plans (price 0) carry no gateway object — activate directly with no
     # checkout. Passing razorpay_plan_id=None into the gateway subscription
     # body would fail for exactly the tiers that cost nothing.
+    existing = _primary_membership(db, current_user.id)
     if float(plan.price or 0) == 0:
         import uuid
         from datetime import datetime, timedelta, timezone
+        # Same conflict rules as the paid path below: a real membership blocks
+        # the subscribe, an abandoned PENDING checkout is discarded first.
+        if existing is not None and existing.status != MembershipStatus.PENDING:
+            raise HTTPException(status_code=409, detail="You already have a membership")
         if existing is not None:
             existing.status = MembershipStatus.CANCELLED
             db.flush()
@@ -112,7 +117,6 @@ async def subscribe(
         db.commit()
         return SubscribeResponse(
             subscription_id=str(row.id), razorpay_key=None)
-    existing = _primary_membership(db, current_user.id)
     if existing is not None and existing.status != MembershipStatus.PENDING:
         # ACTIVE / GRACE: a real, paid-for membership is in the way.
         raise HTTPException(status_code=409, detail="You already have a membership")

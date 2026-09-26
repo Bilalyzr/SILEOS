@@ -225,17 +225,24 @@ async def create_membership_plan(
     razorpay_plan_id = None
     if request.price and request.price > 0:
         try:
-            client = memberships._rzp_client()
-            rzp_plan = client.plan.create({
-                "period": request.period,
-                "interval": request.interval,
-                "item": {
-                    "name": request.name,
-                    "amount": int(round(request.price * 100)),
-                    "currency": "INR",
-                },
-            })
-            razorpay_plan_id = str(rzp_plan["id"])
+            key_id, key_secret = memberships._razorpay_creds()
+            if not key_id or not key_secret:
+                # No gateway configured (localhost / pre-launch): create the
+                # plan locally with no mirror object. Subscribing to it later
+                # still fails honestly with 503 until keys are provided.
+                razorpay_plan_id = None
+            else:
+                client = memberships._rzp_client()
+                rzp_plan = client.plan.create({
+                    "period": request.period,
+                    "interval": request.interval,
+                    "item": {
+                        "name": request.name,
+                        "amount": int(round(request.price * 100)),
+                        "currency": "INR",
+                    },
+                })
+                razorpay_plan_id = str(rzp_plan["id"])
         except HTTPException:
             raise
         except Exception as exc:
@@ -465,6 +472,51 @@ async def update_bundle(
     db.commit()
     db.refresh(bundle)
     return _admin_bundle_out(db, bundle)
+
+
+@router.delete("/bundles/{bundle_id}", status_code=204)
+async def delete_bundle(
+    bundle_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(AuthService.require_admin),
+):
+    """Delete a bundle that has never been sold.
+
+    Orders, invoice items and seat pools reference bundles by id; deleting a
+    bundle with sales would orphan purchase history, so those are refused with
+    409 (deactivate instead). An unsold bundle is deleted together with its
+    course links.
+    """
+    from app.models.company_invoice import CompanyInvoiceItem, CompanySeatPool
+
+    bundle = db.query(Bundle).filter(Bundle.id == bundle_id).first()
+    if not bundle:
+        raise HTTPException(status_code=404, detail="Bundle not found")
+
+    order_count = db.query(Order).filter(Order.bundle_id == bundle_id).count()
+    invoice_count = (
+        db.query(CompanyInvoiceItem)
+        .filter(CompanyInvoiceItem.bundle_id == bundle_id)
+        .count()
+    )
+    pool_count = (
+        db.query(CompanySeatPool)
+        .filter(CompanySeatPool.bundle_id == bundle_id)
+        .count()
+    )
+    if order_count or invoice_count or pool_count:
+        raise HTTPException(
+            status_code=409,
+            detail=(
+                "This bundle has sales or invoice history and cannot be "
+                "deleted. Deactivate it instead."
+            ),
+        )
+
+    db.query(BundleCourse).filter(BundleCourse.bundle_id == bundle_id).delete()
+    db.delete(bundle)
+    db.commit()
+    return None
 
 
 # ──────────────────────────────────────────────────────────────────────────

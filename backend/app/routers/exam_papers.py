@@ -106,7 +106,8 @@ def recover_interrupted(db, user_id):
 
 @router.post('', status_code=201)
 def create_paper(body: PaperIn, db: Session = Depends(get_db), user=Depends(participant)):
-    if not llm_provider.llm_configured(): raise HTTPException(503, 'Paper generation is temporarily unavailable. No payment has been taken.')
+    if not llm_provider.llm_configured() and not svc.offline_practice_enabled():
+        raise HTTPException(503, 'Paper generation is temporarily unavailable. No payment has been taken.')
     staff = user.role in svc.STAFF
     if not staff and body.source_text: raise HTTPException(403, 'Source-document authoring is available to teaching staff.')
     slab = None
@@ -182,7 +183,7 @@ def generate(ident: str, background: BackgroundTasks, db: Session = Depends(get_
         started = row.started_at.replace(tzinfo=svc.now().tzinfo) if row.started_at.tzinfo is None else row.started_at
         if started < svc.now()-timedelta(minutes=60): row.status='failed'; db.commit()
     if row.status not in ('ready','failed'): raise HTTPException(409, 'Paper is already generating or is not available.')
-    if not llm_provider.llm_configured(): raise HTTPException(503, 'Generation is temporarily unavailable. Your paid paper remains available.')
+    if not llm_provider.llm_configured() and not svc.offline_practice_enabled(): raise HTTPException(503, 'Generation is temporarily unavailable. Your paid paper remains available.')
     generation_id = str(uuid.uuid4())
     changed = db.query(ExamPaper).filter(ExamPaper.id == ident, ExamPaper.status.in_(['ready','failed'])).update(
         {'status':'generating','started_at':svc.now(),'error':None,'generation_id':generation_id}, synchronize_session=False)

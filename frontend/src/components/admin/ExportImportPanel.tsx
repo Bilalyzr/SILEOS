@@ -260,7 +260,10 @@ useEffect(() => {
 
       const url = window.URL.createObjectURL(blob)
       const timestamp = new Date().toISOString().slice(0, 10)
-      const extension = format === 'excel' ? 'xlsx' : 'pdf'
+      // Extension must match the actual bytes: the old `'pdf'` fallback saved
+      // CSV exports as .pdf files that nothing could open.
+      const extension =
+        format === 'excel' ? 'xlsx' : format === 'csv' ? 'csv' : 'pdf'
       const filename = `${section}_${timestamp}.${extension}`
 
       // For PDF, open in new tab; for others, download

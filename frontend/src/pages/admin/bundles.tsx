@@ -66,6 +66,26 @@ export function BundlesPage() {
     }
   };
 
+  const deleteBundle = async (bundle: AdminBundle) => {
+    if (
+      !window.confirm(
+        `Delete bundle "${bundle.name}"? This cannot be undone.`,
+      )
+    ) {
+      return;
+    }
+    try {
+      await api.delete(`/admin/bundles/${bundle.id}`);
+      toast.success("Bundle deleted");
+      fetchBundles();
+    } catch (error: any) {
+      console.error("Error deleting bundle:", error);
+      toast.error(
+        error.response?.data?.detail || "Failed to delete bundle",
+      );
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <PageLayout
@@ -223,9 +243,15 @@ export function BundlesPage() {
                             setEditingBundle(bundle);
                             setShowCreateModal(true);
                           }}
-                          className="text-blue-600 hover:text-blue-900"
+                          className="text-blue-600 hover:text-blue-900 mr-4"
                         >
                           Edit
+                        </button>
+                        <button
+                          onClick={() => deleteBundle(bundle)}
+                          className="text-red-600 hover:text-red-900"
+                        >
+                          Delete
                         </button>
                       </td>
                     </tr>
