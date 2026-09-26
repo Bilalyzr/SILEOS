@@ -22,6 +22,15 @@ class Settings(BaseSettings):
     # Dev convenience: when True, new registrations are marked email-verified
     # immediately so they can log in without the email step. Keep False in prod.
     AUTO_VERIFY_EMAIL: bool = Field(default=False, env="AUTO_VERIFY_EMAIL")
+    # SQLAlchemy engine echo. Deliberately separate from DEBUG: DEBUG=true used
+    # to turn on per-statement SQL logging, which added synchronous log I/O to
+    # every query and measurably slowed every request. Only enable to debug SQL.
+    SQLALCHEMY_ECHO: bool = Field(default=False, env="SQLALCHEMY_ECHO")
+    # Dev-only WhatsApp opt-in bypass: lets students save/confirm a WhatsApp
+    # number in communication preferences without the Meta Cloud API being
+    # configured (the JOIN-by-webhook round trip is impossible locally).
+    # Keep False in prod — production must use the real consent flow.
+    WHATSAPP_DEV_OPT_IN: bool = Field(default=False, env="WHATSAPP_DEV_OPT_IN")
 
     # Firebase Admin SDK — used to mirror email/password registrations into
     # Firebase Authentication. FIREBASE_CREDENTIALS_PATH points at the
@@ -146,6 +155,10 @@ class Settings(BaseSettings):
     # Email
     SMTP_HOST: str = Field(default="", env="SMTP_HOST")
     SMTP_PORT: int = Field(default=587, env="SMTP_PORT")
+    # STARTTLS + AUTH are the production defaults; local SMTP catchers
+    # (Mailpit on :1025) speak plain unauthenticated SMTP, so localhost sets
+    # SMTP_STARTTLS=false and leaves SMTP_USER empty.
+    SMTP_STARTTLS: bool = Field(default=True, env="SMTP_STARTTLS")
     SMTP_USER: str = Field(default="", env="SMTP_USER")
     SMTP_PASSWORD: str = Field(default="", env="SMTP_PASSWORD")
     EMAIL_FROM: str = Field(default="noreply@sashainfinity.com", env="EMAIL_FROM")

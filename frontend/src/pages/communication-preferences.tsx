@@ -121,10 +121,13 @@ export function WhatsAppPreferenceCard() {
   }
 
   const status: WhatsAppAccountStatus = query.data;
+  // Prefer the server's single opt_in_available gate (covers the local-dev
+  // bypass); fall back to the client-side derivation for older backends.
   const available =
-    status.configured &&
-    status.business_phone_configured &&
-    status.webhook_ready;
+    status.opt_in_available ??
+    (status.configured &&
+      status.business_phone_configured &&
+      status.webhook_ready);
   const joinUrl = pendingUrl || status.join_url;
   const joined = status.contact_status === "confirmed" || status.opted_in;
   const displayState = pendingUrl && !joined ? "pending" : status.contact_status;

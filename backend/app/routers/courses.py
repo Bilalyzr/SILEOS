@@ -3,7 +3,7 @@ Course Management Router - SashaInfinity LMS API
 Handles course CRUD operations, enrollment, and progress tracking
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status, Query, UploadFile, File, Body, Request, Response
+from fastapi import APIRouter, Depends, HTTPException, status, Query, UploadFile, File, Body, Request, Response, BackgroundTasks
 from sqlalchemy import func
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy.exc import IntegrityError
@@ -55,6 +55,28 @@ from app.services.course_service import (
 )
 from app.routers.video import extract_video_id
 from app.utils.email import send_enrollment_confirmation_email
+
+
+async def send_enrollment_confirmation_email_safely(
+    email: str, user_name: str, course_title: str, course_id: int
+):
+    """Background-task wrapper: log the outcome, never raise into the response."""
+    try:
+        await send_enrollment_confirmation_email(
+            email=email,
+            user_name=user_name,
+            course_title=course_title,
+            course_id=course_id,
+        )
+        logger.info(
+            "Enrollment confirmation email sent to %s for course %s",
+            email, course_title,
+        )
+    except Exception as email_err:
+        logger.warning(
+            "Failed to send enrollment confirmation email to %s: %s",
+            email, email_err,
+        )
 from app.schemas.course import (
     CourseCreate,
     CourseUpdate,
@@ -2088,6 +2110,7 @@ async def mark_lesson_complete(
 @router.post("/{course_id}/enroll", response_model=EnrollmentResponse)
 async def enroll_in_course(
     course_id: int,
+    background_tasks: BackgroundTasks,
     payload: Optional[Dict[str, Any]] = Body(default=None),
     db: Session = Depends(get_db),
     current_user: User = Depends(AuthService.get_current_active_user)
@@ -2277,17 +2300,16 @@ async def enroll_in_course(
         db.commit()
         db.refresh(new_enrollment)
 
-        # Send enrollment confirmation email
-        try:
-            await send_enrollment_confirmation_email(
-                email=current_user.user_email,
-                user_name=current_user.display_name or current_user.user_email,
-                course_title=course.post_title,
-                course_id=course_id
-            )
-            logger.info(f"✅ Enrollment confirmation email sent to {current_user.user_email} for course {course.post_title}")
-        except Exception as email_err:
-            logger.warning(f"⚠️ Failed to send enrollment confirmation email to {current_user.user_email}: {email_err}")
+        # Send enrollment confirmation email AFTER responding — same rule as
+        # registration: a slow SMTP hop must never hold the enroll response
+        # (and its 20s timeout) hostage.
+        background_tasks.add_task(
+            send_enrollment_confirmation_email_safely,
+            email=current_user.user_email,
+            user_name=current_user.display_name or current_user.user_email,
+            course_title=course.post_title,
+            course_id=course_id,
+        )
     except HTTPException:
         db.rollback()
         raise

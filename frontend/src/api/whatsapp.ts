@@ -8,6 +8,10 @@ export type WhatsAppConsentState =
 
 export interface WhatsAppConfigurationStatus {
   configured: boolean;
+  /** Single server-side gate for the opt-in form: real provider ready OR the
+   *  local-dev bypass is enabled. Preferred over re-deriving it client-side. */
+  opt_in_available?: boolean;
+  dev_opt_in?: boolean;
   api_version: string;
   phone_number_configured: boolean;
   business_account_configured: boolean;

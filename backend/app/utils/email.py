@@ -88,12 +88,13 @@ class EmailService:
         """
         subject = message['Subject']
 
-        if not self.smtp_host or not self.smtp_user:
-            # Deliberately returns True: in dev with no SMTP configured we do
-            # not want registration to look broken. Loud enough to notice if it
-            # ever happens in production.
+        if not self.smtp_host:
+            # No SMTP_HOST means email is genuinely unconfigured (mock mode).
+            # A configured host with an EMPTY user is valid: local SMTP catchers
+            # (Mailpit on :1025) accept unauthenticated plain-SMTP delivery.
+            # Deliberately returns True so registration does not look broken.
             logger.warning(
-                "SMTP not configured (SMTP_HOST/SMTP_USER empty) — email to %s "
+                "SMTP not configured (SMTP_HOST empty) — email to %s "
                 "was NOT sent, only logged. Subject: %s",
                 to_email, subject,
             )
@@ -102,11 +103,13 @@ class EmailService:
         stage = "connect"
         try:
             with smtplib.SMTP(self.smtp_host, self.smtp_port, timeout=20) as server:
-                stage = "starttls"
-                server.starttls(context=_smtp_tls_context())
-                server.ehlo()
-                stage = "login"
-                server.login(self.smtp_user, self.smtp_password)
+                if settings.SMTP_STARTTLS:
+                    stage = "starttls"
+                    server.starttls(context=_smtp_tls_context())
+                    server.ehlo()
+                if self.smtp_user:
+                    stage = "login"
+                    server.login(self.smtp_user, self.smtp_password)
                 stage = "send"
                 refused = server.send_message(message)
 

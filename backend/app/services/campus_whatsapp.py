@@ -63,8 +63,17 @@ def configuration_status():
         "WHATSAPP_VERIFY_TOKEN": settings.WHATSAPP_VERIFY_TOKEN,
     }
     missing = [name for name, value in values.items() if not value]
+    provider_ready = bool(
+        settings.WHATSAPP_BUSINESS_PHONE
+        and settings.WHATSAPP_APP_SECRET
+        and settings.WHATSAPP_VERIFY_TOKEN
+    )
     return {
         "configured": not missing,
+        # Single flag the client gates the opt-in form on: the real provider
+        # flow, or the explicit local-dev bypass (no Meta credentials needed).
+        "opt_in_available": provider_ready or settings.WHATSAPP_DEV_OPT_IN,
+        "dev_opt_in": settings.WHATSAPP_DEV_OPT_IN,
         "api_version": settings.WHATSAPP_API_VERSION,
         "phone_number_configured": bool(settings.WHATSAPP_PHONE_NUMBER_ID),
         "business_account_configured": bool(settings.WHATSAPP_BUSINESS_ACCOUNT_ID),
@@ -111,11 +120,41 @@ def begin_opt_in(db, user_id, phone):
     """Start signed inbound verification for one SashaInfinity account."""
 
     configuration = configuration_status()
-    if (
-        not configuration["business_phone_configured"]
-        or not configuration["webhook_ready"]
-    ):
-        return None
+    provider_ready = (
+        configuration["business_phone_configured"]
+        and configuration["webhook_ready"]
+    )
+    if not provider_ready:
+        if not get_settings().WHATSAPP_DEV_OPT_IN:
+            return None
+        # Local development without Meta Cloud credentials: the JOIN-by-webhook
+        # round trip cannot run, so record consent directly. Gated by an
+        # explicit env flag; production keeps the full signed verification.
+        row = (
+            db.query(WhatsAppContact).filter_by(user_id=user_id).with_for_update().first()
+        )
+        if row and row.status == "confirmed" and row.phone == phone:
+            return {
+                "status": "confirmed",
+                "click_to_chat_url": None,
+                "expires_at": None,
+                "consent_at": utc(row.consent_at).isoformat() if row.consent_at else None,
+            }
+        if not row:
+            row = WhatsAppContact(user_id=user_id)
+            db.add(row)
+        row.phone = phone
+        row.status = "confirmed"
+        row.challenge = None
+        row.expires_at = None
+        row.consent_at = datetime.now(timezone.utc)
+        db.commit()
+        return {
+            "status": "confirmed",
+            "click_to_chat_url": None,
+            "expires_at": None,
+            "consent_at": utc(row.consent_at).isoformat(),
+        }
     row = db.query(WhatsAppContact).filter_by(user_id=user_id).with_for_update().first()
     if row and row.status == "confirmed" and row.phone == phone:
         return {

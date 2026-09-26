@@ -76,6 +76,9 @@ services:
       - WHATSAPP_VERIFY_TOKEN=${WHATSAPP_VERIFY_TOKEN:-}
       - WHATSAPP_API_VERSION=${WHATSAPP_API_VERSION:-v23.0}
       - WHATSAPP_APPROVED_TEMPLATES=${WHATSAPP_APPROVED_TEMPLATES:-}
+      # Local-dev bypass so students can save a WhatsApp number without Meta
+      # Cloud credentials. Defaults off; the localhost .env enables it.
+      - WHATSAPP_DEV_OPT_IN=${WHATSAPP_DEV_OPT_IN:-false}
       # AI provider (Zhipu GLM / bigmodel.cn) — powers adaptive mini-lessons,
       # AI tutor and question generation. Empty = those features report "not
       # configured" (honest 503) and the UI hides the generate controls.
@@ -87,6 +90,9 @@ services:
       - SENTRY_DSN=${SENTRY_DSN:-}
       - DEBUG=${DEBUG:-false}
       - AUTO_VERIFY_EMAIL=${AUTO_VERIFY_EMAIL:-false}
+      # Per-statement SQL logging, separate from DEBUG (which used to echo
+      # every query and slow every request). Off unless debugging SQL.
+      - SQLALCHEMY_ECHO=${SQLALCHEMY_ECHO:-false}
       - PYTHONIOENCODING=utf-8
       - PYTHONUTF8=1
       - FRONTEND_URL=${FRONTEND_URL:-https://lms.sashainfinity.com}
@@ -136,6 +142,9 @@ services:
       # Email Configuration
       - SMTP_HOST=${SMTP_HOST}
       - SMTP_PORT=${SMTP_PORT}
+      # STARTTLS+AUTH are the production defaults; localhost points at the
+      # Mailpit catcher below with SMTP_STARTTLS=false and an empty user.
+      - SMTP_STARTTLS=${SMTP_STARTTLS:-true}
       - SMTP_USER=${SMTP_USER}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
       - EMAIL_FROM=${EMAIL_FROM}
@@ -174,7 +183,7 @@ services:
     networks:
       - tutor-network
     restart: unless-stopped
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --timeout-keep-alive 75
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=5)"]
       interval: 15s
@@ -184,6 +193,11 @@ services:
 
   # YouTube Streaming Service (New Method)
   runtime-worker:
+    # Opt-in service: `python -m app.workers.runtime` does not exist in this
+    # codebase snapshot, so auto-start just crash-loops. Start it explicitly
+    # with `docker compose --profile runtime-worker up -d` once the module
+    # lands.
+    profiles: ["runtime-worker"]
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -306,6 +320,18 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+
+  # Local SMTP catcher. The backend delivers all outbound mail (verification,
+  # enrollment confirmations, password resets, …) here instead of the void;
+  # read it in the web UI at http://localhost:8025. SMTP itself stays
+  # unpublished — only the backend reaches it as mailpit:1025.
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "127.0.0.1:8025:8025"
+    networks:
+      - tutor-network
+    restart: unless-stopped
 
   # Nginx Reverse Proxy
   nginx:

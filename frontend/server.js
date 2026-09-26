@@ -13,6 +13,7 @@
  *   /api/v1/stream/extract  -> backend      (video extraction lives there)
  *   /api/v1/stream/*        -> streaming service (:8001)
  *   /api/v1/*               -> backend      (:8000)
+ *   /uploads/, /certificate-files/ -> backend (media; static mounts there)
  *   everything else         -> dist/ with SPA fallback to index.html
  */
 const http = require('http');
@@ -123,6 +124,12 @@ const server = http.createServer((req, res) => {
     return proxy(req, res, STREAMING);
   }
   if (req.url.startsWith('/api/')) {
+    return proxy(req, res, BACKEND);
+  }
+  // Backend-served media. With same-origin builds (VITE_API_URL empty) these
+  // URLs are relative, so :3000 must forward them or course images and
+  // certificates 404 into the SPA fallback. Mirrors nginx conf.d.local.
+  if (req.url.startsWith('/uploads/') || req.url.startsWith('/certificate-files/')) {
     return proxy(req, res, BACKEND);
   }
   return serveStatic(req, res);

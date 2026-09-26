@@ -5,6 +5,21 @@ services:
   frontend:
     ports:
       - "3000:3000"
+    # Same-origin build: empty VITE_* makes the bundle use relative /api/v1.
+    # The base compose would otherwise bake an absolute backend URL (its
+    # ${VAR:-prod-default} turns an empty .env value into the production URL).
+    # Relative keeps every browser call on the :3000 origin — one keep-alive
+    # connection pool, no CORS preflights, and none of the ~200ms IPv6
+    # localhost→127.0.0.1 fallback tax Docker Desktop on Windows charges per
+    # new connection to a second published port. server.js proxies /api/v1,
+    # /uploads/ and /certificate-files/ to the backend inside the docker
+    # network, so nothing else changes.
+    build:
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ""
+        VITE_BACKEND_URL: ""
+        VITE_FRONTEND_URL: ""
 
   # The base compose never passes these into the backend container, but the
   # 2026-09-12 snapshot's fail-fast guards (routers/player.py VIDEO_SECRET,
