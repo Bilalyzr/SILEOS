@@ -4,7 +4,8 @@
 services:
   frontend:
     ports:
-      - "3000:3000"
+      # loopback-only direct access (public traffic enters via the edge :4100)
+      - "127.0.0.1:4000:3000"
 
   # Vars the app reads via plain os.getenv()/config but the base compose file
   # never passes into the container (the root .env is only used for compose

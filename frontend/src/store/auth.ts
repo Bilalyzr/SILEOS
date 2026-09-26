@@ -50,6 +50,9 @@ interface AuthState {
   refreshToken: string | null
   isAuthenticated: boolean
   isLoading: boolean
+  // True once checkAuth() has concluded — ProtectedRoute waits on this so a
+  // cookie/persisted session isn't bounced to /login mid-restore.
+  hasResolvedAuth: boolean
   error: string | null
 
   // Actions
