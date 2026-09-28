@@ -64,6 +64,9 @@ def _shared_cookie_domain(request: Request) -> Optional[str]:
     return ".sashainfinity.com" if host == "sashainfinity.com" or host.endswith(".sashainfinity.com") else None
 
 
+_SSO_SENTINEL_COOKIE = "sf_ss"
+
+
 def _set_shared_session(response: Response, request: Request, refresh_token: str) -> None:
     domain = _shared_cookie_domain(request)
     response.set_cookie(
@@ -76,6 +79,22 @@ def _set_shared_session(response: Response, request: Request, refresh_token: str
         httponly=True,
         samesite="lax",
     )
+    # Readable marker that the HttpOnly refresh cookie above exists. The
+    # frontend checks it to decide whether a session-restore probe is worth
+    # firing — without it, every anonymous page load POSTed /auth/refresh
+    # just to be told 401 (the HttpOnly cookie itself cannot be probed from
+    # JS). Same lifetime/domain so it can never outlive the real session.
+    if domain:
+        response.set_cookie(
+            key=_SSO_SENTINEL_COOKIE,
+            value="1",
+            max_age=REFRESH_TOKEN_EXPIRE_DAYS * 86400,
+            path="/",
+            domain=domain,
+            secure=True,
+            httponly=False,
+            samesite="lax",
+        )
 
 
 def _clear_shared_session(response: Response, request: Request) -> None:
@@ -88,6 +107,15 @@ def _clear_shared_session(response: Response, request: Request) -> None:
         httponly=True,
         samesite="lax",
     )
+    if domain:
+        response.delete_cookie(
+            key=_SSO_SENTINEL_COOKIE,
+            path="/",
+            domain=domain,
+            secure=True,
+            httponly=False,
+            samesite="lax",
+        )
 
 @router.post("/login", response_model=TokenResponse)
 @router.post("/login/", response_model=TokenResponse)

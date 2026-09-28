@@ -327,10 +327,22 @@ export const useAuthStore = create<AuthState>()(
           if (!accessToken) {
             // localStorage is origin-scoped. Restore a Sasha-wide session from
             // the HttpOnly refresh cookie when entering a sibling subdomain.
-            // Flip isLoading BEFORE the async probe: ProtectedRoute treats
-            // isLoading=false + !isAuthenticated as "definitely anonymous"
-            // and would redirect to /login while the probe is still in
-            // flight — bouncing a session that is about to be restored.
+            // The backend also sets a readable sf_ss marker whenever that
+            // cookie exists — if the marker is absent there is provably no
+            // shared session, so we resolve as anonymous WITHOUT the network
+            // probe (every anonymous visit used to fire a doomed /auth/refresh
+            // that surfaced as a red 401 in the console). Localhost has no
+            // cross-domain cookies, so it keeps the probe as the fallback.
+            const onSharedDomain =
+              typeof location !== 'undefined' &&
+              location.hostname.endsWith('.sashainfinity.com')
+            const hasSharedMarker =
+              typeof document !== 'undefined' &&
+              document.cookie.split('; ').some((c) => c.startsWith('sf_ss='))
+            if (onSharedDomain && !hasSharedMarker) {
+              set({ isLoading: false, hasResolvedAuth: true })
+              return
+            }
             set({ isLoading: true })
             try {
               await get().refreshAccessToken()
