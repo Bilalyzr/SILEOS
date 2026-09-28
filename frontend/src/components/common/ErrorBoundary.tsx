@@ -47,6 +47,19 @@ function isNetworkError(error: Error): boolean {
 }
 
 /**
+ * A deploy replaced the JS chunks while this tab was open: the in-memory app
+ * still requests the old hashed filenames, the server answers with the HTML
+ * fallback, and the browser rejects the module. The server is fine — one
+ * reload pulls the new shell and fixes it. Detected and self-healed below.
+ */
+const STALE_CHUNK_RE = /failed to fetch dynamically imported module|importing a module script failed|error loading dynamically imported module/i
+const STALE_RELOADED_KEY = 'sf.stale-chunk-reloaded'
+
+function isStaleChunkError(error: Error): boolean {
+  return STALE_CHUNK_RE.test(error?.message ?? '')
+}
+
+/**
  * App-wide error boundary. Without this, any render-time exception in a page
  * (e.g. a null field a component didn't guard) unmounts the whole React tree
  * and leaves the user on a blank white screen. Here we catch it and show a
@@ -65,6 +78,15 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
   componentDidCatch(error: Error, info: React.ErrorInfo) {
     // Log for production monitoring; a real Sentry/LogRocket hook can go here.
     console.error('Unhandled render error:', error, info?.componentStack)
+
+    // Stale chunk after a deploy: reload once to pull the new build instead of
+    // showing a misleading "Connection Error". The flag prevents a reload
+    // loop when the new build is itself unreachable (then the boundary below
+    // shows the honest retry screen).
+    if (isStaleChunkError(error) && !sessionStorage.getItem(STALE_RELOADED_KEY)) {
+      sessionStorage.setItem(STALE_RELOADED_KEY, '1')
+      window.location.reload()
+    }
   }
 
   componentDidUpdate(prev: ErrorBoundaryProps) {
@@ -85,7 +107,10 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 
   render() {
     if (this.state.hasError) {
-      const isNetwork = this.state.error != null && isNetworkError(this.state.error)
+      // Stale-chunk is NOT a network problem — "failed to fetch" inside the
+      // module message used to route users to the scary "server down" page.
+      const stale = this.state.error != null && isStaleChunkError(this.state.error)
+      const isNetwork = !stale && this.state.error != null && isNetworkError(this.state.error)
 
       if (isNetwork) {
         return (
@@ -145,9 +170,13 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
             <div className="mx-auto mb-4 w-14 h-14 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-2xl">
               !
             </div>
-            <h1 className="text-xl font-bold text-gray-900 mb-2">Something went wrong</h1>
+            <h1 className="text-xl font-bold text-gray-900 mb-2">
+              {stale ? 'Update installed' : 'Something went wrong'}
+            </h1>
             <p className="text-sm text-gray-600 mb-6">
-              This page hit an unexpected error. Reloading usually fixes it.
+              {stale
+                ? 'A new version of the site was just released. Refresh to pick it up.'
+                : 'This page hit an unexpected error. Reloading usually fixes it.'}
             </p>
             <div className="flex items-center justify-center gap-3">
               <button
