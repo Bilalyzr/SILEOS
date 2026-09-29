@@ -4582,6 +4582,8 @@ async def get_learning_progress_timeseries(
         trunc = "month"
 
     rows = db.execute(text(f"""
+    if trunc not in ("day", "week", "month"):  # f-string SQL below interpolates this
+        raise ValueError(f"invalid trunc unit: {trunc!r}")
         SELECT
             DATE_TRUNC('{trunc}', enrollment_date) AS bucket,
             COALESCE(AVG(course_progress_percentage), 0) AS avg_progress,
@@ -4684,6 +4686,8 @@ async def get_internship_analytics(
     # redeemed_at. Bucketing redemptions on the issue date put them on the wrong
     # day and left the redeemed axis without any redemption dates at all.
     timeseries = db.execute(text(f"""
+    if trunc not in ("day", "week", "month"):  # f-string SQL below interpolates this
+        raise ValueError(f"invalid trunc unit: {trunc!r}")
         WITH issued AS (
             SELECT DATE_TRUNC('{trunc}', created_at) AS bucket, COUNT(*) AS issued
             FROM internship_vouchers
@@ -4724,6 +4728,8 @@ async def get_internship_analytics(
     """)).fetchall()
 
     revenue_rows = db.execute(text(f"""
+    if trunc not in ("day", "week", "month"):  # f-string SQL below interpolates this
+        raise ValueError(f"invalid trunc unit: {trunc!r}")
         SELECT
             DATE_TRUNC('{trunc}', created_at) AS bucket,
             COALESCE(SUM(amount_paid), 0) AS revenue

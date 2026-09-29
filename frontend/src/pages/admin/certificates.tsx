@@ -437,7 +437,7 @@ export const AdminCertificates: React.FC = () => {
                                   certificate.secure_certificate_id &&
                                   certificate.certificate_hash
                                     ? `/api/v1/certificates/verify-certificate?id=${certificate.secure_certificate_id}&hash=${certificate.certificate_hash}`
-                                    : `/certificates/view/${certificate.id}`;
+                                    : `/api/v1/certificates/view/${certificate.id}?token=${certificate.certificate_hash}`;
                                 window.open(verifyUrl, "_blank");
                               }}
                               className="text-blue-600 hover:text-blue-900"

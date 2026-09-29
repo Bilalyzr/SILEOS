@@ -382,15 +382,23 @@ async def regenerate_certificate(
 @router.get("/view/{certificate_id}")
 async def view_certificate_html(
     certificate_id: int,
+    token: Optional[str] = Query(
+        None,
+        description="Certificate verification hash — required. Blocks ID "
+        "enumeration: sequential ids alone must not reveal learner names.",
+    ),
     db: Session = Depends(get_db)
 ):
     """
     View certificate as beautiful HTML page.
 
-    Public (no auth): opened in a new tab via `window.open()`, which cannot
-    attach the JWT, so requiring auth would always 401. Consistent with the
-    public verify-certificate page.
+    Public (no auth — window.open cannot attach the JWT), but requires the
+    certificate's unguessable verification hash. Callers that legitimately
+    hold a certificate also hold its hash (every frontend flow already
+    passes id+hash together). Without this gate, walking
+    /view/1../view/N harvested every learner's name and course history.
     """
+    import hmac as _hmac
     from fastapi.responses import HTMLResponse
     import pathlib
 
@@ -398,7 +406,13 @@ async def view_certificate_html(
         IssuedCertificate.id == certificate_id
     ).first()
 
-    if not certificate:
+    # Same 404 for missing cert, missing token, and wrong token — no oracle
+    # that distinguishes an existing certificate from a missing one.
+    if (
+        not certificate
+        or not token
+        or not _hmac.compare_digest(token, certificate.certificate_hash)
+    ):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Certificate not found"
