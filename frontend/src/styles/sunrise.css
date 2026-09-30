@@ -406,3 +406,34 @@ body[data-high-contrast="true"] .brand-banner p {
 body.astra-theme {
   font-family: "Plus Jakarta Sans", "Noto Sans Tamil", system-ui, sans-serif;
 }
+
+/* ── Section-nav fine-tune ─────────────────────────────────────────────
+   The active strip tab inherits the primary gradient fill from the rule
+   at the top of this file, but page-redesign.css lays the link out as an
+   edge-to-edge underline tab: zero horizontal padding, square corners,
+   and a box that spans the full strip height. Inside the 20px glass pill
+   that renders as a cramped block touching the container's edges. Restate
+   the links as properly inset pill tabs so the gradient fill gets
+   breathing room and rounded ends. Colours stay exactly as themed. */
+.astra-theme .rd-section-nav {
+  padding: 6px 12px;
+}
+.astra-theme .rd-section-nav > div {
+  gap: 4px;
+  align-items: center;
+}
+.astra-theme .rd-section-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 14px;
+  border-bottom: 0;
+  border-radius: 999px;
+  font-size: 12.5px;
+  line-height: 1;
+  white-space: nowrap;
+}
+.astra-theme .rd-section-nav a:hover {
+  background: rgba(255, 255, 255, 0.6);
+  color: #9a390b;
+}
