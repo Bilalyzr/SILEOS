@@ -1032,6 +1032,13 @@ async def reset_password(
         user.user_activation_key = ""
         db.commit()
 
+        # A password reset usually means the account may have been
+        # compromised. Every pre-reset session (tokens AND the shared SSO
+        # cookie — refresh checks the revocation marker) must die now, or an
+        # attacker's login survives the victim resetting the password.
+        from app.core.security import revoke_all_user_sessions
+        revoke_all_user_sessions(user.id)
+
         return {"message": "Password reset successfully"}
 
     except HTTPException:
@@ -1065,6 +1072,11 @@ async def change_password(
     if user:
         user.user_pass = get_password_hash(request.new_password)
         db.commit()
+        # Invalidate every session on a password change — the current one
+        # included (the client gets 401 and re-authenticates with the new
+        # password). Without this, other-device logins survive the change.
+        from app.core.security import revoke_all_user_sessions
+        revoke_all_user_sessions(user.id)
 
     return {"message": "Password changed successfully"}
 
