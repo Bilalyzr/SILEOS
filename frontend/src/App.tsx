@@ -7,6 +7,7 @@ const InstitutionsPage = lazyPage(() => import("@/pages/institutions"));
 const BusinessServicesPage = lazyPage(() => import("@/pages/business-services"));
 const CampusForInstitutionsPage = lazyPage(() => import("@/pages/campus-for-institutions"));
 const HelpPage = lazyPage(() => import("@/pages/help"));
+const AccessibilityPage = lazyPage(() => import("@/pages/accessibility"));
 const LabWorkspace = lazyPage(() => import("@/pages/lab-workspace"));
 const LabStudioPage = lazyPage(() => import("@/pages/instructor/lab-studio"));
 import {
@@ -696,6 +697,14 @@ function App() {
                           element={
                             <MainLayout>
                               <CampusForInstitutionsPage />
+                            </MainLayout>
+                          }
+                        />
+                        <Route
+                          path="/accessibility"
+                          element={
+                            <MainLayout>
+                              <AccessibilityPage />
                             </MainLayout>
                           }
                         />
