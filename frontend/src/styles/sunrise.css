@@ -474,3 +474,49 @@ body.astra-theme {
 .astra-theme .rd-sidebar nav > div:has(> div > button):not(:first-child) {
   margin-top: 12px;
 }
+
+/* ── Learning-programs cards fine-tune ──────────────────────────────────
+   home-modern.css makes the swap cards real buttons with `all: unset`,
+   which also wipes the base card's padding, flex column, and inner gap —
+   so in the astra layout (all four cards visible in a grid) every card
+   renders with its icon, title and text pressed against the edges. The
+   astra skin also never restyles the .active card, so the dots below and
+   the auto-rotate highlight nothing. Restore the card's inner layout and
+   give the active card a visible border/glow from the existing accent
+   palette. */
+.astra-theme .sasha-home .hm2-swap-display .swap-card-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 22px;
+}
+.astra-theme .sasha-home .hm2-swap-display .swap-card-item.active {
+  border-color: rgba(154, 57, 11, 0.38);
+  box-shadow:
+    0 10px 26px rgba(222, 121, 37, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+/* Balance: restored padding made four stacked cards tower over the short
+   copy column. Pair them 2×2 so the display column matches the copy
+   height; collapse back to one column where the layout already stacks. */
+.astra-theme .sasha-home .hm2-swap-display {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (max-width: 1100px) {
+  .astra-theme .sasha-home .hm2-swap-display {
+    grid-template-columns: 1fr;
+  }
+}
+.astra-theme .sasha-home .hm2-swap-display .swap-card-item h3 {
+  font-size: 19px;
+}
+.astra-theme .sasha-home .hm2-swap-display .swap-card-item p {
+  font-size: 13px;
+  line-height: 1.6;
+}
+.astra-theme .sasha-home .hm2-swap-display .swap-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  font-size: 18px;
+}
