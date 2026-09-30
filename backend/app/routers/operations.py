@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.core.listing import paginate, csv_stream
 from app.services import operations_service as svc
+from app.services.business_portfolio_service import business_today as _business_today
 from app.services.auth_service import AuthService
 
 router = APIRouter(dependencies=[Depends(AuthService.require_admin)])
@@ -47,6 +48,15 @@ def provider_probe(provider: str):
 @router.get("/summary")
 def summary(db: Session = Depends(get_db)):
     return {"queues": svc.queues(db), "outcomes": svc.outcomes(db), "health": svc.health(db), "as_of": svc.now()}
+
+
+@router.get("/portfolio")
+def portfolio(start: date = Query(default_factory=lambda: _business_today() - timedelta(days=30)), end: date = Query(default_factory=lambda: _business_today()), db: Session = Depends(get_db)):
+    if end < start or (end - start).days > 366:
+        raise HTTPException(422, "Choose a date window of at most 366 days.")
+    from app.services.business_portfolio_service import portfolio as build_portfolio
+
+    return build_portfolio(db, start, end)
 
 
 @router.get("/revenue")
