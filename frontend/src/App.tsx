@@ -5,6 +5,19 @@ import React from "react";
 const LabsPage = lazyPage(() => import("@/pages/labs"));
 const InstitutionsPage = lazyPage(() => import("@/pages/institutions"));
 const BusinessServicesPage = lazyPage(() => import("@/pages/business-services"));
+// 2026-09-27 release: Adaptive Math Pilot + Connected CBSE Workspace
+const MathPilotPage = lazyPage(() => import("@/pages/student/math-pilot"));
+const SchoolWorkspace = lazyPage(() => import("@/pages/school-workspace"));
+const MathPilotTeacher = lazyPage(() => import("@/pages/instructor/math-pilot"));
+const MathDiscovery = lazyPage(() => import("@/pages/math-discovery"));
+// Restored routes lost in the dev-branch merge (pages existed unrouted)
+const LearnWithSashaPage = lazyPage(() => import("@/pages/learn-with-sasha"));
+const CodingStudioPage = lazyPage(() => import("@/pages/instructor/coding-studio"));
+const CodePracticePage = lazyPage(() => import("@/pages/student/code-practice"));
+const CodingWorkspacePage = lazyPage(() => import("@/pages/student/coding-workspace"));
+const InstructorPayoutsPage = lazyPage(() => import("@/pages/instructor/payouts"));
+const AdminPayoutsPage = lazyPage(() => import("@/pages/admin/payouts"));
+const AdminAiProvidersPage = lazyPage(() => import("@/pages/admin/ai-providers"));
 const CampusForInstitutionsPage = lazyPage(() => import("@/pages/campus-for-institutions"));
 const HelpPage = lazyPage(() => import("@/pages/help"));
 const AccessibilityPage = lazyPage(() => import("@/pages/accessibility"));
@@ -921,6 +934,30 @@ function App() {
 
                         {/* Category Pages */}
                         <Route
+                          path="/utporul"
+                          element={
+                            <MainLayout>
+                              <UtporulPage />
+                            </MainLayout>
+                          }
+                        />
+                        <Route
+                          path="/meiporul"
+                          element={
+                            <MainLayout>
+                              <MeiporulPage />
+                            </MainLayout>
+                          }
+                        />
+                        <Route
+                          path="/seyappaduporul"
+                          element={
+                            <MainLayout>
+                              <SeyappaduporulPage />
+                            </MainLayout>
+                          }
+                        />
+                        <Route
                           path="/courses/utporul"
                           element={
                             <MainLayout>
@@ -1226,6 +1263,83 @@ function App() {
                         <Route
                           path="/business-services"
                           element={<ProtectedRoute><AutoRoleLayout><BusinessServicesPage /></AutoRoleLayout></ProtectedRoute>}
+                        />
+                        {/* 2026-09-27 release: CBSE workspace + Adaptive Math Pilot */}
+                        <Route path="/school" element={<ProtectedRoute><SchoolWorkspace /></ProtectedRoute>} />
+                        <Route path="/math-pilot" element={<ProtectedRoute><MathPilotPage /></ProtectedRoute>} />
+                        <Route
+                          path="/instructor/math-pilot"
+                          element={<ProtectedRoute requiredRole="instructor"><InstructorLayout><MathPilotTeacher /></InstructorLayout></ProtectedRoute>}
+                        />
+                        <Route path="/discover/volume" element={<MathDiscovery />} />
+                        {/* Restored routes lost in the dev-branch merge */}
+                        <Route
+                          path="/learn-with-sasha"
+                          element={
+                            <ProtectedRoute>
+                              <AutoRoleLayout>
+                                <LearnWithSashaPage />
+                              </AutoRoleLayout>
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/coding"
+                          element={
+                            <ProtectedRoute>
+                              <StudentLayout>
+                                <CodePracticePage />
+                              </StudentLayout>
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/coding/:slug"
+                          element={
+                            <ProtectedRoute>
+                              <CodingWorkspacePage />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/instructor/coding-studio"
+                          element={
+                            <ProtectedRoute requiredRole="instructor">
+                              <InstructorLayout>
+                                <CodingStudioPage />
+                              </InstructorLayout>
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/instructor/payouts"
+                          element={
+                            <ProtectedRoute requiredRole="instructor">
+                              <InstructorLayout>
+                                <InstructorPayoutsPage />
+                              </InstructorLayout>
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/admin/payouts"
+                          element={
+                            <ProtectedRoute requiredRole="admin">
+                              <AdminLayout>
+                                <AdminPayoutsPage />
+                              </AdminLayout>
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/admin/ai-providers"
+                          element={
+                            <ProtectedRoute requiredRole="admin">
+                              <AdminLayout>
+                                <AdminAiProvidersPage />
+                              </AdminLayout>
+                            </ProtectedRoute>
+                          }
                         />
                         <Route
                           path="/communication-preferences"

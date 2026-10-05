@@ -30,6 +30,7 @@ export const STUDENT_NAV: SidebarItem[] = [
   { kind: 'group', label: 'Progress', icon: BarChart3, children: [
     { kind: 'link', to: '/my-grades',         label: 'My Grades',     icon: GraduationCap },
     { kind: 'link', to: '/my-mastery',        label: 'My Mastery',    icon: Brain, matchPrefix: '/my-mastery' },
+    { kind: 'link', to: '/math-pilot', label: 'Math Discovery', icon: Brain, matchPrefix: '/math-pilot' },
     { kind: 'link', to: '/dashboard/analytics', label: 'Analytics',     icon: BarChart3, matchPrefix: '/dashboard/analytics' },
     { kind: 'link', to: '/leaderboard',       label: 'Leaderboard',     icon: Trophy, matchPrefix: '/leaderboard' },
   ]},
@@ -78,6 +79,7 @@ export const INSTRUCTOR_NAV: SidebarItem[] = [
     { kind: 'link', to: '/instructor/grading',     label: 'Grading',       icon: ClipboardList, matchPrefix: '/instructor/grading' },
     { kind: 'link', to: '/instructor/review-queue', label: 'Review Queue', icon: ClipboardList, matchPrefix: '/instructor/review-queue' },
     { kind: 'link', to: '/instructor/interventions', label: 'Interventions', icon: Brain, matchPrefix: '/instructor/interventions' },
+    { kind: 'link', to: '/instructor/math-pilot', label: 'Math Pilot', icon: Brain, matchPrefix: '/instructor/math-pilot' },
   ]},
   { kind: 'group', label: 'Learners & Insights', icon: Users, children: [
     { kind: 'link', to: '/instructor/students',    label: 'Students',      icon: Users },

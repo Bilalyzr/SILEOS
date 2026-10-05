@@ -1502,6 +1502,16 @@ app.include_router(
 from app.routers import growth
 app.include_router(growth.router, prefix="/api/v1/platform/growth", tags=["Revenue growth operations"])
 
+# Adaptive Math Pilot (2026-09-27 release): rule-based, course-scoped pilot —
+# public volume explorer plus student/instructor evidence flows.
+from app.routers import math_pilot
+app.include_router(math_pilot.router, prefix="/api/v1/math-pilot", tags=["Adaptive Mathematics Pilot"])
+
+# Connected CBSE Workspace (2026-09-27 release): Classes 6-12 NCERT chapter
+# catalogue and course-chapter mapping with educator review.
+from app.routers import curriculum_workspace
+app.include_router(curriculum_workspace.router, prefix="/api/v1/curriculum-workspace", tags=["Curriculum Workspace"])
+
 from app.routers import coding_assessments, coding_judge_internal
 app.include_router(
     coding_assessments.router,

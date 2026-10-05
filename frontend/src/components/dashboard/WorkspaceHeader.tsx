@@ -69,6 +69,7 @@ export function WorkspaceHeader({
         </button>
       </form>
       <AccessibilityMenu />
+      <Link to="/school" className="rd-labs-link">Classes 6–12</Link>
       <Link to="/institutions" className="rd-labs-link" aria-label="Institution workspaces">
         <Building2 size={17} />
         <span>Campus</span>

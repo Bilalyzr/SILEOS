@@ -18,6 +18,20 @@ export function needsPageBack(pathname: string, _search = ""): boolean {
 }
 const rules: Rule[] = [
   [
+    /\/instructor\/math-pilot(?:\/|$)/,
+    "Mathematics pilot review",
+    "Review a versioned volume activity and inspect course-scoped learning evidence.",
+    ["Review content and student-data arrangements", "Enable the pilot for your course", "Inspect answers and override support before transfer"],
+    "/instructor/dashboard",
+  ],
+  [
+    /\/math-pilot(?:\/|$)/,
+    "Volume discovery pilot",
+    "Predict, build a box and check your understanding on new tasks.",
+    ["Choose an approved course and read the data notice", "Complete the independent questions", "Return for the delayed check; sharing is optional"],
+    "/my-mastery",
+  ],
+  [
     /\/exam-pricing(?:\/|$)/,
     "Exam paper pricing",
     "Control which JEE and NEET question ranges students can buy and the price per paper.",

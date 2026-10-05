@@ -1,0 +1,26 @@
+/* Keep the light mathematics experience readable inside legacy global themes. */
+.sf-app .sasha-math-page,
+.sasha-math-page {
+  color: #431407;
+}
+.sf-app .sasha-math-page :is(h1, h2, h3),
+.sasha-math-page :is(h1, h2, h3) {
+  color: #431407 !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: none !important;
+}
+.sf-app .sasha-math-page .math-hero :is(h1, p),
+.sasha-math-page .math-hero :is(h1, p) {
+  color: #fff !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+.sf-app .sasha-math-page .text-orange-700,
+.sasha-math-page .text-orange-700 {
+  color: #9a3412 !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+.sasha-math-page button:focus-visible,
+.sasha-math-page a:focus-visible {
+  outline: 3px solid #9a3412;
+  outline-offset: 4px;
+}

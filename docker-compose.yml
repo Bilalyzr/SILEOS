@@ -55,6 +55,7 @@ services:
       # 127.0.0.1, so nothing legitimate needs this on 0.0.0.0. Publishing it on
       # all interfaces exposed the API directly, bypassing nginx CORS/rate-limit.
       - "127.0.0.1:8100:8000"
+      - "127.0.0.1:8000:8000"   # localhost:8000 — the long-standing direct API entrypoint
     environment: &base-backend-environment
       - DATABASE_URL=postgresql://tutor:${POSTGRES_PASSWORD}@postgres:5432/tutor_lms
       - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
@@ -296,7 +297,7 @@ services:
       # is NOT exposed to the public internet.
       - "127.0.0.1:15432:5432"
     volumes:
-      - postgres_data_sileos:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./database/schemas:/docker-entrypoint-initdb.d/schemas
     networks:
@@ -331,6 +332,7 @@ services:
     image: nginx:alpine
     ports:
       - "127.0.0.1:4100:3100"   # DEV DEPLOYMENT: edge on 4100, loopback only (vhost -> 4100)
+      - "127.0.0.1:3100:3100"   # localhost:3100 — the long-standing direct entrypoint
     environment:
       - PRERENDER_TOKEN=${PRERENDER_TOKEN:-}
     volumes:
@@ -355,7 +357,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  postgres_data_sileos:
+  postgres_data:
     driver: local
   redis_data_sileos:
     driver: local

@@ -363,3 +363,5 @@ from .runtime import RuntimeJob, RuntimeRun  # noqa: F401
 from .growth import (BillingPolicy, BillingOccurrence, CommercialDelivery, PartnerAccrual, PartnerSettlement,
     GrowthLead, GrowthTask, MarketingSpend, GrowthTouch, GrowthExperiment, GrowthAssignment,
     GrowthRecommendation, GrowthValidation)  # noqa: F401
+from .math_pilot import MathPilotPolicy, MathPilotSession, MathPilotEvent  # noqa: F401
+from .curriculum_workspace import CurriculumChapter, CurriculumCourseLink  # noqa: F401
