@@ -75,7 +75,9 @@ export default function PublicHeader() {
     <header className="rd-public-header" ref={headerRef}>
       <div className="rd-public-bar">
         <Link to="/" className="rd-brand" aria-label="SashaInfinity home">
-          <span aria-hidden>∞</span>
+          <span aria-hidden>
+            <img src="/brand/sasha-logo-small.png" alt="" />
+          </span>
           <strong>SashaInfinity</strong>
         </Link>
         <nav className="rd-public-nav" aria-label="Main navigation">

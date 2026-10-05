@@ -520,3 +520,19 @@ body.astra-theme {
   border-radius: 13px;
   font-size: 18px;
 }
+
+/* ── Brand emblem in the public header ─────────────────────────────────
+   The header brand tile was an orange square with an ∞ glyph; it now
+   carries the logo image, so drop the tile fill and fit the emblem. */
+.astra-theme .rd-brand > span {
+  width: auto;
+  height: auto;
+  background: transparent;
+  font-size: 0;
+}
+.astra-theme .rd-brand > span > img {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: block;
+}
