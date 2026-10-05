@@ -283,3 +283,8 @@ gitTok.md
 
 # Nested near-duplicate snapshot repo (embedded git repo — never commit).
 SILEOS/
+
+# Server-local runtime + infra (live secrets & recorded class data — never push)
+/jitsi/
+/recordings_live/
+/backend/recordings_fallback/
