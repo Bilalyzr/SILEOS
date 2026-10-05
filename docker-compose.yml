@@ -56,6 +56,7 @@ services:
       # all interfaces exposed the API directly, bypassing nginx CORS/rate-limit.
       - "127.0.0.1:8100:8000"
       - "127.0.0.1:8000:8000"   # localhost:8000 — the long-standing direct API entrypoint
+      - "[::1]:8000:8000"       # IPv6 loopback — browsers that resolve localhost to ::1
     environment: &base-backend-environment
       - DATABASE_URL=postgresql://tutor:${POSTGRES_PASSWORD}@postgres:5432/tutor_lms
       - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
@@ -333,6 +334,7 @@ services:
     ports:
       - "127.0.0.1:4100:3100"   # DEV DEPLOYMENT: edge on 4100, loopback only (vhost -> 4100)
       - "127.0.0.1:3100:3100"   # localhost:3100 — the long-standing direct entrypoint
+      - "[::1]:3100:3100"       # IPv6 loopback — browsers that resolve localhost to ::1
     environment:
       - PRERENDER_TOKEN=${PRERENDER_TOKEN:-}
     volumes:
