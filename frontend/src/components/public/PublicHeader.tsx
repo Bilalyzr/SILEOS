@@ -76,7 +76,7 @@ export default function PublicHeader() {
       <div className="rd-public-bar">
         <Link to="/" className="rd-brand" aria-label="SashaInfinity home">
           <span aria-hidden>
-            <img src="/brand/sasha-logo-small.png" alt="" />
+            <img src="/brand/sasha-logo-small.png?v=lion2" alt="" />
           </span>
           <strong>SashaInfinity</strong>
         </Link>

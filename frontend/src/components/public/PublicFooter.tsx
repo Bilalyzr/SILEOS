@@ -40,7 +40,7 @@ const PublicFooter = () => {
           <div className={styles.footerColumn}>
             <Link to="/">
               <img
-                src="/assets/images/sasha-logo-small.png"
+                src="/assets/images/sasha-logo-small.png?v=lion2"
                 alt="SashaInfinity Logo"
                 className={styles.footerLogo}
               />

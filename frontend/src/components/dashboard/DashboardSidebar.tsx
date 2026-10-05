@@ -21,7 +21,7 @@ import { useAuthStore } from '@/store/auth'
 import { useNavBadges } from '@/hooks/useNavBadges'
 import { getAvatarUrl } from '@/utils/media'
 
-const SASHA_LOGO_URL = '/brand/sasha-logo-small.png'
+const SASHA_LOGO_URL = '/brand/sasha-logo-small.png?v=lion2'
 
 // ---------------------------------------------------------------------------
 // Types

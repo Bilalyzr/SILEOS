@@ -68,7 +68,7 @@ const VerifyCertificate: React.FC = () => {
           title: `Certificate: ${certificate.course_title} - ${certificate.student_name}`,
           description: `Verified certificate for ${certificate.course_title} issued to ${certificate.student_name}. Verification code: ${certificate.verification_code}`,
           image:
-            "/brand/sasha-logo-small.png",
+            "/brand/sasha-logo-small.png?v=lion2",
           url: window.location.href,
           type: "website",
         }
@@ -77,7 +77,7 @@ const VerifyCertificate: React.FC = () => {
           description:
             "Verify SashaInfinity Technology certificates instantly with our secure verification portal",
           image:
-            "/brand/sasha-logo-small.png",
+            "/brand/sasha-logo-small.png?v=lion2",
           url: window.location.href,
           type: "website",
         },

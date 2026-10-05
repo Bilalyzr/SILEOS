@@ -83,7 +83,7 @@ export const CertificatePage: React.FC = () => {
               ? // `.png` because this is og:image — crawlers render it server-side
                 // and WebP support across them is unreliable.
                 `/api/v1/certificates/image/${certificate.secure_certificate_id}/${certificate.certificate_hash}.png`
-              : "/brand/sasha-logo-small.png",
+              : "/brand/sasha-logo-small.png?v=lion2",
           url: `${window.location.origin}/certificates/${courseId}`,
           type: "website",
         }

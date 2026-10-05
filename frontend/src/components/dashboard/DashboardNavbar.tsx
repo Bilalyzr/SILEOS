@@ -16,7 +16,7 @@ import { useAuthStore } from '@/store/auth'
 import { getAvatarUrl } from '@/utils/media'
 import { NotificationBell } from '@/components/notifications/NotificationBell'
 
-const SASHA_LOGO_URL = '/brand/sasha-logo-small.png'
+const SASHA_LOGO_URL = '/brand/sasha-logo-small.png?v=lion2'
 
 export type Role = 'parent' | 'student' | 'instructor' | 'admin' | 'superadmin' | 'spoc' | 'company' | 'company_manager'
 

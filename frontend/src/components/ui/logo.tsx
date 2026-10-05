@@ -22,7 +22,7 @@ export const Logo: React.FC<LogoProps> = ({
   return (
     <div className={cn("flex items-center", className)}>
       <img
-        src="/brand/sasha-logo-small.png"
+        src="/brand/sasha-logo-small.png?v=lion2"
         alt="SashaInfinity Logo"
         className={cn("w-auto", heightClasses[size])}
       />
