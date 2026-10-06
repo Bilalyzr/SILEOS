@@ -298,7 +298,7 @@ services:
       # is NOT exposed to the public internet.
       - "127.0.0.1:15432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_sileos:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./database/schemas:/docker-entrypoint-initdb.d/schemas
     networks:
@@ -359,7 +359,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  postgres_data:
+  postgres_data_sileos:
     driver: local
   redis_data_sileos:
     driver: local

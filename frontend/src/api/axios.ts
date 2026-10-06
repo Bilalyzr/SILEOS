@@ -195,7 +195,14 @@ api.interceptors.request.use(
         // games route declares a trailing slash — /games, /games/mine,
         // /games/{id}, /games/{id}/play, /games/{id}/results,
         // /games/{id}/publish, /games/{id}/unpublish all 404 with one appended.
-        '/games'
+        '/games',
+
+        // 2026-10-05 release: Adaptive Math Pilot + CBSE Curriculum Workspace
+        // routers (math_pilot.py, curriculum_workspace.py). Both declare no
+        // trailing slashes and run with redirect_slashes=False, so an appended
+        // slash 404s — e.g. GET /curriculum-workspace (200) vs
+        // /curriculum-workspace/ (404) — which blanked the /school page.
+        '/math-pilot', '/curriculum-workspace'
       ]
 
       // Endpoints that MUST have trailing slashes (based on backend FastAPI schema)
@@ -344,8 +351,16 @@ api.interceptors.response.use(
       error.response?.status === 401 &&
       originalRequest?.url?.includes('/auth/refresh')
 
+    // GET /memberships/me answers 404 "No membership" for accounts without
+    // one; fetchMyMembership maps it to null (the card's empty state). That
+    // expected answer shouldn't log as a production error on every
+    // dashboard load for every member-less user.
+    const isExpectedNoMembership =
+      error.response?.status === 404 &&
+      originalRequest?.url?.includes('/memberships/me')
+
     // Log errors in development and production (with different levels)
-    if (!isRecoverable401 && !isSilentRefreshProbe) {
+    if (!isRecoverable401 && !isSilentRefreshProbe && !isExpectedNoMembership) {
       if (import.meta.env.DEV) {
         console.error('❌ API Error:', errorInfo)
         console.error('Full error:', error)
