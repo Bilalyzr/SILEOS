@@ -18,6 +18,32 @@ def _validated_course_type(cls, v):
     """
     return normalize_course_type(v)
 
+
+ALLOWED_LEVELS = ['beginner', 'intermediate', 'advanced', 'expert']
+
+
+def _validated_level(cls, v):
+    """Level whitelist. None passes through (CourseUpdate's "not provided")."""
+    if v is not None and v not in ALLOWED_LEVELS:
+        raise ValueError(f'Level must be one of: {ALLOWED_LEVELS}')
+    return v
+
+
+def _validated_price(cls, v):
+    """No negative prices. None passes through (CourseUpdate's "not provided")."""
+    if v is not None and v < 0:
+        raise ValueError('Price cannot be negative')
+    return v
+
+
+def _validated_sale_price(cls, v):
+    """No negative sale prices — a negative "discount" would invert the
+    checkout maths. None passes through (field not provided)."""
+    if v is not None and v < 0:
+        raise ValueError('Sale price cannot be negative')
+    return v
+
+
 class CourseBase(BaseModel):
     title: str
     description: str
@@ -38,18 +64,9 @@ class CourseBase(BaseModel):
     num_hours: Optional[int] = 0
     institution: Optional[str] = ""
 
-    @validator('level')
-    def validate_level(cls, v):
-        allowed_levels = ['beginner', 'intermediate', 'advanced', 'expert']
-        if v not in allowed_levels:
-            raise ValueError(f'Level must be one of: {allowed_levels}')
-        return v
-
-    @validator('price')
-    def validate_price(cls, v):
-        if v < 0:
-            raise ValueError('Price cannot be negative')
-        return v
+    _level_check = validator('level', allow_reuse=True)(_validated_level)
+    _price_check = validator('price', allow_reuse=True)(_validated_price)
+    _sale_price_check = validator('sale_price', allow_reuse=True)(_validated_sale_price)
 
 class CourseCreate(CourseBase):
     slug: Optional[str] = None
@@ -93,6 +110,14 @@ class CourseUpdate(BaseModel):
     certificate_id: Optional[int] = None  # instructor-chosen certificate template
 
     _course_type_check = validator('course_type', allow_reuse=True)(_validated_course_type)
+
+    # Proctor course-creation journey findings (2026-10-06): CourseUpdate is a
+    # standalone BaseModel, so the create-side guards never ran on updates —
+    # PUT could push a course's price negative or set an arbitrary level after
+    # creation. Reuse the exact create-side validators (None = not provided).
+    _level_check = validator('level', allow_reuse=True)(_validated_level)
+    _price_check = validator('price', allow_reuse=True)(_validated_price)
+    _sale_price_check = validator('sale_price', allow_reuse=True)(_validated_sale_price)
 
 class InstructorInfo(BaseModel):
     id: int
