@@ -3,7 +3,7 @@ import { X,Loader2,Image as ImageIcon } from 'lucide-react'
 import { uploadImage,deleteFile } from '@/api/upload'
 import { uploadImageChunked,ChunkedUploadProgress } from '@/api/chunked-upload'
 import { toast } from 'react-hot-toast'
-import { BACKEND_URL } from '@/config/urls'
+import { ASSET_ORIGIN } from '@/config/urls'
 
 interface ImageUploadProps {
   value?: string
@@ -83,7 +83,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         // Convert relative URL to full URL for preview
         const fullUrl = response.file_url.startsWith('http')
           ? response.file_url
-          : `${BACKEND_URL}${response.file_url}`
+          : `${ASSET_ORIGIN}${response.file_url}`
         onChange(fullUrl)
         toast.success('Image uploaded successfully')
       } else {
@@ -127,8 +127,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
 
     try {
       // Convert full URL back to relative path for delete API
-      const relativeUrl = value.includes(BACKEND_URL)
-        ? value.replace(BACKEND_URL, '')
+      const relativeUrl = value.includes(ASSET_ORIGIN)
+        ? value.replace(ASSET_ORIGIN, '')
         : value.includes('backend.sashainfinity.com')
           ? value.replace('https://backend.sashainfinity.com', '')
           : value

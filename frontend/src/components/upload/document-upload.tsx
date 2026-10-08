@@ -2,7 +2,7 @@ import React from 'react'
 import { X,Loader2,FileText } from 'lucide-react'
 import { uploadDocument,deleteFile } from '@/api/upload'
 import { toast } from 'react-hot-toast'
-import { BACKEND_URL } from '@/config/urls'
+import { ASSET_ORIGIN } from '@/config/urls'
 
 interface DocumentUploadProps {
   value?: string
@@ -63,7 +63,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
         // Convert relative URL to full URL for preview
         const fullUrl = response.file_url.startsWith('http')
           ? response.file_url
-          : `${BACKEND_URL}${response.file_url}`
+          : `${ASSET_ORIGIN}${response.file_url}`
         setDocumentUrl(fullUrl)
         onChange(fullUrl)
         toast.success('Document uploaded successfully')
@@ -88,8 +88,8 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
 
     try {
       // Convert full URL back to relative path for delete API
-      const relativeUrl = value.includes(BACKEND_URL)
-        ? value.replace(BACKEND_URL, '')
+      const relativeUrl = value.includes(ASSET_ORIGIN)
+        ? value.replace(ASSET_ORIGIN, '')
         : value.includes('backend.sashainfinity.com')
           ? value.replace('https://backend.sashainfinity.com', '')
           : value

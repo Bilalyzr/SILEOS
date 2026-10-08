@@ -9,6 +9,15 @@
 // VITE_BACKEND_URL when the backend truly lives on a different origin.
 export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL ?? '';
 
+// Origin for STATIC ASSETS (/uploads/..., /certificate-files/...). Some
+// deployments set VITE_BACKEND_URL to the full API base — host + '/api/v1' —
+// because that's what the axios client needs; prefixing an ASSET path with it
+// produces 'https://host/api/v1/uploads/...' which 404s (uploads are served at
+// the origin root, not under the API). Asset URLs must therefore use the API
+// base with any '/api/v1' suffix stripped. Found by the Proctor site sweep
+// (course thumbnails saved with the /api/v1 prefix, 2026-10-08).
+export const ASSET_ORIGIN = BACKEND_URL.replace(/\/api\/v1\/?$/, '');
+
 // Frontend URL (used to build absolute /uploads links in prod). Same rule:
 // empty default → relative, so one build serves every host.
 export const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL ?? '';

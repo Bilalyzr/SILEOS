@@ -288,3 +288,6 @@ SILEOS/
 /jitsi/
 /recordings_live/
 /backend/recordings_fallback/
+
+# 3D AR model library (365MB — restored from the production tree, never commit; see DEV-README)
+/frontend/public/models/ar/

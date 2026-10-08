@@ -236,10 +236,12 @@ export const CourseDetailPage = () => {
           setIsAdminPreview(true);
         }
 
-        // Fetch progress if enrolled
+        // Fetch progress if enrolled. `data.id`, NOT the route param — the
+        // page is slug-routed (/courses/class-10-physics-2) and the progress
+        // endpoint takes the numeric course id; passing the slug 422s.
         if (data.is_enrolled && isAuthenticated) {
           try {
-            const progressResponse = await api.get(`/courses/${id}/progress`);
+            const progressResponse = await api.get(`/courses/${data.id}/progress`);
             const progressData = progressResponse.data;
             // The backend progress payload exposes `overall_progress`
             // (there is no `progress_percentage` key on this response).

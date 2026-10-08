@@ -74,3 +74,10 @@ after pulling frontend changes.
 3. `nginx/conf.d/default.conf` — `dev.sashainfinity.com` added to the
    edge CORS origin regex
 4. This file.
+
+## AR model library (frontend/public/models/ar/)
+
+39 GLB models (~365MB) powering `/meiporul-ar` — too large for git; restored
+from the production tree on 2026-10-08 after a fresh clone left the page
+rendering HTML fallbacks for every model. If a fresh checkout shows the AR
+page blank, re-copy them from the production frontend's public/models/ar/.
