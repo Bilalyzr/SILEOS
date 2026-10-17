@@ -2955,6 +2955,16 @@ async def import_data(
                     course_id = row.get("id")
                     course = db.query(Course).filter(Course.id == course_id).first()
 
+                    # Audit finding (2026-10-17): imported rows bypassed the
+                    # CourseBase/CourseUpdate validators — clamp negative
+                    # prices to 0 instead of persisting them into checkout math.
+                    for price_key in ("course_price", "sale_price"):
+                        try:
+                            if price_key in row and row[price_key] is not None and float(row[price_key]) < 0:
+                                row[price_key] = 0
+                        except (TypeError, ValueError):
+                            pass
+
                     if update_by_id and course:
                         course.post_title = row.get("post_title", course.post_title)
                         course.course_price = row.get("course_price", course.course_price)

@@ -3281,6 +3281,8 @@ async def admin_create_course(
     price = float(data.get("price", 0))
     certificate_template_id = data.get("certificate_template_id")
 
+    if price < 0:
+        raise HTTPException(status_code=400, detail="Price cannot be negative")
     if not title or not instructor_id:
         raise HTTPException(status_code=400, detail="Title and instructor_id are required")
 

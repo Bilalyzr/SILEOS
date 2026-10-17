@@ -151,9 +151,17 @@ def evidence(course_id: int, offset: int = Query(0, ge=0), db: Session = Depends
 @router.post('/sessions/{session_id}/review')
 def override(session_id: int, body: ReviewIn, db: Session = Depends(transaction), user: User = Depends(educator)):
     row = db.query(MathPilotSession).filter_by(id=session_id).with_for_update().first()
+    # Fold not-found and not-permitted into the SAME 404 (audit finding: the
+    # old 404-then-403 order let an educator probe the platform-wide session
+    # id space — 404 = absent, 403 = exists in a course they can't edit).
     if not row:
         raise HTTPException(404, 'Activity not found.')
-    svc.editor(db, row.course_id, user)
+    try:
+        svc.editor(db, row.course_id, user)
+    except HTTPException as exc:
+        if exc.status_code == 403:
+            raise HTTPException(404, 'Activity not found.')
+        raise
     payload = body.model_dump(mode='json')
     old = db.query(MathPilotEvent).filter_by(session_id=row.id, key=str(body.key)).first()
     if old:
