@@ -1358,135 +1358,6 @@ export function HomePage() {
       </section>
 
       {/* ====================================================================
-          SI—03 — LEARNING ECOSYSTEM INDEX (WITH LERPED VELOCITY-TILT PREVIEW)
-          Matches Re in scratch/node2.js
-          ==================================================================== */}
-      <section
-        aria-labelledby="ecosystem-heading"
-        className="border-b border-ink-900/12 py-section"
-      >
-        <div className="container-page">
-          <SymphoSectionHeader
-            index="SI—03"
-            eyebrow="Platform Architecture"
-            headingId="ecosystem-heading"
-            title="Seven integrated learning environments, one roof"
-            lede="We eliminated the disconnect between watching lectures, running experiments, reading reference texts, and applying for industry internships."
-            action={
-              <SymphoButton to="/labs" variant="outline" arrow>
-                Launch interactive labs
-              </SymphoButton>
-            }
-          />
-
-          <div
-            ref={indexWrapRef}
-            onPointerLeave={() => setHoveredDiscipline(-1)}
-            role="presentation"
-            className="relative mt-10"
-          >
-            <ol className="border-t border-ink-900/15">
-              {ECOSYSTEM_DISCIPLINES.map((item, idx) => (
-                <li
-                  key={item.code}
-                  data-reveal=""
-                  style={{ ["--reveal-delay" as string]: `${idx * 50}ms` }}
-                  className="border-b border-ink-900/15"
-                >
-                  <Link
-                    to={item.to}
-                    onPointerEnter={() => setHoveredDiscipline(idx)}
-                    onFocus={() => setHoveredDiscipline(idx)}
-                    className="group grid grid-cols-[auto_1fr_auto] items-center gap-4 py-4 sm:gap-6 lg:grid-cols-[3.5rem_1fr_1fr_auto] lg:py-5"
-                  >
-                    <span className="font-mono text-label text-ink-500">
-                      {item.index}
-                    </span>
-
-                    <span className="flex items-center gap-3.5">
-                      <span className="hidden size-12 shrink-0 overflow-hidden rounded-sm sm:block lg:hidden">
-                        <img
-                          src={item.image}
-                          alt=""
-                          loading="lazy"
-                          className="h-full w-full object-cover"
-                        />
-                      </span>
-                      <span className="font-display text-[clamp(1.1rem,0.95rem+0.9vw,1.6rem)] font-semibold leading-snug tracking-[-0.02em] text-ink-900 transition-[transform,color] duration-700 ease-out-expo group-hover:translate-x-2 group-hover:text-copper-600">
-                        {item.title}
-                      </span>
-                    </span>
-
-                    <span className="hidden max-w-sm text-sm text-ink-600 lg:block">
-                      {item.summary}
-                    </span>
-
-                    <span
-                      aria-hidden="true"
-                      className="grid size-10 place-items-center rounded-full border border-ink-900/20 text-ink-900 transition-all duration-500 ease-out-expo group-hover:border-ink-900 group-hover:bg-ink-900 group-hover:text-limestone-50"
-                    >
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="size-4 group-hover:hidden"
-                      >
-                        {item.iconPaths.map((d, pi) => (
-                          <path key={pi} d={d} />
-                        ))}
-                      </svg>
-                      <ArrowUpRight
-                        size={16}
-                        className="hidden group-hover:block"
-                      />
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ol>
-
-            {/* Cursor-Following Lerped + Velocity-Tilted Preview Card (Desktop) */}
-            <div
-              ref={previewOuterRef}
-              aria-hidden="true"
-              className="pointer-events-none absolute top-0 left-0 z-10 hidden lg:block"
-            >
-              <div
-                style={{
-                  opacity: hoveredDiscipline >= 0 ? 1 : 0,
-                  transform: `translate(-50%, -50%) scale(${
-                    hoveredDiscipline >= 0 ? 1 : 0.85
-                  })`,
-                }}
-                className="overflow-hidden rounded-md shadow-lift transition-[opacity,transform] duration-500 ease-out-expo"
-              >
-                <div className="relative h-[12rem] w-[17rem] bg-ink-900">
-                  {ECOSYSTEM_DISCIPLINES.map((item, idx) => (
-                    <img
-                      key={item.code}
-                      src={item.image}
-                      alt=""
-                      loading="lazy"
-                      style={{
-                        opacity: hoveredDiscipline === idx ? 1 : 0,
-                        transform: `scale(${
-                          hoveredDiscipline === idx ? 1 : 1.15
-                        })`,
-                      }}
-                      className="absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-700 ease-out-expo"
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ====================================================================
           SI—04 — WHY SASHA INFINITY (ON-DARK BLUEPRINT + ICON-DRAW + SPOTLIGHT)
           Matches He in scratch/node2.js
           ==================================================================== */}
@@ -1736,82 +1607,144 @@ export function HomePage() {
             }
           />
 
-          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
-            {blogs.slice(0, 3).map((post, idx) => {
-              const img =
-                getMediaUrl(post.featured_image) ||
-                FALLBACK_BLOGS[idx % FALLBACK_BLOGS.length].featured_image!;
-              return (
-                <article
-                  key={post.id || post.slug}
-                  data-reveal=""
-                  style={{ ["--reveal-delay" as string]: `${idx * 100}ms` }}
-                  className="group flex flex-col justify-between rounded-lg border border-ink-900/12 bg-limestone-50 transition-shadow duration-500 hover:shadow-lift"
+          <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-12">
+            {/* Featured plate — the pinned specimen of the issue */}
+            <article data-reveal="" className="group lg:col-span-7">
+              <Link
+                to={`/blog/${blogs[0].slug}`}
+                className="relative block overflow-hidden rounded-lg bg-ink-900"
+              >
+                <div className="aspect-[16/10] max-h-[26rem] overflow-hidden">
+                  <img
+                    src={
+                      getMediaUrl(blogs[0].featured_image) ||
+                      FALLBACK_BLOGS[0].featured_image!
+                    }
+                    alt={blogs[0].title}
+                    loading="lazy"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src =
+                        FALLBACK_BLOGS[0].featured_image!;
+                    }}
+                    className="h-full w-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-[1.04]"
+                  />
+                </div>
+
+                <span className="absolute top-4 left-4 rounded-sm bg-limestone-50/90 px-2.5 py-1 font-mono text-label text-ink-900 backdrop-blur-sm">
+                  FIG. 01 — FIELD RECORD
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="absolute right-4 bottom-4 hidden font-mono text-label text-limestone-300/80 sm:block"
                 >
-                  <div>
-                    <Link
-                      to={`/blog/${post.slug}`}
-                      data-reveal="mask"
-                      className="block aspect-[16/10] max-h-44 overflow-hidden rounded-t-lg bg-ink-900"
-                    >
-                      <img
-                        src={img}
-                        alt={post.title}
-                        loading="lazy"
-                        onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).src =
-                            FALLBACK_BLOGS[
-                              idx % FALLBACK_BLOGS.length
-                            ].featured_image!;
-                        }}
-                        className="h-full w-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-[1.04]"
-                      />
-                    </Link>
-                    <div className="p-5">
+                  11.66° N · 78.14° E
+                </span>
+
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink-900/90 via-ink-900/45 to-transparent p-5 pt-16">
+                  <div className="flex items-center gap-2.5 font-mono text-label text-limestone-300">
+                    <span className="text-copper-500">
+                      {blogs[0].category || "Field Note"}
+                    </span>
+                    <span>·</span>
+                    <span>{blogs[0].reading_time || 5} min read</span>
+                  </div>
+                  <h3 className="mt-2 font-display text-2xl font-semibold leading-snug text-limestone-50">
+                    {blogs[0].title}
+                  </h3>
+                </div>
+              </Link>
+
+              <p className="mt-4 text-sm leading-relaxed text-ink-600 line-clamp-2">
+                {blogs[0].excerpt ||
+                  "An inside look at how SashaInfinity designs interactive learning systems and conceptual frameworks."}
+              </p>
+              <div className="mt-3 flex items-center justify-between font-mono text-label text-ink-500">
+                <span>
+                  {blogs[0].created_at
+                    ? new Date(blogs[0].created_at).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })
+                    : "2026 Edition"}
+                </span>
+                <Link
+                  to={`/blog/${blogs[0].slug}`}
+                  className="text-ink-900 transition-colors duration-500 group-hover:text-copper-600"
+                >
+                  Read essay →
+                </Link>
+              </div>
+            </article>
+
+            {/* Entry ledger — the remaining notes, ruled like a journal index */}
+            <div className="border-t border-ink-900/15 lg:col-span-5">
+              {blogs.slice(1, 3).map((post, idx) => {
+                const img =
+                  getMediaUrl(post.featured_image) ||
+                  FALLBACK_BLOGS[
+                    (idx + 1) % FALLBACK_BLOGS.length
+                  ].featured_image!;
+                return (
+                  <Link
+                    key={post.id || post.slug}
+                    to={`/blog/${post.slug}`}
+                    data-reveal=""
+                    style={{
+                      ["--reveal-delay" as string]: `${(idx + 1) * 100}ms`,
+                    }}
+                    className="group flex items-center justify-between gap-5 border-b border-ink-900/15 py-6"
+                  >
+                    <div className="min-w-0">
                       <div className="flex items-center gap-2.5 font-mono text-label text-ink-500">
-                        <span className="text-copper-600">
-                          {post.category || "Field Note"}
-                        </span>
+                        <span className="text-copper-600">FN—0{idx + 2}</span>
                         <span>·</span>
-                        <span>{post.reading_time || 5} min read</span>
+                        <span>{post.category || "Field Note"}</span>
+                        <span>·</span>
+                        <span>{post.reading_time || 5} min</span>
                       </div>
-                      <h3 className="mt-2 font-display text-lg font-bold leading-snug text-ink-900">
-                        <Link
-                          to={`/blog/${post.slug}`}
-                          className="transition-colors group-hover:text-copper-600"
-                        >
-                          {post.title}
-                        </Link>
+                      <h3 className="mt-2 font-display text-lg font-semibold leading-snug text-ink-900 transition-colors duration-500 group-hover:text-copper-600">
+                        {post.title}
                       </h3>
-                      <p className="mt-2 text-xs leading-relaxed text-ink-600 line-clamp-3">
+                      <p className="mt-1.5 text-xs leading-relaxed text-ink-600 line-clamp-1">
                         {post.excerpt ||
-                          "An inside look at how SashaInfinity designs interactive learning systems and conceptual frameworks."}
+                          "An inside look at how SashaInfinity designs interactive learning systems."}
                       </p>
                     </div>
-                  </div>
-                  <div className="flex items-center justify-between border-t border-ink-900/10 px-5 py-3.5 text-xs text-ink-500">
-                    <span>
-                      {post.created_at
-                        ? new Date(post.created_at).toLocaleDateString(
-                            "en-US",
-                            {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                            }
-                          )
-                        : "2026 Edition"}
+
+                    <span className="hidden size-14 shrink-0 overflow-hidden rounded-sm sm:block">
+                      <img
+                        src={img}
+                        alt=""
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-[1.06]"
+                      />
                     </span>
-                    <Link
-                      to={`/blog/${post.slug}`}
-                      className="font-mono text-label text-ink-900 group-hover:text-copper-600"
+                    <span
+                      aria-hidden="true"
+                      className="grid size-10 shrink-0 place-items-center rounded-full border border-ink-900/20 text-ink-900 transition-all duration-500 ease-out-expo group-hover:border-ink-900 group-hover:bg-ink-900 group-hover:text-limestone-50"
                     >
-                      Read article →
-                    </Link>
-                  </div>
-                </article>
-              );
-            })}
+                      <ArrowUpRight size={16} />
+                    </span>
+                  </Link>
+                );
+              })}
+
+              <div className="flex items-center justify-between pt-5 font-mono text-label text-ink-500">
+                <span>
+                  {blogs.length > 3
+                    ? `+ ${blogs.length - 3} more entries`
+                    : "Updated weekly from the studio"}
+                </span>
+                <Link
+                  to="/blog"
+                  className="inline-flex items-center gap-1 text-ink-900 transition-colors duration-500 hover:text-copper-600"
+                >
+                  Browse the archive
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            </div>
           </div>
 
           <NewsletterSection />
