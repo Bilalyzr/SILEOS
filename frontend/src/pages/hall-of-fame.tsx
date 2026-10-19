@@ -1,25 +1,12 @@
-/**
- * Wall of Fame - public page celebrating company staff.
- *
- * Everyone is shown EQUALLY. No ranking, no positions.
- * Glassmorphism + 3D tilt portrait cards: big photo on top, frosted info
- * below, and the card tilts toward your cursor with real perspective.
- *
- * EDIT THE PEOPLE HERE - no backend, no fetching.
- * The HALL_OF_FAME array below is the source of truth.
- * Add / remove people freely - order does NOT matter (no ranking).
- *
- * Each entry:
- *   name        person's display name            (required)
- *   role        their job title / designation    (required)
- *   company     company they work for            (required)
- *   photo       URL of their photo (or empty ''  -> initials avatar)
- *   tenure      how long they've been there      (e.g. "5 years")
- *   location    city, country                     (optional)
- *   linkedin    full LinkedIn URL                 (optional)
- *   blurb       short one-liner about them        (optional)
- *   highlight   optional badge text               (e.g. "Top Mentor")
- */
+import React, { useEffect, useState } from "react";
+import { Linkedin, MapPin, Trophy } from "lucide-react";
+import { hallOfFameApi } from "@/api/hallOfFame";
+import {
+  SymphoButton,
+  SymphoCtaBanner,
+  SymphoPageHero,
+  SymphoSectionHeader,
+} from "@/components/sympho/SymphoSystem";
 
 export interface HallOfFamePerson {
   name: string;
@@ -98,12 +85,6 @@ export const HALL_OF_FAME: HallOfFamePerson[] = [
   },
 ];
 
-// --- Rendering code below. Plain Tailwind. Feel free to tweak styles. ---
-
-import React, { useState, useEffect } from "react";
-import { Trophy, Linkedin } from "lucide-react";
-import { hallOfFameApi } from "@/api/hallOfFame";
-
 const initials = (name: string): string =>
   name
     .split(" ")
@@ -112,10 +93,7 @@ const initials = (name: string): string =>
     .join("")
     .toUpperCase();
 
-// useTilt: tracks mouse over a card and returns a transform that tilts the
-// card in 3D toward the cursor. Resets on mouse leave. On touch devices the
-// card stays flat (no mousemove) - content is still fully readable.
-const MAX_TILT = 8; // degrees - subtle, not dizzying
+const MAX_TILT = 6;
 
 function useTilt() {
   const ref = React.useRef<HTMLDivElement>(null);
@@ -135,7 +113,6 @@ function useTilt() {
     const el = ref.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    // cursor position as a -0.5 .. 0.5 fraction from the card center
     const px = (e.clientX - rect.left) / rect.width - 0.5;
     const py = (e.clientY - rect.top) / rect.height - 0.5;
     setStyle({
@@ -144,11 +121,10 @@ function useTilt() {
         (-py * MAX_TILT).toFixed(2) +
         "deg) rotateY(" +
         (px * MAX_TILT).toFixed(2) +
-        "deg) scale(1.02)",
+        "deg) scale(1.015)",
       transition: "transform 0.1s ease-out",
     });
-    // glare follows the cursor (0-100% position, opacity ramps in)
-    setGlare({ x: (px + 0.5) * 100, y: (py + 0.5) * 100, o: 0.25 });
+    setGlare({ x: (px + 0.5) * 100, y: (py + 0.5) * 100, o: 0.18 });
   }, []);
 
   const onLeave = React.useCallback(() => {
@@ -162,45 +138,44 @@ function useTilt() {
   return { ref, style, onMove, onLeave, glare };
 }
 
-// Portrait: the top of the card - big photo or initials on a soft gradient.
-// Minimal & premium: photo dominates, no text overlay (name goes below).
-const Portrait: React.FC<{ person: HallOfFamePerson }> = ({ person }) => {
+const Portrait: React.FC<{ person: HallOfFamePerson; index: number }> = ({
+  person,
+  index,
+}) => {
   const [broken, setBroken] = React.useState(false);
   const showPhoto = person.photo && !broken;
   return (
-    <div className="relative h-64 w-full overflow-hidden rounded-t-2xl">
+    <div className="relative h-64 w-full overflow-hidden border-b border-ink-900/12 bg-ink-950">
       {showPhoto ? (
         <img
           src={person.photo}
           alt={person.name}
           onError={() => setBroken(true)}
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
       ) : (
-        <>
-          {/* soft gradient with a subtle radial highlight */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#f4911a] via-[#ffaa44] to-[#fdba74]" />
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "radial-gradient(circle at 35% 30%, rgba(255,255,255,0.35) 0%, transparent 50%)",
-            }}
-          />
-          <div
-            className="absolute inset-0 flex items-center justify-center text-5xl font-extrabold tracking-tight text-white"
-            style={{ fontFamily: "Lexend Deca, sans-serif" }}
-          >
+        <div className="relative flex h-full w-full items-center justify-center bg-ink-950 blueprint-grid">
+          <div className="flex h-24 w-24 items-center justify-center rounded-full border border-copper-500/40 bg-copper-500/10 font-display text-4xl font-light italic text-limestone-50">
             {initials(person.name)}
           </div>
-        </>
+        </div>
+      )}
+      <span className="absolute left-4 top-4 rounded-pill bg-ink-950/85 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-limestone-100 backdrop-blur-sm">
+        HOF—{String(index + 1).padStart(2, "0")}
+      </span>
+      {person.highlight && (
+        <span className="absolute right-4 top-4 rounded-pill bg-copper-500 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-limestone-50">
+          {person.highlight}
+        </span>
       )}
     </div>
   );
 };
 
-// PersonCard: minimal & premium. Photo-forward, just name + role + meta.
-const PersonCard: React.FC<{ person: HallOfFamePerson }> = ({ person }) => {
+const PersonCard: React.FC<{ person: HallOfFamePerson; index: number }> = ({
+  person,
+  index,
+}) => {
   const tilt = useTilt();
 
   return (
@@ -208,67 +183,69 @@ const PersonCard: React.FC<{ person: HallOfFamePerson }> = ({ person }) => {
       ref={tilt.ref}
       onMouseMove={tilt.onMove}
       onMouseLeave={tilt.onLeave}
-      className="group relative overflow-hidden rounded-2xl border border-white/60 shadow-[0_12px_40px_-12px_rgba(26,26,46,0.25)] backdrop-blur-2xl"
+      className="group sheet-frame relative flex flex-col overflow-hidden bg-limestone-50"
       style={{
         ...tilt.style,
-        background: "rgba(255,255,255,0.6)",
         transformStyle: "preserve-3d",
       }}
     >
-      {person.highlight ? (
-        <span className="absolute right-3 top-3 z-10 rounded-full bg-white/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#f4911a] shadow-sm ring-1 ring-[#f4911a]/20 backdrop-blur">
-          {person.highlight}
-        </span>
-      ) : null}
+      <Portrait person={person} index={index} />
 
-      <Portrait person={person} />
+      <div className="flex flex-1 flex-col justify-between p-6">
+        <div>
+          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-copper-500">
+            {person.role}
+          </span>
+          <h3 className="mt-1 font-display text-2xl font-light text-ink-900">
+            {person.name}
+          </h3>
+          <p className="mt-0.5 font-mono text-[11px] text-ink-500">
+            {person.company}
+          </p>
+          {person.blurb && (
+            <p className="mt-3 text-sm leading-relaxed text-ink-600">
+              {person.blurb}
+            </p>
+          )}
+        </div>
 
-      {/* Minimal info: name, role, tiny meta row. Nothing else. */}
-      <div className="px-6 py-5 text-center">
-        <h4
-          className="text-lg font-bold tracking-tight text-[#1a1a2e]"
-          style={{ fontFamily: "Lexend Deca, sans-serif" }}
-        >
-          {person.name}
-        </h4>
-        <p className="mt-0.5 text-sm font-medium text-[#f4911a]">
-          {person.role}
-        </p>
+        <div className="mt-6 flex items-center justify-between border-t border-ink-900/10 pt-4 font-mono text-[11px] text-ink-500">
+          <div className="flex items-center gap-2">
+            <span>{person.tenure}</span>
+            {person.location && (
+              <>
+                <span>·</span>
+                <span className="inline-flex items-center gap-1">
+                  <MapPin className="h-3 w-3 text-copper-500" />
+                  {person.location}
+                </span>
+              </>
+            )}
+          </div>
 
-        <div className="mt-3 flex items-center justify-center gap-2 text-[11px] text-slate-400">
-          <span>{person.tenure}</span>
-          {person.location ? (
-            <>
-              <span className="text-slate-300">&middot;</span>
-              <span>{person.location}</span>
-            </>
-          ) : null}
-          {person.linkedin ? (
-            <>
-              <span className="text-slate-300">&middot;</span>
-              <a
-                href={person.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-0.5 font-medium text-[#0a66c2] hover:underline"
-              >
-                <Linkedin className="h-3 w-3" />
-              </a>
-            </>
-          ) : null}
+          {person.linkedin && (
+            <a
+              href={person.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${person.name} LinkedIn`}
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-ink-900/15 text-ink-700 transition-colors hover:border-copper-500 hover:text-copper-500"
+            >
+              <Linkedin className="h-3.5 w-3.5" />
+            </a>
+          )}
         </div>
       </div>
 
-      {/* cursor-following glare overlay (glass catching light effect) */}
       <div
-        className="pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-300"
+        className="pointer-events-none absolute inset-0 transition-opacity duration-300"
         style={{
           background:
             "radial-gradient(circle at " +
             tilt.glare.x +
             "% " +
             tilt.glare.y +
-            "%, rgba(255,255,255,0.45), transparent 50%)",
+            "%, rgba(255,255,255,0.45), transparent 55%)",
           opacity: tilt.glare.o,
           mixBlendMode: "overlay",
         }}
@@ -278,8 +255,6 @@ const PersonCard: React.FC<{ person: HallOfFamePerson }> = ({ person }) => {
 };
 
 export const HallOfFamePage: React.FC = () => {
-  // Fetch published members from the API. The admin UI manages what appears
-  // here; this page is read-only for visitors.
   const [people, setPeople] = useState<HallOfFamePerson[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -290,7 +265,6 @@ export const HallOfFamePage: React.FC = () => {
       try {
         setLoading(true);
         const data = await hallOfFameApi.list();
-        // Map the API shape to the local HallOfFamePerson interface.
         if (!cancelled) {
           setPeople(
             data.map((m) => ({
@@ -318,93 +292,95 @@ export const HallOfFamePage: React.FC = () => {
   }, []);
 
   return (
-    <div
-      className="relative min-h-screen overflow-hidden"
-      style={{
-        background:
-          "radial-gradient(circle at 0% 0%, rgba(244,145,26,0.10), transparent 40%)," +
-          "radial-gradient(circle at 100% 10%, rgba(56,189,248,0.12), transparent 50%)," +
-          "radial-gradient(circle at 50% 100%, rgba(168,85,247,0.08), transparent 45%)," +
-          "linear-gradient(180deg, #e7effc 0%, #ffffff 60%, #fff7ed 100%)",
-      }}
-    >
-      <div className="pointer-events-none absolute -left-20 top-32 h-72 w-72 rounded-full bg-[#f4911a]/20 blur-3xl" />
-      <div className="pointer-events-none absolute right-0 top-64 h-80 w-80 rounded-full bg-[#38bdf8]/20 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-40 left-1/3 h-72 w-72 rounded-full bg-[#a855f7]/15 blur-3xl" />
+    <div className="sympho-scope rd-screen rd-screen-hall-of-fame min-h-screen bg-limestone-100 text-ink-900">
+      <SymphoPageHero
+        index="SI—HOF.01"
+        category="WALL OF FAME // HONOUR ROLL"
+        code="EQUAL RECOGNITION LEDGER"
+        title="Our Honoured Staff & Mentors."
+        subtitle="Celebrating the dedicated founders, program managers, engineers, and mentors behind our studio courses and internship cohorts — presented as peers on a single architectural plate."
+        metrics={[
+          {
+            value: String(people.length || HALL_OF_FAME.length),
+            unit: "inductees",
+            label: "Honoured Staff & Mentors",
+            code: "HOF—01",
+          },
+          {
+            value: "EQUAL",
+            unit: "standing",
+            label: "Unranked Peer Recognition",
+            code: "HOF—02",
+          },
+          {
+            value: "3D TILT",
+            unit: "plates",
+            label: "Interactive Portrait Cards",
+            code: "HOF—03",
+          },
+        ]}
+      />
 
-      <section className="relative px-4 pt-16 pb-12 sm:pt-24 sm:pb-16">
-        <div className="mx-auto max-w-3xl text-center">
-          <span
-            className="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#f4911a] shadow-sm backdrop-blur-xl"
-            style={{ fontFamily: "Inter, sans-serif" }}
-          >
-            <Trophy className="h-3.5 w-3.5" /> Wall of Fame
-          </span>
-          <h1
-            className="mt-6 text-4xl font-extrabold leading-tight text-[#1a1a2e] sm:text-5xl"
-            style={{ fontFamily: "Lexend Deca, sans-serif" }}
-          >
-            Our Honoured{" "}
-            <span className="bg-gradient-to-r from-[#f4911a] to-[#ffaa44] bg-clip-text text-transparent">
-              Staff
-            </span>
-          </h1>
-          <p className="mx-auto mt-4 max-w-xl text-base text-slate-600 sm:text-lg">
-            Celebrating the dedicated people behind our internship program - the
-            founders, managers, and mentors who show up every day.
-          </p>
+      <section className="py-section-sm">
+        <div className="mx-auto max-w-[1680px] px-gutter">
+          <SymphoSectionHeader
+            index="HOF—01"
+            category="PORTRAIT ARCHIVE"
+            code={`${people.length} INDUCTEES`}
+            title="Wall of Fame Directory"
+            subtitle="Every member is honoured equally — hover any portrait plate to inspect their tenure, station, and mentorship record."
+          />
+
+          <div className="mt-12">
+            {loading ? (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="sheet-frame h-[380px] animate-pulse bg-limestone-50 p-6"
+                  />
+                ))}
+              </div>
+            ) : error ? (
+              <div className="sheet-frame mx-auto max-w-xl bg-limestone-50 p-12 text-center">
+                <Trophy className="mx-auto h-10 w-10 text-copper-500" />
+                <p className="mt-4 font-display text-2xl font-light text-ink-900">
+                  Could not load the Wall of Fame. Please try again later.
+                </p>
+              </div>
+            ) : people.length > 0 ? (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {people.map((p, idx) => (
+                  <PersonCard key={p.name} person={p} index={idx} />
+                ))}
+              </div>
+            ) : (
+              <div className="sheet-frame mx-auto max-w-xl bg-limestone-50 p-12 text-center">
+                <Trophy className="mx-auto h-10 w-10 text-copper-500" />
+                <p className="mt-4 font-display text-2xl font-light text-ink-900">
+                  No inductees yet. Check back soon.
+                </p>
+                <div className="mt-6 flex justify-center">
+                  <SymphoButton to="/internships" variant="primary">
+                    Explore Internships
+                  </SymphoButton>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
-      {/* Loading state */}
-      {loading ? (
-        <section className="relative px-4 pb-24">
-          <div className="mx-auto max-w-6xl">
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="h-[340px] animate-pulse rounded-2xl bg-white/40"
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-      ) : error ? (
-        <section className="relative px-4 pb-20">
-          <div
-            className="mx-auto max-w-md rounded-2xl border border-white/60 bg-white/40 p-12 text-center backdrop-blur-xl"
-            data-glass="content"
-          >
-            <Trophy className="mx-auto h-10 w-10 text-slate-400" />
-            <p className="mt-4 text-sm text-slate-600">
-              Could not load the Wall of Fame. Please try again later.
-            </p>
-          </div>
-        </section>
-      ) : people.length > 0 ? (
-        <section className="relative px-4 pb-24">
-          <div className="mx-auto max-w-6xl">
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {people.map((p) => (
-                <PersonCard key={p.name} person={p} />
-              ))}
-            </div>
-          </div>
-        </section>
-      ) : (
-        <section className="relative px-4 pb-20">
-          <div
-            className="mx-auto max-w-md rounded-2xl border border-white/60 bg-white/40 p-12 text-center backdrop-blur-xl"
-            data-glass="content"
-          >
-            <Trophy className="mx-auto h-10 w-10 text-slate-400" />
-            <p className="mt-4 text-sm text-slate-600">
-              No inductees yet. Check back soon.
-            </p>
-          </div>
-        </section>
-      )}
+      <SymphoCtaBanner
+        code="SI—HOF // 02"
+        eyebrow="WORK WITH OUR MENTORS"
+        title="Ready to learn with our faculty & mentors?"
+        description="Join an upcoming internship cohort or enroll in a studio course taught by our honoured practitioners."
+        primaryLabel="Explore Internships"
+        primaryTo="/internships"
+        secondaryLabel="Browse All Courses"
+        secondaryTo="/courses"
+      />
     </div>
   );
 };

@@ -186,6 +186,9 @@ async def video_info(video_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+ALLOWED_EXTRACT_QUALITIES = {"360", "480", "720", "1080", "1440"}
+
+
 @app.get("/extract")
 async def extract_video_url(
     url: str = Query(..., description="YouTube video URL"),
@@ -198,6 +201,10 @@ async def extract_video_url(
         video_id = extract_video_id(url)
         if not video_id:
             return JSONResponse(content={"success": False, "error": "Invalid YouTube URL"}, status_code=400)
+
+        quality = str(quality).strip()
+        if quality not in ALLOWED_EXTRACT_QUALITIES:
+            return JSONResponse(content={"success": False, "error": "Invalid quality"}, status_code=400)
 
         cache_key = f"{video_id}:{quality}"
         now = time.time()
@@ -255,13 +262,12 @@ async def extract_video_url(
 
 @app.get("/cache/status")
 async def get_cache_status() -> JSONResponse:
-    """Get current cache status"""
+    """Get current cache status without exposing unlisted video IDs."""
     now = time.time()
-    active = {k: v for k, v in _url_cache.items() if v[1] > now}
+    active_count = sum(1 for _, v in _url_cache.items() if (now - v[1]) < CACHE_TTL)
     return JSONResponse(content={
         "success": True,
-        "cache_size": len(active),
-        "cached_videos": list(active.keys()),
+        "cache_size": active_count,
         "total_cache_entries": len(_url_cache)
     })
 

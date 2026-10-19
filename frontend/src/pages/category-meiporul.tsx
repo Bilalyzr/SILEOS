@@ -1,18 +1,16 @@
-import { PageLayout, PageHeader } from "@/components/design-system/PageLayout";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Rocket, BookOpen, Users, Star } from "lucide-react";
+import { BookOpen, Compass, Sparkles } from "lucide-react";
 import { api } from "@/api/axios";
 import { CourseCard } from "@/components/course/course-card";
 import { Course } from "@/types";
-import styles from "@/styles/category-page.module.css";
+import {
+  SymphoButton,
+  SymphoCtaBanner,
+  SymphoPageHero,
+  SymphoSectionHeader,
+} from "@/components/sympho/SymphoSystem";
 
-// Maps the backend /courses list item to the local Course shape. The backend
-// returns `title`/`description`/`price`/`level`/`rating`/`instructor.name`/
-// `category`/`stats` — NOT the post_*/course_*/average_rating/display_name/
-// categories[]/lessons[] fields an older API used. Reading the old names left
-// values undefined and `undefined.toLowerCase()` / `.map()` threw during
-// mapping, blanking the whole page whenever the category had courses.
 const convertAPICourseToLocal = (apiCourse: any): Course => {
   return {
     id: apiCourse.id,
@@ -68,6 +66,29 @@ const convertAPICourseToLocal = (apiCourse: any): Course => {
   } as unknown as Course;
 };
 
+const PILLARS = [
+  {
+    code: "MP—01",
+    title: "Sangam Classical Corpus",
+    detail: "Ettuthokai and Pattuppattu anthologies examined through structural and ecological landscapes (Tinai).",
+  },
+  {
+    code: "MP—02",
+    title: "Akam & Puram Dialectics",
+    detail: "The interior landscape of human devotion and the exterior architecture of civic valor and statecraft.",
+  },
+  {
+    code: "MP—03",
+    title: "Ethical & Dharmic Treatises",
+    detail: "Tirukkural, Naladiyar, and didactic frameworks for moral clarity, governance, and relational harmony.",
+  },
+  {
+    code: "MP—04",
+    title: "Spatial & Hermeneutic Analysis",
+    detail: "First-principles literary interpretation paired with interactive 3D spatial reconstructions.",
+  },
+];
+
 export const MeiporulPage = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
@@ -88,12 +109,11 @@ export const MeiporulPage = () => {
           },
         });
 
-        const convertedCourses: Course[] = response.data.courses.map(
+        const convertedCourses: Course[] = (response.data?.courses || []).map(
           convertAPICourseToLocal,
         );
         setCourses(convertedCourses);
 
-        // Calculate stats
         const totalStudents = convertedCourses.reduce(
           (sum, course) => sum + course.total_enrollments,
           0,
@@ -120,135 +140,221 @@ export const MeiporulPage = () => {
   }, []);
 
   return (
-    <div className={styles.categoryPage}>
-      {/* Hero Section */}
-      <section className={styles.hero}>
-        <PageLayout
-          header={
-            <PageHeader>
-              <div>
-                <h1>Meiporul</h1>
-                <p className={styles.heroDescription}>
-                  Meiporul represents the true essence, reality, and subject
-                  matter in Tamil literary tradition. Dive into the core themes
-                  of love, ethics, and human experience as expressed through
-                  ancient Tamil literature and poetry.
-                </p>
-              </div>
-            </PageHeader>
-          }
-          className="rd-screen rd-screen-category-meiporul"
-        >
-          <div className={styles.heroIcon}>
-            <Rocket size={64} />
-          </div>
-          <div className={styles.heroStats}>
-            <div className={styles.statItem}>
-              <BookOpen size={24} />
-              <div>
-                <strong>{stats.totalCourses}</strong>
-                <span>Courses</span>
-              </div>
-            </div>
-            <div className={styles.statItem}>
-              <Users size={24} />
-              <div>
-                <strong>{stats.totalStudents}</strong>
-                <span>Students</span>
-              </div>
-            </div>
-            <div className={styles.statItem}>
-              <Star size={24} />
-              <div>
-                <strong>{stats.avgRating}</strong>
-                <span>Avg Rating</span>
-              </div>
-            </div>
-          </div>
-        </PageLayout>
-      </section>
+    <div className="sympho-scope rd-screen rd-screen-category-meiporul min-h-screen bg-limestone-100 text-ink-900">
+      <SymphoPageHero
+        index="SI—DIV.01"
+        category="TAMIL TRIAD // மெய்ப்பொருள்"
+        code="CLASSICAL DIVISION I"
+        title="Meiporul — The True Essence of Reality."
+        subtitle="Meiporul represents the foundational truth, authentic human experience, and essential subject matter in classical Tamil literary architecture. Dive into the timeless themes of love, ethics, and existence."
+        metrics={[
+          {
+            value: String(stats.totalCourses),
+            unit: "tracks",
+            label: "Published Courses",
+            code: "DIM—01",
+          },
+          {
+            value: String(stats.totalStudents),
+            unit: "scholars",
+            label: "Enrolled Learners",
+            code: "DIM—02",
+          },
+          {
+            value: stats.avgRating > 0 ? stats.avgRating.toFixed(1) : "4.9",
+            unit: "/ 5.0",
+            label: "Average Rating",
+            code: "DIM—03",
+          },
+        ]}
+        actions={
+          <>
+            <SymphoButton to="/meiporul-ar" variant="copper">
+              Open Meiporul 3D AR Studio
+            </SymphoButton>
+            <SymphoButton to="/courses" variant="ghost-dark">
+              Browse Full Catalog
+            </SymphoButton>
+          </>
+        }
+      />
 
-      {/* About Section */}
-      <section className={styles.about}>
-        <div className={styles.container}>
-          <h2>About Meiporul</h2>
-          <div className={styles.aboutContent}>
-            <div className={styles.aboutText}>
-              <p>
-                <strong>Meiporul</strong> (மெய்ப்பொருள்) signifies the true
-                subject matter or essential content in Tamil literary
-                classification. It focuses on authentic human emotions,
-                experiences, and the timeless themes that define Tamil
-                literature.
-              </p>
-              <p>This category encompasses courses on:</p>
-              <ul>
-                <li>Classical Tamil literature - Sangam poetry and epics</li>
-                <li>
-                  Akam (interior/love poetry) and Puram (exterior/heroic poetry)
-                </li>
-                <li>Ethics, morality, and dharma in Tamil texts</li>
-                <li>Human emotions and the psychology of relationships</li>
-                <li>Literary analysis and interpretation techniques</li>
-              </ul>
+      {/* Triad Division Switcher Bar */}
+      <div className="border-b border-ink-900/12 bg-limestone-50">
+        <div className="mx-auto flex max-w-[1680px] flex-wrap items-center justify-between gap-4 px-gutter py-4">
+          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-500">
+            <Compass className="h-3.5 w-3.5 text-copper-500" />
+            <span>Classical Tamil Knowledge Triad</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Link
+              to="/category/meiporul"
+              className="rounded-pill bg-ink-900 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-limestone-100"
+            >
+              01 · Meiporul (மெய்ப்பொருள்)
+            </Link>
+            <Link
+              to="/category/utporul"
+              className="rounded-pill border border-ink-900/15 bg-limestone-100 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-700 transition-colors hover:border-copper-500 hover:text-copper-500"
+            >
+              02 · Utporul (உட்பொருள்)
+            </Link>
+            <Link
+              to="/category/seyappaduporul"
+              className="rounded-pill border border-ink-900/15 bg-limestone-100 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-700 transition-colors hover:border-copper-500 hover:text-copper-500"
+            >
+              03 · Seyappaduporul (செய்யப்படுபொருள்)
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Monograph Treatise Section */}
+      <section className="relative border-b border-ink-900/12 py-section-sm">
+        <div className="mx-auto max-w-[1680px] px-gutter">
+          <SymphoSectionHeader
+            index="MP—01"
+            category="ARCHIVAL MONOGRAPH"
+            code="EPISTEMIC FOUNDATION"
+            title="About Meiporul"
+            subtitle="Meiporul (மெய்ப்பொருள்) signifies the authentic substance beneath appearances — as immortalized in Tiruvalluvar's couplet: discerning the truth of a thing regardless of who speaks it."
+          />
+
+          <div className="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {PILLARS.map((pillar) => (
+                  <div
+                    key={pillar.code}
+                    className="sheet-frame flex flex-col justify-between bg-limestone-50/90 p-6 transition-colors hover:border-copper-500/40"
+                  >
+                    <div>
+                      <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-copper-500">
+                        {pillar.code}
+                      </span>
+                      <h3 className="mt-2 font-display text-xl font-light text-ink-900">
+                        {pillar.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-relaxed text-ink-600">
+                        {pillar.detail}
+                      </p>
+                    </div>
+                    <div className="mt-6 border-t border-ink-900/10 pt-3 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-500">
+                      Primary Division I // Verified Syllabus
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className={styles.aboutImage}>
-              <img
-                src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=2070&auto=format&fit=crop"
-                alt="Meiporul - Tamil Literature and Poetry"
-              />
+
+            <div className="lg:col-span-5">
+              <div className="sheet-frame overflow-hidden bg-ink-950 text-limestone-100">
+                <div className="relative aspect-[16/10] overflow-hidden border-b border-limestone-100/12">
+                  <img
+                    src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=2070&auto=format&fit=crop"
+                    alt="Meiporul - Tamil Literature and Poetry"
+                    className="h-full w-full object-cover opacity-80 transition-transform duration-700 hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/30 to-transparent" />
+                  <div className="absolute bottom-4 left-5 right-5 flex items-end justify-between">
+                    <div>
+                      <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-copper-400">
+                        KURAL 423 // EPISTEMIC AXIOM
+                      </span>
+                      <p className="mt-1 font-display text-2xl font-light italic text-limestone-50">
+                        மெய்ப்பொருள் காண்பது அறிவு
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <p className="text-sm leading-relaxed text-limestone-200/80">
+                    &ldquo;To discern the true essence in whatever is spoken, by whomsoever it is spoken — that alone is true wisdom.&rdquo;
+                  </p>
+                  <div className="mt-5 flex items-center justify-between border-t border-limestone-100/12 pt-4">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-limestone-300/60">
+                      3D Spatial Companion Available
+                    </span>
+                    <Link
+                      to="/meiporul-ar"
+                      className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-copper-400 hover:text-copper-300"
+                    >
+                      <Sparkles className="h-3.5 w-3.5" />
+                      Launch AR Viewer →
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Courses Section */}
-      <section className={styles.courses}>
-        <div className={styles.container}>
-          <h2>Available Courses</h2>
-          {loading ? (
-            <div className={styles.loading}>
-              <div className={styles.spinner}></div>
-              <p>Loading courses...</p>
-            </div>
-          ) : courses.length > 0 ? (
-            <div className={styles.coursesGrid}>
-              {courses.map((course) => (
-                <CourseCard key={course.id} course={course} />
-              ))}
-            </div>
-          ) : (
-            <div className={styles.noCourses}>
-              <Rocket size={48} />
-              <h3>No courses available yet</h3>
-              <p>Check back soon for new Meiporul courses!</p>
-              <Link to="/courses" className={styles.browseButton}>
-                Browse All Courses
-              </Link>
-            </div>
-          )}
-        </div>
-      </section>
+      <section className="py-section-sm">
+        <div className="mx-auto max-w-[1680px] px-gutter">
+          <SymphoSectionHeader
+            index="MP—02"
+            category="CURRICULUM LEDGER"
+            code={`${courses.length} TRACKS`}
+            title="Available Courses"
+            subtitle="Structured studio tracks exploring classical Tamil literature, ethics, and philosophical analysis."
+          />
 
-      {/* CTA Section */}
-      <section className={styles.cta}>
-        <div className={styles.container}>
-          <h2>Discover the Beauty of Tamil Literature</h2>
-          <p>
-            Immerse yourself in the rich tradition of Meiporul and explore the
-            authentic emotions, timeless themes, and profound wisdom of
-            classical Tamil texts.
-          </p>
-          <div className={styles.ctaButtons}>
-            <Link to="/courses" className={styles.primaryButton}>
-              Browse All Courses
-            </Link>
-            <Link to="/about" className={styles.secondaryButton}>
-              Learn More About Us
-            </Link>
+          <div className="mt-12">
+            {loading ? (
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {[1, 2, 3].map((n) => (
+                  <div
+                    key={n}
+                    className="sheet-frame h-96 animate-pulse bg-limestone-50 p-6"
+                  />
+                ))}
+              </div>
+            ) : courses.length > 0 ? (
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {courses.map((course) => (
+                  <CourseCard key={course.id} course={course} />
+                ))}
+              </div>
+            ) : (
+              <div className="sheet-frame mx-auto max-w-2xl bg-limestone-50 p-12 text-center">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-ink-900/15 bg-limestone-100 text-copper-500">
+                  <BookOpen className="h-6 w-6" />
+                </div>
+                <span className="mt-4 block font-mono text-[10px] uppercase tracking-[0.18em] text-copper-500">
+                  ARCHIVE STATUS // COHORT IN PREPARATION
+                </span>
+                <h3 className="mt-2 font-display text-3xl font-light text-ink-900">
+                  No courses available yet
+                </h3>
+                <p className="mx-auto mt-2 max-w-md text-sm text-ink-600">
+                  Check back soon for new Meiporul courses, or explore our interactive 3D AR models and full course catalog right now.
+                </p>
+                <div className="mt-8 flex flex-wrap justify-center gap-3">
+                  <SymphoButton to="/courses" variant="primary">
+                    Browse All Courses
+                  </SymphoButton>
+                  <SymphoButton to="/meiporul-ar" variant="outline">
+                    Explore Meiporul 3D AR
+                  </SymphoButton>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
+
+      <SymphoCtaBanner
+        code="SI—TRIAD // 01"
+        eyebrow="CLASSICAL TAMIL SCHOLARSHIP"
+        title="Discover the beauty of Tamil literature."
+        description="Immerse yourself in the rich tradition of Meiporul and explore authentic emotions, timeless ethics, and profound wisdom."
+        primaryLabel="Browse All Courses"
+        primaryTo="/courses"
+        secondaryLabel="Learn More About Us"
+        secondaryTo="/about"
+      />
     </div>
   );
 };

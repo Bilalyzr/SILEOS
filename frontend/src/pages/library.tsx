@@ -1,19 +1,15 @@
-import { AstraSymbol } from "@/components/design-system/AstraSymbol";
-import { PageLayout } from "@/components/design-system/PageLayout";
-import { PageBanner } from "@/components/design-system/PageBanner";
-/**
- * Digital Library storefront — public browse of published ebooks
- * (backend: GET /api/v1/library). Category tabs mirror the three store
- * categories (Books / Guides / Lecture Notes); search hits the title
- * ilike filter server-side.
- */
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { BookOpen, Search } from "lucide-react";
+import { ArrowUpRight, BookOpen, Search } from "lucide-react";
 import { EBOOK_CATEGORY_LABELS, libraryAPI, type Ebook } from "@/api/library";
+import {
+  SymphoButton,
+  SymphoCtaBanner,
+  SymphoPageHero,
+} from "@/components/sympho/SymphoSystem";
 
 const TABS = [
-  { value: "", label: "All" },
+  { value: "", label: "All Volumes" },
   { value: "book", label: EBOOK_CATEGORY_LABELS.book },
   { value: "guide", label: EBOOK_CATEGORY_LABELS.guide },
   { value: "lecture_notes", label: EBOOK_CATEGORY_LABELS.lecture_notes },
@@ -40,145 +36,202 @@ export default function LibraryPage() {
             setError(null);
           })
           .catch((e) =>
-            setError(e?.response?.data?.detail ?? "Failed to load the library"),
+            setError(e?.response?.data?.detail ?? "Failed to load the library")
           )
           .finally(() => setLoading(false));
       },
-      q ? 300 : 0,
-    ); // debounce search only
+      q ? 300 : 0
+    );
     return () => clearTimeout(t);
   }, [category, q]);
 
   const grouped = useMemo(() => ebooks, [ebooks]);
 
   return (
-    <PageLayout
-      header={
-        <PageBanner
-          eyebrow="Digital library"
-          title="Ideas worth keeping"
-          description="Explore ebooks, guides and lecture notes. Buy once and keep every available download in your library."
-          share
-          shareTitle="Explore the SashaInfinity Digital Library"
-          actions={
-            <label className="relative block w-full sm:w-72">
+    <div className="sympho-scope min-h-screen bg-limestone-100 text-ink-900">
+      <SymphoPageHero
+        index="SI—LIB"
+        eyebrow="Digital Library & Monographs"
+        title="Technical volumes, guides & annotated lecture notes"
+        lede="Explore peer-reviewed e-books, engineering playbooks, and instructor-authored monographs. Acquire once and retain permanent access inside your personal reading room."
+        drawingCode="SHEET SI—LIB · ARCHIVE"
+        badge={`${grouped.length || 0} Volumes Indexed`}
+        specs={[
+          { label: "Formats", value: "PDF / Interactive" },
+          { label: "Categories", value: "Books · Guides · Notes" },
+          { label: "Access", value: "Permanent Library" },
+          { label: "Authorship", value: "Faculty & Fellows" },
+        ]}
+        primaryAction={
+          <SymphoButton to="/courses" variant="on-dark" arrow>
+            Browse paired courses
+          </SymphoButton>
+        }
+        secondaryAction={
+          <SymphoButton to="/my-library" variant="outline-dark">
+            My reading room
+          </SymphoButton>
+        }
+      />
+
+      <section className="py-section-sm">
+        <div className="container-page">
+          {/* Architectural Search & Category Bar */}
+          <div className="sheet-frame mb-12 flex flex-col gap-5 rounded-lg border border-ink-900/15 bg-limestone-50 p-6 lg:flex-row lg:items-center lg:justify-between">
+            <div
+              className="flex flex-wrap gap-2"
+              role="tablist"
+              aria-label="Ebook categories"
+            >
+              {TABS.map((t) => {
+                const active = category === t.value;
+                return (
+                  <button
+                    key={t.value}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => setCategory(t.value)}
+                    className={`rounded-pill border px-4 py-2 font-mono text-xs uppercase tracking-wider transition-colors ${
+                      active
+                        ? "border-ink-900 bg-ink-900 text-limestone-50"
+                        : "border-ink-900/20 bg-limestone-100 text-ink-700 hover:border-ink-900"
+                    }`}
+                  >
+                    {t.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            <label className="relative block w-full lg:w-80">
               <span className="sr-only">Search ebooks</span>
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-orange-800 h-4 w-4" />
+              <Search className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-ink-500" />
               <input
                 type="search"
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Search titles…"
                 aria-label="Search ebooks"
-                className="pl-10 pr-4 py-2 w-full border border-orange-200 bg-white/70 rounded-xl"
+                className="field-input pl-10"
               />
             </label>
-          }
-        />
-      }
-      className="rd-screen rd-screen-library"
-    >
-      <div
-        className="flex gap-2 mb-6"
-        role="tablist"
-        aria-label="Ebook categories"
-      >
-        {TABS.map((t) => (
-          <button
-            key={t.value}
-            role="tab"
-            aria-selected={category === t.value}
-            onClick={() => setCategory(t.value)}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors ${
-              category === t.value
-                ? "bg-blue-600 text-white border-blue-600"
-                : "bg-white text-gray-700 border-gray-300 hover:border-blue-400"
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-      {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div
-              key={i}
-              className="h-56 rounded-xl bg-gray-100 animate-pulse"
-            />
-          ))}
-        </div>
-      ) : error ? (
-        <p role="alert" className="text-red-600 text-sm">
-          {error}
-        </p>
-      ) : grouped.length === 0 ? (
-        <p className="text-gray-500 text-sm border border-dashed border-gray-300 rounded-xl p-8 text-center">
-          No ebooks here yet — instructors are writing!
-        </p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {grouped.map((e) => (
-            <Link
-              key={e.id}
-              to={`/library/${e.slug}`}
-              className="group border border-gray-200 rounded-xl overflow-hidden bg-white hover:shadow-md transition-shadow flex flex-col"
+          </div>
+
+          {loading ? (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div
+                  key={i}
+                  className="h-72 animate-pulse rounded-lg border border-ink-900/12 bg-limestone-50"
+                />
+              ))}
+            </div>
+          ) : error ? (
+            <p
+              role="alert"
+              className="rounded-lg border border-copper-500/40 bg-copper-200/20 p-6 text-sm text-ink-900"
             >
-              <div className="h-36 bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center relative">
-                {e.cover_image ? (
-                  <img
-                    src={e.cover_image}
-                    alt=""
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <BookOpen className="h-12 w-12 text-blue-400" aria-hidden />
-                )}
-                <span className="absolute top-2 right-2 text-[11px] font-semibold bg-white/90 text-gray-700 px-2 py-0.5 rounded-full">
-                  {EBOOK_CATEGORY_LABELS[e.category] ?? e.category}
-                </span>
-              </div>
-              <div className="p-4 flex-1 flex flex-col">
-                <h3 className="font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-700">
-                  {e.title}
-                </h3>
-                {e.course_title && (
-                  <p className="text-xs text-gray-500 mt-1">
-                    <AstraSymbol value="📘" /> {e.course_title}
-                  </p>
-                )}
-                <p className="text-sm text-gray-600 line-clamp-2 mt-1 flex-1">
-                  {e.description}
-                </p>
-                <div className="mt-3 flex items-center justify-between">
-                  <PriceTag ebook={e} />
-                  {e.page_count ? (
-                    <span className="text-xs text-gray-400">
-                      {e.page_count} pages
-                    </span>
-                  ) : null}
-                </div>
-              </div>
-            </Link>
-          ))}
+              {error}
+            </p>
+          ) : grouped.length === 0 ? (
+            <div className="sheet-frame rounded-lg border border-ink-900/15 bg-limestone-50 p-12 text-center">
+              <BookOpen className="mx-auto mb-4 size-10 text-copper-500" />
+              <h3 className="font-display text-2xl font-normal text-ink-900">
+                No ebooks here yet — instructors are writing!
+              </h3>
+              <p className="mx-auto mt-2 max-w-md text-sm text-ink-600">
+                New engineering monographs, study guides, and annotated lecture
+                compendiums are being prepared for publication.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {grouped.map((e, idx) => (
+                <Link
+                  key={e.id}
+                  to={`/library/${e.slug}`}
+                  className="sheet-frame group flex flex-col justify-between overflow-hidden rounded-lg border border-ink-900/15 bg-limestone-50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lift"
+                >
+                  <div>
+                    <div className="relative flex h-48 items-center justify-center overflow-hidden border-b border-ink-900/12 bg-ink-900 text-limestone-100 blueprint-grid">
+                      {e.cover_image ? (
+                        <img
+                          src={e.cover_image}
+                          alt=""
+                          className="h-full w-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center gap-2 text-copper-300">
+                          <BookOpen className="size-10 stroke-[1.3]" aria-hidden />
+                          <span className="font-mono text-[0.65rem] tracking-widest uppercase text-limestone-300">
+                            VOL. {String(idx + 1).padStart(2, "0")}
+                          </span>
+                        </div>
+                      )}
+                      <span className="absolute top-3 right-3 rounded-pill bg-limestone-50/92 px-3 py-1 font-mono text-[0.65rem] uppercase tracking-wider text-ink-900">
+                        {EBOOK_CATEGORY_LABELS[e.category] ?? e.category}
+                      </span>
+                    </div>
+
+                    <div className="p-6">
+                      {e.course_title && (
+                        <p className="mb-2 font-mono text-label text-copper-600">
+                          {e.course_title}
+                        </p>
+                      )}
+                      <h3 className="font-display text-2xl font-normal text-ink-900 transition-colors group-hover:text-copper-600 line-clamp-2">
+                        {e.title}
+                      </h3>
+                      <p className="mt-2.5 text-sm leading-relaxed text-ink-600 line-clamp-3">
+                        {e.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between border-t border-ink-900/10 px-6 py-4">
+                    <PriceTag ebook={e} />
+                    <div className="flex items-center gap-3 font-mono text-xs text-ink-500">
+                      {e.page_count ? <span>{e.page_count} pages</span> : null}
+                      <ArrowUpRight className="size-4 text-ink-900 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-copper-600" />
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
-      )}
-    </PageLayout>
+      </section>
+
+      <SymphoCtaBanner
+        eyebrow="Continuous Access"
+        title="Want unlimited access to courses, labs & publications?"
+        description="Unlock our entire catalog of courses and learning tracks with a SashaInfinity Membership pass."
+        primaryText="Explore membership"
+        primaryTo="/membership"
+        secondaryText="View course bundles"
+        secondaryTo="/bundles"
+      />
+    </div>
   );
 }
 
 export function PriceTag({ ebook }: { ebook: Ebook }) {
   if (ebook.effective_price_inr === 0) {
-    return <span className="font-bold text-emerald-600">FREE</span>;
+    return (
+      <span className="font-mono text-xs font-semibold uppercase tracking-wider text-sage-700">
+        FREE
+      </span>
+    );
   }
   return (
     <span className="flex items-baseline gap-2">
-      <span className="font-bold text-gray-900">
+      <span className="font-display text-xl font-normal text-ink-900">
         ₹{ebook.effective_price_inr}
       </span>
       {ebook.discount_price_inr != null &&
         ebook.discount_price_inr < ebook.price_inr && (
-          <span className="text-xs text-gray-400 line-through">
+          <span className="font-mono text-xs text-ink-400 line-through">
             ₹{ebook.price_inr}
           </span>
         )}

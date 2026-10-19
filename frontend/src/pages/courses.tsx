@@ -1,4 +1,3 @@
-import { PageBanner } from "@/components/design-system/PageBanner";
 import * as React from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import {
@@ -9,10 +8,8 @@ import {
   X,
   Sparkles,
   PackageOpen,
+  ArrowUpRight,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { CourseCard } from "@/components/course/course-card";
 import { Pagination } from "@/components/ui/pagination";
 import * as Select from "@radix-ui/react-select";
@@ -24,10 +21,11 @@ import { OfferTimerWidget } from "@/components/promotional/OfferTimerWidget";
 import { fetchMembershipPlans } from "@/api/membership";
 import { fetchBundles } from "@/api/bundle";
 import { StudentLiveClasses } from "@/components/live/StudentLiveClasses";
-
-// Function to convert API course to local Course interface
-
-// Categories loaded dynamically from API below
+import {
+  SymphoButton,
+  SymphoCtaBanner,
+  SymphoPageHero,
+} from "@/components/sympho/SymphoSystem";
 
 const levels = [
   { value: "beginner", label: "Beginner" },
@@ -35,7 +33,6 @@ const levels = [
   { value: "advanced", label: "Advanced" },
 ];
 
-// v2.0 §3 "type as an implicit filter": learners filter 3D / tuition / skills without any tag.
 const courseTypes = [
   { value: "meiporul", label: "Meiporul", description: "3D & AR lessons" },
   {
@@ -68,7 +65,7 @@ export const CoursesPage = () => {
   const [viewMode, setViewMode] = React.useState<"grid" | "list">("grid");
   const [isFilterOpen, setIsFilterOpen] = React.useState(false);
   const [localSearchQuery, setLocalSearchQuery] = React.useState(
-    searchParams.get("search") || "",
+    searchParams.get("search") || ""
   );
 
   // API State
@@ -78,12 +75,10 @@ export const CoursesPage = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [totalPages, setTotalPages] = React.useState(1);
   const [totalItems, setTotalItems] = React.useState(0);
-  const pageSize = 12; // Courses per page
+  const pageSize = 12;
 
   const { filters, setFilters } = useCourseStore();
 
-  // Promo strip state — membership/bundles links only show when the
-  // corresponding catalog is non-empty. Never blocks the course grid.
   const [hasMemberships, setHasMemberships] = React.useState(false);
   const [hasBundles, setHasBundles] = React.useState(false);
 
@@ -106,7 +101,6 @@ export const CoursesPage = () => {
     })();
   }, []);
 
-  // Fetch courses from API
   React.useEffect(() => {
     let current = true;
     const fetchCourses = async () => {
@@ -114,14 +108,10 @@ export const CoursesPage = () => {
         setIsLoadingCourses(true);
         setApiError(null);
 
-        // Build query parameters from filters
         const params = new URLSearchParams();
         params.append("page", currentPage.toString());
         params.append("page_size", pageSize.toString());
 
-        // Add filter parameters if they exist
-        // "all" is the Select's clear-this-filter sentinel — it is never a real
-        // column value, so it must never reach the backend.
         const isSet = (v?: string): v is string => Boolean(v) && v !== "all";
         if (isSet(filters.search)) params.append("search", filters.search);
         if (isSet(filters.category))
@@ -133,17 +123,13 @@ export const CoursesPage = () => {
           params.append("course_type", (filters as any).course_type);
         if (isSet(filters.sort)) params.append("sort", filters.sort);
 
-        // Use axios which automatically handles auth tokens
         const response = await api.get(`/courses/?${params.toString()}`);
         if (!current) return;
         const data = response.data;
-        // API now returns paginated response
         const coursesArray = data.courses || [];
         setTotalPages(data.total_pages || 1);
         setTotalItems(data.total || 0);
 
-        // Convert API response to local format
-        // Note: API returns simplified structure, so we need to adapt
         const courses = coursesArray.map((course: any) => ({
           id: course.id,
           slug: course.slug || "",
@@ -155,8 +141,6 @@ export const CoursesPage = () => {
           course_price_type: course.price > 0 ? "paid" : "free",
           course_level: course.level,
           course_duration: `${course.stats?.duration || 0} minutes`,
-          // Leave empty when the API has no image so CourseCard can fall back to
-          // the bundled artwork; a placeholder URL here would always win.
           course_thumbnail: course.featured_image || "",
           course_intro_video: "",
           average_rating: course.rating || 0,
@@ -196,9 +180,6 @@ export const CoursesPage = () => {
               ]
             : [],
           lessons: [],
-          // The list endpoint omits the lessons array but returns the count in
-          // `stats.lessons`; CourseCard reads `lesson_count` (falling back to
-          // lessons.length), so surface the real count here.
           lesson_count: course.stats?.lessons ?? 0,
           created_at: course.created_at,
           updated_at: course.updated_at,
@@ -208,10 +189,8 @@ export const CoursesPage = () => {
         if (!current) return;
         console.error("Failed to fetch courses:", error);
         setApiError(
-          error instanceof Error ? error.message : "Failed to load courses",
+          error instanceof Error ? error.message : "Failed to load courses"
         );
-        // Show nothing rather than sample data — placeholder courses on the
-        // public catalog read as real listings and can't be enrolled in.
         setApiCourses([]);
         setTotalPages(1);
         setTotalItems(0);
@@ -221,13 +200,11 @@ export const CoursesPage = () => {
     };
 
     fetchCourses();
-    return () => { current = false; };
+    return () => {
+      current = false;
+    };
   }, [currentPage, filters]);
 
-  // Build the category dropdown from the whole catalog rather than the current
-  // page: the backend param is page_size, so `limit=100` was ignored and this
-  // only ever saw the first 20 courses. Categories don't change as the user
-  // filters, so this runs once.
   React.useEffect(() => {
     api
       .get("/courses/?page_size=100")
@@ -236,8 +213,6 @@ export const CoursesPage = () => {
         const catMap: Record<string, { name: string; count: number }> = {};
         courses.forEach((c: any) => {
           if (!c.category) return;
-          // id is the slug the backend matches on; name keeps the casing the
-          // instructor actually typed.
           const id = c.category.trim().toLowerCase().replace(/\s+/g, "-");
           if (!catMap[id]) catMap[id] = { name: c.category.trim(), count: 0 };
           catMap[id].count += 1;
@@ -247,13 +222,12 @@ export const CoursesPage = () => {
             id,
             name,
             count,
-          })),
+          }))
         );
       })
       .catch(() => {});
   }, []);
 
-  // Initialize filters from URL params
   React.useEffect(() => {
     const urlFilters = {
       search: searchParams.get("search") || "",
@@ -264,15 +238,11 @@ export const CoursesPage = () => {
       sort: searchParams.get("sort") || "latest",
     };
     setFilters(urlFilters);
-    // Any filter change invalidates the current page. Staying on page 4 while
-    // narrowing the results to 2 pages returned an empty grid, which reads as
-    // "the filter is broken".
     setCurrentPage(1);
   }, [searchParams, setFilters]);
 
   const handleFilterChange = (key: string, value: string) => {
     const newParams = new URLSearchParams(searchParams);
-    // "all" is the dropdown's clear-this-filter sentinel, not a column value.
     if (value && value !== "all") {
       newParams.set(key, value);
     } else {
@@ -291,48 +261,56 @@ export const CoursesPage = () => {
     setLocalSearchQuery("");
   };
 
-  // Count only the filters the user can actually see and clear. `filters` also
-  // holds sort/page/per_page, which always have truthy defaults and inflated
-  // this count by 3 — making the badge wrong and "Clear Filters" always visible.
   const activeFiltersCount = (
     ["search", "category", "level", "price_type"] as const
   ).filter((key) => filters[key] && filters[key] !== "all").length;
 
   return (
-    <div className="rd-catalog-page">
-      <div className="rd-route-heading">
-        <PageBanner
-          eyebrow="Explore / Courses"
-          title="Find your next course"
-          description="Build practical skills with expert-led courses, live classes and interactive learning."
-          share
-          shareTitle="Find your next course on SashaInfinity"
-          shareDescription="Explore expert-led courses, live classes and interactive learning."
-          actions={
-            <Link to="/labs" className="rd-text-link">
-              Explore learning labs
-            </Link>
-          }
-        />
-      </div>
-      <div className="container-custom pb-12 rd-catalog-grid">
-        <aside className="rd-catalog-filters">
-          <h2>Filter courses</h2>
-          <FilterContent
-            filters={filters}
-            categories={categories}
-            onFilterChange={handleFilterChange}
-            onClearFilters={clearFilters}
-          />
-        </aside>
-        <div className="rd-catalog-results">
-          <StudentLiveClasses />
-          {/* Search and Filters Bar (floats over the hero) */}
-          <div className="rd-catalog-controls">
+    <div className="sympho-scope min-h-screen bg-limestone-100 text-ink-900">
+      <SymphoPageHero
+        index="SI—CRS"
+        eyebrow="Explore / Courses & Cohorts"
+        title="Find your next engineering or academic mastery track"
+        lede="Build practical capabilities through expert-led cohorts, interactive simulation labs, and structured assessments across the Tamil Knowledge Triad."
+        drawingCode="SHEET SI—CRS · SCALE 1:100"
+        badge={`${totalItems || 0} Active Programs`}
+        specs={[
+          { label: "Catalog Size", value: `${totalItems || "40+"} Courses` },
+          { label: "Disciplines", value: `${categories.length || 6} Tracks` },
+          { label: "Pedagogy", value: "Triad + Labs" },
+          { label: "Credential", value: "Cryptographic ID" },
+        ]}
+        primaryAction={
+          <SymphoButton to="/labs" variant="on-dark" arrow>
+            Explore learning labs
+          </SymphoButton>
+        }
+        secondaryAction={
+          <SymphoButton to="/bundles" variant="outline-dark">
+            Course bundles
+          </SymphoButton>
+        }
+      />
+
+      <div className="container-page py-12 lg:py-16">
+        <StudentLiveClasses />
+
+        {/* Architectural Filter & Search Ledger Bar */}
+        <div className="sheet-frame mb-10 rounded-lg border border-ink-900/15 bg-limestone-50 p-6 shadow-plate">
+          {/* Course Type Triad Tabs */}
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-ink-900/10 pb-5">
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-label text-copper-600">
+                01 · TAXONOMY FILTER
+              </span>
+              <span className="hidden text-xs text-ink-500 sm:inline">
+                Filter by Tamil Knowledge Triad dimension
+              </span>
+            </div>
             <div
-              className="astra-course-type-filter"
               role="group"
               aria-label="Course type"
+              className="flex flex-wrap gap-2"
             >
               {[
                 {
@@ -341,278 +319,341 @@ export const CoursesPage = () => {
                   description: "Every learning format",
                 },
                 ...courseTypes,
-              ].map((type) => (
-                <button
-                  key={type.value}
-                  type="button"
-                  title={type.description}
-                  aria-pressed={
-                    (searchParams.get("course_type") || "all") === type.value
-                  }
-                  onClick={() => handleFilterChange("course_type", type.value)}
-                >
-                  {type.label}
-                </button>
-              ))}
+              ].map((type) => {
+                const isSelected =
+                  (searchParams.get("course_type") || "all") === type.value;
+                return (
+                  <button
+                    key={type.value}
+                    type="button"
+                    title={type.description}
+                    aria-pressed={isSelected}
+                    onClick={() => handleFilterChange("course_type", type.value)}
+                    className={`rounded-pill border px-4 py-1.5 font-mono text-xs uppercase tracking-wider transition-colors ${
+                      isSelected
+                        ? "border-ink-900 bg-ink-900 text-limestone-50"
+                        : "border-ink-900/20 bg-limestone-100/70 text-ink-700 hover:border-ink-900"
+                    }`}
+                  >
+                    {type.label}
+                  </button>
+                );
+              })}
             </div>
-            <div className="flex flex-col lg:flex-row gap-4">
-              {/* Search */}
-              <form onSubmit={handleSearch} className="flex-1">
-                <div className="relative">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-neutral-400 w-5 h-5" />
-                  <Input
-                    type="search"
-                    placeholder="Search courses..."
-                    value={localSearchQuery}
-                    onChange={(e) => setLocalSearchQuery(e.target.value)}
-                    className="pl-12 pr-12 h-12 sm:h-10"
-                  />
-                  {localSearchQuery && (
-                    <button
-                      type="button"
-                      onClick={() => setLocalSearchQuery("")}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  )}
-                </div>
-              </form>
-
-              {/* Filter Toggle (Mobile) */}
-              <Dialog.Root open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-                <Dialog.Trigger asChild>
-                  <Button variant="outline" className="lg:hidden min-h-[44px]">
-                    <SlidersHorizontal className="w-4 h-4 mr-2" />
-                    Filters
-                    {activeFiltersCount > 0 && (
-                      <Badge variant="default" className="ml-2">
-                        {activeFiltersCount}
-                      </Badge>
-                    )}
-                  </Button>
-                </Dialog.Trigger>
-
-                <Dialog.Portal>
-                  <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
-                  <Dialog.Content className="fixed top-0 right-0 h-full w-full sm:w-80 bg-white shadow-xl z-50 p-6 overflow-y-auto">
-                    <div className="flex items-center justify-between mb-6">
-                      <Dialog.Title className="text-lg font-semibold">
-                        Filters
-                      </Dialog.Title>
-                      <Dialog.Close asChild>
-                        <Button variant="ghost" size="icon">
-                          <X className="w-4 h-4" />
-                        </Button>
-                      </Dialog.Close>
-                    </div>
-
-                    {/* Mobile Filter Content */}
-                    <FilterContent
-                      filters={filters}
-                      categories={categories}
-                      onFilterChange={handleFilterChange}
-                      onClearFilters={clearFilters}
-                    />
-                  </Dialog.Content>
-                </Dialog.Portal>
-              </Dialog.Root>
-
-              {/* Desktop filters live in the side panel. */}
-              <FilterDropdown
-                placeholder="Sort"
-                options={sortOptions}
-                value={filters.sort || "latest"}
-                onChange={(value) => handleFilterChange("sort", value)}
-              />
-
-              {/* View Mode Toggle */}
-              <div className="flex items-center border border-neutral-200 rounded-xl p-1 bg-neutral-50">
-                <Button
-                  variant={viewMode === "grid" ? "default" : "ghost"}
-                  size="sm"
-                  onClick={() => setViewMode("grid")}
-                >
-                  <Grid className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant={viewMode === "list" ? "default" : "ghost"}
-                  size="sm"
-                  onClick={() => setViewMode("list")}
-                >
-                  <List className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-
-            {/* Active Filters */}
-            {activeFiltersCount > 0 && (
-              <div className="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-neutral-200">
-                <span className="text-sm text-neutral-600 w-full sm:w-auto mb-1 sm:mb-0">
-                  Active filters:
-                </span>
-                {filters.search && (
-                  <Badge variant="outline">
-                    Search: {filters.search}
-                    <button
-                      onClick={() => handleFilterChange("search", "")}
-                      className="ml-1 hover:text-danger-600"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </Badge>
-                )}
-                {filters.category && (
-                  <Badge variant="outline">
-                    Category:{" "}
-                    {categories.find((c) => c.id === filters.category)?.name}
-                    <button
-                      onClick={() => handleFilterChange("category", "")}
-                      className="ml-1 hover:text-danger-600"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </Badge>
-                )}
-                {filters.level && (
-                  <Badge variant="outline">
-                    Level:{" "}
-                    {levels.find((l) => l.value === filters.level)?.label}
-                    <button
-                      onClick={() => handleFilterChange("level", "")}
-                      className="ml-1 hover:text-danger-600"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </Badge>
-                )}
-              </div>
-            )}
           </div>
 
-          {/* Promo strip — membership / bundles cross-sell */}
-          {(hasMemberships || hasBundles) && (
-            <div className="flex flex-col sm:flex-row gap-3 mb-6">
-              {hasMemberships && (
-                <Link
-                  to="/membership"
-                  className="flex-1 flex items-center gap-3 rounded-xl border border-primary-100 bg-primary-50 px-4 py-3 text-sm font-semibold text-primary-700 hover:bg-primary-100 transition-colors"
-                >
-                  <Sparkles className="w-4 h-4 shrink-0" />
-                  <span>Get every course with a Membership →</span>
-                </Link>
-              )}
-              {hasBundles && (
-                <Link
-                  to="/bundles"
-                  className="flex-1 flex items-center gap-3 rounded-xl border border-secondary-100 bg-secondary-50 px-4 py-3 text-sm font-semibold text-secondary-700 hover:bg-secondary-100 transition-colors"
-                >
-                  <PackageOpen className="w-4 h-4 shrink-0" />
-                  <span>Save with Course Bundles →</span>
-                </Link>
-              )}
-            </div>
-          )}
-
-          {/* Results */}
-          <div className="flex justify-between items-center mb-6">
-            <p className="text-neutral-700">
-              {isLoadingCourses ? (
-                "Loading courses…"
-              ) : (
-                <>
-                  <span className="font-bold text-secondary-900">
-                    {totalItems}
-                  </span>{" "}
-                  <span className="text-neutral-500">
-                    course{totalItems === 1 ? "" : "s"} found
-                  </span>
-                </>
-              )}
-            </p>
-            {apiError && (
-              <p className="text-danger-600 text-sm">
-                Couldn't load courses: {apiError}
-              </p>
-            )}
-          </div>
-
-          {/* Course Grid/List */}
-          {isLoadingCourses ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="bg-white rounded-2xl border border-neutral-100 shadow-soft p-4 animate-pulse"
-                  data-glass="content"
-                >
-                  <div className="aspect-video bg-neutral-200 rounded-xl mb-4"></div>
-                  <div className="h-4 bg-neutral-200 rounded mb-2"></div>
-                  <div className="h-4 bg-neutral-200 rounded w-3/4 mb-4"></div>
-                  <div className="flex items-center justify-between">
-                    <div className="h-3 w-20 bg-neutral-200 rounded"></div>
-                    <div className="h-8 w-20 bg-neutral-200 rounded-lg"></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div
-              className={
-                viewMode === "grid"
-                  ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
-                  : "space-y-4 sm:space-y-6"
-              }
-            >
-              {apiCourses.map((course) => (
-                <CourseCard
-                  key={course.id}
-                  course={course}
-                  variant={viewMode === "list" ? "compact" : "default"}
+          {/* Search + Sort + View Controls */}
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
+            <form onSubmit={handleSearch} className="flex-1">
+              <div className="relative">
+                <Search className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-ink-500" />
+                <input
+                  type="search"
+                  placeholder="Search courses..."
+                  value={localSearchQuery}
+                  onChange={(e) => setLocalSearchQuery(e.target.value)}
+                  className="field-input pl-11 pr-10"
                 />
-              ))}
-            </div>
-          )}
-
-          {/* Empty State */}
-          {!isLoadingCourses && apiCourses.length === 0 && (
-            <div className="text-center py-16">
-              <div className="w-24 h-24 bg-primary-50 ring-8 ring-primary-50/40 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Search className="w-12 h-12 text-primary-500" />
+                {localSearchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setLocalSearchQuery("")}
+                    className="absolute top-1/2 right-3 -translate-y-1/2 text-ink-400 hover:text-ink-900"
+                  >
+                    <X className="size-4" />
+                  </button>
+                )}
               </div>
-              <h3 className="text-xl font-heading font-bold text-secondary-900 mb-2">
-                No courses found
-              </h3>
-              <p className="text-neutral-600 mb-6">
-                Try adjusting your search criteria or browse our available
-                categories
-              </p>
-              <Button onClick={clearFilters}>Clear Filters</Button>
-            </div>
-          )}
+            </form>
 
-          {/* Pagination */}
-          {!isLoadingCourses && totalPages > 1 && (
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              totalItems={totalItems}
-              pageSize={pageSize}
-              onPageChange={(page) => setCurrentPage(page)}
-              showPageInfo={true}
+            {/* Mobile Filter Drawer Trigger */}
+            <Dialog.Root open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+              <Dialog.Trigger asChild>
+                <button
+                  type="button"
+                  className="inline-flex min-h-[3rem] items-center justify-center gap-2 rounded border border-ink-900/20 bg-limestone-100 px-4 text-sm font-medium text-ink-900 lg:hidden"
+                >
+                  <SlidersHorizontal className="size-4" />
+                  <span>Filters</span>
+                  {activeFiltersCount > 0 && (
+                    <span className="rounded-pill bg-copper-500 px-2 py-0.5 font-mono text-xs text-limestone-50">
+                      {activeFiltersCount}
+                    </span>
+                  )}
+                </button>
+              </Dialog.Trigger>
+
+              <Dialog.Portal>
+                <Dialog.Overlay className="fixed inset-0 z-50 bg-ink-950/60 backdrop-blur-sm" />
+                <Dialog.Content className="sympho-scope fixed top-0 right-0 z-50 h-full w-full overflow-y-auto bg-limestone-50 p-6 text-ink-900 shadow-lift sm:w-80">
+                  <div className="mb-6 flex items-center justify-between border-b border-ink-900/12 pb-4">
+                    <Dialog.Title className="font-display text-xl font-normal">
+                      Filter Courses
+                    </Dialog.Title>
+                    <Dialog.Close asChild>
+                      <button
+                        type="button"
+                        className="rounded-pill border border-ink-900/20 p-2 text-ink-700 hover:text-ink-900"
+                      >
+                        <X className="size-4" />
+                      </button>
+                    </Dialog.Close>
+                  </div>
+
+                  <FilterContent
+                    filters={filters}
+                    categories={categories}
+                    onFilterChange={handleFilterChange}
+                    onClearFilters={clearFilters}
+                  />
+                </Dialog.Content>
+              </Dialog.Portal>
+            </Dialog.Root>
+
+            <FilterDropdown
+              placeholder="Sort"
+              options={sortOptions}
+              value={filters.sort || "latest"}
+              onChange={(value) => handleFilterChange("sort", value)}
             />
+
+            <div className="inline-flex items-center rounded border border-ink-900/20 bg-limestone-100 p-1">
+              <button
+                type="button"
+                aria-label="Grid view"
+                onClick={() => setViewMode("grid")}
+                className={`rounded px-3 py-1.5 transition-colors ${
+                  viewMode === "grid"
+                    ? "bg-ink-900 text-limestone-50"
+                    : "text-ink-600 hover:text-ink-900"
+                }`}
+              >
+                <Grid className="size-4" />
+              </button>
+              <button
+                type="button"
+                aria-label="List view"
+                onClick={() => setViewMode("list")}
+                className={`rounded px-3 py-1.5 transition-colors ${
+                  viewMode === "list"
+                    ? "bg-ink-900 text-limestone-50"
+                    : "text-ink-600 hover:text-ink-900"
+                }`}
+              >
+                <List className="size-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Active Filter Pills */}
+          {activeFiltersCount > 0 && (
+            <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-ink-900/10 pt-4">
+              <span className="font-mono text-label text-ink-500">
+                Active filters:
+              </span>
+              {filters.search && (
+                <span className="inline-flex items-center gap-1.5 rounded-pill border border-ink-900/20 bg-limestone-100 px-3 py-1 text-xs text-ink-900">
+                  Search: {filters.search}
+                  <button
+                    type="button"
+                    onClick={() => handleFilterChange("search", "")}
+                    className="hover:text-copper-600"
+                  >
+                    <X className="size-3" />
+                  </button>
+                </span>
+              )}
+              {filters.category && (
+                <span className="inline-flex items-center gap-1.5 rounded-pill border border-ink-900/20 bg-limestone-100 px-3 py-1 text-xs text-ink-900">
+                  Category:{" "}
+                  {categories.find((c) => c.id === filters.category)?.name ||
+                    filters.category}
+                  <button
+                    type="button"
+                    onClick={() => handleFilterChange("category", "")}
+                    className="hover:text-copper-600"
+                  >
+                    <X className="size-3" />
+                  </button>
+                </span>
+              )}
+              {filters.level && (
+                <span className="inline-flex items-center gap-1.5 rounded-pill border border-ink-900/20 bg-limestone-100 px-3 py-1 text-xs text-ink-900">
+                  Level:{" "}
+                  {levels.find((l) => l.value === filters.level)?.label ||
+                    filters.level}
+                  <button
+                    type="button"
+                    onClick={() => handleFilterChange("level", "")}
+                    className="hover:text-copper-600"
+                  >
+                    <X className="size-3" />
+                  </button>
+                </span>
+              )}
+            </div>
           )}
         </div>
 
-        {/* 🇮🇳 Static corner offer timer — keeps the 50% OFF countdown pinned
-          to the bottom-right; renders null once the offer deadline passes. */}
+        {/* Main 12-Col Layout: Sidebar + Results */}
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
+          <aside className="hidden lg:col-span-3 lg:block">
+            <div className="sheet-frame sticky top-24 rounded-lg border border-ink-900/15 bg-limestone-50 p-6">
+              <div className="mb-5 flex items-center justify-between border-b border-ink-900/10 pb-3">
+                <h2 className="font-display text-xl font-normal text-ink-900">
+                  Filter courses
+                </h2>
+                <span className="font-mono text-label text-copper-600">
+                  SPEC
+                </span>
+              </div>
+              <FilterContent
+                filters={filters}
+                categories={categories}
+                onFilterChange={handleFilterChange}
+                onClearFilters={clearFilters}
+              />
+            </div>
+          </aside>
+
+          <div className="lg:col-span-9">
+            {/* Cross-sell Banners */}
+            {(hasMemberships || hasBundles) && (
+              <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {hasMemberships && (
+                  <Link
+                    to="/membership"
+                    className="group flex items-center justify-between rounded-lg border border-ink-900/15 bg-limestone-50 p-4 transition-colors hover:border-copper-500"
+                  >
+                    <span className="flex items-center gap-3 text-sm font-medium text-ink-900">
+                      <Sparkles className="size-4 text-copper-500" />
+                      <span>Get every course with a Membership</span>
+                    </span>
+                    <ArrowUpRight className="size-4 text-copper-600 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </Link>
+                )}
+                {hasBundles && (
+                  <Link
+                    to="/bundles"
+                    className="group flex items-center justify-between rounded-lg border border-ink-900/15 bg-limestone-50 p-4 transition-colors hover:border-copper-500"
+                  >
+                    <span className="flex items-center gap-3 text-sm font-medium text-ink-900">
+                      <PackageOpen className="size-4 text-copper-500" />
+                      <span>Save with curated Course Bundles</span>
+                    </span>
+                    <ArrowUpRight className="size-4 text-copper-600 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </Link>
+                )}
+              </div>
+            )}
+
+            {/* Results Counter Bar */}
+            <div className="mb-6 flex items-center justify-between border-b border-ink-900/12 pb-4">
+              <p className="font-mono text-xs uppercase tracking-wider text-ink-600">
+                {isLoadingCourses ? (
+                  "Loading courses…"
+                ) : (
+                  <>
+                    <strong className="text-ink-900">{totalItems}</strong>{" "}
+                    course{totalItems === 1 ? "" : "s"} found
+                  </>
+                )}
+              </p>
+              {apiError && (
+                <p className="text-sm text-copper-600">
+                  Couldn&apos;t load courses: {apiError}
+                </p>
+              )}
+            </div>
+
+            {/* Course Grid / List */}
+            {isLoadingCourses ? (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="animate-pulse rounded-lg border border-ink-900/12 bg-limestone-50 p-5"
+                  >
+                    <div className="mb-4 aspect-video rounded bg-limestone-200" />
+                    <div className="mb-2 h-4 rounded bg-limestone-200" />
+                    <div className="mb-4 h-4 w-3/4 rounded bg-limestone-200" />
+                    <div className="flex items-center justify-between">
+                      <div className="h-3 w-20 rounded bg-limestone-200" />
+                      <div className="h-8 w-20 rounded bg-limestone-200" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div
+                className={
+                  viewMode === "grid"
+                    ? "grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3"
+                    : "space-y-6"
+                }
+              >
+                {apiCourses.map((course) => (
+                  <CourseCard
+                    key={course.id}
+                    course={course}
+                    variant={viewMode === "list" ? "compact" : "default"}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Empty State */}
+            {!isLoadingCourses && apiCourses.length === 0 && (
+              <div className="sheet-frame rounded-lg border border-ink-900/15 bg-limestone-50 py-16 text-center">
+                <div className="mx-auto mb-5 grid size-16 place-items-center rounded-pill border border-ink-900/15 bg-limestone-100 text-copper-600">
+                  <Search className="size-7" />
+                </div>
+                <h3 className="font-display text-2xl font-normal text-ink-900">
+                  No courses match this specification
+                </h3>
+                <p className="mx-auto mt-2 max-w-md text-sm text-ink-600">
+                  Try adjusting your search criteria or clearing active filters
+                  to view all available programs.
+                </p>
+                <div className="mt-6">
+                  <SymphoButton onClick={clearFilters} variant="primary">
+                    Clear Filters
+                  </SymphoButton>
+                </div>
+              </div>
+            )}
+
+            {/* Pagination */}
+            {!isLoadingCourses && totalPages > 1 && (
+              <div className="mt-12">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalItems={totalItems}
+                  pageSize={pageSize}
+                  onPageChange={(page) => setCurrentPage(page)}
+                  showPageInfo={true}
+                />
+              </div>
+            )}
+          </div>
+        </div>
       </div>
+
+      <SymphoCtaBanner
+        eyebrow="Need a Guided Learning Path?"
+        title="Unsure which engineering or STEM track fits your goals?"
+        description="Explore our multi-course mastery bundles or try a browser-native learning lab before committing to a full cohort."
+        primaryText="Explore course bundles"
+        primaryTo="/bundles"
+        secondaryText="Try interactive labs"
+        secondaryTo="/labs"
+      />
       <OfferTimerWidget />
     </div>
   );
 };
 
-// Filter Components
 interface FilterDropdownProps {
   placeholder: string;
   options: Array<
@@ -632,12 +673,15 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
   return (
     <Select.Root value={value} onValueChange={onChange}>
       <Select.Trigger asChild>
-        <Button variant="outline" className="w-32 justify-between">
+        <button
+          type="button"
+          className="inline-flex min-h-[3rem] w-44 items-center justify-between rounded border border-ink-900/20 bg-limestone-50 px-4 text-sm text-ink-900 hover:border-ink-900/40"
+        >
           <span className="truncate">
             {value
               ? (() => {
                   const option = options.find(
-                    (opt) => ("value" in opt ? opt.value : opt.id) === value,
+                    (opt) => ("value" in opt ? opt.value : opt.id) === value
                   );
                   return option
                     ? "label" in option
@@ -648,12 +692,12 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
               : placeholder}
           </span>
           <Select.Icon />
-        </Button>
+        </button>
       </Select.Trigger>
 
       <Select.Portal>
         <Select.Content
-          className="bg-white border border-neutral-200 rounded-lg shadow-lg p-1 overflow-hidden min-w-[150px] max-h-[300px]"
+          className="sympho-scope min-w-[180px] max-h-[300px] overflow-hidden rounded-lg border border-ink-900/15 bg-limestone-50 p-1 text-ink-900 shadow-plate"
           style={{ zIndex: 9999 }}
           position="popper"
           sideOffset={5}
@@ -662,7 +706,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
           <Select.Viewport className="p-1">
             <Select.Item
               value="all"
-              className="px-3 py-2 hover:bg-neutral-100 rounded cursor-pointer"
+              className="cursor-pointer rounded px-3 py-2 text-sm hover:bg-limestone-200/70"
             >
               <Select.ItemText>All {placeholder}</Select.ItemText>
             </Select.Item>
@@ -670,14 +714,12 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
               <Select.Item
                 key={"value" in option ? option.value : option.id}
                 value={"value" in option ? option.value : option.id}
-                className="px-3 py-2 hover:bg-neutral-100 rounded cursor-pointer"
+                className="cursor-pointer rounded px-3 py-2 text-sm hover:bg-limestone-200/70"
               >
                 <Select.ItemText>
                   {"label" in option ? option.label : option.name}
                   {"count" in option && option.count && (
-                    <span className="text-neutral-500 ml-1">
-                      ({option.count})
-                    </span>
+                    <span className="ml-1 text-ink-500">({option.count})</span>
                   )}
                 </Select.ItemText>
               </Select.Item>
@@ -704,38 +746,47 @@ const FilterContent: React.FC<FilterContentProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      {/* Categories */}
       <div>
-        <h3 className="font-semibold text-neutral-900 mb-3">Categories</h3>
+        <h3 className="font-mono text-label text-ink-600 mb-3">Categories</h3>
         <div className="space-y-2">
           {categories.map((category) => (
-            <label key={category.id} className="flex items-center">
+            <label
+              key={category.id}
+              className="flex cursor-pointer items-center text-sm text-ink-800 hover:text-copper-600"
+            >
               <input
                 type="radio"
                 name="category"
                 value={category.id}
                 checked={filters.category === category.id}
                 onChange={(e) => onFilterChange("category", e.target.value)}
-                className="mr-2"
+                className="mr-2.5 accent-copper-600"
               />
-              <span className="text-sm">
-                {category.name} ({category.count})
+              <span>
+                {category.name}{" "}
+                <span className="font-mono text-xs text-ink-400">
+                  ({category.count})
+                </span>
               </span>
             </label>
           ))}
         </div>
       </div>
 
-      {/* Level */}
-      <div>
-        <h3 className="font-semibold text-neutral-900 mb-3">Learning format</h3>
+      <div className="border-t border-ink-900/10 pt-5">
+        <h3 className="font-mono text-label text-ink-600 mb-3">
+          Learning format
+        </h3>
         <div className="space-y-2">
           {courseTypes.map((type) => (
-            <label key={type.value} className="flex items-center text-sm">
+            <label
+              key={type.value}
+              className="flex cursor-pointer items-center text-sm text-ink-800 hover:text-copper-600"
+            >
               <input
                 type="radio"
                 name="course_type"
-                className="mr-2"
+                className="mr-2.5 accent-copper-600"
                 value={type.value}
                 checked={(filters as any).course_type === type.value}
                 onChange={(e) =>
@@ -747,48 +798,58 @@ const FilterContent: React.FC<FilterContentProps> = ({
           ))}
         </div>
       </div>
-      <div>
-        <h3 className="font-semibold text-neutral-900 mb-3">Level</h3>
+
+      <div className="border-t border-ink-900/10 pt-5">
+        <h3 className="font-mono text-label text-ink-600 mb-3">Level</h3>
         <div className="space-y-2">
           {levels.map((level) => (
-            <label key={level.value} className="flex items-center">
+            <label
+              key={level.value}
+              className="flex cursor-pointer items-center text-sm text-ink-800 hover:text-copper-600"
+            >
               <input
                 type="radio"
                 name="level"
                 value={level.value}
                 checked={filters.level === level.value}
                 onChange={(e) => onFilterChange("level", e.target.value)}
-                className="mr-2"
+                className="mr-2.5 accent-copper-600"
               />
-              <span className="text-sm">{level.label}</span>
+              <span>{level.label}</span>
             </label>
           ))}
         </div>
       </div>
 
-      {/* Price */}
-      <div>
-        <h3 className="font-semibold text-neutral-900 mb-3">Price</h3>
+      <div className="border-t border-ink-900/10 pt-5">
+        <h3 className="font-mono text-label text-ink-600 mb-3">Price</h3>
         <div className="space-y-2">
           {priceTypes.map((price) => (
-            <label key={price.value} className="flex items-center">
+            <label
+              key={price.value}
+              className="flex cursor-pointer items-center text-sm text-ink-800 hover:text-copper-600"
+            >
               <input
                 type="radio"
                 name="price_type"
                 value={price.value}
                 checked={filters.price_type === price.value}
                 onChange={(e) => onFilterChange("price_type", e.target.value)}
-                className="mr-2"
+                className="mr-2.5 accent-copper-600"
               />
-              <span className="text-sm">{price.label}</span>
+              <span>{price.label}</span>
             </label>
           ))}
         </div>
       </div>
 
-      <Button onClick={onClearFilters} variant="outline" className="w-full">
+      <button
+        type="button"
+        onClick={onClearFilters}
+        className="w-full rounded-pill border border-ink-900/25 py-2.5 font-mono text-xs uppercase tracking-wider text-ink-800 transition-colors hover:border-ink-900 hover:bg-ink-900 hover:text-limestone-50"
+      >
         Clear All Filters
-      </Button>
+      </button>
     </div>
   );
 };

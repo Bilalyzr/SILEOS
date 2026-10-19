@@ -52,3 +52,5 @@ import "./styles/astra-glass.css";
 import "./styles/campus-glass.css";
 import "./styles/campus-growth.css";
 import "./styles/sunrise.css";
+import "./styles/sympho-editorial.css";
+

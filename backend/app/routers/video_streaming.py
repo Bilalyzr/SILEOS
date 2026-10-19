@@ -43,11 +43,16 @@ from app.services.auth_service import AuthService
 router = APIRouter()
 
 
+# A YouTube id is exactly 11 chars of this alphabet — anything else means the
+# "id" is actually path/userinfo junk or SQL LIKE wildcards.
+_YOUTUBE_ID_RE = re.compile(r'[A-Za-z0-9_-]{11}')
+
+
 def _require_video_access(video_id: str, current_user: User, db: Session) -> None:
     """
     Enforce that `current_user` can stream `video_id`.
 
-    Resolves the lesson by LIKE-matching the video id against BOTH
+    Resolves the lesson by LIKE-matching the validated 11-char video id against BOTH
     `lesson_video_url` and `lesson_youtube_url`, then checks for an active
     enrollment in the owning course. Admins and the course's instructor bypass
     the enrollment check.
@@ -57,6 +62,9 @@ def _require_video_access(video_id: str, current_user: User, db: Session) -> Non
     `lesson_video_url` empty — matching only the latter made every such lesson
     404 here even for enrolled users.
     """
+    if not video_id or not _YOUTUBE_ID_RE.fullmatch(video_id):
+        raise HTTPException(status_code=400, detail="Invalid video ID")
+
     if current_user.role == "admin":
         return
 
@@ -104,10 +112,6 @@ def extract_video_id(youtube_url: str) -> Optional[str]:
     return None
 
 
-# A YouTube id is exactly 11 chars of this alphabet — anything else means the
-# "id" is actually path/userinfo junk from a crafted URL.
-_YOUTUBE_ID_RE = re.compile(r'[A-Za-z0-9_-]{11}')
-
 # Quality values we will interpolate into the yt-dlp format selector.
 ALLOWED_EXTRACT_QUALITIES = {"360", "480", "720", "1080", "1440"}
 
@@ -144,6 +148,8 @@ def validate_extract_quality(quality: str) -> str:
 
 def get_video_url(video_id: str) -> str:
     """Extract direct MP4 URL using yt-dlp (runs on the server, so IP matches)."""
+    if not video_id or not _YOUTUBE_ID_RE.fullmatch(video_id):
+        raise ValueError("Invalid video ID")
     now = time.time()
     cached = _url_cache.get(video_id)
     if cached and (now - cached[1]) < CACHE_TTL:
