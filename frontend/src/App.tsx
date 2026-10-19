@@ -1834,10 +1834,21 @@ function App() {
                             </ProtectedRoute>
                           }
                         />
-                        <Route path="/library" element={<LibraryPage />} />
+                        <Route
+                          path="/library"
+                          element={
+                            <MainLayout>
+                              <LibraryPage />
+                            </MainLayout>
+                          }
+                        />
                         <Route
                           path="/library/:slug"
-                          element={<LibraryDetailPage />}
+                          element={
+                            <MainLayout>
+                              <LibraryDetailPage />
+                            </MainLayout>
+                          }
                         />
                         <Route
                           path="/my-library"

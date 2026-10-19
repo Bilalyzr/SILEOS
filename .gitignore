@@ -290,4 +290,6 @@ SILEOS/
 /backend/recordings_fallback/
 
 # 3D AR model library (365MB — restored from the production tree, never commit; see DEV-README)
-/frontend/public/models/ar/
+/frontend/public/models/ar/*
+!/frontend/public/models/ar/apple-vision-pro.glb
+!/models/ar/apple-vision-pro.glb

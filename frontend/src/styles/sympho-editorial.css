@@ -1,0 +1,764 @@
+/* ==========================================================================
+   SYMPHO BUILD ARCHITECTURAL EDITORIAL DESIGN SYSTEM FOR SASHA INFINITY LMS
+   Exact tokens, typography, blueprint framing, and motion primitives from
+   https://sympho-build.vercel.app/
+   ========================================================================== */
+
+:root {
+  --color-ink-950: #1c0e06;
+  --color-ink-900: #442714;
+  --color-ink-800: #17233a;
+  --color-ink-700: #5c3820;
+  --color-ink-600: #75543e;
+  --color-ink-500: #8b522a;
+  --color-ink-400: #9c7a63;
+
+  --color-limestone-50: #fffdf9;
+  --color-limestone-100: #fff8f1;
+  --color-limestone-200: #ffead4;
+  --color-limestone-300: #f3cfa8;
+  --color-limestone-400: #c99366;
+
+  --color-copper-200: #ffd5a5;
+  --color-copper-300: #ffb875;
+  --color-copper-400: #ff9b54;
+  --color-copper-500: #ff751f;
+  --color-copper-600: #9a390b;
+
+  --color-sage-200: #ffe4cb;
+  --color-sage-300: #ffc78e;
+  --color-sage-500: #de7925;
+  --color-sage-600: #b23c05;
+  --color-sage-700: #853b14;
+
+  --sileos-gradient: linear-gradient(120deg, #ffd5a5 0%, #ffb875 52%, #ff9b54 100%);
+  --sileos-banner:
+    radial-gradient(ellipse at 80% 0%, #fff9e4b0, transparent 60%),
+    linear-gradient(120deg, #fff7e9, #ffe2c0 65%, #ffcc9b);
+  --sileos-canvas:
+    radial-gradient(ellipse at 4% 0%, #ffd9b2a6, transparent 55%),
+    radial-gradient(ellipse at 95% 45%, #ffe4cbb3, transparent 55%),
+    linear-gradient(135deg, #fff8f0, #fffaf7 50%, #ffefdf);
+
+  --color-danger: #c62525;
+  --color-warning: #a4620a;
+
+  --font-display: "Plus Jakarta Sans", "Space Grotesk", "Noto Sans Tamil", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-sans: "Plus Jakarta Sans", "Noto Sans Tamil", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --text-display-2xl: clamp(1.85rem, 1.35rem + 2.2vw, 3.1rem);
+  --text-display-xl: clamp(1.65rem, 1.25rem + 1.8vw, 2.5rem);
+  --text-display-lg: clamp(1.45rem, 1.15rem + 1.3vw, 2.1rem);
+  --text-display-md: clamp(1.25rem, 1.05rem + 0.9vw, 1.65rem);
+  --text-display-sm: clamp(1.05rem, 0.98rem + 0.4vw, 1.3rem);
+  --text-lede: clamp(0.92rem, 0.88rem + 0.18vw, 1.02rem);
+  --text-label: 0.66rem;
+
+  --spacing-gutter: clamp(1rem, 0.6rem + 2vw, 2.5rem);
+  --spacing-section: clamp(3.25rem, 2.5rem + 3.5vw, 5.5rem);
+  --spacing-section-sm: clamp(2.5rem, 1.8rem + 2.5vw, 4rem);
+  --spacing-header: 4.25rem;
+
+  --radius-pill: 999px;
+  --shadow-plate: 0 8px 28px rgba(142, 77, 23, 0.08), inset 0 1px 0 #ffffff;
+  --shadow-lift: 0 14px 38px rgba(179, 99, 24, 0.16), inset 0 1px 0 #ffffff;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quint: cubic-bezier(0.83, 0, 0.17, 1);
+  --ease-spring: cubic-bezier(0.34, 1.36, 0.64, 1);
+
+  --duration-base: 0.32s;
+  --duration-slow: 0.64s;
+  --duration-cinematic: 1.1s;
+
+  --paper-grain: var(--sileos-canvas);
+}
+
+/* ==========================================================================
+   SILEOS SUNRISE PALETTE SURFACES & STICKY SCROLL PINNING
+   ========================================================================== */
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.sympho-scope .h-svh {
+  height: 100vh !important;
+  height: 100svh !important;
+}
+
+.sympho-scope .min-h-svh {
+  min-height: 100vh !important;
+  min-height: 100svh !important;
+}
+
+.sympho-scope .rounded-xs {
+  border-radius: 2px;
+}
+
+body.astra-theme .sympho-scope,
+.sympho-scope {
+  background-color: var(--color-limestone-100);
+  background-image: var(--sileos-canvas);
+  font-family: var(--font-sans) !important;
+  color: var(--color-ink-900);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "cv11";
+}
+
+/* Explicit dark surface restoration for 3D Stage & Dark Sections */
+body.astra-theme .sympho-scope.on-dark,
+body.astra-theme .sympho-scope.bg-ink-950,
+body.astra-theme .sympho-scope .bg-ink-950,
+.sympho-scope.on-dark,
+.sympho-scope.bg-ink-950,
+.sympho-scope .bg-ink-950 {
+  background-color: var(--color-ink-950) !important;
+  color: var(--color-limestone-50) !important;
+}
+
+body.astra-theme .sympho-scope.bg-ink-900,
+body.astra-theme .sympho-scope .bg-ink-900,
+.sympho-scope.bg-ink-900,
+.sympho-scope .bg-ink-900 {
+  background-color: #261409 !important;
+}
+
+body.astra-theme .sympho-scope.bg-ink-800,
+body.astra-theme .sympho-scope .bg-ink-800,
+.sympho-scope.bg-ink-800,
+.sympho-scope .bg-ink-800 {
+  background-color: #321b0d !important;
+}
+
+body.astra-theme .sympho-scope .bg-limestone-50,
+.sympho-scope .bg-limestone-50 {
+  background-color: var(--color-limestone-50) !important;
+}
+
+body.astra-theme .sympho-scope .bg-limestone-100,
+.sympho-scope .bg-limestone-100 {
+  background-color: var(--color-limestone-100) !important;
+}
+
+body.astra-theme .sympho-scope .bg-limestone-200,
+.sympho-scope .bg-limestone-200 {
+  background-color: var(--color-limestone-200) !important;
+}
+
+body.astra-theme .sympho-scope .bg-copper-500,
+.sympho-scope .bg-copper-500 {
+  background: var(--sileos-gradient) !important;
+  color: #51230d !important;
+}
+
+/* Crisp Frosted White & Warm Ivory Glass Header Bar */
+body.astra-theme .sympho-header,
+.sympho-header {
+  background: rgba(255, 255, 255, 0.94) !important;
+  color: #442714 !important;
+  border-bottom: 1px solid rgba(157, 85, 36, 0.13) !important;
+  box-shadow: 0 4px 20px -6px rgba(142, 77, 23, 0.08), inset 0 -1px 0 rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+}
+
+body.astra-theme .sympho-header :is(button, a, summary),
+.sympho-header :is(button, a, summary) {
+  min-height: 0 !important;
+  min-width: 0 !important;
+}
+
+body.astra-theme .sympho-header input,
+.sympho-header input {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  min-height: 0 !important;
+  color: #442714 !important;
+  font-family: var(--font-sans) !important;
+}
+
+body.astra-theme .sympho-header input::placeholder,
+.sympho-header input::placeholder {
+  color: #8b522a !important;
+}
+
+/* Clean White Architectural Footer */
+body.astra-theme .sympho-footer,
+.sympho-footer {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  color: #442714 !important;
+  border-top: 1px solid rgba(157, 85, 36, 0.16) !important;
+  box-shadow: 0 -8px 28px rgba(179, 99, 24, 0.05) !important;
+}
+
+body.astra-theme .sympho-scope :is(h1, h2, h3, h4) {
+  font-family: var(--font-display) !important;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: inherit;
+  font-optical-sizing: auto;
+  text-wrap: balance;
+}
+
+body.astra-theme .sympho-scope :is(h1, h2, h3, h4) em {
+  font-style: normal !important;
+  color: var(--color-copper-600);
+}
+
+body.astra-theme .sympho-scope .on-dark :is(h1, h2, h3, h4) em,
+body.astra-theme .sympho-scope.on-dark :is(h1, h2, h3, h4) em {
+  font-style: normal !important;
+  color: var(--color-copper-300);
+}
+
+body.astra-theme .sympho-scope :is(h5, h6) {
+  font-family: var(--font-sans) !important;
+  color: inherit;
+}
+
+body.astra-theme .sympho-scope .font-mono,
+.sympho-scope .font-mono {
+  font-family: var(--font-mono) !important;
+}
+
+body.astra-theme .sympho-scope .font-sans,
+.sympho-scope .font-sans {
+  font-family: var(--font-sans) !important;
+}
+
+body.astra-theme .sympho-scope .font-display,
+.sympho-scope .font-display {
+  font-family: var(--font-display) !important;
+}
+
+body.astra-theme .sympho-scope .font-light {
+  font-weight: 500 !important;
+}
+
+body.astra-theme .sympho-scope .font-normal {
+  font-weight: 400 !important;
+}
+
+body.astra-theme .sympho-scope .font-medium {
+  font-weight: 600 !important;
+}
+
+body.astra-theme .sympho-scope .font-semibold {
+  font-weight: 700 !important;
+}
+
+.sympho-scope ::selection {
+  background-color: #ffb875;
+  color: #442714;
+}
+
+/* Explicit color restoration when inside .on-dark vs light sections */
+body.astra-theme .sympho-scope .on-dark,
+body.astra-theme .sympho-scope.on-dark {
+  color: var(--color-limestone-50);
+}
+
+body.astra-theme .sympho-scope .text-limestone-50 {
+  color: var(--color-limestone-50) !important;
+}
+body.astra-theme .sympho-scope .text-limestone-100 {
+  color: var(--color-limestone-100) !important;
+}
+body.astra-theme .sympho-scope .text-limestone-200 {
+  color: var(--color-limestone-200) !important;
+}
+body.astra-theme .sympho-scope .text-limestone-300 {
+  color: var(--color-limestone-300) !important;
+}
+body.astra-theme .sympho-scope .text-limestone-400 {
+  color: var(--color-limestone-400) !important;
+}
+body.astra-theme .sympho-scope .text-ink-950 {
+  color: var(--color-ink-950) !important;
+}
+body.astra-theme .sympho-scope .text-ink-900 {
+  color: var(--color-ink-900) !important;
+}
+body.astra-theme .sympho-scope .text-ink-800 {
+  color: var(--color-ink-800) !important;
+}
+body.astra-theme .sympho-scope .text-ink-700 {
+  color: var(--color-ink-700) !important;
+}
+body.astra-theme .sympho-scope .text-ink-600 {
+  color: var(--color-ink-600) !important;
+}
+body.astra-theme .sympho-scope .text-ink-500 {
+  color: var(--color-ink-500) !important;
+}
+body.astra-theme .sympho-scope .text-ink-400 {
+  color: var(--color-ink-400) !important;
+}
+body.astra-theme .sympho-scope .text-copper-200 {
+  color: var(--color-copper-200) !important;
+}
+body.astra-theme .sympho-scope .text-copper-300 {
+  color: var(--color-copper-300) !important;
+}
+body.astra-theme .sympho-scope .text-copper-400 {
+  color: var(--color-copper-400) !important;
+}
+body.astra-theme .sympho-scope .text-copper-500 {
+  color: var(--color-copper-500) !important;
+}
+body.astra-theme .sympho-scope .text-copper-600 {
+  color: var(--color-copper-600) !important;
+}
+body.astra-theme .sympho-scope .text-sage-300 {
+  color: var(--color-sage-300) !important;
+}
+body.astra-theme .sympho-scope .text-sage-500 {
+  color: var(--color-sage-500) !important;
+}
+body.astra-theme .sympho-scope .text-sage-600 {
+  color: var(--color-sage-600) !important;
+}
+body.astra-theme .sympho-scope .text-sage-700 {
+  color: var(--color-sage-700) !important;
+}
+
+/* ==========================================================================
+   ARCHITECTURAL COMPONENTS (.container-page, .sheet-label, .sheet-frame, .rule)
+   ========================================================================== */
+.sympho-scope .container-page {
+  width: 100%;
+  max-width: 96rem;
+  padding-inline: var(--spacing-gutter);
+  margin-inline: auto;
+}
+
+.sympho-scope .sheet-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-mono) !important;
+  font-size: var(--text-label);
+  line-height: 1.3;
+  letter-spacing: 0.14em;
+  color: var(--color-ink-500);
+  text-transform: uppercase;
+}
+
+.sympho-scope .sheet-label::before {
+  content: "";
+  display: inline-block;
+  width: 2rem;
+  height: 1px;
+  opacity: 0.6;
+  background-color: currentColor;
+}
+
+.sympho-scope .on-dark .sheet-label,
+.sympho-scope.on-dark .sheet-label {
+  color: var(--color-limestone-300);
+}
+
+.sympho-scope .rule {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(22, 24, 26, 0.12);
+}
+
+.sympho-scope .on-dark .rule,
+.sympho-scope.on-dark .rule {
+  background-color: rgba(244, 239, 230, 0.14);
+}
+
+.sympho-scope .blueprint-grid {
+  background-image:
+    linear-gradient(rgba(244, 239, 230, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244, 239, 230, 0.045) 1px, transparent 1px);
+  background-position: -1px -1px;
+  background-size: 72px 72px;
+}
+
+.sympho-scope .blueprint-grid-light {
+  background-image:
+    linear-gradient(rgba(22, 24, 26, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(22, 24, 26, 0.05) 1px, transparent 1px);
+  background-position: -1px -1px;
+  background-size: 72px 72px;
+}
+
+.sympho-scope .sheet-frame {
+  --tick: 14px;
+  --tick-color: currentColor;
+  position: relative;
+}
+
+.sympho-scope .sheet-frame::before,
+.sympho-scope .sheet-frame::after {
+  content: "";
+  width: var(--tick);
+  height: var(--tick);
+  pointer-events: none;
+  opacity: 0.55;
+  position: absolute;
+}
+
+.sympho-scope .sheet-frame::before {
+  border-top: 1px solid var(--tick-color);
+  border-left: 1px solid var(--tick-color);
+  top: -1px;
+  left: -1px;
+}
+
+.sympho-scope .sheet-frame::after {
+  border-right: 1px solid var(--tick-color);
+  border-bottom: 1px solid var(--tick-color);
+  bottom: -1px;
+  right: -1px;
+}
+
+.sympho-scope .link-dim {
+  transition: background-size var(--duration-base) var(--ease-out-expo);
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  padding-bottom: 2px;
+}
+
+.sympho-scope .link-dim:hover,
+.sympho-scope .link-dim:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* ==========================================================================
+   TYPOGRAPHY HELPERS & SPLIT WORDS
+   ========================================================================== */
+.sympho-scope .text-display-2xl {
+  font-size: var(--text-display-2xl) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.028em !important;
+}
+
+.sympho-scope .text-display-xl {
+  font-size: var(--text-display-xl) !important;
+  line-height: 1.12 !important;
+  letter-spacing: -0.025em !important;
+}
+
+.sympho-scope .text-display-lg {
+  font-size: var(--text-display-lg) !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.022em !important;
+}
+
+.sympho-scope .text-display-md {
+  font-size: var(--text-display-md) !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.018em !important;
+}
+
+.sympho-scope .text-display-sm {
+  font-size: var(--text-display-sm) !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.012em !important;
+}
+
+.sympho-scope .text-lede {
+  font-size: var(--text-lede) !important;
+  line-height: 1.6 !important;
+}
+
+.sympho-scope .text-label {
+  font-size: var(--text-label) !important;
+  line-height: 1.3 !important;
+  letter-spacing: 0.12em !important;
+}
+
+.sympho-scope .split-word {
+  vertical-align: top;
+  margin: -0.12em -0.06em -0.1em;
+  padding: 0.12em 0.06em 0.1em;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.sympho-scope .split-word > span {
+  display: inline-block;
+}
+
+.sympho-scope .split-last-two .split-word:nth-last-child(-n+2) {
+  font-style: normal;
+  color: var(--color-copper-500);
+}
+
+.sympho-scope .on-dark .split-last-two .split-word:nth-last-child(-n+2),
+.sympho-scope.on-dark .split-last-two .split-word:nth-last-child(-n+2) {
+  font-style: normal;
+  color: var(--color-copper-300);
+}
+
+/* ==========================================================================
+   SYMPHO BUILD SCROLL REVEAL & MOTION CHOREOGRAPHY
+   ([data-reveal], [data-reveal="mask"], [data-split], [data-draw], .icon-draw)
+   ========================================================================== */
+html {
+  scroll-behavior: smooth;
+}
+
+.sympho-scope .sympho-scroll-progress {
+  background: linear-gradient(90deg, #ffd5a5 0%, #ff9b54 55%, #9a390b 100%);
+  transform: scaleX(var(--scroll-progress, 0));
+  box-shadow: 0 1px 8px rgba(255, 117, 31, 0.35);
+  transition: transform 0.08s linear;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sympho-scope [data-reveal]:not([data-revealed]) {
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-y, 2.1rem), 0) scale(0.975);
+    filter: blur(3px);
+  }
+
+  .sympho-scope [data-reveal] {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0px);
+    transition:
+      opacity 0.72s var(--ease-out-expo),
+      transform 0.95s var(--ease-out-expo),
+      filter 0.72s var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0s);
+    will-change: opacity, transform, filter;
+  }
+
+  .sympho-scope [data-reveal="mask"] {
+    overflow: hidden;
+  }
+
+  .sympho-scope [data-reveal="mask"]:not([data-revealed]) > * {
+    clip-path: inset(100% 0 0);
+    transform: scale(1.08);
+  }
+
+  .sympho-scope [data-reveal="mask"] > * {
+    clip-path: inset(0);
+    transition:
+      clip-path 1.15s var(--ease-in-out-quint),
+      transform 1.45s var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0s);
+  }
+
+  .sympho-scope [data-split]:not([data-revealed]) .split-word > span {
+    transform: translateY(108%) rotate(1.5deg);
+    opacity: 0;
+  }
+
+  .sympho-scope [data-split] .split-word > span {
+    transform: translateY(0%) rotate(0deg);
+    opacity: 1;
+    transition:
+      transform 0.9s var(--ease-out-expo),
+      opacity 0.65s var(--ease-out-expo);
+    transition-delay: calc(var(--i, 0) * 40ms + var(--reveal-delay, 0s));
+  }
+
+  .sympho-scope [data-draw]:not([data-revealed]) .draw-path {
+    stroke-dashoffset: 1px;
+  }
+
+  .sympho-scope [data-draw] .draw-path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1.6s var(--ease-out-quart);
+    transition-delay: var(--reveal-delay, 0s);
+  }
+
+  .sympho-scope .icon-draw:not([data-revealed]) svg :is(path, line, polyline, circle, rect) {
+    stroke-dashoffset: 80px;
+  }
+
+  .sympho-scope .icon-draw svg :is(path, line, polyline, circle, rect) {
+    stroke-dasharray: 80;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1.8s var(--ease-out-quart) 0.15s;
+  }
+
+  .sympho-scope .sympho-quote:not([data-active]) blockquote {
+    transform: translateY(calc(var(--dir, 1) * 14px));
+  }
+
+  .sympho-scope .sympho-quote blockquote {
+    transition: transform 0.65s var(--ease-out-expo);
+  }
+}
+
+/* ==========================================================================
+   SPOTLIGHT, SCROLL CUE, NAV BUTTONS & WATERMARK
+   ========================================================================== */
+.sympho-scope .spot-light {
+  background: radial-gradient(
+    32rem circle at var(--mx, 70%) var(--my, 20%),
+    rgba(208, 132, 95, 0.15),
+    transparent 60%
+  );
+  transition: background 0.2s linear;
+}
+
+@keyframes sympho-scroll-cue {
+  0% {
+    transform: translateY(-160%);
+  }
+  45%,
+  55% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(160%);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sympho-scope .scroll-cue {
+    animation: sympho-scroll-cue 2.2s var(--ease-in-out-quint) infinite;
+  }
+}
+
+.sympho-scope .sympho-nav-btn {
+  border: 1px solid rgba(154, 57, 11, 0.25);
+  border-radius: 999px;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  display: grid;
+  color: var(--color-ink-900);
+}
+
+.sympho-scope .sympho-nav-btn:hover {
+  background: var(--sileos-gradient);
+  color: #51230d;
+  border-color: #ff9b54;
+}
+
+.sympho-scope .sympho-watermark {
+  -webkit-text-stroke: 1.5px rgba(154, 57, 11, 0.25);
+  color: rgba(255, 184, 117, 0.14) !important;
+}
+
+/* ==========================================================================
+   CURTAIN-FILL PILL BUTTON (.sympho-btn)
+   ========================================================================== */
+.sympho-scope .sympho-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-family: var(--font-sans) !important;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  user-select: none;
+  transition:
+    transform 0.3s var(--ease-out-expo),
+    color 0.3s var(--ease-out-expo),
+    border-color 0.3s var(--ease-out-expo),
+    box-shadow 0.3s var(--ease-out-expo);
+}
+
+.sympho-scope .sympho-btn .sympho-btn-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background-color: var(--fill, var(--color-copper-500));
+  transform: translateY(102%);
+  transition: transform 0.5s var(--ease-out-expo);
+  pointer-events: none;
+}
+
+.sympho-scope .sympho-btn:hover .sympho-btn-fill,
+.sympho-scope .sympho-btn:focus-visible .sympho-btn-fill {
+  transform: translateY(0%);
+}
+
+.sympho-scope .sympho-btn .sympho-btn-arrow-1 {
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.sympho-scope .sympho-btn .sympho-btn-arrow-2 {
+  position: absolute;
+  inset: 0;
+  transform: translate(-100%, 100%);
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.sympho-scope .sympho-btn:hover .sympho-btn-arrow-1 {
+  transform: translate(100%, -100%);
+}
+
+.sympho-scope .sympho-btn:hover .sympho-btn-arrow-2 {
+  transform: translate(0, 0);
+}
+
+/* Form fields */
+.sympho-scope .field-label {
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--color-ink-900);
+  display: block;
+}
+
+.sympho-scope .field-input {
+  border-radius: 12px;
+  border: 1px solid rgba(157, 85, 36, 0.22);
+  width: 100%;
+  display: block;
+  background-color: var(--color-limestone-50);
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-ink-900);
+  min-height: 3rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.sympho-scope .field-input::placeholder {
+  color: var(--color-ink-400);
+}
+
+.sympho-scope .field-input:hover {
+  border-color: rgba(154, 57, 11, 0.42);
+}
+
+.sympho-scope .field-input:focus {
+  border-color: var(--color-copper-500);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 117, 31, 0.22);
+}
+
+/* ==========================================================================
+   ARCHITECTURAL COURSE CARDS INSIDE .sympho-scope
+   ========================================================================== */
+body.astra-theme .sympho-scope .glass-panel,
+.sympho-scope .glass-panel {
+  background-color: var(--color-limestone-50) !important;
+  border: 1px solid rgba(157, 85, 36, 0.16) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--shadow-plate) !important;
+  backdrop-filter: none !important;
+}
+
+body.astra-theme .sympho-scope .glass-panel:hover,
+.sympho-scope .glass-panel:hover {
+  border-color: rgba(255, 155, 84, 0.65) !important;
+  box-shadow: var(--shadow-lift) !important;
+}
+

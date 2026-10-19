@@ -1,18 +1,16 @@
-import { PageLayout, PageHeader } from "@/components/design-system/PageLayout";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Lightbulb, BookOpen, Users, Star } from "lucide-react";
+import { Compass, Lightbulb } from "lucide-react";
 import { api } from "@/api/axios";
 import { CourseCard } from "@/components/course/course-card";
 import { Course } from "@/types";
-import styles from "@/styles/category-page.module.css";
+import {
+  SymphoButton,
+  SymphoCtaBanner,
+  SymphoPageHero,
+  SymphoSectionHeader,
+} from "@/components/sympho/SymphoSystem";
 
-// Maps the backend /courses list item to the local Course shape. The backend
-// returns `title`/`description`/`price`/`level`/`rating`/`instructor.name`/
-// `category`/`stats` — NOT the post_*/course_*/average_rating/display_name/
-// categories[]/lessons[] fields an older API used. Reading the old names left
-// values undefined and `undefined.toLowerCase()` / `.map()` threw during
-// mapping, blanking the whole page whenever the category had courses.
 const convertAPICourseToLocal = (apiCourse: any): Course => {
   return {
     id: apiCourse.id,
@@ -68,6 +66,29 @@ const convertAPICourseToLocal = (apiCourse: any): Course => {
   } as unknown as Course;
 };
 
+const PILLARS = [
+  {
+    code: "UP—01",
+    title: "Metaphysics & Ontology",
+    detail: "First-principles inquiry into the nature of reality, consciousness, and causal order in classical Tamil thought.",
+  },
+  {
+    code: "UP—02",
+    title: "Epistemology & Logic",
+    detail: "Pramana frameworks: direct perception (Katchi), inference (Anumanam), and authoritative testimony (Agamam).",
+  },
+  {
+    code: "UP—03",
+    title: "Moral Philosophy & Interiority",
+    detail: "The inner architecture of virtue, self-governance, and contemplative inquiry across historical commentaries.",
+  },
+  {
+    code: "UP—04",
+    title: "Commentarial Traditions",
+    detail: "Comparative study of medieval commentators (Parimelazhagar, Ilampuranar, Nachinarkiniyar) and their interpretive rigor.",
+  },
+];
+
 export const UtporulPage = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
@@ -88,12 +109,11 @@ export const UtporulPage = () => {
           },
         });
 
-        const convertedCourses: Course[] = response.data.courses.map(
+        const convertedCourses: Course[] = (response.data?.courses || []).map(
           convertAPICourseToLocal,
         );
         setCourses(convertedCourses);
 
-        // Calculate stats
         const totalStudents = convertedCourses.reduce(
           (sum, course) => sum + course.total_enrollments,
           0,
@@ -120,134 +140,218 @@ export const UtporulPage = () => {
   }, []);
 
   return (
-    <div className={styles.categoryPage}>
-      {/* Hero Section */}
-      <section className={styles.hero}>
-        <PageLayout
-          header={
-            <PageHeader>
-              <div>
-                <h1>Utporul</h1>
-                <p className={styles.heroDescription}>
-                  Utporul encompasses metaphysics, epistemology, and the
-                  fundamental truths of existence. Explore the philosophical
-                  foundations that shape understanding of reality, knowledge,
-                  and the nature of being through ancient Tamil wisdom.
-                </p>
-              </div>
-            </PageHeader>
-          }
-          className="rd-screen rd-screen-category-utporul"
-        >
-          <div className={styles.heroIcon}>
-            <Lightbulb size={64} />
-          </div>
-          <div className={styles.heroStats}>
-            <div className={styles.statItem}>
-              <BookOpen size={24} />
-              <div>
-                <strong>{stats.totalCourses}</strong>
-                <span>Courses</span>
-              </div>
-            </div>
-            <div className={styles.statItem}>
-              <Users size={24} />
-              <div>
-                <strong>{stats.totalStudents}</strong>
-                <span>Students</span>
-              </div>
-            </div>
-            <div className={styles.statItem}>
-              <Star size={24} />
-              <div>
-                <strong>{stats.avgRating}</strong>
-                <span>Avg Rating</span>
-              </div>
-            </div>
-          </div>
-        </PageLayout>
-      </section>
+    <div className="sympho-scope rd-screen rd-screen-category-utporul min-h-screen bg-limestone-100 text-ink-900">
+      <SymphoPageHero
+        index="SI—DIV.02"
+        category="TAMIL TRIAD // உட்பொருள்"
+        code="CLASSICAL DIVISION II"
+        title="Utporul — Metaphysics & Inner Substance."
+        subtitle="Utporul encompasses metaphysics, epistemology, and the inner philosophical truths of existence. Explore the deep conceptual structures that shape human understanding of reality and knowledge."
+        metrics={[
+          {
+            value: String(stats.totalCourses),
+            unit: "tracks",
+            label: "Published Courses",
+            code: "DIM—01",
+          },
+          {
+            value: String(stats.totalStudents),
+            unit: "scholars",
+            label: "Enrolled Learners",
+            code: "DIM—02",
+          },
+          {
+            value: stats.avgRating > 0 ? stats.avgRating.toFixed(1) : "4.9",
+            unit: "/ 5.0",
+            label: "Average Rating",
+            code: "DIM—03",
+          },
+        ]}
+        actions={
+          <>
+            <SymphoButton to="/courses" variant="copper">
+              Explore All Courses
+            </SymphoButton>
+            <SymphoButton to="/category/meiporul" variant="ghost-dark">
+              View Division I · Meiporul
+            </SymphoButton>
+          </>
+        }
+      />
 
-      {/* About Section */}
-      <section className={styles.about}>
-        <div className={styles.container}>
-          <h2>About Utporul</h2>
-          <div className={styles.aboutContent}>
-            <div className={styles.aboutText}>
-              <p>
-                <strong>Utporul</strong> (உட்பொருள்) represents the internal
-                substance or essence in Tamil literary tradition. It is one of
-                the three primary divisions of classical Tamil literature
-                alongside Meiporul and Seyappaduporul.
-              </p>
-              <p>
-                This category explores the deeper philosophical aspects
-                including:
-              </p>
-              <ul>
-                <li>Metaphysical concepts and the nature of reality</li>
-                <li>Epistemology and theories of knowledge</li>
-                <li>Ethics and moral philosophy</li>
-                <li>Spiritual wisdom and self-realization</li>
-                <li>Ancient Tamil philosophical texts and commentaries</li>
-              </ul>
+      {/* Triad Division Switcher Bar */}
+      <div className="border-b border-ink-900/12 bg-limestone-50">
+        <div className="mx-auto flex max-w-[1680px] flex-wrap items-center justify-between gap-4 px-gutter py-4">
+          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-500">
+            <Compass className="h-3.5 w-3.5 text-copper-500" />
+            <span>Classical Tamil Knowledge Triad</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Link
+              to="/category/meiporul"
+              className="rounded-pill border border-ink-900/15 bg-limestone-100 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-700 transition-colors hover:border-copper-500 hover:text-copper-500"
+            >
+              01 · Meiporul (மெய்ப்பொருள்)
+            </Link>
+            <Link
+              to="/category/utporul"
+              className="rounded-pill bg-ink-900 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-limestone-100"
+            >
+              02 · Utporul (உட்பொருள்)
+            </Link>
+            <Link
+              to="/category/seyappaduporul"
+              className="rounded-pill border border-ink-900/15 bg-limestone-100 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-700 transition-colors hover:border-copper-500 hover:text-copper-500"
+            >
+              03 · Seyappaduporul (செய்யப்படுபொருள்)
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Monograph Treatise Section */}
+      <section className="relative border-b border-ink-900/12 py-section-sm">
+        <div className="mx-auto max-w-[1680px] px-gutter">
+          <SymphoSectionHeader
+            index="UP—01"
+            category="ARCHIVAL MONOGRAPH"
+            code="INTERNAL SUBSTANCE"
+            title="About Utporul"
+            subtitle="Utporul (உட்பொருள்) represents the internal substance, esoteric allegory, and philosophical depth embedded within classical Tamil texts — bridging poetic form with metaphysical inquiry."
+          />
+
+          <div className="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {PILLARS.map((pillar) => (
+                  <div
+                    key={pillar.code}
+                    className="sheet-frame flex flex-col justify-between bg-limestone-50/90 p-6 transition-colors hover:border-copper-500/40"
+                  >
+                    <div>
+                      <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-copper-500">
+                        {pillar.code}
+                      </span>
+                      <h3 className="mt-2 font-display text-xl font-light text-ink-900">
+                        {pillar.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-relaxed text-ink-600">
+                        {pillar.detail}
+                      </p>
+                    </div>
+                    <div className="mt-6 border-t border-ink-900/10 pt-3 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-500">
+                      Primary Division II // Verified Syllabus
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className={styles.aboutImage}>
-              <img
-                src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=1973&auto=format&fit=crop"
-                alt="Utporul - Philosophy and Wisdom"
-              />
+
+            <div className="lg:col-span-5">
+              <div className="sheet-frame overflow-hidden bg-ink-950 text-limestone-100">
+                <div className="relative aspect-[16/10] overflow-hidden border-b border-limestone-100/12">
+                  <img
+                    src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=1973&auto=format&fit=crop"
+                    alt="Utporul - Philosophy and Wisdom"
+                    className="h-full w-full object-cover opacity-80 transition-transform duration-700 hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/30 to-transparent" />
+                  <div className="absolute bottom-4 left-5 right-5">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-copper-400">
+                      ULLURAI UVAMAM // INNER ALLEGORY
+                    </span>
+                    <p className="mt-1 font-display text-2xl font-light italic text-limestone-50">
+                      உட்பொருள் உணர்தல்
+                    </p>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <p className="text-sm leading-relaxed text-limestone-200/80">
+                    In Tolkappiyam poetics, the unstated inner resonance (Ullurai) carries the philosophical weight of the verse — training the mind to look past surface phenomena into structural causes.
+                  </p>
+                  <div className="mt-5 flex items-center justify-between border-t border-limestone-100/12 pt-4">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-limestone-300/60">
+                      Division II of III
+                    </span>
+                    <Link
+                      to="/category/seyappaduporul"
+                      className="font-mono text-[11px] uppercase tracking-[0.14em] text-copper-400 hover:text-copper-300"
+                    >
+                      Next: Seyappaduporul →
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Courses Section */}
-      <section className={styles.courses}>
-        <div className={styles.container}>
-          <h2>Available Courses</h2>
-          {loading ? (
-            <div className={styles.loading}>
-              <div className={styles.spinner}></div>
-              <p>Loading courses...</p>
-            </div>
-          ) : courses.length > 0 ? (
-            <div className={styles.coursesGrid}>
-              {courses.map((course) => (
-                <CourseCard key={course.id} course={course} />
-              ))}
-            </div>
-          ) : (
-            <div className={styles.noCourses}>
-              <Lightbulb size={48} />
-              <h3>No courses available yet</h3>
-              <p>Check back soon for new Utporul courses!</p>
-              <Link to="/courses" className={styles.browseButton}>
-                Browse All Courses
-              </Link>
-            </div>
-          )}
-        </div>
-      </section>
+      <section className="py-section-sm">
+        <div className="mx-auto max-w-[1680px] px-gutter">
+          <SymphoSectionHeader
+            index="UP—02"
+            category="CURRICULUM LEDGER"
+            code={`${courses.length} TRACKS`}
+            title="Available Courses"
+            subtitle="Rigorous courses in metaphysics, epistemology, and classical Tamil philosophical commentaries."
+          />
 
-      {/* CTA Section */}
-      <section className={styles.cta}>
-        <div className={styles.container}>
-          <h2>Ready to Begin Your Journey?</h2>
-          <p>
-            Explore the profound wisdom of Utporul and deepen your understanding
-            of philosophy, metaphysics, and the nature of existence.
-          </p>
-          <div className={styles.ctaButtons}>
-            <Link to="/courses" className={styles.primaryButton}>
-              Browse All Courses
-            </Link>
-            <Link to="/about" className={styles.secondaryButton}>
-              Learn More About Us
-            </Link>
+          <div className="mt-12">
+            {loading ? (
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {[1, 2, 3].map((n) => (
+                  <div
+                    key={n}
+                    className="sheet-frame h-96 animate-pulse bg-limestone-50 p-6"
+                  />
+                ))}
+              </div>
+            ) : courses.length > 0 ? (
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {courses.map((course) => (
+                  <CourseCard key={course.id} course={course} />
+                ))}
+              </div>
+            ) : (
+              <div className="sheet-frame mx-auto max-w-2xl bg-limestone-50 p-12 text-center">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-ink-900/15 bg-limestone-100 text-copper-500">
+                  <Lightbulb className="h-6 w-6" />
+                </div>
+                <span className="mt-4 block font-mono text-[10px] uppercase tracking-[0.18em] text-copper-500">
+                  ARCHIVE STATUS // COHORT IN PREPARATION
+                </span>
+                <h3 className="mt-2 font-display text-3xl font-light text-ink-900">
+                  No courses available yet
+                </h3>
+                <p className="mx-auto mt-2 max-w-md text-sm text-ink-600">
+                  Check back soon for new Utporul courses, or browse our active catalog across engineering, mathematics, and classical studies.
+                </p>
+                <div className="mt-8 flex flex-wrap justify-center gap-3">
+                  <SymphoButton to="/courses" variant="primary">
+                    Browse All Courses
+                  </SymphoButton>
+                  <SymphoButton to="/library" variant="outline">
+                    Open Digital Library
+                  </SymphoButton>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
+
+      <SymphoCtaBanner
+        code="SI—TRIAD // 02"
+        eyebrow="PHILOSOPHICAL ARCHITECTURE"
+        title="Ready to begin your journey?"
+        description="Explore the profound wisdom of Utporul and deepen your understanding of philosophy, metaphysics, and the nature of existence."
+        primaryLabel="Browse All Courses"
+        primaryTo="/courses"
+        secondaryLabel="Learn More About Us"
+        secondaryTo="/about"
+      />
     </div>
   );
 };
