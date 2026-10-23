@@ -110,6 +110,13 @@ class ProviderCandidate:
 
 def _master_secret() -> bytes:
     settings = get_settings()
+    if not os.environ.get("AI_CREDENTIAL_ENCRYPTION_KEY"):
+        import logging
+        logging.getLogger(__name__).warning(
+            "AI_CREDENTIAL_ENCRYPTION_KEY is unset — provider API-key encryption "
+            "falls back to SECRET_KEY. Set a dedicated key (then re-enter "
+            "provider credentials) so key-at-rest does not depend on the app secret."
+        )
     value = (os.environ.get("AI_CREDENTIAL_ENCRYPTION_KEY") or settings.SECRET_KEY).encode("utf-8")
     return hashlib.sha256(value).digest()
 

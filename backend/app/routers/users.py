@@ -167,13 +167,24 @@ async def remove_avatar(
         # Optionally delete the old file
         if old_avatar:
             import os
-            file_path = old_avatar.lstrip('/')
-            if os.path.exists(file_path):
+            from app.core.config import get_settings
+            avatars_dir = os.path.realpath(
+                os.path.join(get_settings().UPLOAD_DIR, "avatars")
+            )
+            # profile_photo is user-writable text and must never be trusted as
+            # a path ("../.env" here was an arbitrary-file-deletion primitive).
+            # Only delete files this app itself wrote for THIS user.
+            candidate = os.path.realpath(
+                os.path.join(avatars_dir, os.path.basename(old_avatar))
+            )
+            if (candidate.startswith(avatars_dir + os.sep)
+                    and os.path.basename(candidate).startswith(f"{current_user.id}_")
+                    and os.path.isfile(candidate)):
                 try:
-                    os.remove(file_path)
+                    os.remove(candidate)
                 except Exception as e:
                     import logging
-                    logging.warning(f"Failed to delete avatar file {file_path}: {e}")
+                    logging.warning(f"Failed to delete avatar file {candidate}: {e}")
 
     return {"message": "Avatar removed successfully"}
 

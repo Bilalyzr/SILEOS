@@ -113,8 +113,22 @@ class UserService:
         os.makedirs(upload_dir, exist_ok=True)
 
         # Generate unique filename
-        file_extension = file.filename.split('.')[-1] if '.' in file.filename else 'jpg'
-        filename = f"{user_id}_{uuid.uuid4().hex}.{file_extension}"
+        # Extension must come from the decoded image itself — the client's
+        # filename/Content-Type are spoofable, and a .html/.svg saved into the
+        # nginx-served uploads root is stored same-origin XSS.
+        import io
+        from PIL import Image as PILImage, UnidentifiedImageError
+        _contents = file.file.read()
+        try:
+            with PILImage.open(io.BytesIO(_contents)) as _img:
+                _fmt = (_img.format or "").upper()
+        except UnidentifiedImageError:
+            raise ValueError("Avatar must be a valid JPEG, PNG, WEBP or GIF image")
+        _fmt_ext = {"JPEG": "jpg", "PNG": "png", "WEBP": "webp", "GIF": "gif"}
+        if _fmt not in _fmt_ext:
+            raise ValueError("Avatar must be a valid JPEG, PNG, WEBP or GIF image")
+        file.file.seek(0)
+        filename = f"{user_id}_{uuid.uuid4().hex}.{_fmt_ext[_fmt]}"
         file_path = os.path.join(upload_dir, filename)
 
         # Save file

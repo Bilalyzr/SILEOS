@@ -164,6 +164,7 @@ app = FastAPI(
     version="1.0.0",
     docs_url="/docs" if settings.ENVIRONMENT == "development" else None,
     redoc_url="/redoc" if settings.ENVIRONMENT == "development" else None,
+    openapi_url="/openapi.json" if settings.ENVIRONMENT == "development" else None,
     lifespan=lifespan,
     # Fix redirect URLs to use HTTPS
     redirect_slashes=False
@@ -366,7 +367,10 @@ async def readiness_check():
         finally:
             db.close()
     except Exception as exc:
-        checks["database"] = f"error: {type(exc).__name__}: {exc}"
+        checks["database"] = (
+            f"error: {type(exc).__name__}: {exc}"
+            if settings.ENVIRONMENT == "development" else "error"
+        )
 
     # --- Redis (degradable) ---
     try:
@@ -375,7 +379,10 @@ async def readiness_check():
         await client.ping()
         checks["redis"] = "ok"
     except Exception as exc:
-        checks["redis"] = f"error: {type(exc).__name__}: {exc}"
+        checks["redis"] = (
+            f"error: {type(exc).__name__}: {exc}"
+            if settings.ENVIRONMENT == "development" else "error"
+        )
         degraded.append("redis")
 
     ready = db_ok

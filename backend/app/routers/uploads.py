@@ -271,6 +271,16 @@ async def upload_video(
             detail=f"Invalid file type. Allowed types: {', '.join(ALLOWED_VIDEO_TYPES)}"
         )
 
+    # Extension allowlist agreeing with the content type — generate_unique_
+    # filename preserved the client extension verbatim, so payload.html with
+    # Content-Type: video/mp4 landed as served same-origin HTML.
+    allowed_video_exts = {".mp4", ".webm", ".ogg", ".avi", ".mov", ".mkv"}
+    if get_file_extension(file.filename or "") not in allowed_video_exts:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid file extension. Allowed: {', '.join(sorted(allowed_video_exts))}"
+        )
+
     # Generate unique filename first
     unique_filename = generate_unique_filename(file.filename)
     file_path = UPLOAD_DIR / "videos" / unique_filename
@@ -348,6 +358,16 @@ async def upload_document(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Invalid file type. Allowed types: PDF, DOC, DOCX"
+        )
+
+    # The extension must agree with the (client-controlled) content type —
+    # resume.html with Content-Type: application/pdf was stored as served
+    # same-origin HTML under /uploads/documents/.
+    allowed_doc_exts = {".pdf", ".doc", ".docx"}
+    if get_file_extension(file.filename or "") not in allowed_doc_exts:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid file extension. Allowed: {', '.join(sorted(allowed_doc_exts))}"
         )
 
     # Read file content

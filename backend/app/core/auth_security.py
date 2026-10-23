@@ -383,32 +383,6 @@ async def logout_user_with_security(user_id: int, session_id: str, ip_address: s
         details={"session_id": session_id[:16]}
     )
 
-async def validate_token_with_security(token: str, ip_address: str) -> Optional[Dict]:
-    """Enhanced token validation with security checks"""
-    try:
-        from jose import jwt, JWTError
-        from app.core.config import get_settings
-        settings = get_settings()
-
-        # Decode JWT token
-        payload = jwt.decode(token, settings.JWT_SECRET, algorithms=[settings.ALGORITHM])
-        user_id = payload.get("sub")
-
-        if not user_id:
-            return None
-
-        # This is a simplified validation
-        # In production, you might want to check against session storage
-        return {"user_id": int(user_id), "is_valid": True}
-
-    except JWTError as e:
-        await log_security_event(
-            "INVALID_TOKEN",
-            client_ip=ip_address,
-            details={"error": str(e)}
-        )
-        return None
-
 # Password complexity requirements
 PASSWORD_COMPLEXITY_RULES = {
     "min_length": 12,

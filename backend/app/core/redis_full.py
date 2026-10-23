@@ -59,7 +59,7 @@ class CacheManager:
         if isinstance(value, (dict, list)):
             value = json.dumps(value)
         elif not isinstance(value, str):
-            value = pickle.dumps(value)
+            value = json.dumps(value, default=str)
 
         if expire:
             await client.setex(key, expire, value)
@@ -79,11 +79,9 @@ class CacheManager:
         try:
             return json.loads(value)
         except (json.JSONDecodeError, TypeError):
-            # Try pickle if JSON fails
-            try:
-                return pickle.loads(value.encode() if isinstance(value, str) else value)
-            except:
-                return value
+            # Never deserialize opaque cache values: pickle.loads on Redis
+            # content is an RCE gadget for any future write path.
+            return value
 
     @staticmethod
     async def delete(key: str):

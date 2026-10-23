@@ -366,7 +366,8 @@ def student_mastery(
 ):
     """Per-course mastery for one student (blueprint §15 adaptive/Mastery
     learning graph, lite). Students see their own; instructors/admins see all."""
-    if current_user.id != user_id and current_user.role == "student":
+    if (current_user.id != user_id
+            and current_user.role not in ("admin", "superadmin", "instructor")):
         raise HTTPException(status.HTTP_403_FORBIDDEN,
                             detail="Students may only view their own mastery")
     target = db.query(User).filter(User.id == user_id).first()
@@ -403,7 +404,8 @@ def cumulative_grade(
     40%, interactive modules 20% (no module results -> their weight
     redistributes to quizzes+assignments 50/50). The breakdown is returned
     so the UI can show the math, not just a number."""
-    if current_user.id != user_id and current_user.role == "student":
+    if (current_user.id != user_id
+            and current_user.role not in ("admin", "superadmin", "instructor")):
         raise HTTPException(status.HTTP_403_FORBIDDEN,
                             detail="Students may only view their own grade")
     enrollment = (db.query(Enrollment)

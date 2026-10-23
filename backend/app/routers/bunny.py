@@ -131,7 +131,18 @@ async def upload_video_to_bunny(
             video_id = video_data["guid"]
 
         # Step 2: Upload video content to Bunny
-        video_content = await file.read()
+        # Hard-capped streamed read — unbounded file.read() lets a single
+        # request buffer its whole body in RAM and OOM the API.
+        _max_bytes = 500 * 1024 * 1024
+        _chunks, _total = [], 0
+        while _chunk := await file.read(1024 * 1024):
+            _total += len(_chunk)
+            if _total > _max_bytes:
+                from fastapi import HTTPException as _HTTPException
+                raise _HTTPException(status_code=413,
+                                     detail="Video exceeds the 500MB limit")
+            _chunks.append(_chunk)
+        video_content = b"".join(_chunks)
         async with httpx.AsyncClient(timeout=300) as client:
             upload_res = await client.put(
                 f"https://video.bunnycdn.com/library/{BUNNY_LIBRARY_ID}/videos/{video_id}",

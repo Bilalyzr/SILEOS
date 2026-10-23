@@ -803,8 +803,24 @@ async def upload_blog_image(
         )
 
     # Generate unique filename
-    unique_filename = f"{uuid.uuid4()}{Path(file.filename).suffix}"
-    file_path = Path("uploads") / "blog" / unique_filename
+    # Decode the real image format: the client suffix/Content-Type are
+    # spoofable, and the previous CWD-relative "uploads/blog" wrote outside
+    # the served root (or into it, as .html, depending on WORKDIR).
+    import io as _io
+    from PIL import Image as PILImage, UnidentifiedImageError
+    from app.core.config import get_settings as _get_settings
+    try:
+        with PILImage.open(_io.BytesIO(contents)) as _img:
+            _fmt = (_img.format or "").upper()
+    except UnidentifiedImageError:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="File is not a valid image")
+    _fmt_ext = {"JPEG": "jpg", "PNG": "png", "WEBP": "webp", "GIF": "gif"}
+    if _fmt not in _fmt_ext:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="File is not a valid JPEG, PNG, WEBP or GIF image")
+    unique_filename = f"{uuid.uuid4()}.{_fmt_ext[_fmt]}"
+    file_path = Path(_get_settings().UPLOAD_DIR) / "blog" / unique_filename
 
     # Ensure directory exists
     file_path.parent.mkdir(parents=True, exist_ok=True)

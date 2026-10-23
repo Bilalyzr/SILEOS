@@ -216,16 +216,3 @@ def create_impersonation_token(target_user_id: int, admin_id: int) -> str:
     }
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
 
-def create_email_verification_token(email: str) -> str:
-    """Create email verification token"""
-    data = {"sub": email, "type": "email_verification"}
-    expire = datetime.utcnow() + timedelta(hours=24)
-    data.update({"exp": expire})
-    return jwt.encode(data, settings.SECRET_KEY, algorithm=ALGORITHM)
-
-def create_password_reset_token(email: str) -> str:
-    """Create password reset token"""
-    data = {"sub": email, "type": "password_reset"}
-    expire = datetime.utcnow() + timedelta(hours=1)
-    data.update({"exp": expire})
-    return jwt.encode(data, settings.SECRET_KEY, algorithm=ALGORITHM)

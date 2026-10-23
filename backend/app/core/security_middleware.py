@@ -37,7 +37,8 @@ def is_login_path(path: str) -> bool:
     with endswith('/auth/login') covers all of those (and nothing else:
     '/auth/logout' or '/auth/loginx' do not end in '/auth/login').
     """
-    return path.rstrip("/").endswith("/auth/login")
+    return (path.rstrip("/").endswith("/auth/login")
+            or path.rstrip("/").endswith("/auth/check-email"))
 
 
 def last_forwarded_ip(forwarded_for: Optional[str]) -> Optional[str]:

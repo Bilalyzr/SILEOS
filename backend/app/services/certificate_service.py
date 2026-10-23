@@ -430,13 +430,21 @@ class CertificateService:
                 _, _, b64 = url.partition(",")
                 return ImageReader(io.BytesIO(base64.b64decode(b64)))
             if url.startswith("http://") or url.startswith("https://"):
+                # SSRF guard: admin-stored background.image_url reaches this
+                # fetcher unvalidated (the instructor designer path enforces
+                # is_safe_asset_src; the legacy admin write path did not), so
+                # it could pull cloud-metadata/localhost URLs into the PDF.
+                from app.services.certificate_html_renderer import is_safe_asset_src
+                if not is_safe_asset_src(url):
+                    logger.warning("certificate preview: blocked unsafe image url")
+                    return None
                 import requests
                 resp = requests.get(url, timeout=5)
                 resp.raise_for_status()
                 return ImageReader(io.BytesIO(resp.content))
             # Local / relative path served under /uploads or /certificate-files.
             clean = url.lstrip("/")
-            candidates = [url, clean]
+            candidates = [clean] if os.path.isabs(url) is False else []
             for base in ("/app", os.getcwd()):
                 candidates.append(os.path.join(base, clean))
             # /certificate-files/* is served from the ./certificates dir.
@@ -444,9 +452,23 @@ class CertificateService:
                 rel = clean[len("certificate-files/"):]
                 for base in ("/app/certificates", os.path.join(os.getcwd(), "certificates")):
                     candidates.append(os.path.join(base, rel))
+            allowed_roots = tuple(
+                os.path.realpath(r) for r in (
+                    "/app/uploads", "/app/certificates",
+                    os.path.join(os.getcwd(), "uploads"),
+                    os.path.join(os.getcwd(), "certificates"),
+                ) if os.path.isdir(r)
+            )
             for path in candidates:
-                if path and os.path.isfile(path):
-                    return ImageReader(path)
+                if not path:
+                    continue
+                real = os.path.realpath(path)
+                # Path-traversal guard: only images inside the served upload
+                # and certificate roots may be read into the PDF.
+                if not real.startswith(tuple(r + os.sep for r in allowed_roots)):
+                    continue
+                if os.path.isfile(real):
+                    return ImageReader(real)
         except Exception:
             logger.warning("certificate preview: could not load image %s", url, exc_info=True)
         return None
