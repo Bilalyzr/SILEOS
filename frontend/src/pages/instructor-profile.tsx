@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar,AvatarImage,AvatarFallback } from "@/components/ui/avatar"
 import { StarRating } from "@/components/ui/star-rating"
 import { CourseCard } from "@/components/course/course-card"
+import { SymphoPageHero } from "@/components/sympho/SymphoSystem"
 import { Course } from "@/types"
 import { api } from "@/api/axios"
 import { getMediaUrl } from "@/utils/media"
@@ -280,58 +281,82 @@ export const InstructorProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white">
-      {/* Header Section */}
-      <div className="relative bg-gradient-to-br from-primary-600 to-primary-800 text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary-400 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        </div>
+    <div className="sympho-scope min-h-screen bg-limestone-100 text-ink-900">
+      {/* Sympho Hero */}
+      <SymphoPageHero
+        index="SI—PRF.01"
+        eyebrow="Instructor"
+        title={instructor.display_name}
+        lede={(instructor.bio || `Learn from ${instructor.display_name} on SashaInfinity — expert-led courses.`)
+          .replace(/<[^>]*>/g, "")
+          .slice(0, 180)}
+        drawingCode="SHEET SI—PRF · SCALE 1:100"
+        badge={formatExperience(instructor.experience_years)}
+        specs={[
+          {
+            label: "Courses",
+            value: instructorStats
+              ? `${instructorStats.total_courses}`
+              : "—",
+          },
+          {
+            label: "Rating",
+            value: instructorStats
+              ? instructorStats.average_rating.toFixed(1)
+              : "—",
+          },
+          {
+            label: "Students",
+            value: instructorStats
+              ? instructorStats.total_students.toLocaleString()
+              : "—",
+          },
+        ]}
+      />
 
-        <div className="container-custom py-16 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <Avatar size="xl" className="w-32 h-32 mx-auto mb-6 ring-4 ring-white/30">
+      {/* Identity strip — avatar, rating and social links carried over from
+          the previous gradient header */}
+      <div className="border-b border-ink-900/10 bg-limestone-50">
+        <div className="container-custom py-6">
+          <div className="flex flex-wrap items-center gap-6">
+            <Avatar
+              size="xl"
+              className="w-24 h-24 ring-2 ring-ink-900/10"
+            >
               {getMediaUrl(instructor.profile_photo) && (
                 <AvatarImage src={getMediaUrl(instructor.profile_photo)} />
               )}
-              <AvatarFallback className="bg-primary-700 text-white text-4xl font-bold">
+              <AvatarFallback className="bg-primary-700 text-white text-3xl font-bold">
                 {instructor.display_name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
 
-            <h1 className="text-4xl font-bold mb-4">
-              {instructor.display_name}
-            </h1>
-
-            <p className="text-xl text-primary-100 mb-4 max-w-2xl mx-auto">
-              {instructor.bio}
-            </p>
-
-            <div className="flex items-center justify-center gap-6 mb-6">
+            <div className="flex-1 min-w-[12rem]">
               {instructorStats && (
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <StarRating rating={instructorStats.average_rating} />
                   <span className="font-semibold">
                     {instructorStats.average_rating.toFixed(1)}
                   </span>
-                  <span className="text-primary-200">
+                  <span className="text-sm text-ink-600">
                     ({instructorStats.total_reviews} reviews)
                   </span>
                 </div>
               )}
-              <Badge className="bg-primary-700 text-white border-0">
-                {formatExperience(instructor.experience_years)}
-              </Badge>
+              <p className="mt-1 text-sm text-ink-600">
+                {formatExperience(instructor.experience_years)} · Teaching on
+                SashaInfinity
+              </p>
             </div>
 
             {/* Social Links */}
-            <div className="flex items-center justify-center gap-4">
+            <div className="flex items-center gap-3">
               {instructor.social_links.website && (
                 <a
                   href={instructor.social_links.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-white/10 hover:bg-white/20 p-3 rounded-full transition-colors"
+                  className="bg-ink-900/5 hover:bg-ink-900/10 text-ink-700 p-3 rounded-full transition-colors"
                 >
                   <Globe className="w-5 h-5" />
                 </a>
@@ -341,7 +366,7 @@ export const InstructorProfilePage = () => {
                   href={instructor.social_links.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-white/10 hover:bg-white/20 p-3 rounded-full transition-colors"
+                  className="bg-ink-900/5 hover:bg-ink-900/10 text-ink-700 p-3 rounded-full transition-colors"
                 >
                   <Facebook className="w-5 h-5" />
                 </a>
@@ -351,7 +376,7 @@ export const InstructorProfilePage = () => {
                   href={instructor.social_links.twitter}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-white/10 hover:bg-white/20 p-3 rounded-full transition-colors"
+                  className="bg-ink-900/5 hover:bg-ink-900/10 text-ink-700 p-3 rounded-full transition-colors"
                 >
                   <Twitter className="w-5 h-5" />
                 </a>
@@ -361,7 +386,7 @@ export const InstructorProfilePage = () => {
                   href={instructor.social_links.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-white/10 hover:bg-white/20 p-3 rounded-full transition-colors"
+                  className="bg-ink-900/5 hover:bg-ink-900/10 text-ink-700 p-3 rounded-full transition-colors"
                 >
                   <Linkedin className="w-5 h-5" />
                 </a>

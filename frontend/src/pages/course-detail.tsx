@@ -54,7 +54,6 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { instructorPath } from "@/utils/slug";
 import {
   Play,
-  Clock,
   Users,
   Star,
   Globe,
@@ -76,6 +75,7 @@ import { Progress } from "@/components/ui/progress";
 import { StarRating } from "@/components/ui/star-rating";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ShareButton } from "@/components/ui/share-button";
+import { SymphoPageHero } from "@/components/sympho/SymphoSystem";
 import * as Tabs from "@radix-ui/react-tabs";
 import { useAuth } from "@/hooks/use-auth";
 import { useSEO } from "@/hooks/use-seo";
@@ -480,7 +480,7 @@ export const CourseDetailPage = () => {
     : course.course_price;
 
   return (
-    <div className="rd-course-detail min-h-screen">
+    <div className="rd-course-detail sympho-scope min-h-screen bg-limestone-100 text-ink-900">
       {isEnrolled && !isAdminPreview && <div className="container-custom"><StudentLiveClasses courseId={Number(course.id)}/><a className="sf-secondary" href={`/offline.html?course=${course.id}`}>Download lessons & labs for offline learning</a></div>}
       {/* Admin Preview Banner */}
       {isAdminPreview && (
@@ -508,231 +508,68 @@ export const CourseDetailPage = () => {
         </div>
       )}
 
-      {/* Enhanced Hero Section with Gradient */}
-      <div className="relative si-hero border-b border-orange-100 overflow-hidden">
-        {/* Animated background patterns */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-primary-500 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-success-500 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        </div>
+      {/* Sympho Hero */}
+      <SymphoPageHero
+        index="SI—CRS.02"
+        eyebrow={
+          course.categories?.[0]?.name || `${course.course_level} Level`
+        }
+        title={course.post_title}
+        lede={(course.post_excerpt || course.post_content || "")
+          .replace(/<[^>]*>/g, "")
+          .slice(0, 180)}
+        drawingCode="SHEET SI—CRS · SCALE 1:100"
+        badge={
+          course.course_price_type === "free"
+            ? "Enrollment Open"
+            : formatPrice(displayPrice)
+        }
+        specs={[
+          {
+            label: "Instructor",
+            value: course.instructor?.display_name || "—",
+          },
+          { label: "Duration", value: course.course_duration || "—" },
+          { label: "Level", value: course.course_level || "—" },
+          {
+            label: "Students",
+            value: course.total_enrollments.toLocaleString(),
+          },
+        ]}
+        actions={
+          <Link
+            to={instructorPath(
+              (course.instructor as any)?.id ?? "",
+              (course.instructor as any)?.name,
+            )}
+            className="text-sm text-limestone-200 underline underline-offset-4 hover:text-limestone-50"
+          >
+            View instructor profile
+          </Link>
+        }
+      />
 
-        <div className="container-custom py-8 relative z-10">
-          <div className="grid lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              {/* Breadcrumb */}
-              <nav className="mb-6">
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-gray-500">
-                  <Link
-                    to="/"
-                    className="hover:text-primary-600 transition-colors"
-                  >
-                    Home
-                  </Link>
-                  <span className="text-gray-300">/</span>
-                  <Link
-                    to="/courses"
-                    className="hover:text-primary-600 transition-colors"
-                  >
-                    Courses
-                  </Link>
-                  <span className="text-gray-300">/</span>
-                  <span className="text-gray-900 font-medium line-clamp-1">
-                    {course.post_title}
-                  </span>
-                </div>
-              </nav>
-
-              {/* Enhanced Course Info */}
-              <div className="space-y-6">
-                <div>
-                  {/* Badge for course level */}
-                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary-500/20 border border-primary-400/30 rounded-full mb-4">
-                    <Award className="w-4 h-4 text-primary-400" />
-                    <span className="text-sm font-medium text-primary-300">
-                      {course.course_level} Level
-                    </span>
-                  </div>
-
-                  <h1 className="text-3xl lg:text-4xl font-extrabold mb-4 text-gray-900 leading-tight tracking-tight font-display">
-                    {course.post_title}
-                  </h1>
-                  <p className="text-base text-gray-600 mb-6 leading-relaxed text-justify">
-                    {course.post_excerpt}
-                  </p>
-                </div>
-
-                {/* Enhanced Meta Info Cards */}
-                <div className="rd-course-facts">
-                  <div className="bg-gray-50 rounded-xl p-4 border border-gray-200 hover:bg-orange-50 transition-all group">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Star className="w-5 h-5 text-yellow-400" />
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-1 mb-1">
-                          <StarRating
-                            rating={course.average_rating}
-                            size="sm"
-                          />
-                        </div>
-                        <p className="text-xs text-neutral-400">
-                          {course.total_reviews} reviews
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-gray-50 rounded-xl p-4 border border-gray-200 hover:bg-orange-50 transition-all group">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-primary-500/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Users className="w-5 h-5 text-primary-400" />
-                      </div>
-                      <div>
-                        <p className="text-lg font-bold text-gray-900">
-                          {course.total_enrollments.toLocaleString()}
-                        </p>
-                        <p className="text-xs text-neutral-400">Students</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-gray-50 rounded-xl p-4 border border-gray-200 hover:bg-orange-50 transition-all group">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-success-500/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Clock className="w-5 h-5 text-success-400" />
-                      </div>
-                      <div>
-                        <p className="text-lg font-bold text-gray-900">
-                          {course.course_duration}
-                        </p>
-                        <p className="text-xs text-neutral-400">Duration</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-gray-50 rounded-xl p-4 border border-gray-200 hover:bg-orange-50 transition-all group">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Globe className="w-5 h-5 text-blue-400" />
-                      </div>
-                      <div>
-                        <p className="text-lg font-bold text-gray-900">
-                          English
-                        </p>
-                        <p className="text-xs text-neutral-400">Language</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Enhanced Instructor Card */}
-                <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-                  <p className="text-xs text-neutral-400 mb-3 uppercase tracking-wide">
-                    Taught by
-                  </p>
-                  <div className="flex items-center gap-4">
-                    <Avatar size="lg" className="ring-2 ring-primary-500/50">
-                      {getMediaUrl(course.instructor?.avatar) && (
-                        <AvatarImage
-                          src={getMediaUrl(course.instructor?.avatar)}
-                          alt={course.instructor?.display_name}
-                        />
-                      )}
-                      <AvatarFallback className="bg-primary-600 text-white text-lg font-bold">
-                        {course.instructor?.display_name?.charAt(0) || "I"}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1">
-                      <p className="font-bold text-gray-900 text-lg">
-                        {course.instructor?.display_name}
-                      </p>
-                      <p className="text-sm text-neutral-400">
-                        Expert Instructor
-                      </p>
-
-                      {/* Workshop Info */}
-                      {(course.num_offline_workshops ?? 0) > 0 && (
-                        <div className="flex items-center gap-3 mt-2 text-sm">
-                          <div className="flex items-center gap-1.5 text-orange-600">
-                            <BookOpen className="w-3.5 h-3.5" />
-                            <span className="font-medium">
-                              {course.num_offline_workshops} Workshop
-                              {(course.num_offline_workshops ?? 0) > 1
-                                ? "s"
-                                : ""}
-                            </span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="border-primary-500 text-primary-600 hover:bg-primary-50"
-                      asChild
-                    >
-                      <Link
-                        to={instructorPath(
-                          (course.instructor as any)?.id ?? "",
-                          (course.instructor as any)?.name,
-                        )}
-                      >
-                        View Profile
-                      </Link>
-                    </Button>
-                  </div>
-
-                  {/* Workshops / Hours (below Taught By) */}
-                  {((course.num_offline_workshops ?? 0) > 0 ||
-                    (course.num_hours ?? 0) > 0) && (
-                    <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-gray-200 text-sm text-neutral-700">
-                      {(course.num_offline_workshops ?? 0) > 0 && (
-                        <div className="flex items-center gap-2">
-                          <BookOpen className="w-4 h-4 text-orange-600 flex-shrink-0" />
-                          <span className="text-xs font-medium text-orange-600 uppercase tracking-wide">
-                            No. of Offline Workshops:
-                          </span>
-                          <span className="font-medium">
-                            {course.num_offline_workshops}
-                          </span>
-                        </div>
-                      )}
-                      {(course.num_hours ?? 0) > 0 && (
-                        <div className="flex items-center gap-2">
-                          <Clock className="w-4 h-4 text-orange-600 flex-shrink-0" />
-                          <span className="text-xs font-medium text-orange-600 uppercase tracking-wide">
-                            No. of Offline Hours:
-                          </span>
-                          <span className="font-medium">
-                            {course.num_hours}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* Enhanced Categories */}
-                {course.categories && course.categories.length > 0 && (
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-sm text-neutral-400 mr-2">
-                      Topics:
-                    </span>
-                    {course.categories.map((category) => (
-                      <Badge
-                        key={category.id}
-                        className="bg-primary-500/20 text-primary-300 border-primary-400/30 hover:bg-primary-500/30"
-                      >
-                        {category.name}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Enhanced Course Preview Card */}
-            <div className="lg:col-span-1">
+      {/* Breadcrumb + purchase panel (carried over from the previous hero) */}
+      <div className="container-custom py-8">
+        <nav className="mb-6">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-gray-500">
+            <Link to="/" className="hover:text-primary-600 transition-colors">
+              Home
+            </Link>
+            <span className="text-gray-300">/</span>
+            <Link
+              to="/courses"
+              className="hover:text-primary-600 transition-colors"
+            >
+              Courses
+            </Link>
+            <span className="text-gray-300">/</span>
+            <span className="text-gray-900 font-medium line-clamp-1">
+              {course.post_title}
+            </span>
+          </div>
+        </nav>
+        <div className="ml-auto max-w-md">
               <Card className="rd-purchase-panel sticky top-8 overflow-hidden">
                 <div className="aspect-video relative overflow-hidden group">
                   <img
@@ -994,8 +831,6 @@ export const CourseDetailPage = () => {
                   </div>
                 </CardContent>
               </Card>
-            </div>
-          </div>
         </div>
       </div>
 

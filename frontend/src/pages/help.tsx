@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 
-import { BrandBanner } from "@/components/design-system/BrandBanner";
+import { SymphoPageHero } from "@/components/sympho/SymphoSystem";
 
 const articles = [
   { category: "Getting started", icon: GraduationCap, title: "Create your account and choose a workspace", text: "Set up your profile, verify your email and open the dashboard for your role.", href: "/register" },
@@ -36,16 +36,16 @@ export default function HelpPage() {
   }, [query]);
 
   return (
-    <div className="campus-growth-page">
+    <div className="sympho-scope campus-growth-page min-h-screen bg-limestone-100 text-ink-900">
       <Helmet><title>Help centre · SashaInfinity</title></Helmet>
+      <SymphoPageHero
+        index="SI—HLP.01"
+        eyebrow="Help centre"
+        title="What would you like to do?"
+        lede="Answers, guides and direct routes to support across the SashaInfinity studio."
+        drawingCode="SHEET SI—HLP · SCALE 1:100"
+      />
       <div className="campus-growth-wrap">
-        <BrandBanner
-          headingLevel="h1"
-          eyebrow="SashaInfinity Help Centre"
-          title="What would you like to do?"
-          description="Find the shortest path to your next step across learning, teaching and campus operations."
-          compact
-        />
         <section className="campus-panel help-search-panel">
           <label className="help-search">
             <Search size={20} />

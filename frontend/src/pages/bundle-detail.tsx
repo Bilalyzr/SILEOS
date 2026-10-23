@@ -1,5 +1,6 @@
 import { PageLayout } from "@/components/design-system/PageLayout";
-import { PageBanner } from "@/components/design-system/PageBanner";
+import { SymphoPageHero } from "@/components/sympho/SymphoSystem";
+import { ShareButton } from "@/components/ui/share-button";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -187,16 +188,34 @@ export default function BundleDetailPage() {
   const ownedSet = new Set(bundle.owned_course_ids);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="sympho-scope min-h-screen bg-limestone-100 text-ink-900">
       <PageLayout
         header={
-          <PageBanner
+          <SymphoPageHero
+            index="SI—BND.02"
             eyebrow="Curated learning bundle"
             title={bundle.name}
-            description={bundle.description}
-            share
-            shareTitle={bundle.name}
-            shareDescription={`${bundle.courses.length} courses brought together in one learning bundle.`}
+            lede={bundle.description}
+            drawingCode="SHEET SI—BND · SCALE 1:100"
+            badge={pct > 0 ? `Save ${pct}%` : undefined}
+            specs={[
+              {
+                label: "Courses",
+                value: `${bundle.courses.length} included`,
+              },
+              { label: "Bundle price", value: `₹${bundle.bundle_price}` },
+              {
+                label: "Combined value",
+                value: `₹${bundle.combined_price}`,
+              },
+            ]}
+            actions={
+              <ShareButton
+                url={`${window.location.origin}/bundles/${bundle.slug}`}
+                title={bundle.name}
+                description={`${bundle.courses.length} courses brought together in one learning bundle.`}
+              />
+            }
           />
         }
         className="rd-screen rd-screen-bundle-detail"

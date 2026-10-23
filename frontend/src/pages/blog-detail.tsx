@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ShareButton } from "@/components/ui/share-button";
+import { SymphoPageHero } from "@/components/sympho/SymphoSystem";
 import { api } from "@/api/axios";
 import { useAuthStore } from "@/store/auth";
 import { useSEO } from "@/hooks/use-seo";
@@ -259,8 +260,29 @@ export const BlogDetailPage = () => {
     );
   }
 
+  const readingTimeMinutes = Math.max(
+    1,
+    Math.round(post.content.replace(/<[^>]*>/g, "").split(/\s+/).filter(Boolean).length / 200),
+  );
+
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="sympho-scope min-h-screen bg-limestone-100 text-ink-900">
+      <SymphoPageHero
+        index="SI—BLG.02"
+        eyebrow={post.category || "Field Note"}
+        title={post.title}
+        lede={
+          post.excerpt ||
+          post.content.replace(/<[^>]*>/g, "").slice(0, 180)
+        }
+        drawingCode="SHEET SI—BLG · SCALE 1:100"
+        badge={`${readingTimeMinutes} min read`}
+        specs={[
+          { label: "Author", value: post.author.name },
+          { label: "Published", value: formatDate(post.post_date) },
+        ]}
+      />
+
       {/* Back Button */}
       <div className="bg-white border-b border-neutral-200">
         <div className="container-custom max-w-4xl py-4">

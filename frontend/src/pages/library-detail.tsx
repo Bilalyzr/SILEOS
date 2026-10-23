@@ -12,7 +12,8 @@ import toast from 'react-hot-toast'
 import { EBOOK_CATEGORY_LABELS, libraryAPI, type Ebook } from '@/api/library'
 import { PriceTag } from './library'
 import { PageLayout } from '@/components/design-system/PageLayout'
-import { PageBanner } from '@/components/design-system/PageBanner'
+import { SymphoPageHero } from '@/components/sympho/SymphoSystem'
+import { ShareButton } from '@/components/ui/share-button'
 
 export default function LibraryDetailPage() {
   const { slug } = useParams<{ slug: string }>()
@@ -65,17 +66,34 @@ export default function LibraryDetailPage() {
   }
 
   return (
+    <div className="sympho-scope min-h-screen bg-limestone-100 text-ink-900">
     <PageLayout
       className="rd-screen rd-screen-library-detail"
       header={
-        <PageBanner
+        <SymphoPageHero
+          index="SI—LIB.02"
           eyebrow={EBOOK_CATEGORY_LABELS[ebook.category] ?? ebook.category}
           title={ebook.title}
-          description={ebook.description.slice(0, 220)}
-          image={ebook.cover_image || undefined}
-          share
-          shareUrl={`${window.location.origin}/library/${ebook.slug}`}
-          shareDescription={ebook.description.slice(0, 160)}
+          lede={ebook.description.slice(0, 220)}
+          drawingCode="SHEET SI—LIB · SCALE 1:100"
+          badge={ebook.effective_price_inr === 0 ? 'Free' : `₹${ebook.effective_price_inr}`}
+          specs={[
+            { label: 'Format', value: 'Digital ebook' },
+            { label: 'Pages', value: ebook.page_count ? `${ebook.page_count}` : '—' },
+            {
+              label: 'Size',
+              value: ebook.file_size_bytes
+                ? `${(ebook.file_size_bytes / 1048576).toFixed(1)} MB`
+                : '—',
+            },
+          ]}
+          actions={
+            <ShareButton
+              url={`${window.location.origin}/library/${ebook.slug}`}
+              title={ebook.title}
+              description={ebook.description.slice(0, 160)}
+            />
+          }
         />
       }
     >
@@ -155,5 +173,6 @@ export default function LibraryDetailPage() {
         </div>
       </div>
     </PageLayout>
+    </div>
   )
 }

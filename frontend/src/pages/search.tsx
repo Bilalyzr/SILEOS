@@ -4,6 +4,7 @@ import { Search, Filter, Loader2, SearchX } from "lucide-react";
 import { CourseCard } from "@/components/course/course-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { SymphoPageHero } from "@/components/sympho/SymphoSystem";
 import { api } from "@/api/axios";
 import { Course } from "@/types";
 
@@ -168,21 +169,31 @@ export function SearchPage() {
   ).length;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="sympho-scope min-h-screen bg-limestone-100 text-ink-900">
+      <SymphoPageHero
+        index="SI—SRCH"
+        eyebrow="Studio index"
+        title="Search the studio"
+        lede="Courses, labs, notes and mentors — one query."
+        drawingCode="SHEET SI—SRCH · SCALE 1:100"
+        badge={`${total} result${total === 1 ? "" : "s"}`}
+        actions={
+          <div className="relative w-full max-w-xl">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search for courses..."
+              value={searchTerm}
+              onChange={(e) => handleSearch(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+        }
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Search Header */}
-        <div className="mb-8">
-          <div className="flex items-center space-x-4 mb-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search for courses..."
-                value={searchTerm}
-                onChange={(e) => handleSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
+        <div className="mb-8 py-8">
+          <div className="flex items-center justify-end mb-4">
             <Button
               variant="outline"
               onClick={() => setShowFilters(!showFilters)}

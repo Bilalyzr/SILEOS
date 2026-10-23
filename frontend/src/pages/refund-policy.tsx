@@ -1,4 +1,7 @@
-import PageHeader from "@/components/public/PageHeader";
+import { Fragment } from "react";
+import { Link } from "react-router-dom";
+import { ChevronRight } from "lucide-react";
+import { SymphoPageHero } from "@/components/sympho/SymphoSystem";
 
 const breadcrumbs = [
   { name: "Home", path: "/" },
@@ -7,9 +10,33 @@ const breadcrumbs = [
 
 export function RefundPolicyPage() {
   return (
-    <>
-      <PageHeader title="Refund and Returns Policy" breadcrumbs={breadcrumbs} />
+    <div className="sympho-scope min-h-screen bg-limestone-100 text-ink-900">
+      <SymphoPageHero
+        index="SI—LGL.04"
+        eyebrow="Legal"
+        title="Refund Policy"
+        lede="Refunds and returns for SashaInfinity purchases, including the 7-day money-back guarantee for paid courses."
+        drawingCode="SHEET SI—LGL · SCALE 1:100"
+      />
       <div className="container-custom py-16">
+        <nav
+          className="rd-breadcrumb rd-public-breadcrumb mb-6"
+          aria-label="Breadcrumb"
+        >
+          {breadcrumbs.map((crumb, i) => (
+            <Fragment key={crumb.path}>
+              {i > 0 && <ChevronRight size={12} />}
+              <Link
+                to={crumb.path}
+                aria-current={
+                  i === breadcrumbs.length - 1 ? "page" : undefined
+                }
+              >
+                {crumb.name}
+              </Link>
+            </Fragment>
+          ))}
+        </nav>
         <div className="max-w-4xl mx-auto prose prose-lg">
           <div
             className="bg-white rounded-lg shadow-md p-8"
@@ -241,6 +268,6 @@ export function RefundPolicyPage() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

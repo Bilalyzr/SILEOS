@@ -19,6 +19,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { api } from "@/api/axios"
 import { getMediaUrl } from "@/utils/media"
 import { ShareButton } from "@/components/ui/share-button"
+import { SymphoPageHero } from "@/components/sympho/SymphoSystem"
 
 interface PublicProfile {
   username: string
@@ -106,7 +107,6 @@ export const PublicProfilePage = () => {
     )
   }
 
-  const cover = getMediaUrl(profile.cover_photo)
   const photo = getMediaUrl(profile.profile_photo)
   const isInstructor = profile.role === "instructor" || profile.role === "admin"
   const joined = profile.joined_date
@@ -124,18 +124,24 @@ export const PublicProfilePage = () => {
   ].filter((s) => s.url)
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white">
-      {/* Cover banner */}
-      <div
-        className="relative h-48 md:h-60 bg-gradient-to-br from-primary-600 to-primary-800"
-        style={
-          cover
-            ? { backgroundImage: `url(${cover})`, backgroundSize: "cover", backgroundPosition: "center" }
-            : undefined
+    <div className="sympho-scope min-h-screen bg-limestone-100 text-ink-900">
+      {/* Sympho Hero (replaces the gradient cover banner) */}
+      <SymphoPageHero
+        index="SI—PRF.02"
+        eyebrow="Student profile"
+        title={profile.display_name}
+        lede={
+          profile.bio ||
+          `Discover ${profile.display_name}'s learning profile on SashaInfinity.`
         }
-      >
-        <div className="absolute inset-0 bg-black/20" />
-      </div>
+        drawingCode="SHEET SI—PRF · SCALE 1:100"
+        badge={profile.designation || undefined}
+        specs={[
+          { label: "Role", value: profile.role || "—" },
+          { label: "Location", value: profile.location || "—" },
+          { label: "Joined", value: joined || "—" },
+        ]}
+      />
 
       <div className="container-custom">
         <div className="max-w-4xl mx-auto -mt-16 relative z-10 px-4">

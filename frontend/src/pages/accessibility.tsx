@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { SymphoPageHero } from "@/components/sympho/SymphoSystem";
 
 /**
  * /accessibility — the page the footer "Accessibility" link points to.
@@ -30,16 +31,15 @@ export function AccessibilityPage() {
   const check = "flex items-center gap-3 text-sm text-slate-700";
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-10">
-      <p className="text-xs font-semibold uppercase tracking-widest text-orange-600">Accessibility</p>
-      <h1 className="mt-2 text-3xl font-bold text-slate-900">Everyone can learn here.</h1>
-      <p className="mt-3 text-sm leading-relaxed text-slate-600">
-        SashaInfinity is built to be usable by everyone. Adjust your reading
-        experience below — your choices apply across the whole site immediately
-        and are remembered on this device. The same settings are available any
-        time from the accessibility icon in the header.
-      </p>
-
+    <div className="sympho-scope min-h-screen bg-limestone-100 text-ink-900">
+      <SymphoPageHero
+        index="SI—A11Y"
+        eyebrow="Inclusive by design"
+        title="Everyone can learn here."
+        lede="SashaInfinity is built to be usable by everyone. Adjust your reading experience below — your choices apply across the whole site immediately and are remembered on this device."
+        drawingCode="SHEET SI—A11Y · SCALE 1:100"
+      />
+      <div className="mx-auto max-w-2xl px-4 py-10">
       <section className={`mt-8 ${card}`}>
         <h2 className="text-lg font-semibold text-slate-900">Display preferences</h2>
         <div className="mt-4 space-y-4">
@@ -101,6 +101,7 @@ export function AccessibilityPage() {
           we will make it work.
         </p>
       </section>
+      </div>
     </div>
   );
 }

@@ -1,4 +1,5 @@
-import { PageLayout, PageHeader } from "@/components/design-system/PageLayout";
+import { PageLayout } from "@/components/design-system/PageLayout";
+import { SymphoPageHero } from "@/components/sympho/SymphoSystem";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -76,17 +77,25 @@ export function CartPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="sympho-scope min-h-screen bg-limestone-100 text-ink-900">
       <PageLayout
         header={
-          <PageHeader>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Shopping Cart
-            </h1>
-            <p className="text-gray-600">
-              {items.length} course{items.length !== 1 ? "s" : ""} in cart
-            </p>
-          </PageHeader>
+          <SymphoPageHero
+            index="SI—CRT"
+            eyebrow="Checkout"
+            title="Shopping Cart"
+            lede="Review your selected programs before checkout."
+            drawingCode="SHEET SI—CRT · SCALE 1:100"
+            badge={
+              items.length > 0
+                ? `${items.length} item${items.length !== 1 ? "s" : ""}`
+                : "Empty"
+            }
+            specs={[
+              { label: "Subtotal", value: `₹${subtotal.toFixed(2)}` },
+              { label: "Total", value: `₹${total.toFixed(2)}` },
+            ]}
+          />
         }
         className="rd-screen rd-screen-cart"
       >
