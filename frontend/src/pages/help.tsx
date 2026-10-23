@@ -36,7 +36,7 @@ export default function HelpPage() {
   }, [query]);
 
   return (
-    <div className="sympho-scope campus-growth-page min-h-screen bg-limestone-100 text-ink-900">
+    <div className="sympho-scope min-h-screen bg-limestone-100 text-ink-900">
       <Helmet><title>Help centre · SashaInfinity</title></Helmet>
       <SymphoPageHero
         index="SI—HLP.01"
@@ -45,6 +45,8 @@ export default function HelpPage() {
         lede="Answers, guides and direct routes to support across the SashaInfinity studio."
         drawingCode="SHEET SI—HLP · SCALE 1:100"
       />
+      {/* Padded cream canvas for the content body; hero above is full-bleed */}
+      <div className="campus-growth-page">
       <div className="campus-growth-wrap">
         <section className="campus-panel help-search-panel">
           <label className="help-search">
@@ -71,6 +73,7 @@ export default function HelpPage() {
           )}
         </section>
       </div>
+    </div>
     </div>
   );
 }
