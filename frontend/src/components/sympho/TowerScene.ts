@@ -1206,6 +1206,11 @@ export class TowerScene {
     this.scene.add(this.rigRoot);
     this.rigRoot.add(this.glassesGroup);
     this.glassesGroup.position.set(0, 3.2, 0.4);
+    // Product decision: only the real Apple Vision Pro GLB may ever render.
+    // The procedural fallback glasses stay mounted (scroll choreography and
+    // batches still reference their groups) but are invisible from birth —
+    // including while the GLB fetches and if that fetch ever fails.
+    this.glassesGroup.visible = false;
     this.realHeadsetRoot.position.set(0, 3.4, 0.2);
     this.rigRoot.add(this.realHeadsetRoot);
 
