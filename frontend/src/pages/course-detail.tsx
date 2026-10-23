@@ -553,7 +553,7 @@ export const CourseDetailPage = () => {
                     </span>
                   </div>
 
-                  <h1 className="text-3xl lg:text-4xl font-extrabold mb-4 text-gray-900 leading-tight tracking-tight font-[Lexend Deca]">
+                  <h1 className="text-3xl lg:text-4xl font-extrabold mb-4 text-gray-900 leading-tight tracking-tight font-display">
                     {course.post_title}
                   </h1>
                   <p className="text-base text-gray-600 mb-6 leading-relaxed text-justify">

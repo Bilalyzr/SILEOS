@@ -39,7 +39,7 @@
   color: var(--sf-ink);
   background: var(--sf-bg);
   min-height: 100vh;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans", "Noto Sans Tamil", system-ui, sans-serif;
 }
 .sf-app :where(h1, h2, h3, h4) {
   letter-spacing: -0.025em;

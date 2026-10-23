@@ -682,7 +682,7 @@
   gap: 55px;
 }
 .sf-app .rd-home-hero h1 {
-  font-family: "Space Grotesk", Inter, sans-serif;
+  font-family: "Plus Jakarta Sans", "Noto Sans Tamil", system-ui, sans-serif;
   font-size: clamp(36px, 4vw, 60px);
   font-weight: 700;
   color: var(--sf-ink);
