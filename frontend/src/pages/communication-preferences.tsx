@@ -294,7 +294,7 @@ export function CommunicationPreferencesPage() {
   const administrator = role === "admin" || role === "superadmin";
 
   return (
-    <div className="campus mx-auto max-w-6xl py-2">
+    <div className="campus mx-auto max-w-7xl py-2">
       <BrandBanner
         headingLevel="h1"
         eyebrow="SashaInfinity · Communication preferences"

@@ -142,6 +142,19 @@ body.astra-theme::before {
     inset 0 1px 0 white;
   color: #442714;
 }
+/* Page-root placement: the banner is a rounded card, not a full-bleed slab.
+   PageLayout renders the header slot raw (.rd-page has no gutters) and the
+   campus pages wrap it in assorted max-w containers with py-2 — so inset and
+   center it in the site container rhythm (96rem + spacing-gutter) on every
+   page root. Deliberately direct-child only: nested previews (e.g. the
+   campus-panel artwork preview) keep their host container's width. */
+.rd-page > .brand-banner,
+.campus > .brand-banner,
+.campus-growth-wrap > .brand-banner {
+  width: min(calc(100% - 2 * var(--spacing-gutter, 2.5rem)), 96rem);
+  margin-inline: auto;
+  margin-block-start: 1.375rem;
+}
 .brand-banner-copy {
   position: relative;
   z-index: 1;
