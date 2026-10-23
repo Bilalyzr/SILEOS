@@ -1,3 +1,4 @@
+import { Eye } from "lucide-react";
 /**
  * GuardianVisibility (v2.0 §4.2 Parent View Configurator — WP6): which
  * signals a guardian sees for this course in the parent digest. Defaults
@@ -21,7 +22,7 @@ export function GuardianVisibility({ courseId, settings, onChange }: { courseId:
   return (
     <div className="border border-gray-200 rounded-xl p-6 bg-sky-50" data-testid="guardian-visibility">
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-10 h-10 bg-sky-100 rounded-lg flex items-center justify-center"><span className="text-sky-700 text-xl">👪</span></div>
+        <div className="w-10 h-10 bg-sky-100 rounded-lg flex items-center justify-center"><Eye className="text-sky-700" size={20} /></div>
         <div>
           <h3 className="text-lg font-semibold text-gray-900">Guardian visibility</h3>
           <p className="text-sm text-gray-500">What a linked parent sees for this course in their weekly digest.</p>

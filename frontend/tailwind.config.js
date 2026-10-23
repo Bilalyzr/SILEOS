@@ -26,6 +26,7 @@ export default {
           300: '#fdba74',
           400: '#fb923c',
           500: '#ff751f', // Orange - Main brand color
+          550: '#c85a1a',
           600: '#ea580c',
           700: '#c2410c',
           800: '#9a3412',
@@ -138,7 +139,8 @@ export default {
           200: '#ffd5a5',
           300: '#ffb875',
           400: '#ff9b54',
-          500: '#ff751f',
+          500: '#ff751f', // Orange - Main brand color
+          550: '#c85a1a',
           600: '#9a390b',
         },
         sage: {

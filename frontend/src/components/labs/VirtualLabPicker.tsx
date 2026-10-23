@@ -1,3 +1,4 @@
+import { Microscope } from "lucide-react";
 /**
  * Virtual lab picker for the course editor — the admin-curated catalog
  * (GET /api/v1/virtual-labs): PhET sims, admin embeds and native gradeable
@@ -43,7 +44,7 @@ export function VirtualLabPicker({
 
   return (
     <div className="mt-3 p-4 bg-teal-50 border border-teal-200 rounded-lg">
-      <h5 className="font-medium text-gray-900 mb-1">🔬 Virtual Lab</h5>
+      <h5 className="font-medium text-gray-900 mb-1"><Microscope size={16} className="inline-block align-[-2px] mr-1" /> Virtual Lab</h5>
       {attachedSim ? (
         <div>
           <div className="flex flex-wrap items-center gap-2 mb-2">
@@ -101,7 +102,7 @@ export function VirtualLabPicker({
                     onClick={() => onAttach(l.slug)}
                     className="w-full text-left text-sm px-3 py-2 rounded-lg border border-gray-200 hover:border-teal-400 bg-white flex items-center gap-2"
                   >
-                    <span>🔬</span>
+                    <Microscope size={16} />
                     <span className="flex-1 min-w-0">
                       <span className="block truncate">{l.title}</span>
                       {l.description && <span className="block text-[11px] text-gray-400 truncate">{l.description}</span>}

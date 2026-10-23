@@ -23,6 +23,7 @@
   --color-copper-300: #ffb875;
   --color-copper-400: #ff9b54;
   --color-copper-500: #ff751f;
+  --color-copper-550: #c85a1a;
   --color-copper-600: #9a390b;
 
   --color-sage-200: #ffe4cb;
@@ -53,7 +54,7 @@
   --text-display-md: clamp(1.25rem, 1.05rem + 0.9vw, 1.65rem);
   --text-display-sm: clamp(1.05rem, 0.98rem + 0.4vw, 1.3rem);
   --text-lede: clamp(0.92rem, 0.88rem + 0.18vw, 1.02rem);
-  --text-label: 0.66rem;
+  --text-label: 0.72rem;
 
   --spacing-gutter: clamp(1rem, 0.6rem + 2vw, 2.5rem);
   --spacing-section: clamp(3.25rem, 2.5rem + 3.5vw, 5.5rem);
@@ -74,6 +75,20 @@
   --duration-cinematic: 1.1s;
 
   --paper-grain: var(--sileos-canvas);
+}
+
+/* Keyboard focus indicator — site-wide. Specificity (body :focus-visible)
+   outranks bare `outline-none` utilities, so controls that removed their
+   outline without a replacement ring can never become focus-invisible
+   (WCAG 2.4.7). Elements with their own focus:ring styles simply show
+   ring + outline together — one consistent affordance. */
+body :focus-visible {
+  outline: 2px solid var(--color-copper-600);
+  outline-offset: 2px;
+}
+.on-dark :focus-visible,
+[data-on-dark] :focus-visible {
+  outline-color: var(--color-copper-300);
 }
 
 /* ==========================================================================

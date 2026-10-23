@@ -1,3 +1,4 @@
+import { Target } from "lucide-react";
 /**
  * RewardDesigner (v2.0 §4.2 / §10 Reward System Designer — WP6): per-course
  * points overrides, custom badges (rule + threshold + points), streak-freeze
@@ -37,7 +38,7 @@ export function RewardDesigner({ courseId, settings, onChange }: { courseId: num
   return (
     <div className="border border-gray-200 rounded-xl p-6 bg-amber-50" data-testid="reward-designer">
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center"><span className="text-amber-700 text-xl">🎯</span></div>
+        <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center"><Target className="text-amber-700" size={20} /></div>
         <div>
           <h3 className="text-lg font-semibold text-gray-900">Reward system</h3>
           <p className="text-sm text-gray-500">Points per activity, custom badges, streak freezes and the course leaderboard — for this course only.</p>

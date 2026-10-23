@@ -1,3 +1,4 @@
+import { Users } from "lucide-react";
 /**
  * CollaboratorsBlock (roadmap R6): co-instructors for a course. Owner adds by
  * email (instructor accounts only) and removes; co-instructors edit
@@ -40,7 +41,7 @@ export function CollaboratorsBlock({ courseId }: { courseId: number }) {
   return (
     <div className="border border-gray-200 rounded-xl p-6 bg-violet-50/60" data-testid="collaborators-block">
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-10 h-10 bg-violet-100 rounded-lg flex items-center justify-center"><span className="text-violet-700 text-xl">👥</span></div>
+        <div className="w-10 h-10 bg-violet-100 rounded-lg flex items-center justify-center"><Users className="text-violet-700" size={20} /></div>
         <div>
           <h3 className="text-lg font-semibold text-gray-900">Co-instructors</h3>
           <p className="text-sm text-gray-500">They can edit the curriculum, quizzes, assignments, live classes and grades. Ownership and revenue stay with you.</p>

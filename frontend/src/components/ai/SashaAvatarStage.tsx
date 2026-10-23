@@ -1,3 +1,4 @@
+import { Sparkles } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
@@ -140,7 +141,7 @@ export function SashaAvatarStage({ mood = 'idle', className = '' }: SashaAvatarS
   if (failed) {
     return (
       <div className={`grid place-items-center ${className}`} role="img" aria-label="Sasha AI tutor">
-        <div className="grid h-44 w-44 place-items-center rounded-[3rem] border border-orange-300/30 bg-orange-300/10 text-6xl shadow-[0_0_80px_rgba(249,115,22,0.24)]"><span aria-hidden>✦</span></div>
+        <div className="grid h-44 w-44 place-items-center rounded-[3rem] border border-orange-300/30 bg-orange-300/10 text-6xl shadow-[0_0_80px_rgba(249,115,22,0.24)]"><Sparkles aria-hidden size={48} /></div>
       </div>
     )
   }

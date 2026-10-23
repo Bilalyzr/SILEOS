@@ -531,15 +531,23 @@ export function NewsletterSection() {
             className="flex flex-col gap-3 sm:flex-row"
             noValidate
           >
-            <input
-              type="email"
-              required
-              placeholder="Enter your email"
-              aria-label="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="field-input flex-1"
-            />
+            <div className="flex flex-1 flex-col">
+              <label
+                htmlFor="newsletter-email"
+                className="sheet-label mb-1.5 block"
+              >
+                Email address
+              </label>
+              <input
+                id="newsletter-email"
+                type="email"
+                required
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="field-input"
+              />
+            </div>
             <button
               type="submit"
               disabled={submitting}
@@ -1722,7 +1730,7 @@ export function HomePage() {
                     </span>
                     <span
                       aria-hidden="true"
-                      className="grid size-10 shrink-0 place-items-center rounded-full border border-ink-900/20 text-ink-900 transition-all duration-500 ease-out-expo group-hover:border-ink-900 group-hover:bg-ink-900 group-hover:text-limestone-50"
+                      className="grid size-11 shrink-0 place-items-center rounded-full border border-ink-900/20 text-ink-900 transition-all duration-500 ease-out-expo group-hover:border-ink-900 group-hover:bg-ink-900 group-hover:text-limestone-50"
                     >
                       <ArrowUpRight size={16} />
                     </span>

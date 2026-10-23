@@ -174,7 +174,7 @@ export default function PublicHeader() {
         background: scrolled
           ? "rgba(255, 255, 255, 0.96)"
           : "rgba(255, 255, 255, 0.92)",
-        color: "#442714",
+        color: "var(--color-ink-900)",
         borderBottom: "1px solid rgba(157, 85, 36, 0.13)",
       }}
       className={`sympho-scope sympho-header sticky top-0 z-50 border-b transition-all duration-300 ${
@@ -192,7 +192,7 @@ export default function PublicHeader() {
         >
           <span
             aria-hidden="true"
-            className="relative grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-xl border border-[#f2c89f] bg-[#fffaf4] shadow-[0_3px_10px_rgba(179,99,24,0.12)] transition-transform duration-300 group-hover:scale-105"
+            className="relative grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-xl border border-limestone-300 bg-limestone-100 shadow-[0_3px_10px_rgba(179,99,24,0.12)] transition-transform duration-300 group-hover:scale-105"
           >
             <img
               src="/brand/sasha-logo-small.png?v=lion2"
@@ -202,14 +202,14 @@ export default function PublicHeader() {
           </span>
           <span className="flex flex-col leading-none">
             <span
-              style={{ color: "#442714" }}
+              style={{ color: "var(--color-ink-900)" }}
               className="font-display text-[1.02rem] font-bold tracking-[-0.02em]"
             >
               Sasha Infinity
             </span>
             <span
-              style={{ color: "#9a390b" }}
-              className="mt-0.5 font-mono text-[0.55rem] font-semibold tracking-[0.16em] uppercase"
+              style={{ color: "var(--color-copper-600)" }}
+              className="mt-0.5 font-mono text-[0.72rem] font-semibold tracking-[0.16em] uppercase"
             >
               Knowledge Architecture
             </span>
@@ -219,7 +219,7 @@ export default function PublicHeader() {
         {/* Primary Desktop Navigation Capsule */}
         <nav
           aria-label="Primary"
-          className="hidden items-center gap-0.5 rounded-full border border-[#edc7a7]/70 bg-[#fff9f2]/95 p-1 shadow-[inset_0_1px_0_#ffffff,0_2px_10px_rgba(142,77,23,0.05)] lg:inline-flex"
+          className="hidden items-center gap-0.5 rounded-full border border-limestone-300/70 bg-limestone-100/95 p-1 shadow-[inset_0_1px_0_#ffffff,0_2px_10px_rgba(142,77,23,0.05)] lg:inline-flex"
         >
           <NavLink
             to="/"
@@ -227,8 +227,8 @@ export default function PublicHeader() {
             className={({ isActive }) =>
               `relative rounded-full px-3.5 py-1.5 text-[0.8rem] font-semibold transition-all duration-200 ${
                 isActive
-                  ? "bg-gradient-to-r from-[#ffd5a5] via-[#ffb875] to-[#ff9b54] text-[#51230d] shadow-[0_2px_8px_rgba(222,121,37,0.22),inset_0_1px_0_#ffffff]"
-                  : "text-[#5c3820] hover:bg-[#ffecd6]/70 hover:text-[#9a390b]"
+                  ? "bg-gradient-to-r from-copper-200 via-copper-300 to-copper-400 text-ink-900 shadow-[0_2px_8px_rgba(222,121,37,0.22),inset_0_1px_0_#ffffff]"
+                  : "text-ink-700 hover:bg-limestone-200/70 hover:text-copper-600"
               }`
             }
           >
@@ -249,15 +249,15 @@ export default function PublicHeader() {
               }
               className={`inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-[0.8rem] font-semibold transition-all duration-200 ${
                 openMenu === "learn"
-                  ? "bg-[#ffecd6] text-[#9a390b]"
-                  : "text-[#5c3820] hover:bg-[#ffecd6]/70 hover:text-[#9a390b]"
+                  ? "bg-limestone-200 text-copper-600"
+                  : "text-ink-700 hover:bg-limestone-200/70 hover:text-copper-600"
               }`}
             >
               <span>Learn</span>
               <ChevronDown
                 size={12}
                 className={`transition-transform duration-300 ${
-                  openMenu === "learn" ? "rotate-180 text-[#9a390b]" : ""
+                  openMenu === "learn" ? "rotate-180 text-copper-600" : ""
                 }`}
               />
             </button>
@@ -274,19 +274,19 @@ export default function PublicHeader() {
               <div
                 style={{
                   background: "#ffffff",
-                  color: "#442714",
+                  color: "var(--color-ink-900)",
                   border: "1px solid rgba(157, 85, 36, 0.16)",
                 }}
                 className="rounded-2xl p-4 shadow-[0_18px_42px_rgba(142,77,23,0.14)]"
               >
-                <div className="mb-3 flex items-center justify-between border-b border-[#9d5524]/12 pb-2.5 px-1">
-                  <span className="font-mono text-[0.64rem] font-bold tracking-widest uppercase text-[#853b14]">
+                <div className="mb-3 flex items-center justify-between border-b border-copper-600/12 pb-2.5 px-1">
+                  <span className="font-mono text-[0.72rem] font-bold tracking-widest uppercase text-copper-600">
                     01 — Learning Architecture
                   </span>
                   <Link
                     to="/courses"
                     onClick={() => setOpenMenu(null)}
-                    className="inline-flex items-center gap-1 font-mono text-[0.64rem] font-semibold uppercase tracking-wider text-[#9a390b] hover:underline"
+                    className="inline-flex items-center gap-1 font-mono text-[0.72rem] font-semibold uppercase tracking-wider text-copper-600 hover:underline"
                   >
                     All Catalogs
                     <ArrowUpRight size={12} />
@@ -298,20 +298,20 @@ export default function PublicHeader() {
                       <Link
                         to={item.to}
                         onClick={() => setOpenMenu(null)}
-                        className="group flex items-start gap-2.5 rounded-xl p-2.5 transition-colors hover:bg-[#fff4e8]"
+                        className="group flex items-start gap-2.5 rounded-xl p-2.5 transition-colors hover:bg-limestone-100"
                       >
-                        <span className="mt-0.5 rounded-md bg-[#ffecd6] px-1.5 py-0.5 font-mono text-[0.6rem] font-bold tracking-wider text-[#9a390b]">
+                        <span className="mt-0.5 rounded-md bg-limestone-200 px-1.5 py-0.5 font-mono text-[0.72rem] font-bold tracking-wider text-copper-600">
                           {item.code}
                         </span>
                         <span className="flex-1">
-                          <span className="flex items-center justify-between font-display text-[0.84rem] font-bold text-[#442714] group-hover:text-[#9a390b]">
+                          <span className="flex items-center justify-between font-display text-[0.84rem] font-bold text-ink-900 group-hover:text-copper-600">
                             {item.label}
                             <ArrowUpRight
                               size={13}
                               className="opacity-0 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
                             />
                           </span>
-                          <span className="mt-0.5 block text-[0.7rem] leading-snug text-[#75543e]">
+                          <span className="mt-0.5 block text-[0.75rem] leading-snug text-ink-600">
                             {item.blurb}
                           </span>
                         </span>
@@ -328,8 +328,8 @@ export default function PublicHeader() {
             className={({ isActive }) =>
               `relative rounded-full px-3.5 py-1.5 text-[0.8rem] font-semibold transition-all duration-200 ${
                 isActive
-                  ? "bg-gradient-to-r from-[#ffd5a5] via-[#ffb875] to-[#ff9b54] text-[#51230d] shadow-[0_2px_8px_rgba(222,121,37,0.22),inset_0_1px_0_#ffffff]"
-                  : "text-[#5c3820] hover:bg-[#ffecd6]/70 hover:text-[#9a390b]"
+                  ? "bg-gradient-to-r from-copper-200 via-copper-300 to-copper-400 text-ink-900 shadow-[0_2px_8px_rgba(222,121,37,0.22),inset_0_1px_0_#ffffff]"
+                  : "text-ink-700 hover:bg-limestone-200/70 hover:text-copper-600"
               }`
             }
           >
@@ -341,8 +341,8 @@ export default function PublicHeader() {
             className={({ isActive }) =>
               `relative rounded-full px-3.5 py-1.5 text-[0.8rem] font-semibold transition-all duration-200 ${
                 isActive
-                  ? "bg-gradient-to-r from-[#ffd5a5] via-[#ffb875] to-[#ff9b54] text-[#51230d] shadow-[0_2px_8px_rgba(222,121,37,0.22),inset_0_1px_0_#ffffff]"
-                  : "text-[#5c3820] hover:bg-[#ffecd6]/70 hover:text-[#9a390b]"
+                  ? "bg-gradient-to-r from-copper-200 via-copper-300 to-copper-400 text-ink-900 shadow-[0_2px_8px_rgba(222,121,37,0.22),inset_0_1px_0_#ffffff]"
+                  : "text-ink-700 hover:bg-limestone-200/70 hover:text-copper-600"
               }`
             }
           >
@@ -354,8 +354,8 @@ export default function PublicHeader() {
             className={({ isActive }) =>
               `relative rounded-full px-3.5 py-1.5 text-[0.8rem] font-semibold transition-all duration-200 ${
                 isActive
-                  ? "bg-gradient-to-r from-[#ffd5a5] via-[#ffb875] to-[#ff9b54] text-[#51230d] shadow-[0_2px_8px_rgba(222,121,37,0.22),inset_0_1px_0_#ffffff]"
-                  : "text-[#5c3820] hover:bg-[#ffecd6]/70 hover:text-[#9a390b]"
+                  ? "bg-gradient-to-r from-copper-200 via-copper-300 to-copper-400 text-ink-900 shadow-[0_2px_8px_rgba(222,121,37,0.22),inset_0_1px_0_#ffffff]"
+                  : "text-ink-700 hover:bg-limestone-200/70 hover:text-copper-600"
               }`
             }
           >
@@ -367,8 +367,8 @@ export default function PublicHeader() {
             className={({ isActive }) =>
               `relative rounded-full px-3.5 py-1.5 text-[0.8rem] font-semibold transition-all duration-200 ${
                 isActive
-                  ? "bg-gradient-to-r from-[#ffd5a5] via-[#ffb875] to-[#ff9b54] text-[#51230d] shadow-[0_2px_8px_rgba(222,121,37,0.22),inset_0_1px_0_#ffffff]"
-                  : "text-[#5c3820] hover:bg-[#ffecd6]/70 hover:text-[#9a390b]"
+                  ? "bg-gradient-to-r from-copper-200 via-copper-300 to-copper-400 text-ink-900 shadow-[0_2px_8px_rgba(222,121,37,0.22),inset_0_1px_0_#ffffff]"
+                  : "text-ink-700 hover:bg-limestone-200/70 hover:text-copper-600"
               }`
             }
           >
@@ -391,15 +391,15 @@ export default function PublicHeader() {
               }
               className={`inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-[0.8rem] font-semibold transition-all duration-200 ${
                 openMenu === "community"
-                  ? "bg-[#ffecd6] text-[#9a390b]"
-                  : "text-[#5c3820] hover:bg-[#ffecd6]/70 hover:text-[#9a390b]"
+                  ? "bg-limestone-200 text-copper-600"
+                  : "text-ink-700 hover:bg-limestone-200/70 hover:text-copper-600"
               }`}
             >
               <span>Community</span>
               <ChevronDown
                 size={12}
                 className={`transition-transform duration-300 ${
-                  openMenu === "community" ? "rotate-180 text-[#9a390b]" : ""
+                  openMenu === "community" ? "rotate-180 text-copper-600" : ""
                 }`}
               />
             </button>
@@ -416,19 +416,19 @@ export default function PublicHeader() {
               <div
                 style={{
                   background: "#ffffff",
-                  color: "#442714",
+                  color: "var(--color-ink-900)",
                   border: "1px solid rgba(157, 85, 36, 0.16)",
                 }}
                 className="rounded-2xl p-4 shadow-[0_18px_42px_rgba(142,77,23,0.14)]"
               >
-                <div className="mb-3 flex items-center justify-between border-b border-[#9d5524]/12 pb-2.5 px-1">
-                  <span className="font-mono text-[0.64rem] font-bold tracking-widest uppercase text-[#853b14]">
+                <div className="mb-3 flex items-center justify-between border-b border-copper-600/12 pb-2.5 px-1">
+                  <span className="font-mono text-[0.72rem] font-bold tracking-widest uppercase text-copper-600">
                     02 — Community & Discourse
                   </span>
                   <Link
                     to="/hall-of-fame"
                     onClick={() => setOpenMenu(null)}
-                    className="inline-flex items-center gap-1 font-mono text-[0.64rem] font-semibold uppercase tracking-wider text-[#9a390b] hover:underline"
+                    className="inline-flex items-center gap-1 font-mono text-[0.72rem] font-semibold uppercase tracking-wider text-copper-600 hover:underline"
                   >
                     Wall of Fame
                     <ArrowUpRight size={12} />
@@ -440,20 +440,20 @@ export default function PublicHeader() {
                       <Link
                         to={item.to}
                         onClick={() => setOpenMenu(null)}
-                        className="group flex items-start gap-2.5 rounded-xl p-2.5 transition-colors hover:bg-[#fff4e8]"
+                        className="group flex items-start gap-2.5 rounded-xl p-2.5 transition-colors hover:bg-limestone-100"
                       >
-                        <span className="mt-0.5 rounded-md bg-[#ffecd6] px-1.5 py-0.5 font-mono text-[0.6rem] font-bold tracking-wider text-[#9a390b]">
+                        <span className="mt-0.5 rounded-md bg-limestone-200 px-1.5 py-0.5 font-mono text-[0.72rem] font-bold tracking-wider text-copper-600">
                           {item.code}
                         </span>
                         <span className="flex-1">
-                          <span className="flex items-center justify-between font-display text-[0.84rem] font-bold text-[#442714] group-hover:text-[#9a390b]">
+                          <span className="flex items-center justify-between font-display text-[0.84rem] font-bold text-ink-900 group-hover:text-copper-600">
                             {item.label}
                             <ArrowUpRight
                               size={13}
                               className="opacity-0 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
                             />
                           </span>
-                          <span className="mt-0.5 block text-[0.7rem] leading-snug text-[#75543e]">
+                          <span className="mt-0.5 block text-[0.75rem] leading-snug text-ink-600">
                             {item.blurb}
                           </span>
                         </span>
@@ -472,7 +472,7 @@ export default function PublicHeader() {
           <form
             onSubmit={search}
             role="search"
-            className="hidden items-center gap-1.5 rounded-full border border-[#edc7a7]/75 bg-[#fff9f2] px-3 py-1.5 shadow-[inset_0_1px_0_#ffffff] 2xl:flex"
+            className="hidden items-center gap-1.5 rounded-full border border-limestone-300/75 bg-limestone-100 px-3 py-1.5 shadow-[inset_0_1px_0_#ffffff] 2xl:flex"
           >
             <Search size={13} className="text-[#8b522a]" />
             <input
@@ -480,7 +480,7 @@ export default function PublicHeader() {
               placeholder="Search courses..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-28 bg-transparent text-xs text-[#442714] placeholder:text-[#8b522a] focus:outline-none"
+              className="w-28 bg-transparent text-xs text-ink-900 placeholder:text-[#8b522a] focus:outline-none"
             />
           </form>
 
@@ -490,8 +490,8 @@ export default function PublicHeader() {
             onClick={() => setSearchOpen((v) => !v)}
             className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-colors 2xl:hidden ${
               searchOpen
-                ? "border-[#9a390b] bg-[#ffecd6] text-[#9a390b]"
-                : "border-[#edc7a7]/80 bg-[#fffaf4] text-[#442714] hover:border-[#9a390b] hover:text-[#9a390b]"
+                ? "border-[#9a390b] bg-limestone-200 text-copper-600"
+                : "border-limestone-300/80 bg-limestone-100 text-ink-900 hover:border-copper-600 hover:text-copper-600"
             }`}
           >
             <Search size={15} />
@@ -502,17 +502,17 @@ export default function PublicHeader() {
           <Link
             to="/cart"
             aria-label={`Cart, ${count} items`}
-            className="relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#edc7a7]/80 bg-[#fffaf4] text-[#442714] transition-colors hover:border-[#9a390b] hover:bg-[#ffecd6] hover:text-[#51230d]"
+            className="relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-limestone-300/80 bg-limestone-100 text-ink-900 transition-colors hover:border-copper-600 hover:bg-limestone-200 hover:text-ink-900"
           >
             <ShoppingCart size={15} />
             {count > 0 && (
               <span
                 style={{
                   background:
-                    "linear-gradient(120deg, #ffd5a5 0%, #ffb875 52%, #ff9b54 100%)",
-                  color: "#51230d",
+                    "linear-gradient(120deg, var(--color-copper-200) 0%, var(--color-copper-300) 52%, var(--color-copper-400) 100%)",
+                  color: "var(--color-ink-900)",
                 }}
-                className="absolute -top-1 -right-1 grid h-4 w-4 place-items-center rounded-full font-mono text-[0.6rem] font-bold"
+                className="absolute -top-1 -right-1 grid h-4 w-4 place-items-center rounded-full font-mono text-[0.72rem] font-bold"
               >
                 {count}
               </span>
@@ -527,8 +527,8 @@ export default function PublicHeader() {
                 onClick={() => setWorkspaceOpen((v) => !v)}
                 style={{
                   background:
-                    "linear-gradient(120deg, #ffd5a5 0%, #ffb875 52%, #ff9b54 100%)",
-                  color: "#51230d",
+                    "linear-gradient(120deg, var(--color-copper-200) 0%, var(--color-copper-300) 52%, var(--color-copper-400) 100%)",
+                  color: "var(--color-ink-900)",
                   border: "1px solid rgba(255, 190, 134, 0.7)",
                 }}
                 className="inline-flex cursor-pointer items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold shadow-[0_4px_14px_rgba(222,121,37,0.18),inset_0_1px_0_#ffffff]"
@@ -546,28 +546,28 @@ export default function PublicHeader() {
                 <div
                   style={{
                     background: "#ffffff",
-                    color: "#442714",
+                    color: "var(--color-ink-900)",
                   }}
-                  className="absolute right-0 z-50 mt-2 w-44 rounded-2xl border border-[#9d5524]/16 p-1.5 shadow-[0_14px_34px_rgba(142,77,23,0.14)]"
+                  className="absolute right-0 z-50 mt-2 w-44 rounded-2xl border border-copper-600/16 p-1.5 shadow-[0_14px_34px_rgba(142,77,23,0.14)]"
                 >
                   <Link
                     to={dashboard}
                     onClick={() => setWorkspaceOpen(false)}
-                    className="block rounded-lg px-3 py-1.5 text-xs font-semibold text-[#442714] hover:bg-[#fff4e8] hover:text-[#9a390b]"
+                    className="block rounded-lg px-3 py-1.5 text-xs font-semibold text-ink-900 hover:bg-limestone-100 hover:text-copper-600"
                   >
                     Dashboard
                   </Link>
                   <Link
                     to="/profile"
                     onClick={() => setWorkspaceOpen(false)}
-                    className="block rounded-lg px-3 py-1.5 text-xs font-semibold text-[#442714] hover:bg-[#fff4e8] hover:text-[#9a390b]"
+                    className="block rounded-lg px-3 py-1.5 text-xs font-semibold text-ink-900 hover:bg-limestone-100 hover:text-copper-600"
                   >
                     Profile
                   </Link>
                   <Link
                     to="/settings"
                     onClick={() => setWorkspaceOpen(false)}
-                    className="block rounded-lg px-3 py-1.5 text-xs font-semibold text-[#442714] hover:bg-[#fff4e8] hover:text-[#9a390b]"
+                    className="block rounded-lg px-3 py-1.5 text-xs font-semibold text-ink-900 hover:bg-limestone-100 hover:text-copper-600"
                   >
                     Settings
                   </Link>
@@ -579,7 +579,7 @@ export default function PublicHeader() {
                       navigate("/");
                       setMobileOpen(false);
                     }}
-                    className="mt-1 w-full rounded-lg border-t border-[#9d5524]/12 px-3 py-1.5 text-left text-xs font-bold text-[#9a390b] hover:bg-[#fff4e8]"
+                    className="mt-1 w-full rounded-lg border-t border-copper-600/12 px-3 py-1.5 text-left text-xs font-bold text-copper-600 hover:bg-limestone-100"
                   >
                     Log out
                   </button>
@@ -590,7 +590,7 @@ export default function PublicHeader() {
             <div className="hidden items-center gap-1.5 sm:flex">
               <Link
                 to="/login"
-                className="rounded-full border border-[#edc7a7] bg-[#fffaf4] px-3.5 py-1.5 text-xs font-semibold text-[#843711] transition-colors hover:bg-[#ffecd6]"
+                className="rounded-full border border-limestone-300 bg-limestone-100 px-3.5 py-1.5 text-xs font-semibold text-copper-600 transition-colors hover:bg-limestone-200"
               >
                 Log in
               </Link>
@@ -598,8 +598,8 @@ export default function PublicHeader() {
                 to="/register"
                 style={{
                   background:
-                    "linear-gradient(120deg, #ffd5a5 0%, #ffb875 52%, #ff9b54 100%)",
-                  color: "#51230d",
+                    "linear-gradient(120deg, var(--color-copper-200) 0%, var(--color-copper-300) 52%, var(--color-copper-400) 100%)",
+                  color: "var(--color-ink-900)",
                   border: "1px solid rgba(255, 190, 134, 0.75)",
                 }}
                 className="inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-xs font-bold shadow-[0_4px_14px_rgba(222,121,37,0.20),inset_0_1px_0_#ffffff] transition-all hover:brightness-105"
@@ -616,7 +616,7 @@ export default function PublicHeader() {
             aria-expanded={mobileOpen}
             aria-controls="public-mobile-nav"
             onClick={() => setMobileOpen((v) => !v)}
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#edc7a7] bg-[#fffaf4] text-[#442714] lg:hidden"
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-limestone-300 bg-limestone-100 text-ink-900 lg:hidden"
           >
             {mobileOpen ? <X size={17} /> : <Menu size={17} />}
           </button>
@@ -628,9 +628,9 @@ export default function PublicHeader() {
         <div
           style={{
             background: "#ffffff",
-            color: "#442714",
+            color: "var(--color-ink-900)",
           }}
-          className="border-t border-[#9d5524]/12 py-2.5 shadow-md 2xl:hidden"
+          className="border-t border-copper-600/12 py-2.5 shadow-md 2xl:hidden"
         >
           <div className="container-page">
             <form onSubmit={search} className="flex items-center gap-2.5">
@@ -640,17 +640,17 @@ export default function PublicHeader() {
                 placeholder="Search courses, interactive labs, subjects..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="flex-1 bg-transparent text-xs text-[#442714] focus:outline-none sm:text-sm"
+                className="flex-1 bg-transparent text-xs text-ink-900 focus:outline-none sm:text-sm"
                 autoFocus
               />
               <button
                 type="submit"
                 style={{
                   background:
-                    "linear-gradient(120deg, #ffd5a5 0%, #ffb875 52%, #ff9b54 100%)",
-                  color: "#51230d",
+                    "linear-gradient(120deg, var(--color-copper-200) 0%, var(--color-copper-300) 52%, var(--color-copper-400) 100%)",
+                  color: "var(--color-ink-900)",
                 }}
-                className="rounded-full px-3.5 py-1 font-mono text-[0.68rem] font-bold uppercase"
+                className="rounded-full px-3.5 py-1 font-mono text-[0.72rem] font-bold uppercase"
               >
                 Search
               </button>
@@ -666,15 +666,15 @@ export default function PublicHeader() {
           aria-label="Mobile navigation"
           style={{
             background: "#ffffff",
-            color: "#442714",
+            color: "var(--color-ink-900)",
           }}
-          className="fixed inset-x-0 top-[4.25rem] bottom-0 z-50 overflow-y-auto border-t border-[#9d5524]/15 lg:hidden"
+          className="fixed inset-x-0 top-[4.25rem] bottom-0 z-50 overflow-y-auto border-t border-copper-600/15 lg:hidden"
         >
           <div className="container-page flex min-h-full flex-col justify-between py-6">
             <div>
               <form
                 onSubmit={search}
-                className="mb-6 flex items-center gap-2.5 rounded-xl border border-[#edc7a7] bg-[#fffaf4] px-3.5 py-2.5"
+                className="mb-6 flex items-center gap-2.5 rounded-xl border border-limestone-300 bg-limestone-100 px-3.5 py-2.5"
               >
                 <Search size={15} className="text-[#8b522a]" />
                 <input
@@ -682,28 +682,28 @@ export default function PublicHeader() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search courses..."
-                  className="flex-1 bg-transparent text-xs text-[#442714] placeholder:text-[#8b522a] focus:outline-none"
+                  className="flex-1 bg-transparent text-xs text-ink-900 placeholder:text-[#8b522a] focus:outline-none"
                 />
                 <button
                   type="submit"
-                  className="font-mono text-label font-bold text-[#9a390b]"
+                  className="font-mono text-label font-bold text-copper-600"
                 >
                   Search
                 </button>
               </form>
 
-              <p className="sheet-label mb-3 text-[#853b14]">
+              <p className="sheet-label mb-3 text-copper-600">
                 01 — Learn & Practice
               </p>
-              <ul className="divide-y divide-[#9d5524]/12 border-y border-[#9d5524]/12">
+              <ul className="divide-y divide-[#9d5524]/12 border-y border-copper-600/12">
                 {learnMegaItems.map((item) => (
                   <li key={item.to}>
                     <Link
                       to={item.to}
-                      className="flex items-baseline justify-between py-2.5 font-display text-base font-bold text-[#442714] hover:text-[#9a390b]"
+                      className="flex items-baseline justify-between py-2.5 font-display text-base font-bold text-ink-900 hover:text-copper-600"
                     >
                       <span>{item.label}</span>
-                      <span className="font-mono text-[0.65rem] font-semibold text-[#9a390b]">
+                      <span className="font-mono text-[0.72rem] font-semibold text-copper-600">
                         {item.code}
                       </span>
                     </Link>
@@ -711,14 +711,14 @@ export default function PublicHeader() {
                 ))}
               </ul>
 
-              <p className="sheet-label mt-6 mb-3 text-[#853b14]">
+              <p className="sheet-label mt-6 mb-3 text-copper-600">
                 02 — Institutions, Careers & Community
               </p>
               <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 <li>
                   <Link
                     to="/campus"
-                    className="block rounded-xl border border-[#edc7a7]/70 bg-[#fffaf4] p-2.5 text-xs font-semibold text-[#442714] hover:border-[#9a390b]"
+                    className="block rounded-xl border border-limestone-300/70 bg-limestone-100 p-2.5 text-xs font-semibold text-ink-900 hover:border-copper-600"
                   >
                     For Institutions (Campus OS)
                   </Link>
@@ -726,7 +726,7 @@ export default function PublicHeader() {
                 <li>
                   <Link
                     to="/internships"
-                    className="block rounded-xl border border-[#edc7a7]/70 bg-[#fffaf4] p-2.5 text-xs font-semibold text-[#442714] hover:border-[#9a390b]"
+                    className="block rounded-xl border border-limestone-300/70 bg-limestone-100 p-2.5 text-xs font-semibold text-ink-900 hover:border-copper-600"
                   >
                     Internships Marketplace
                   </Link>
@@ -735,7 +735,7 @@ export default function PublicHeader() {
                   <li key={item.to}>
                     <Link
                       to={item.to}
-                      className="block rounded-xl border border-[#edc7a7]/70 bg-[#fffaf4] p-2.5 text-xs font-semibold text-[#442714] hover:border-[#9a390b]"
+                      className="block rounded-xl border border-limestone-300/70 bg-limestone-100 p-2.5 text-xs font-semibold text-ink-900 hover:border-copper-600"
                     >
                       {item.label}
                     </Link>
@@ -745,10 +745,10 @@ export default function PublicHeader() {
             </div>
 
             {!user && (
-              <div className="mt-6 flex flex-wrap gap-2.5 border-t border-[#9d5524]/12 pt-5">
+              <div className="mt-6 flex flex-wrap gap-2.5 border-t border-copper-600/12 pt-5">
                 <Link
                   to="/login"
-                  className="rounded-full border border-[#edc7a7] bg-[#fffaf4] px-4 py-2 text-xs font-semibold text-[#843711]"
+                  className="rounded-full border border-limestone-300 bg-limestone-100 px-4 py-2 text-xs font-semibold text-copper-600"
                 >
                   Log in
                 </Link>
@@ -756,8 +756,8 @@ export default function PublicHeader() {
                   to="/register"
                   style={{
                     background:
-                      "linear-gradient(120deg, #ffd5a5 0%, #ffb875 52%, #ff9b54 100%)",
-                    color: "#51230d",
+                      "linear-gradient(120deg, var(--color-copper-200) 0%, var(--color-copper-300) 52%, var(--color-copper-400) 100%)",
+                    color: "var(--color-ink-900)",
                   }}
                   className="rounded-full px-4 py-2 text-xs font-bold"
                 >
