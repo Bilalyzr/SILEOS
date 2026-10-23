@@ -109,7 +109,7 @@ export default function CampusForInstitutionsPage() {
   }
 
   return (
-    <div className="sympho-scope campus-growth-page rd-screen rd-screen-campus-for-institutions min-h-screen bg-limestone-100 text-ink-900">
+    <div className="sympho-scope min-h-screen bg-limestone-100 text-ink-900">
       <Helmet>
         <title>Campus OS for schools and colleges · SashaInfinity</title>
         <meta
@@ -155,6 +155,10 @@ export default function CampusForInstitutionsPage() {
           </>
         }
       />
+
+      {/* Page body keeps the campus-growth padded/cream canvas; the hero
+          above renders full-bleed like Courses/Labs. */}
+      <div className="campus-growth-page rd-screen rd-screen-campus-for-institutions">
 
       {/* Platform Highlights Bar */}
       <section
@@ -687,6 +691,7 @@ export default function CampusForInstitutionsPage() {
         secondaryLabel="Explore Learning Labs"
         secondaryTo="/labs"
       />
+    </div>
     </div>
   );
 }

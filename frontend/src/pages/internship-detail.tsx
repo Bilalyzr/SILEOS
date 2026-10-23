@@ -1,5 +1,6 @@
 import { PageLayout, PageHeader } from "@/components/design-system/PageLayout";
-import { PageBanner } from "@/components/design-system/PageBanner";
+import { SymphoPageHero } from "@/components/sympho/SymphoSystem";
+import { ShareButton } from "@/components/ui/share-button";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -178,21 +179,40 @@ export const InternshipDetailPage: React.FC = () => {
 
   // ---------- Default view ----------
   return (
+    <div className="sympho-scope min-h-screen bg-limestone-100 text-ink-900">
     <PageLayout
       header={
-        <PageBanner
+        <SymphoPageHero
+          index="SI—INT.02"
           eyebrow={
             internship.spoc_name
               ? `Mentored by ${internship.spoc_name}`
               : "Mentor-led internship"
           }
           title={internship.title}
-          description={internship.description
+          lede={internship.description
             ?.replace(/<[^>]*>/g, "")
             .slice(0, 180)}
-          image={internship.cover_image || undefined}
-          share
-          shareUrl={`${window.location.origin}/internships/${internship.slug}`}
+          drawingCode="APPRENTICESHIP LEDGER · SCALE 1:100"
+          badge="Open Cohort"
+          specs={[
+            { label: "Program", value: "Industry Internship" },
+            {
+              label: "Mentorship",
+              value: internship.spoc_name || "Industry mentor",
+            },
+            { label: "Credential", value: "Verified Certificate" },
+            { label: "Checkout", value: "Course Voucher" },
+          ]}
+          actions={
+            <ShareButton
+              url={`${window.location.origin}/internships/${internship.slug}`}
+              title={internship.title}
+              description={internship.description
+                ?.replace(/<[^>]*>/g, "")
+                .slice(0, 180)}
+            />
+          }
         />
       }
       className="rd-screen rd-screen-internship-detail"
@@ -246,6 +266,7 @@ export const InternshipDetailPage: React.FC = () => {
         </button>
       </div>
     </PageLayout>
+    </div>
   );
 };
 
