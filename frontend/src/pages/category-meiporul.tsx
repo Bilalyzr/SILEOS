@@ -180,7 +180,7 @@ export const MeiporulPage = () => {
       />
 
       {/* Triad Division Switcher Bar */}
-      <div className="border-b border-ink-900/12 bg-limestone-50">
+      <div className="border-b border-ink-900/10 bg-limestone-50">
         <div className="mx-auto flex max-w-[1680px] flex-wrap items-center justify-between gap-4 px-gutter py-4">
           <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-500">
             <Compass className="h-3.5 w-3.5 text-copper-500" />
@@ -210,7 +210,7 @@ export const MeiporulPage = () => {
       </div>
 
       {/* Monograph Treatise Section */}
-      <section className="relative border-b border-ink-900/12 py-section-sm">
+      <section className="relative border-b border-ink-900/10 py-section-sm">
         <div className="mx-auto max-w-[1680px] px-gutter">
           <SymphoSectionHeader
             index="MP—01"
@@ -249,7 +249,7 @@ export const MeiporulPage = () => {
 
             <div className="lg:col-span-5">
               <div className="sheet-frame overflow-hidden bg-ink-950 text-limestone-100">
-                <div className="relative aspect-[16/10] overflow-hidden border-b border-limestone-100/12">
+                <div className="relative aspect-[16/10] overflow-hidden border-b border-limestone-100/10">
                   <img
                     src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=2070&auto=format&fit=crop"
                     alt="Meiporul - Tamil Literature and Poetry"
@@ -271,7 +271,7 @@ export const MeiporulPage = () => {
                   <p className="text-sm leading-relaxed text-limestone-200/80">
                     &ldquo;To discern the true essence in whatever is spoken, by whomsoever it is spoken — that alone is true wisdom.&rdquo;
                   </p>
-                  <div className="mt-5 flex items-center justify-between border-t border-limestone-100/12 pt-4">
+                  <div className="mt-5 flex items-center justify-between border-t border-limestone-100/10 pt-4">
                     <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-limestone-300/60">
                       3D Spatial Companion Available
                     </span>

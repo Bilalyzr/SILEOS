@@ -180,7 +180,7 @@ export const SeyappaduporulPage = () => {
       />
 
       {/* Triad Division Switcher Bar */}
-      <div className="border-b border-ink-900/12 bg-limestone-50">
+      <div className="border-b border-ink-900/10 bg-limestone-50">
         <div className="mx-auto flex max-w-[1680px] flex-wrap items-center justify-between gap-4 px-gutter py-4">
           <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-500">
             <Compass className="h-3.5 w-3.5 text-copper-500" />
@@ -210,7 +210,7 @@ export const SeyappaduporulPage = () => {
       </div>
 
       {/* Monograph Treatise Section */}
-      <section className="relative border-b border-ink-900/12 py-section-sm">
+      <section className="relative border-b border-ink-900/10 py-section-sm">
         <div className="mx-auto max-w-[1680px] px-gutter">
           <SymphoSectionHeader
             index="SP—01"
@@ -249,7 +249,7 @@ export const SeyappaduporulPage = () => {
 
             <div className="lg:col-span-5">
               <div className="sheet-frame overflow-hidden bg-ink-950 text-limestone-100">
-                <div className="relative aspect-[16/10] overflow-hidden border-b border-limestone-100/12">
+                <div className="relative aspect-[16/10] overflow-hidden border-b border-limestone-100/10">
                   <img
                     src="https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=2073&auto=format&fit=crop"
                     alt="Seyappaduporul - Tamil Poetics and Composition"
@@ -269,7 +269,7 @@ export const SeyappaduporulPage = () => {
                   <p className="text-sm leading-relaxed text-limestone-200/80">
                     Just as architectural load-bearing columns give form to space, Tamil prosody (Yappu) and rhetoric (Ani) give acoustic and cognitive permanence to thought.
                   </p>
-                  <div className="mt-5 flex items-center justify-between border-t border-limestone-100/12 pt-4">
+                  <div className="mt-5 flex items-center justify-between border-t border-limestone-100/10 pt-4">
                     <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-limestone-300/60">
                       Division III of III
                     </span>

@@ -936,7 +936,8 @@ export function HomePage() {
 
           <canvas
             ref={canvasRef}
-            className={`absolute inset-0 h-full w-full transition-opacity duration-[1600ms] ease-out ${
+            style={{ transitionDuration: "1600ms" }}
+            className={`absolute inset-0 h-full w-full transition-opacity ease-out ${
               sceneReady ? "opacity-100" : "opacity-0"
             }`}
           />
@@ -1127,7 +1128,7 @@ export function HomePage() {
                       className={`sticky bottom-[calc(5.5rem+env(safe-area-inset-bottom))] w-full max-w-md rounded-md border bg-ink-900/90 p-5 transition-[border-color] duration-700 ease-out-expo sm:p-7 lg:static lg:bg-ink-900/85 lg:p-9 ${
                         isActive
                           ? "border-copper-400/60"
-                          : "border-limestone-100/12"
+                          : "border-limestone-100/10"
                       }`}
                     >
                       <div className="flex items-center justify-between font-mono text-label uppercase">
@@ -1151,14 +1152,14 @@ export function HomePage() {
                         {stage.deliverables.map((d) => (
                           <li
                             key={d}
-                            className="rounded-pill border border-limestone-100/18 bg-limestone-50/5 px-2.5 py-0.5 font-mono text-[0.64rem] uppercase tracking-wider text-limestone-200"
+                            className="rounded-pill border border-limestone-100/20 bg-limestone-50/5 px-2.5 py-0.5 font-mono text-[0.64rem] uppercase tracking-wider text-limestone-200"
                           >
                             {d}
                           </li>
                         ))}
                       </ul>
 
-                      <div className="mt-6 h-px w-full bg-limestone-100/12">
+                      <div className="mt-6 h-px w-full bg-limestone-100/10">
                         <div
                           className="h-px origin-left bg-copper-400 transition-transform duration-700 ease-out-expo"
                           style={{ transform: `scaleX(${barScale})` }}
@@ -1180,7 +1181,7 @@ export function HomePage() {
       <section
         aria-labelledby="stats-heading"
         data-testid="stats-bar"
-        className="container-page border-b border-ink-900/12 py-section"
+        className="container-page border-b border-ink-900/10 py-section"
       >
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-3">
@@ -1248,7 +1249,7 @@ export function HomePage() {
           ==================================================================== */}
       <section
         aria-labelledby="selected-programs-heading"
-        className="relative border-b border-ink-900/12 py-14 lg:py-20"
+        className="relative border-b border-ink-900/10 py-14 lg:py-20"
       >
         <div className="container-page">
           <SymphoSectionHeader
@@ -1278,7 +1279,7 @@ export function HomePage() {
                   key={course.id}
                   data-reveal=""
                   style={{ ["--reveal-delay" as string]: `${idx * 70}ms` }}
-                  className="group flex flex-col overflow-hidden rounded-xl border border-ink-900/12 bg-limestone-50/90 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-copper-500/35 hover:shadow-md"
+                  className="group flex flex-col overflow-hidden rounded-xl border border-ink-900/10 bg-limestone-50/90 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-copper-500/35 hover:shadow-md"
                 >
                   <Link
                     ref={(node) => {
@@ -1395,7 +1396,7 @@ export function HomePage() {
             lede="Five commitments that separate an architectural learning environment from generic content libraries."
           />
 
-          <ol className="mt-10 grid gap-px overflow-hidden rounded-md bg-limestone-100/12 sm:grid-cols-2 lg:grid-cols-5">
+          <ol className="mt-10 grid gap-px overflow-hidden rounded-md bg-limestone-100/10 sm:grid-cols-2 lg:grid-cols-5">
             {WHY_PILLARS.map((pillar, idx) => (
               <li
                 key={pillar.num}
@@ -1449,7 +1450,7 @@ export function HomePage() {
       <section
         aria-labelledby="testimonials-heading"
         aria-roledescription="carousel"
-        className="border-b border-ink-900/12 py-section"
+        className="border-b border-ink-900/10 py-section"
       >
         <div className="container-page grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-4">
@@ -1599,7 +1600,7 @@ export function HomePage() {
           ==================================================================== */}
       <section
         aria-labelledby="insights-heading"
-        className="border-b border-ink-900/12 bg-limestone-200/60 py-section"
+        className="border-b border-ink-900/10 bg-limestone-200/60 py-section"
       >
         <div className="container-page">
           <SymphoSectionHeader
@@ -1764,7 +1765,7 @@ export function HomePage() {
           ==================================================================== */}
       <section
         aria-labelledby="faq-heading"
-        className="border-b border-ink-900/12 py-section"
+        className="border-b border-ink-900/10 py-section"
       >
         <div className="container-page">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
@@ -1801,7 +1802,7 @@ export function HomePage() {
               </div>
             </div>
 
-            <div className="divide-y divide-ink-900/12 border-y border-ink-900/12 lg:col-span-8">
+            <div className="divide-y divide-ink-900/10 border-y border-ink-900/10 lg:col-span-8">
               {FAQ_ITEMS.map((item, i) => (
                 <details
                   key={item.q}

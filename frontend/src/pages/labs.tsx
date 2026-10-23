@@ -95,9 +95,9 @@ export default function LabsPage() {
   return (
     <div className="sympho-scope min-h-screen bg-limestone-100 text-ink-900">
       {/* Sympho Architectural Dark Hero */}
-      <header className="on-dark relative overflow-hidden border-b border-limestone-100/12 bg-ink-900 text-limestone-50 blueprint-grid">
+      <header className="on-dark relative overflow-hidden border-b border-limestone-100/10 bg-ink-900 text-limestone-50 blueprint-grid">
         <div className="container-page relative z-10 pt-12 pb-16 lg:pt-16 lg:pb-20">
-          <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-limestone-100/12 pb-5">
+          <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-limestone-100/10 pb-5">
             <div className="flex items-center gap-4">
               <span className="font-mono text-label text-copper-300">
                 SI—LABS
@@ -153,7 +153,7 @@ export default function LabsPage() {
 
             <div className="lg:col-span-4">
               <div className="sheet-frame rounded-lg border border-limestone-100/15 bg-ink-950/70 p-6 backdrop-blur-md">
-                <div className="flex items-center justify-between border-b border-limestone-100/12 pb-3 font-mono text-label text-limestone-300">
+                <div className="flex items-center justify-between border-b border-limestone-100/10 pb-3 font-mono text-label text-limestone-300">
                   <span>LABORATORY TELEMETRY</span>
                   <span className="text-copper-300">LIVE</span>
                 </div>
@@ -177,10 +177,10 @@ export default function LabsPage() {
       </header>
 
       {/* Dimension-Line Figures Bar */}
-      <section className="border-b border-ink-900/12 py-12">
+      <section className="border-b border-ink-900/10 py-12">
         <div className="container-page">
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
-            <div className="pr-6 sm:border-r sm:border-ink-900/12">
+            <div className="pr-6 sm:border-r sm:border-ink-900/10">
               <div className="flex items-center gap-2 font-mono text-label text-copper-600">
                 <FlaskConical size={14} />
                 <span>SIMULATIONS</span>
@@ -194,7 +194,7 @@ export default function LabsPage() {
               </p>
             </div>
 
-            <div className="sm:border-r sm:border-ink-900/12 sm:px-6">
+            <div className="sm:border-r sm:border-ink-900/10 sm:px-6">
               <div className="flex items-center gap-2 font-mono text-label text-copper-600">
                 <BookOpen size={14} />
                 <span>CURRICULUM CHAPTERS</span>
@@ -228,7 +228,7 @@ export default function LabsPage() {
       {/* Experiment Library & Curriculum Matrix */}
       <section className="py-section-sm" id="lab-results">
         <div className="container-page">
-          <div className="flex flex-col gap-6 border-b border-ink-900/12 pb-8 lg:flex-row lg:items-end lg:justify-between">
+          <div className="flex flex-col gap-6 border-b border-ink-900/10 pb-8 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <div className="mb-3 flex items-center gap-3">
                 <span className="font-mono text-label text-copper-500">
@@ -448,7 +448,7 @@ export default function LabsPage() {
               </div>
 
               {data && !labs.length && (
-                <p className="mt-8 rounded-lg border border-ink-900/12 bg-limestone-50 p-8 text-center text-sm text-ink-600">
+                <p className="mt-8 rounded-lg border border-ink-900/10 bg-limestone-50 p-8 text-center text-sm text-ink-600">
                   No experiments match these filters.
                 </p>
               )}

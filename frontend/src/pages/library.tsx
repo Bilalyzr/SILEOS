@@ -123,7 +123,7 @@ export default function LibraryPage() {
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div
                   key={i}
-                  className="h-72 animate-pulse rounded-lg border border-ink-900/12 bg-limestone-50"
+                  className="h-72 animate-pulse rounded-lg border border-ink-900/10 bg-limestone-50"
                 />
               ))}
             </div>
@@ -154,7 +154,7 @@ export default function LibraryPage() {
                   className="sheet-frame group flex flex-col justify-between overflow-hidden rounded-lg border border-ink-900/15 bg-limestone-50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lift"
                 >
                   <div>
-                    <div className="relative flex h-48 items-center justify-center overflow-hidden border-b border-ink-900/12 bg-ink-900 text-limestone-100 blueprint-grid">
+                    <div className="relative flex h-48 items-center justify-center overflow-hidden border-b border-ink-900/10 bg-ink-900 text-limestone-100 blueprint-grid">
                       {e.cover_image ? (
                         <img
                           src={e.cover_image}

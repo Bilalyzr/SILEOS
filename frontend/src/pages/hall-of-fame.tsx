@@ -145,7 +145,7 @@ const Portrait: React.FC<{ person: HallOfFamePerson; index: number }> = ({
   const [broken, setBroken] = React.useState(false);
   const showPhoto = person.photo && !broken;
   return (
-    <div className="relative h-64 w-full overflow-hidden border-b border-ink-900/12 bg-ink-950">
+    <div className="relative h-64 w-full overflow-hidden border-b border-ink-900/10 bg-ink-950">
       {showPhoto ? (
         <img
           src={person.photo}

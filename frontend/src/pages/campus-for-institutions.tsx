@@ -158,7 +158,7 @@ export default function CampusForInstitutionsPage() {
 
       {/* Platform Highlights Bar */}
       <section
-        className="border-b border-ink-900/12 bg-limestone-50"
+        className="border-b border-ink-900/10 bg-limestone-50"
         aria-label="Campus platform highlights"
       >
         <div className="mx-auto flex max-w-[1680px] flex-wrap items-center justify-between gap-4 px-gutter py-4">
@@ -183,7 +183,7 @@ export default function CampusForInstitutionsPage() {
       </section>
 
       {/* Outcomes Grid */}
-      <section className="border-b border-ink-900/12 py-section-sm">
+      <section className="border-b border-ink-900/10 py-section-sm">
         <div className="mx-auto max-w-[1680px] px-gutter">
           <SymphoSectionHeader
             index="CMP—01"
@@ -204,7 +204,7 @@ export default function CampusForInstitutionsPage() {
                     <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-copper-500">
                       {code}
                     </span>
-                    <span className="flex h-9 w-9 items-center justify-center rounded-full border border-ink-900/12 bg-limestone-100 text-ink-800">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-full border border-ink-900/10 bg-limestone-100 text-ink-800">
                       <Icon className="h-4 w-4 text-copper-500" />
                     </span>
                   </div>
@@ -225,7 +225,7 @@ export default function CampusForInstitutionsPage() {
       </section>
 
       {/* ROI / Capacity Calculator */}
-      <section className="on-dark relative overflow-hidden border-b border-limestone-100/12 bg-ink-950 py-section-sm text-limestone-100 blueprint-grid">
+      <section className="on-dark relative overflow-hidden border-b border-limestone-100/10 bg-ink-950 py-section-sm text-limestone-100 blueprint-grid">
         <div className="mx-auto max-w-[1680px] px-gutter">
           <SymphoSectionHeader
             dark
@@ -301,7 +301,7 @@ export default function CampusForInstitutionsPage() {
                   {formatHours(hours)} hours
                 </strong>
               </div>
-              <p className="mt-6 border-t border-limestone-100/12 pt-4 text-xs leading-relaxed text-limestone-300/70">
+              <p className="mt-6 border-t border-limestone-100/10 pt-4 text-xs leading-relaxed text-limestone-300/70">
                 This is a planning estimate across 20 operating days per month. Your guided walkthrough will map your exact institutional workflows and measurable targets.
               </p>
             </div>
@@ -310,7 +310,7 @@ export default function CampusForInstitutionsPage() {
       </section>
 
       {/* Plans Section */}
-      <section className="border-b border-ink-900/12 py-section-sm" id="plans">
+      <section className="border-b border-ink-900/10 py-section-sm" id="plans">
         <div className="mx-auto max-w-[1680px] px-gutter">
           <SymphoSectionHeader
             index="CMP—03"

@@ -87,7 +87,7 @@ export function ForCompaniesPage() {
       />
 
       {/* Core Value Pillars */}
-      <section className="border-b border-ink-900/12 py-section-sm">
+      <section className="border-b border-ink-900/10 py-section-sm">
         <div className="mx-auto max-w-[1680px] px-gutter">
           <SymphoSectionHeader
             index="CRP—01"

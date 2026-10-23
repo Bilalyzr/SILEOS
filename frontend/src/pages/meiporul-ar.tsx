@@ -340,7 +340,7 @@ function LazyModelPreview({
   return (
     <div
       ref={ref}
-      className="relative h-56 overflow-hidden border-b border-ink-900/12 bg-ink-900 blueprint-grid"
+      className="relative h-56 overflow-hidden border-b border-ink-900/10 bg-ink-900 blueprint-grid"
     >
       {visible && ready ? (
         <model-viewer
@@ -456,9 +456,9 @@ export function MeiporulARPage() {
     <PageLayout
       header={
         <PageHeader>
-          <div className="sympho-scope on-dark relative overflow-hidden border-b border-limestone-100/12 bg-ink-900 py-14 text-limestone-50 blueprint-grid">
+          <div className="sympho-scope on-dark relative overflow-hidden border-b border-limestone-100/10 bg-ink-900 py-14 text-limestone-50 blueprint-grid">
             <div className="container-page">
-              <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-limestone-100/12 pb-4">
+              <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-limestone-100/10 pb-4">
                 <div className="flex items-center gap-3">
                   <span className="font-mono text-label text-copper-300">
                     SI—MAR
@@ -533,7 +533,7 @@ export function MeiporulARPage() {
           </div>
         </div>
 
-        <div className="mb-6 flex items-center justify-between border-b border-ink-900/12 pb-3 font-mono text-xs text-ink-600">
+        <div className="mb-6 flex items-center justify-between border-b border-ink-900/10 pb-3 font-mono text-xs text-ink-600">
           <span>
             Showing {filtered.length} of {models.length} spatial models
           </span>

@@ -386,7 +386,7 @@ export const CoursesPage = () => {
               <Dialog.Portal>
                 <Dialog.Overlay className="fixed inset-0 z-50 bg-ink-950/60 backdrop-blur-sm" />
                 <Dialog.Content className="sympho-scope fixed top-0 right-0 z-50 h-full w-full overflow-y-auto bg-limestone-50 p-6 text-ink-900 shadow-lift sm:w-80">
-                  <div className="mb-6 flex items-center justify-between border-b border-ink-900/12 pb-4">
+                  <div className="mb-6 flex items-center justify-between border-b border-ink-900/10 pb-4">
                     <Dialog.Title className="font-display text-xl font-normal">
                       Filter Courses
                     </Dialog.Title>
@@ -548,7 +548,7 @@ export const CoursesPage = () => {
             )}
 
             {/* Results Counter Bar */}
-            <div className="mb-6 flex items-center justify-between border-b border-ink-900/12 pb-4">
+            <div className="mb-6 flex items-center justify-between border-b border-ink-900/10 pb-4">
               <p className="font-mono text-xs uppercase tracking-wider text-ink-600">
                 {isLoadingCourses ? (
                   "Loading courses…"
@@ -572,7 +572,7 @@ export const CoursesPage = () => {
                 {Array.from({ length: 6 }).map((_, i) => (
                   <div
                     key={i}
-                    className="animate-pulse rounded-lg border border-ink-900/12 bg-limestone-50 p-5"
+                    className="animate-pulse rounded-lg border border-ink-900/10 bg-limestone-50 p-5"
                   >
                     <div className="mb-4 aspect-video rounded bg-limestone-200" />
                     <div className="mb-2 h-4 rounded bg-limestone-200" />

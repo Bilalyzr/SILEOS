@@ -148,7 +148,7 @@ export function AboutPage() {
       />
 
       {/* Who We Are — Editorial Split Plate */}
-      <section className="border-b border-ink-900/12 py-section-sm">
+      <section className="border-b border-ink-900/10 py-section-sm">
         <div className="mx-auto max-w-[1680px] px-gutter">
           <SymphoSectionHeader
             index="ABT—01"
@@ -205,7 +205,7 @@ export function AboutPage() {
 
             <div className="lg:col-span-5">
               <div className="sheet-frame flex h-full flex-col justify-between overflow-hidden bg-ink-950 p-8 text-limestone-100 blueprint-grid">
-                <div className="flex items-center justify-between border-b border-limestone-100/12 pb-4">
+                <div className="flex items-center justify-between border-b border-limestone-100/10 pb-4">
                   <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-copper-400">
                     PLATE // SI—STUDIO
                   </span>
@@ -225,7 +225,7 @@ export function AboutPage() {
                   />
                 </div>
 
-                <div className="border-t border-limestone-100/12 pt-4">
+                <div className="border-t border-limestone-100/10 pt-4">
                   <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-copper-400">
                     IMMERSIVE LEARNING DIVISION
                   </span>
@@ -240,7 +240,7 @@ export function AboutPage() {
       </section>
 
       {/* Core Offerings */}
-      <section className="border-b border-ink-900/12 py-section-sm">
+      <section className="border-b border-ink-900/10 py-section-sm">
         <div className="mx-auto max-w-[1680px] px-gutter">
           <SymphoSectionHeader
             index="ABT—02"
@@ -283,7 +283,7 @@ export function AboutPage() {
       </section>
 
       {/* Mission & Vision Dark Blueprint Section */}
-      <section className="on-dark relative overflow-hidden border-b border-limestone-100/12 bg-ink-950 py-section-sm text-limestone-100 blueprint-grid">
+      <section className="on-dark relative overflow-hidden border-b border-limestone-100/10 bg-ink-950 py-section-sm text-limestone-100 blueprint-grid">
         <div className="mx-auto max-w-[1680px] px-gutter">
           <SymphoSectionHeader
             dark
@@ -301,7 +301,7 @@ export function AboutPage() {
                 className="sheet-frame flex flex-col justify-between bg-ink-900/90 p-8"
               >
                 <div>
-                  <div className="flex items-center justify-between border-b border-limestone-100/12 pb-4">
+                  <div className="flex items-center justify-between border-b border-limestone-100/10 pb-4">
                     <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-copper-400">
                       {m.code}
                     </span>
@@ -316,7 +316,7 @@ export function AboutPage() {
                     {m.body}
                   </p>
                 </div>
-                <div className="mt-8 flex items-center gap-2 border-t border-limestone-100/12 pt-4 font-mono text-[10px] uppercase tracking-[0.14em] text-copper-400">
+                <div className="mt-8 flex items-center gap-2 border-t border-limestone-100/10 pt-4 font-mono text-[10px] uppercase tracking-[0.14em] text-copper-400">
                   <ShieldCheck className="h-3.5 w-3.5" />
                   Charter Verified
                 </div>

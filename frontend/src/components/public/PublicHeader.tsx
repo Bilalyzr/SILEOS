@@ -279,7 +279,7 @@ export default function PublicHeader() {
                 }}
                 className="rounded-2xl p-4 shadow-[0_18px_42px_rgba(142,77,23,0.14)]"
               >
-                <div className="mb-3 flex items-center justify-between border-b border-copper-600/12 pb-2.5 px-1">
+                <div className="mb-3 flex items-center justify-between border-b border-copper-600/10 pb-2.5 px-1">
                   <span className="font-mono text-[0.72rem] font-bold tracking-widest uppercase text-copper-600">
                     01 — Learning Architecture
                   </span>
@@ -421,7 +421,7 @@ export default function PublicHeader() {
                 }}
                 className="rounded-2xl p-4 shadow-[0_18px_42px_rgba(142,77,23,0.14)]"
               >
-                <div className="mb-3 flex items-center justify-between border-b border-copper-600/12 pb-2.5 px-1">
+                <div className="mb-3 flex items-center justify-between border-b border-copper-600/10 pb-2.5 px-1">
                   <span className="font-mono text-[0.72rem] font-bold tracking-widest uppercase text-copper-600">
                     02 — Community & Discourse
                   </span>
@@ -548,7 +548,7 @@ export default function PublicHeader() {
                     background: "#ffffff",
                     color: "var(--color-ink-900)",
                   }}
-                  className="absolute right-0 z-50 mt-2 w-44 rounded-2xl border border-copper-600/16 p-1.5 shadow-[0_14px_34px_rgba(142,77,23,0.14)]"
+                  className="absolute right-0 z-50 mt-2 w-44 rounded-2xl border border-copper-600/15 p-1.5 shadow-[0_14px_34px_rgba(142,77,23,0.14)]"
                 >
                   <Link
                     to={dashboard}
@@ -579,7 +579,7 @@ export default function PublicHeader() {
                       navigate("/");
                       setMobileOpen(false);
                     }}
-                    className="mt-1 w-full rounded-lg border-t border-copper-600/12 px-3 py-1.5 text-left text-xs font-bold text-copper-600 hover:bg-limestone-100"
+                    className="mt-1 w-full rounded-lg border-t border-copper-600/10 px-3 py-1.5 text-left text-xs font-bold text-copper-600 hover:bg-limestone-100"
                   >
                     Log out
                   </button>
@@ -630,7 +630,7 @@ export default function PublicHeader() {
             background: "#ffffff",
             color: "var(--color-ink-900)",
           }}
-          className="border-t border-copper-600/12 py-2.5 shadow-md 2xl:hidden"
+          className="border-t border-copper-600/10 py-2.5 shadow-md 2xl:hidden"
         >
           <div className="container-page">
             <form onSubmit={search} className="flex items-center gap-2.5">
@@ -695,7 +695,7 @@ export default function PublicHeader() {
               <p className="sheet-label mb-3 text-copper-600">
                 01 — Learn & Practice
               </p>
-              <ul className="divide-y divide-[#9d5524]/12 border-y border-copper-600/12">
+              <ul className="divide-y divide-[#9d5524]/12 border-y border-copper-600/10">
                 {learnMegaItems.map((item) => (
                   <li key={item.to}>
                     <Link
@@ -745,7 +745,7 @@ export default function PublicHeader() {
             </div>
 
             {!user && (
-              <div className="mt-6 flex flex-wrap gap-2.5 border-t border-copper-600/12 pt-5">
+              <div className="mt-6 flex flex-wrap gap-2.5 border-t border-copper-600/10 pt-5">
                 <Link
                   to="/login"
                   className="rounded-full border border-limestone-300 bg-limestone-100 px-4 py-2 text-xs font-semibold text-copper-600"

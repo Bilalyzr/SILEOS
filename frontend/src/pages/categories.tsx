@@ -156,7 +156,7 @@ export function CategoriesPage() {
       />
 
       {/* Section 01: The Tamil Knowledge Triad */}
-      <section className="border-b border-ink-900/12 py-section">
+      <section className="border-b border-ink-900/10 py-section">
         <div className="container-page">
           <SymphoSectionHeader
             index="SI—01"
@@ -219,7 +219,7 @@ export function CategoriesPage() {
       </section>
 
       {/* Section 02: Platform Figures */}
-      <section className="border-b border-ink-900/12 py-14">
+      <section className="border-b border-ink-900/10 py-14">
         <div className="container-page">
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-3">
             {[
@@ -230,7 +230,7 @@ export function CategoriesPage() {
               <div
                 key={stat.label}
                 className={
-                  i < 2 ? "sm:border-r sm:border-ink-900/12 sm:pr-8" : ""
+                  i < 2 ? "sm:border-r sm:border-ink-900/10 sm:pr-8" : ""
                 }
               >
                 <div className="font-display text-display-lg font-light text-ink-900">

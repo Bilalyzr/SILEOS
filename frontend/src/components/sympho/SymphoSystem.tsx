@@ -803,8 +803,8 @@ export const SymphoPageHero: React.FC<SymphoPageHeroProps> = ({
       onPointerMove={onPointerMove}
       className={`relative overflow-hidden border-b ${
         dark
-          ? "on-dark bg-ink-900 text-limestone-50 border-limestone-100/12 blueprint-grid"
-          : "bg-limestone-100 text-ink-900 border-ink-900/12 blueprint-grid-light"
+          ? "on-dark bg-ink-900 text-limestone-50 border-limestone-100/10 blueprint-grid"
+          : "bg-limestone-100 text-ink-900 border-ink-900/10 blueprint-grid-light"
       }`}
     >
       {dark && (
@@ -828,7 +828,7 @@ export const SymphoPageHero: React.FC<SymphoPageHeroProps> = ({
         <div
           ref={topBarRef}
           data-reveal=""
-          className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b pb-5 border-current/12"
+          className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b pb-5 [border-color:color-mix(in_srgb,currentColor_10%,transparent)]"
         >
           <div className="flex items-center gap-4">
             <span className="font-mono text-label text-copper-500 [.on-dark_&]:text-copper-300">
@@ -838,7 +838,7 @@ export const SymphoPageHero: React.FC<SymphoPageHeroProps> = ({
           </div>
           <div className="flex items-center gap-3 font-mono text-label opacity-70">
             {badge && (
-              <span className="inline-flex items-center gap-2 rounded-pill border border-current/20 px-3 py-1">
+              <span className="inline-flex items-center gap-2 rounded-pill border [border-color:color-mix(in_srgb,currentColor_20%,transparent)] px-3 py-1">
                 <span className="size-1.5 rounded-pill bg-copper-400" />
                 {badge}
               </span>
@@ -888,7 +888,7 @@ export const SymphoPageHero: React.FC<SymphoPageHeroProps> = ({
                     : "border-ink-900/15 bg-limestone-50/85 text-ink-900"
                 }`}
               >
-                <div className="mb-4 flex items-center justify-between border-b border-current/12 pb-3 font-mono text-label opacity-70">
+                <div className="mb-4 flex items-center justify-between border-b [border-color:color-mix(in_srgb,currentColor_10%,transparent)] pb-3 font-mono text-label opacity-70">
                   <span>SPECIFICATION LEDGER</span>
                   <span className="text-copper-400">REV 2026.4</span>
                 </div>
@@ -896,7 +896,7 @@ export const SymphoPageHero: React.FC<SymphoPageHeroProps> = ({
                   {resolvedSpecs.map((s) => (
                     <div
                       key={s.label}
-                      className="border-t border-current/12 pt-3 first:border-t-0 first:pt-0 [&:nth-child(2)]:border-t-0 [&:nth-child(2)]:pt-0"
+                      className="border-t [border-color:color-mix(in_srgb,currentColor_10%,transparent)] pt-3 first:border-t-0 first:pt-0 [&:nth-child(2)]:border-t-0 [&:nth-child(2)]:pt-0"
                     >
                       <dt className="font-mono text-label opacity-65">
                         {s.label}
