@@ -16,6 +16,10 @@ logger = logging.getLogger(__name__)
 settings = get_settings()
 
 
+_smtp_fail_streak = 0
+_smtp_pause_until = 0.0
+
+
 class EmailService:
     """Email service for sending notifications via SMTP or mock mode"""
 
@@ -52,6 +56,14 @@ class EmailService:
             if html_body:
                 msg.attach(MIMEText(html_body, 'html'))
 
+            # Circuit breaker: repeated SMTP failures pause attempts for 10
+            # minutes. Some callers still invoke this sync sender from async
+            # code, and each attempt can block the event loop for the DNS +
+            # connect duration; bounding retries keeps those stalls rare.
+            import time as _time
+            global _smtp_fail_streak, _smtp_pause_until
+            if _time.time() < _smtp_pause_until:
+                return False
             # Connect to SMTP server
             with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT, timeout=20) as server:
                 # Enable TLS encryption
@@ -64,10 +76,18 @@ class EmailService:
                 server.send_message(msg)
 
             logger.info(f"✅ Email sent successfully to {to_email}")
+            _smtp_fail_streak = 0
             return True
 
         except Exception as e:
             logger.error(f"❌ Failed to send email to {to_email}: {e}")
+            _smtp_fail_streak += 1
+            if _smtp_fail_streak >= 2:
+                _smtp_pause_until = _time.time() + 600
+                _smtp_fail_streak = 0
+                logger.warning(
+                    "SMTP failed twice in a row — pausing send attempts for 10 minutes"
+                )
             return False
 
     @staticmethod

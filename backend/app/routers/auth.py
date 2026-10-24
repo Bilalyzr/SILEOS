@@ -44,6 +44,7 @@ from app.schemas.auth import (
     VerifyEmailRequest
 )
 
+import asyncio
 import logging
 
 logger = logging.getLogger(__name__)
@@ -1414,7 +1415,9 @@ async def google_login(
 
     try:
         # Verify Firebase token using manual JWT verification
-        decoded_token = verify_firebase_token(token)
+        # Sync JWKS fetch (requests lib) must stay off the event loop —
+        # its DNS/connect can stall every concurrent request.
+        decoded_token = await asyncio.to_thread(verify_firebase_token, token)
 
         email = decoded_token.get("email")
         name = decoded_token.get("name", "")
@@ -1611,7 +1614,9 @@ async def complete_google_login(
 
     try:
         # Verify Firebase token
-        decoded_token = verify_firebase_token(token)
+        # Sync JWKS fetch (requests lib) must stay off the event loop —
+        # its DNS/connect can stall every concurrent request.
+        decoded_token = await asyncio.to_thread(verify_firebase_token, token)
         email = decoded_token.get("email")
         name = decoded_token.get("name", "")
         picture = decoded_token.get("picture", "")

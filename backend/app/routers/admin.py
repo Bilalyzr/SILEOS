@@ -12,6 +12,7 @@ from sqlalchemy.exc import IntegrityError
 from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta, timezone
 from pydantic import BaseModel, Field
+import asyncio
 import logging
 import os
 import re
@@ -3899,7 +3900,12 @@ async def preview_certificate_template(
                 },
                 "elements": template.elements_config or [],
             }
-            CertificateService.render_template_preview(template_design, sample_data, temp_path)
+            # Preview does sync HTTP (image fetch) + reportlab CPU work;
+            # run it off the event loop so one preview cannot stall the API.
+            await asyncio.to_thread(
+                CertificateService.render_template_preview,
+                template_design, sample_data, temp_path
+            )
             return _pdf_response(temp_path)
 
         # HTML/legacy templates (the hand-authored designs — Sasha 3D, Royal
