@@ -136,7 +136,7 @@ body.astra-theme::before {
   box-shadow:
     0 12px 38px #b3631810,
     inset 0 1px 0 white;
-  color: #442714;
+  color: #17233a;
 }
 /* Page-root placement: the banner is a rounded card, not a full-bleed slab.
    PageLayout renders the header slot raw (.rd-page has no gutters) and the
@@ -281,23 +281,23 @@ body.astra-theme::before {
 }
 .astra-theme :is(.sf-hero, .si-hero) {
   background:
-    radial-gradient(ellipse at 82% 0%, rgba(255, 251, 231, 0.72), transparent 58%),
-    linear-gradient(120deg, #fff7e9, #ffe2c0 65%, #ffcc9b) !important;
-  border-color: rgba(255, 190, 134, 0.45) !important;
+    radial-gradient(ellipse at 92% 0%, rgba(255, 237, 213, 0.9), transparent 45%),
+    #ffffff !important;
+  border-color: #e4e7ec !important;
   box-shadow:
     0 12px 38px rgba(179, 99, 24, 0.06),
     inset 0 1px 0 white;
-  color: #442714;
+  color: #17233a;
 }
 .astra-theme :is(.sf-hero, .si-hero) :is(h1, h2) {
-  color: #442714 !important;
+  color: #17233a !important;
 }
 /* The dashboard Welcome banner: astra-glass.css sets :is(h1..h6) to the navy
    --ink, which overrides the banner's warm #442714 ink by source order and
    leaves the heading the wrong colour for this surface. Same fix the hero
    rule above applies. */
 .astra-theme :is(.brand-banner, .brand-banner-compact) :is(h1, h2, h3) {
-  color: #442714 !important;
+  color: #17233a !important;
 }
 .astra-theme :is(.sf-hero, .si-hero) p {
   color: #75543e !important;
@@ -791,7 +791,19 @@ body.astra-theme::before {
   color: inherit !important;
 }
 .astra-theme .rd-sidebar nav div:not(:has(a[aria-current="page"])) > button {
-  color: #94a3b8 !important;
+  color: #cbd5e1 !important;
+}
+/* Group toggles read as the same kind of item as single links */
+.astra-theme .rd-sidebar nav div > button,
+.astra-theme .rd-sidebar nav div > button span {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+.astra-theme .rd-sidebar nav a,
+.astra-theme .rd-sidebar nav a span {
+  font-weight: 500;
 }
 .astra-theme .rd-sidebar nav div:has(a[aria-current="page"]) > button {
   color: #fdba74 !important;

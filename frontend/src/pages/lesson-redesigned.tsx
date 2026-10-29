@@ -2727,7 +2727,7 @@ export const LessonPageRedesigned = () => {
                       )}
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block text-[11px] text-neutral-500 mb-0.5">
+                      <span className="block text-[11px] text-slate-300 mb-0.5">
                         {l.type === "quiz"
                           ? "Quiz"
                           : l.type === "assignment"

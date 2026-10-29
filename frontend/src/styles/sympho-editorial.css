@@ -776,3 +776,106 @@ body.astra-theme .sympho-scope .glass-panel:hover,
   box-shadow: var(--shadow-lift) !important;
 }
 
+
+/* ==========================================================================
+   DASHBOARD FINE-TUNE (navy #17233a / orange #c2410c / teal #0d9488)
+   One rule set for every role workspace. Loaded last, so it wins.
+   ========================================================================== */
+
+/* Brand banner on each role home: navy ink, readable tracking (at -0.04em
+   the display face ran words together), orange accents. */
+body.astra-theme .brand-banner { border-color: #e4e7ec !important; }
+body.astra-theme .brand-banner h2 {
+  color: #17233a !important;
+  letter-spacing: -0.02em !important;
+  word-spacing: 0.04em;
+}
+body.astra-theme .brand-eyebrow { color: #c2410c !important; }
+body.astra-theme .brand-banner p { color: #475569 !important; }
+body.astra-theme .brand-text-link { color: #c2410c !important; }
+body.astra-theme .brand-text-link:hover { color: #9a3412 !important; text-decoration: underline; }
+body.astra-theme .brand-art-label { color: #56657d !important; background: #ffffff !important; border-color: #e4e7ec !important; }
+body.astra-theme :is(.brand-art-spark, .brand-art-cap) {
+  background: #ffffff !important;
+  border-color: #e4e7ec !important;
+  color: #c2410c !important;
+}
+
+/* Stat values: one numeric face (some cards were monospace, some not) */
+body.astra-theme :is(.rd-stat-value, .rd-stat-value *, .dash-stat-value, .dash-stat-value *) {
+  font-family: var(--font-display, "Plus Jakarta Sans"), system-ui, sans-serif !important;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+body.astra-theme .dash-stat-label { color: #56657d !important; }
+
+/* Shared Back control: quiet navy outline that sits in the flow
+   (its negative bottom margin tucked it under the next card). */
+body.astra-theme .astra-page-back { margin: 12px 0 12px !important; }
+body.astra-theme .astra-back-button {
+  background: #ffffff;
+  border-color: #e4e7ec;
+  color: #334155;
+}
+body.astra-theme .astra-back-button:hover {
+  background: #ffffff;
+  border-color: #c2410c;
+  color: #c2410c;
+}
+body.astra-theme .astra-back-button:focus-visible { outline-color: #c2410c; }
+
+/* Primary actions: one solid orange with white text (5.2:1). Mid-orange
+   (500/600) fails AA with white text; blue/indigo/cyan primaries were
+   off-palette. */
+body.astra-theme :is(button, a, [role="button"]):is(.bg-orange-500, .bg-orange-600, .bg-blue-600, .bg-indigo-600, .bg-cyan-600, .bg-sky-600, .bg-primary-500, .bg-primary-600):not(:disabled) {
+  background-color: #c2410c !important;
+  border-color: #c2410c !important;
+  color: #ffffff !important;
+}
+body.astra-theme :is(button, a, [role="button"]):is(.bg-orange-500, .bg-orange-600, .bg-blue-600, .bg-indigo-600, .bg-cyan-600, .bg-sky-600, .bg-primary-500, .bg-primary-600):not(:disabled):hover {
+  background-color: #9a3412 !important;
+  border-color: #9a3412 !important;
+}
+body.astra-theme :is(button, a, [role="button"]):is(.bg-orange-500, .bg-orange-600, .bg-blue-600, .bg-indigo-600, .bg-cyan-600, .bg-sky-600):disabled {
+  background-color: #cbd5e1 !important;
+  color: #475569 !important;
+}
+/* Orange gradient tiles/avatars carrying white text */
+body.astra-theme .bg-gradient-to-br.from-orange-400.to-orange-600,
+body.astra-theme .bg-gradient-to-r.from-orange-500.to-orange-600 {
+  background-image: none !important;
+  background-color: #c2410c !important;
+}
+/* Off-palette link/tab blues and indigos -> navy ink, orange on hover */
+body.astra-theme :is(button, a):is(.text-blue-600, .text-blue-700, .text-indigo-600, .text-indigo-700) {
+  color: #c2410c !important;
+}
+
+/* Readable muted + status text (each >= 4.5:1 on white and #f4f6fa) */
+body.astra-theme :is(.text-slate-400, .text-gray-400) { color: #5b6b82 !important; }
+/* Informational blue text (stats, autosave state) -> navy ink */
+body.astra-theme :is(.text-blue-600, .text-blue-700):not(button):not(a) { color: #1e2d48 !important; }
+/* Progress bars are teal; orange badges with white text use the AA orange */
+body.astra-theme .bg-blue-600.rounded-full:is(.h-1, .h-1\.5, .h-2, .h-2\.5, .h-3, .h-full) { background-color: #0d9488 !important; }
+/* Headings explicitly marked white (dark lesson player) stay white; a
+   global heading ink rule was turning them navy on navy. */
+body.astra-theme :is(h1, h2, h3, h4).text-white { color: #ffffff !important; }
+body.astra-theme .bg-orange-500.text-white { background-color: #c2410c !important; }
+body.astra-theme .rd-workspace .dash-underline { color: #c2410c !important; }
+body.astra-theme .text-warning-600,
+body.astra-theme .text-yellow-600 { color: #a16207 !important; }
+body.astra-theme .text-orange-500 { color: #c2410c !important; }
+body.astra-theme :is(.text-amber-500, .text-amber-600) { color: #b45309 !important; }
+body.astra-theme :is(.text-emerald-500, .text-green-500) { color: #047857 !important; }
+body.astra-theme :is(.text-purple-600, .text-violet-600) { color: #6d28d9 !important; }
+/* Copper eyebrows on light surfaces (kept as-is on dark heroes) */
+body.astra-theme .text-copper-500:not(.on-dark *):not(.on-dark) { color: #c2410c; }
+
+/* Campus surfaces still carried the old copper ink */
+body.astra-theme .campus-eyebrow { color: #c2410c !important; }
+body.astra-theme .campus-notice {
+  background: #fff7ed !important;
+  border-color: #fed7aa !important;
+  color: #7c2d12;
+}
+body.astra-theme .campus-check-reason { color: #56657d !important; }

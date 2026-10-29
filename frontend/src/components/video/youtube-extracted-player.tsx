@@ -269,7 +269,7 @@ export const YouTubeExtractedPlayer = forwardRef<VideoPlayerHandle, YouTubeExtra
                             </div>
                         </div>
                         <p className="text-lg font-medium text-white/80 mb-1">Preparing Video</p>
-                        <p className="text-sm text-neutral-500">Extracting stream from source...</p>
+                        <p className="text-sm text-slate-300">Extracting stream from source...</p>
                     </div>
                 </div>
             )

@@ -34,17 +34,19 @@ export default {
           950: '#431407',
         },
         secondary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e', // Dark Blue - Secondary brand color
-          950: '#082f49',
+          // Navy/slate (was sky blue): text-secondary-800/900 are the dark
+          // UI ink across the dashboards, so they now match the navy palette.
+          50: '#f4f6fa',
+          100: '#eaeef4',
+          200: '#e4e7ec',
+          300: '#cbd5e1',
+          400: '#94a3b8',
+          500: '#64748b',
+          600: '#475569',
+          700: '#334155',
+          800: '#1e2d48',
+          900: '#17233a',
+          950: '#0f1a2e',
         },
         success: {
           50: '#f0fdf4',

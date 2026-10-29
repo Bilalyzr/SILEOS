@@ -26,11 +26,12 @@ interface CourseRow {
 
 type SortKey = 'enrollments' | 'progress' | 'completion'
 
+// Text-safe shades (>= 4.5:1 on white): these colour the % labels too.
 const progressColor = (pct: number): string => {
-  if (pct >= 75) return '#10b981'  // emerald
-  if (pct >= 50) return ORANGE
-  if (pct >= 25) return '#f59e0b'  // amber
-  return '#ef4444'                  // red
+  if (pct >= 75) return '#047857'  // emerald-700
+  if (pct >= 50) return '#c2410c'  // brand orange
+  if (pct >= 25) return '#b45309'  // amber-700
+  return '#b91c1c'                  // red-700
 }
 
 export const CoursesProgressChart: React.FC = () => {

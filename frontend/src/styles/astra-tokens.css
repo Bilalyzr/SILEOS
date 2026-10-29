@@ -16,7 +16,7 @@
   --navy:   #0b2540;
 
   /* status (all AA on glass) */
-  --ok:#047a5b; --warn:#a4620a; --bad:#c62525; --info:#0b6fa8;
+  --ok:#047a5b; --warn:#8a5208; --bad:#c62525; --info:#334155;
 
   /* glass tiers */
   --glass-1: rgba(255,255,255,.52);   /* ambient   */

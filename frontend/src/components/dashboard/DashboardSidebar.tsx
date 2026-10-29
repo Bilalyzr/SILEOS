@@ -62,15 +62,18 @@ const ROLE_LABELS: Record<Role, string> = {
   company_manager: 'Manager',
 }
 
+// One chip style for every role: the chip sits on the navy sidebar, and
+// per-role colours (purple, sky, rose…) fought the navy/orange palette.
+const ROLE_CHIP = 'bg-white/10 text-[#fdba74] ring-white/15'
 const ROLE_TONES: Record<Role, string> = {
-  parent: 'bg-orange-100 text-orange-700 ring-orange-200/40',
-  student:         'bg-orange-100 text-orange-700 ring-orange-200/40',
-  instructor:      'bg-purple-100 text-purple-700 ring-purple-200/40',
-  admin:           'bg-secondary-100 text-secondary-800 ring-secondary-200/40',
-  superadmin:      'bg-rose-100 text-rose-700 ring-rose-300/50',
-  spoc:            'bg-emerald-100 text-emerald-700 ring-emerald-200/40',
-  company:         'bg-sky-100 text-sky-700 ring-sky-200/40',
-  company_manager: 'bg-amber-100 text-amber-700 ring-amber-200/40',
+  parent: ROLE_CHIP,
+  student: ROLE_CHIP,
+  instructor: ROLE_CHIP,
+  admin: ROLE_CHIP,
+  superadmin: ROLE_CHIP,
+  spoc: ROLE_CHIP,
+  company: ROLE_CHIP,
+  company_manager: ROLE_CHIP,
 }
 
 // ---------------------------------------------------------------------------

@@ -244,16 +244,17 @@ export function CompanyDashboardPage() {
                     },
                   }}
                   onClick={() => setTab(n.key)}
-                  className={`relative w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-left transition group ${
+                  aria-current={active ? "page" : undefined}
+                  className={`relative w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-left transition group ${
                     active
-                      ? "text-orange-700 font-semibold"
-                      : "text-secondary-800 hover:text-orange-700 hover:bg-orange-50/50"
+                      ? "text-white font-semibold"
+                      : "text-secondary-800 hover:text-[#c2410c] hover:bg-[#f4f6fa]"
                   }`}
                 >
                   {active && (
                     <motion.span
                       layoutId="company-tab-active-pill"
-                      className="absolute inset-0 rounded-lg bg-orange-100/70 ring-1 ring-orange-200"
+                      className="absolute inset-0 rounded-lg bg-[#c2410c] shadow-[0_4px_14px_rgba(194,65,12,0.3)]"
                       transition={{
                         type: "spring",
                         stiffness: 380,
@@ -262,7 +263,7 @@ export function CompanyDashboardPage() {
                     />
                   )}
                   <Icon
-                    className={`w-4 h-4 flex-shrink-0 relative z-10 ${active ? "text-orange-600" : "text-slate-500 group-hover:text-orange-600 transition"}`}
+                    className={`w-4 h-4 flex-shrink-0 relative z-10 ${active ? "text-white" : "text-slate-500 group-hover:text-[#c2410c] transition"}`}
                   />
                   <span className="relative z-10 flex-1 truncate">
                     {n.label}

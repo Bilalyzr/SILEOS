@@ -136,13 +136,13 @@ export function InstructorStudents() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "active":
-        return "bg-green-600";
+        return "!bg-emerald-50 !text-emerald-800 !border-emerald-200";
       case "completed":
-        return "bg-blue-600";
+        return "!bg-teal-50 !text-teal-800 !border-teal-200";
       case "cancelled":
-        return "bg-yellow-600";
+        return "!bg-amber-50 !text-amber-800 !border-amber-200";
       default:
-        return "bg-gray-600";
+        return "!bg-slate-100 !text-slate-700 !border-slate-200";
     }
   };
 
