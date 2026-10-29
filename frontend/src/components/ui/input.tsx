@@ -8,12 +8,16 @@ export interface InputProps
   helperText?: string
   leftIcon?: React.ReactNode
   rightIcon?: React.ReactNode
+  /** Interactive trailing control (e.g. show-password). Anchored to the input
+   *  box itself, so an error/helper line below never shifts it. */
+  rightElement?: React.ReactNode
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, label, error, helperText, leftIcon, rightIcon, id, ...props }, ref) => {
+  ({ className, type, label, error, helperText, leftIcon, rightIcon, rightElement, id, ...props }, ref) => {
     const generatedId = React.useId() // always called; never `id || useId()`
     const inputId = id || generatedId
+    const messageId = `${inputId}-message`
 
     return (
       <div className="w-full">
@@ -37,25 +41,33 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               "sf-input flex h-10 sm:h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm sm:text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
               leftIcon && "pl-10",
               rightIcon && "pr-10",
+              rightElement && "pr-12",
               error && "border-danger-500 focus-visible:ring-danger-500",
               className
             )}
             ref={ref}
             id={inputId}
             style={{ fontSize: '16px' }}
+            aria-invalid={error ? true : undefined}
+            aria-describedby={error || helperText ? messageId : undefined}
             {...props}
           />
-          {rightIcon && (
+          {rightIcon && !rightElement && (
             <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
               <span className="text-neutral-500 sm:text-sm">{rightIcon}</span>
             </div>
           )}
+          {rightElement && (
+            <div className="absolute inset-y-0 right-0 flex items-center pr-1">
+              {rightElement}
+            </div>
+          )}
         </div>
         {error && (
-          <p className="mt-2 text-sm text-danger-600">{error}</p>
+          <p id={messageId} role="alert" className="mt-2 text-sm text-danger-600">{error}</p>
         )}
         {helperText && !error && (
-          <p className="mt-2 text-sm text-neutral-500">{helperText}</p>
+          <p id={messageId} className="mt-2 text-sm text-neutral-500">{helperText}</p>
         )}
       </div>
     )

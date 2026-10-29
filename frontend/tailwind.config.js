@@ -120,19 +120,22 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         ink: {
-          950: '#1c0e06',
-          900: '#442714',
-          800: '#17233a',
-          700: '#5c3820',
-          600: '#75543e',
-          500: '#8b522a',
-          400: '#9c7a63',
+          // Navy/slate ink (2026-10-29 layered palette; was warm brown).
+          950: '#0f1a2e',
+          900: '#17233a',
+          800: '#1e2d48',
+          700: '#334155',
+          600: '#475569',
+          500: '#56657d',
+          400: '#6b7a90',
         },
+        // Layered surfaces (2026-10-29): 50 = cards (white), 100 = page
+        // canvas, 200 = section bands/chips, 300 = borders.
         limestone: {
-          50: '#fffdf9',
-          100: '#fff8f1',
-          200: '#ffead4',
-          300: '#f3cfa8',
+          50: '#ffffff',
+          100: '#f4f6fa',
+          200: '#eaeef4',
+          300: '#e4e7ec',
           400: '#c99366',
         },
         copper: {

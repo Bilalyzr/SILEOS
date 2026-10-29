@@ -352,7 +352,7 @@ export const CoursesPage = () => {
                   placeholder="Search courses..."
                   value={localSearchQuery}
                   onChange={(e) => setLocalSearchQuery(e.target.value)}
-                  className="field-input pl-11 pr-10"
+                  className="field-input !pl-11 pr-10"
                 />
                 {localSearchQuery && (
                   <button

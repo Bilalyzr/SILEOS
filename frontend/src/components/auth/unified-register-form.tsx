@@ -175,7 +175,7 @@ export const UnifiedRegisterForm = () => {
             <h2 className="text-2xl font-bold text-gray-900">Registration Successful!</h2>
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <p className="text-sm text-blue-900">
-                📧 <strong>Check your email!</strong>
+                <strong>Check your email!</strong>
               </p>
               <p className="text-sm text-blue-800 mt-2">
                 We've sent a verification link to <strong>{formData.email}</strong>
@@ -221,11 +221,11 @@ export const UnifiedRegisterForm = () => {
                 className={cn(
                   "p-4 border-2 rounded-lg transition-all text-left",
                   userType === 'student'
-                    ? "border-blue-500 bg-blue-50"
+                    ? "border-orange-600 bg-orange-50"
                     : "border-gray-200 hover:border-gray-300"
                 )}
               >
-                <User className={cn("w-6 h-6 mb-2", userType === 'student' ? "text-blue-600" : "text-gray-400")} />
+                <User className={cn("w-6 h-6 mb-2", userType === 'student' ? "text-orange-700" : "text-gray-400")} />
                 <div className="font-semibold text-sm">Student</div>
                 <div className="text-xs text-gray-600">Learn from experts</div>
               </button>
@@ -315,7 +315,7 @@ export const UnifiedRegisterForm = () => {
                   value={formData.bio}
                   onChange={handleChange}
                   placeholder="Tell us about yourself and your teaching experience..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
               </div>
             </>
@@ -358,8 +358,8 @@ export const UnifiedRegisterForm = () => {
               className="mt-1"
             />
             <label htmlFor="terms" className="text-sm text-gray-600 leading-tight">
-              I agree to the <Link to="/terms" className="text-blue-600 hover:underline">Terms of Service</Link> and{' '}
-              <Link to="/privacy" className="text-blue-600 hover:underline">Privacy Policy</Link>
+              I agree to the <Link to="/terms" className="text-orange-700 hover:underline">Terms of Service</Link> and{' '}
+              <Link to="/privacy" className="text-orange-700 hover:underline">Privacy Policy</Link>
             </label>
           </div>
 
@@ -408,7 +408,7 @@ export const UnifiedRegisterForm = () => {
           {/* Login Link */}
           <p className="text-center text-sm text-gray-600">
             Already have an account?{' '}
-            <Link to="/login" className="text-blue-600 hover:underline font-medium">
+            <Link to="/login" className="text-orange-700 hover:underline font-medium">
               Sign in
             </Link>
           </p>

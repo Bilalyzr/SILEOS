@@ -74,7 +74,7 @@ export function WorkspaceHeader({
         <Building2 size={17} />
         <span>Campus</span>
       </Link>
-      <Link to="/labs" className="rd-labs-link">
+      <Link to="/labs" className="rd-labs-link" aria-label="Learning labs">
         <FlaskConical size={17} />
         <span>Learning labs</span>
       </Link>

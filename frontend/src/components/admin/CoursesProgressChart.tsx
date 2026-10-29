@@ -13,6 +13,7 @@ import { api } from '@/api/axios'
 
 const ORANGE = '#f97316'
 const BLUE = '#2563eb'
+const TEAL = '#0d9488' // progress bars (secondary accent)
 
 interface CourseRow {
   course_id: number
@@ -100,7 +101,7 @@ export const CoursesProgressChart: React.FC = () => {
   return (
     <div className="space-y-4">
       {/* Header + KPIs */}
-      <div className="bg-gradient-to-r from-orange-50 via-white to-blue-50 rounded-xl border border-gray-200 p-6">
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
         <div className="flex items-start justify-between mb-5">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
@@ -244,7 +245,7 @@ const KPI: React.FC<{
     orange: 'bg-orange-100 text-orange-600',
     blue: 'bg-blue-100 text-blue-600',
     emerald: 'bg-emerald-100 text-emerald-600',
-    gradient: 'bg-gradient-to-br from-orange-100 to-blue-100 text-orange-600',
+    gradient: 'bg-orange-50 text-orange-600',
   }
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-3 flex items-center gap-3">
@@ -292,7 +293,7 @@ const CourseRow: React.FC<{ c: CourseRow }> = ({ c }) => {
           className="h-full rounded-full transition-all"
           style={{
             width: `${Math.min(100, Math.max(0, c.avg_progress))}%`,
-            background: `linear-gradient(90deg, ${ORANGE}, ${BLUE})`,
+            background: TEAL,
           }}
         />
       </div>

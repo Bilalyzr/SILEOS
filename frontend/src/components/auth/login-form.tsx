@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation, useSearchParams } from "react-router-do
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { Eye, EyeOff, Mail, Lock, Loader2, ShieldCheck } from "lucide-react"
+import { Eye, EyeOff, Mail, Lock, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -336,55 +336,61 @@ export const LoginForm: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-secondary-50 px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Welcome back</CardTitle>
-          <CardDescription className="text-center">
+    // AuthLayout owns the page shell (story panel + surface); this form only
+    // fills the content column — a second min-h-screen background here
+    // doubled the page height and painted over the layout surface.
+    <div className="w-full max-w-md mx-auto">
+      <Card className="w-full">
+        <CardHeader className="space-y-2 text-center">
+          <CardTitle className="text-2xl sm:text-3xl font-bold tracking-tight">Welcome back</CardTitle>
+          <CardDescription>
             Sign in to your account to continue learning
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {/* Email Input */}
-            <div className="space-y-2">
-              <Input
-                {...register("email")}
-                type="email"
-                placeholder="Enter your email"
-                leftIcon={<Mail className="w-4 h-4" />}
-                error={errors.email?.message}
-                disabled={isSubmitting || isLoading}
-                className="h-12"
-              />
-            </div>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+            <Input
+              {...register("email")}
+              id="login_email"
+              label="Email address"
+              type="email"
+              autoComplete="email"
+              inputMode="email"
+              placeholder="you@example.com"
+              leftIcon={<Mail className="w-4 h-4" />}
+              error={errors.email?.message}
+              disabled={isSubmitting || isLoading}
+              className="h-12"
+            />
 
-            {/* Password Input */}
-            <div className="space-y-2">
-              <div className="relative">
-                <Input
-                  {...register("password")}
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  leftIcon={<Lock className="w-4 h-4" />}
-                  error={errors.password?.message}
-                  disabled={isSubmitting || isLoading}
-                  className="h-12"
-                />
+            <Input
+              {...register("password")}
+              id="login_password"
+              label="Password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              placeholder="Enter your password"
+              leftIcon={<Lock className="w-4 h-4" />}
+              error={errors.password?.message}
+              disabled={isSubmitting || isLoading}
+              className="h-12"
+              rightElement={
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-500 hover:text-neutral-700 p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  className="flex h-11 w-11 items-center justify-center rounded-md text-neutral-500 transition-colors hover:text-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   onClick={() => setShowPassword(!showPassword)}
                   disabled={isSubmitting || isLoading}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-pressed={showPassword}
                 >
                   {showPassword ? (
-                    <EyeOff className="w-4 h-4" />
+                    <EyeOff className="w-4 h-4" aria-hidden="true" />
                   ) : (
-                    <Eye className="w-4 h-4" />
+                    <Eye className="w-4 h-4" aria-hidden="true" />
                   )}
                 </button>
-              </div>
-            </div>
+              }
+            />
 
             {/* Two-factor code — revealed only after the server says this
                 account has 2FA enabled, so ordinary logins are unaffected.
@@ -416,39 +422,33 @@ export const LoginForm: React.FC = () => {
             )}
 
             {/* Remember Me & Forgot Password */}
-            <div className="flex items-center justify-between gap-4">
-              <label className="flex items-center touch-action-manipulation">
+            <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+              <label className="flex min-h-[44px] cursor-pointer items-center gap-2 touch-action-manipulation">
                 <input
                   {...register("remember")}
                   type="checkbox"
-                  className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500 w-5 h-5"
+                  className="h-5 w-5 cursor-pointer rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
                   disabled={isSubmitting || isLoading}
                 />
-                <span className="ml-2 text-sm text-neutral-600">Remember me</span>
+                <span className="text-sm text-neutral-600">Remember me</span>
               </label>
               <Link
                 to="/forgot-password"
-                className="text-sm text-primary-600 hover:text-primary-700 min-h-[44px] flex items-center"
+                className="flex min-h-[44px] items-center text-sm font-medium text-primary-600 hover:text-primary-700"
               >
                 Forgot password?
               </Link>
             </div>
 
-            {/* Submit Button */}
+            {/* Button renders its own spinner when `loading` — adding a
+                Loader2 here as well showed two spinners side by side. */}
             <Button
               type="submit"
-              className="w-full h-12 sm:h-10"
+              className="w-full h-12 text-base"
               disabled={isSubmitting || isLoading}
               loading={isSubmitting || isLoading}
             >
-              {isSubmitting || isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Signing in...
-                </>
-              ) : (
-                "Sign in"
-              )}
+              {isSubmitting || isLoading ? "Signing in..." : "Sign in"}
             </Button>
           </form>
 
@@ -525,22 +525,20 @@ export const LoginForm: React.FC = () => {
 
           {/* Divider */}
           <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-neutral-300" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-              </div>
+            <div className="flex items-center gap-3 text-xs font-medium uppercase tracking-wider text-neutral-500">
+              <span className="h-px flex-1 bg-neutral-200" aria-hidden="true" />
+              or continue with
+              <span className="h-px flex-1 bg-neutral-200" aria-hidden="true" />
             </div>
 
             {/* Social Login Buttons */}
-            <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-4">
+            <div className="mt-5 grid grid-cols-2 gap-3">
               <Button
                 variant="outline"
                 onClick={handleGoogleLogin}
                 disabled={isSubmitting || isLoading || isGoogleLoading || !isFirebaseConfigured}
                 title={!isFirebaseConfigured ? "Google sign-in not configured" : undefined}
-                className="min-h-[44px] sm:min-h-0"
+                className="h-11"
               >
                 <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
                   <path
@@ -560,14 +558,13 @@ export const LoginForm: React.FC = () => {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                 </svg>
-                <span className="hidden sm:inline">Sign in with Google</span>
-                <span className="sm:hidden">Google</span>
+                Google
               </Button>
               <Button
                 variant="outline"
                 onClick={handleLinkedInLogin}
                 disabled={isSubmitting || isLoading}
-                className="min-h-[44px] sm:min-h-0"
+                className="h-11"
               >
                 <svg className="w-4 h-4 mr-2" fill="#0A66C2" viewBox="0 0 24 24">
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>

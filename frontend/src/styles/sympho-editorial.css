@@ -5,18 +5,20 @@
    ========================================================================== */
 
 :root {
-  --color-ink-950: #1c0e06;
-  --color-ink-900: #442714;
-  --color-ink-800: #17233a;
-  --color-ink-700: #5c3820;
-  --color-ink-600: #75543e;
-  --color-ink-500: #8b522a;
-  --color-ink-400: #9c7a63;
+  /* Navy/slate ink (2026-10-29 layered palette; was warm brown). */
+  --color-ink-950: #0f1a2e;
+  --color-ink-900: #17233a;
+  --color-ink-800: #1e2d48;
+  --color-ink-700: #334155;
+  --color-ink-600: #475569;
+  --color-ink-500: #56657d;
+  --color-ink-400: #6b7a90;
 
-  --color-limestone-50: #fffdf9;
-  --color-limestone-100: #fff8f1;
-  --color-limestone-200: #ffead4;
-  --color-limestone-300: #f3cfa8;
+  /* Layered surfaces (2026-10-29): cards white, canvas tinted, bands deeper. */
+  --color-limestone-50: #ffffff;
+  --color-limestone-100: #f4f6fa;
+  --color-limestone-200: #eaeef4;
+  --color-limestone-300: #e4e7ec;
   --color-limestone-400: #c99366;
 
   --color-copper-200: #ffd5a5;
@@ -32,14 +34,10 @@
   --color-sage-600: #b23c05;
   --color-sage-700: #853b14;
 
-  --sileos-gradient: linear-gradient(120deg, #ffd5a5 0%, #ffb875 52%, #ff9b54 100%);
-  --sileos-banner:
-    radial-gradient(ellipse at 80% 0%, #fff9e4b0, transparent 60%),
-    linear-gradient(120deg, #fff7e9, #ffe2c0 65%, #ffcc9b);
-  --sileos-canvas:
-    radial-gradient(ellipse at 4% 0%, #ffd9b2a6, transparent 55%),
-    radial-gradient(ellipse at 95% 45%, #ffe4cbb3, transparent 55%),
-    linear-gradient(135deg, #fff8f0, #fffaf7 50%, #ffefdf);
+  /* Primary action = solid brand orange, white text (5.2:1). */
+  --sileos-gradient: linear-gradient(0deg, #c2410c, #c2410c);
+  --sileos-banner: linear-gradient(#ffffff, #ffffff);
+  --sileos-canvas: none;
 
   --color-danger: #c62525;
   --color-warning: #a4620a;
@@ -139,14 +137,14 @@ body.astra-theme .sympho-scope.bg-ink-900,
 body.astra-theme .sympho-scope .bg-ink-900,
 .sympho-scope.bg-ink-900,
 .sympho-scope .bg-ink-900 {
-  background-color: #261409 !important;
+  background-color: #17233a !important;
 }
 
 body.astra-theme .sympho-scope.bg-ink-800,
 body.astra-theme .sympho-scope .bg-ink-800,
 .sympho-scope.bg-ink-800,
 .sympho-scope .bg-ink-800 {
-  background-color: #321b0d !important;
+  background-color: #1e2d48 !important;
 }
 
 body.astra-theme .sympho-scope .bg-limestone-50,
@@ -167,7 +165,7 @@ body.astra-theme .sympho-scope .bg-limestone-200,
 body.astra-theme .sympho-scope .bg-copper-500,
 .sympho-scope .bg-copper-500 {
   background: var(--sileos-gradient) !important;
-  color: #51230d !important;
+  color: #ffffff !important;
 }
 
 /* Crisp Frosted White & Warm Ivory Glass Header Bar */
@@ -657,8 +655,8 @@ html {
 
 .sympho-scope .sympho-nav-btn:hover {
   background: var(--sileos-gradient);
-  color: #51230d;
-  border-color: #ff9b54;
+  color: #ffffff;
+  border-color: #c2410c;
 }
 
 .sympho-scope .sympho-watermark {

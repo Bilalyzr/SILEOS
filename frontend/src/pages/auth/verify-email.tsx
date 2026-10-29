@@ -69,7 +69,7 @@ export const VerifyEmailPage = () => {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+      <div className="w-full flex justify-center">
         <Card className="w-full max-w-md">
           <CardContent className="pt-6">
             <div className="text-center space-y-4">
@@ -91,7 +91,7 @@ export const VerifyEmailPage = () => {
     const isAlreadyVerified = status === 'already-verified'
 
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+      <div className="w-full flex justify-center">
         <Card className="w-full max-w-md">
           <CardContent className="pt-6">
             <div className="text-center space-y-4">
@@ -146,7 +146,7 @@ export const VerifyEmailPage = () => {
 
   // Error state
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="w-full flex justify-center">
       <Card className="w-full max-w-md">
         <CardContent className="pt-6">
           <div className="text-center space-y-4">

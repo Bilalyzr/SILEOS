@@ -2,6 +2,7 @@ import * as React from "react"
 import { Navigate, useLocation } from "react-router-dom"
 import { useAuth, useAuthContext } from "@/hooks/use-auth"
 import { roleHomePath, isNonStudentRole } from "@/utils/role-routing"
+import { InfinityTrace } from "@/components/loading/InfinityTrace"
 
 interface ProtectedRouteProps {
   children: React.ReactNode
@@ -26,12 +27,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // gets bounced to /login before the async restore finishes.
   if (isLoading || !hasResolvedAuth) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
-          <p className="text-neutral-600">Loading...</p>
-        </div>
-      </div>
+      <InfinityTrace label="Checking your session" fullscreen />
     )
   }
 

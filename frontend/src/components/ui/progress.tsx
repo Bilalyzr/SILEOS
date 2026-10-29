@@ -18,7 +18,7 @@ const Progress = React.forwardRef<
   }
 
   const variantClasses = {
-    default: "bg-primary-500",
+    default: "bg-teal-600", // progress = teal; orange is reserved for actions
     success: "bg-success-500",
     warning: "bg-warning-500",
     danger: "bg-danger-500"

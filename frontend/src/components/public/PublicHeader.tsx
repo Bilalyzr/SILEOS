@@ -183,7 +183,9 @@ export default function PublicHeader() {
           : "shadow-[0_4px_16px_-12px_rgba(142,77,23,0.08)]"
       }`}
     >
-      <div className="container-page flex h-[4.25rem] items-center justify-between gap-3">
+      {/* Phones: subtitle + search icon hide below sm so the menu toggle
+          and cart stay on-screen (the bar was ~460px wide at 390px). */}
+      <div className="container-page flex h-[4.25rem] items-center justify-between gap-2 sm:gap-3">
         {/* SashaInfinity Brand Mark */}
         <Link
           to="/"
@@ -209,7 +211,7 @@ export default function PublicHeader() {
             </span>
             <span
               style={{ color: "var(--color-copper-600)" }}
-              className="mt-0.5 font-mono text-[0.72rem] font-semibold tracking-[0.16em] uppercase"
+              className="mt-0.5 hidden font-mono text-[0.72rem] font-semibold tracking-[0.16em] uppercase sm:block"
             >
               Knowledge Architecture
             </span>
@@ -227,7 +229,7 @@ export default function PublicHeader() {
             className={({ isActive }) =>
               `relative rounded-full px-3.5 py-1.5 text-[0.8rem] font-semibold transition-all duration-200 ${
                 isActive
-                  ? "bg-gradient-to-r from-copper-200 via-copper-300 to-copper-400 text-ink-900 shadow-[0_2px_8px_rgba(222,121,37,0.22),inset_0_1px_0_#ffffff]"
+                  ? "bg-[#c2410c] text-white shadow-[0_2px_8px_rgba(194,65,12,0.25)]"
                   : "text-ink-700 hover:bg-limestone-200/70 hover:text-copper-600"
               }`
             }
@@ -328,7 +330,7 @@ export default function PublicHeader() {
             className={({ isActive }) =>
               `relative rounded-full px-3.5 py-1.5 text-[0.8rem] font-semibold transition-all duration-200 ${
                 isActive
-                  ? "bg-gradient-to-r from-copper-200 via-copper-300 to-copper-400 text-ink-900 shadow-[0_2px_8px_rgba(222,121,37,0.22),inset_0_1px_0_#ffffff]"
+                  ? "bg-[#c2410c] text-white shadow-[0_2px_8px_rgba(194,65,12,0.25)]"
                   : "text-ink-700 hover:bg-limestone-200/70 hover:text-copper-600"
               }`
             }
@@ -341,7 +343,7 @@ export default function PublicHeader() {
             className={({ isActive }) =>
               `relative rounded-full px-3.5 py-1.5 text-[0.8rem] font-semibold transition-all duration-200 ${
                 isActive
-                  ? "bg-gradient-to-r from-copper-200 via-copper-300 to-copper-400 text-ink-900 shadow-[0_2px_8px_rgba(222,121,37,0.22),inset_0_1px_0_#ffffff]"
+                  ? "bg-[#c2410c] text-white shadow-[0_2px_8px_rgba(194,65,12,0.25)]"
                   : "text-ink-700 hover:bg-limestone-200/70 hover:text-copper-600"
               }`
             }
@@ -354,7 +356,7 @@ export default function PublicHeader() {
             className={({ isActive }) =>
               `relative rounded-full px-3.5 py-1.5 text-[0.8rem] font-semibold transition-all duration-200 ${
                 isActive
-                  ? "bg-gradient-to-r from-copper-200 via-copper-300 to-copper-400 text-ink-900 shadow-[0_2px_8px_rgba(222,121,37,0.22),inset_0_1px_0_#ffffff]"
+                  ? "bg-[#c2410c] text-white shadow-[0_2px_8px_rgba(194,65,12,0.25)]"
                   : "text-ink-700 hover:bg-limestone-200/70 hover:text-copper-600"
               }`
             }
@@ -367,7 +369,7 @@ export default function PublicHeader() {
             className={({ isActive }) =>
               `relative rounded-full px-3.5 py-1.5 text-[0.8rem] font-semibold transition-all duration-200 ${
                 isActive
-                  ? "bg-gradient-to-r from-copper-200 via-copper-300 to-copper-400 text-ink-900 shadow-[0_2px_8px_rgba(222,121,37,0.22),inset_0_1px_0_#ffffff]"
+                  ? "bg-[#c2410c] text-white shadow-[0_2px_8px_rgba(194,65,12,0.25)]"
                   : "text-ink-700 hover:bg-limestone-200/70 hover:text-copper-600"
               }`
             }
@@ -488,7 +490,7 @@ export default function PublicHeader() {
             type="button"
             aria-label="Search catalog"
             onClick={() => setSearchOpen((v) => !v)}
-            className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-colors 2xl:hidden ${
+            className={`hidden h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-colors sm:inline-flex 2xl:hidden ${
               searchOpen
                 ? "border-[#9a390b] bg-limestone-200 text-copper-600"
                 : "border-limestone-300/80 bg-limestone-100 text-ink-900 hover:border-copper-600 hover:text-copper-600"
@@ -597,12 +599,11 @@ export default function PublicHeader() {
               <Link
                 to="/register"
                 style={{
-                  background:
-                    "linear-gradient(120deg, var(--color-copper-200) 0%, var(--color-copper-300) 52%, var(--color-copper-400) 100%)",
-                  color: "var(--color-ink-900)",
-                  border: "1px solid rgba(255, 190, 134, 0.75)",
+                  background: "#c2410c",
+                  color: "#ffffff",
+                  border: "1px solid #c2410c",
                 }}
-                className="inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-xs font-bold shadow-[0_4px_14px_rgba(222,121,37,0.20),inset_0_1px_0_#ffffff] transition-all hover:brightness-105"
+                className="inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-xs font-bold shadow-[0_4px_14px_rgba(194,65,12,0.25)] transition-all hover:brightness-110"
               >
                 <span>Sign up</span>
                 <ArrowUpRight size={12} />

@@ -357,14 +357,14 @@ export const SymphoButton: React.FC<SymphoButtonProps> = ({
 
   const variantClasses =
     variant === "on-dark"
-      ? "bg-copper-500 text-[#51230d] font-bold hover:text-limestone-50 [--fill:#9a390b] border border-[#ffbe86]/70 shadow-[0_7px_20px_rgba(222,121,37,0.24),inset_0_1px_0_#ffffff]"
+      ? "bg-copper-500 text-white font-bold hover:text-limestone-50 [--fill:#9a390b] border border-[#c2410c] shadow-[0_7px_20px_rgba(194,65,12,0.25),inset_0_1px_0_#ffffff]"
       : variant === "outline-dark" || variant === "ghost-dark"
-      ? "bg-transparent text-limestone-50 border border-limestone-100/35 hover:border-copper-300 hover:text-[#51230d] [--fill:var(--color-copper-300)]"
+      ? "bg-transparent text-limestone-50 border border-limestone-100/35 hover:border-[#c2410c] hover:text-white [--fill:#c2410c]"
       : variant === "outline"
-      ? "bg-[#fff8ef] text-[#843711] border border-[#edc7a7] hover:border-[#9a390b] hover:text-limestone-50 [--fill:#9a390b]"
+      ? "bg-white text-[#9a3412] border border-[#e4e7ec] hover:border-[#9a390b] hover:text-limestone-50 [--fill:#9a390b]"
       : variant === "copper"
-      ? "bg-copper-500 text-[#51230d] font-bold hover:text-limestone-50 [--fill:#9a390b] border border-[#ffbe86]/70 shadow-[0_7px_20px_rgba(222,121,37,0.22),inset_0_1px_0_#ffffff]"
-      : "bg-copper-500 text-[#51230d] font-bold hover:text-limestone-50 [--fill:#9a390b] border border-[#ffbe86]/70 shadow-[0_7px_20px_rgba(222,121,37,0.22),inset_0_1px_0_#ffffff]";
+      ? "bg-copper-500 text-white font-bold hover:text-limestone-50 [--fill:#9a390b] border border-[#c2410c] shadow-[0_7px_20px_rgba(194,65,12,0.25),inset_0_1px_0_#ffffff]"
+      : "bg-copper-500 text-white font-bold hover:text-limestone-50 [--fill:#9a390b] border border-[#c2410c] shadow-[0_7px_20px_rgba(194,65,12,0.25),inset_0_1px_0_#ffffff]";
 
   const inner = (
     <>

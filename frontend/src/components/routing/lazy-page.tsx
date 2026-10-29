@@ -1,6 +1,7 @@
 import { lazy, Suspense, type ComponentType } from "react";
 import { PageGuide } from "./PageGuide";
 import { LearningPreferences } from "@/components/labs/LearningPreferences";
+import { InfinityTrace } from "@/components/loading/InfinityTrace";
 
 /** Keep the surrounding navigation mounted while a route's code loads. */
 export function lazyPage(load: () => Promise<{ default: ComponentType<any> }>) {
@@ -17,13 +18,7 @@ export function lazyPage(load: () => Promise<{ default: ComponentType<any> }>) {
           <PageGuide />
           <LearningPreferences />
         </div>
-        <Suspense
-          fallback={
-            <div className="astra-work p-6" role="status" aria-live="polite">
-              Loading this workspace…
-            </div>
-          }
-        >
+        <Suspense fallback={<InfinityTrace label="Preparing this workspace" />}>
           <Page {...props} />
         </Suspense>
       </div>

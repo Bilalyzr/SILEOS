@@ -850,19 +850,30 @@
     min-height: 48px !important;
   }
 
-  /* Touch-friendly buttons */
+  /* Touch-friendly buttons: guarantee the 44px target size only. A forced
+     `padding: 12px 20px !important` used to sit here; it left 0px of content
+     box inside round icon buttons (icons vanished on phones) and inflated
+     every chip/tab until header items overlapped. Components own padding. */
   button,
   .btn,
   [role="button"] {
     min-height: 44px !important;
-    padding: 12px 20px !important;
+  }
+
+  button:has(> svg:only-child),
+  [role="button"]:has(> svg:only-child) {
+    min-width: 44px;
   }
 
   button.sm,
   .btn-sm {
     min-height: 40px !important;
-    padding: 10px 16px !important;
   }
+}
+
+/* Icons never collapse inside flex controls (buttons, links, chips). */
+:where(button, a, [role="button"], label) > svg {
+  flex-shrink: 0;
 }
 
 /* Safe area for notched devices */

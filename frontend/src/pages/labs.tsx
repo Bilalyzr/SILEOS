@@ -410,7 +410,7 @@ export default function LabsPage() {
                           </span>
                         </div>
 
-                        <div className="mt-4">
+                        <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1.5">
                           <span className="inline-block rounded-pill border border-ink-900/15 bg-limestone-100 px-3 py-0.5 font-mono text-[0.65rem] uppercase text-ink-600">
                             {bundle
                               ? bundle.spatial === "scene"
@@ -423,7 +423,7 @@ export default function LabsPage() {
                               : "External simulation"}
                           </span>
                           {bundle && (
-                            <span className="ml-2 font-mono text-xs text-ink-500">
+                            <span className="font-mono text-xs text-ink-500">
                               Classes {bundle.grades.join(", ")}
                             </span>
                           )}

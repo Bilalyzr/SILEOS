@@ -14,9 +14,7 @@
 }
 
 .campus-os-banner .brand-banner {
-  background:
-    radial-gradient(circle at 82% 18%, rgb(255 255 255 / 74%), transparent 28%),
-    linear-gradient(118deg, #fffaf5 0%, #fff1e4 58%, #ffd5b7 100%);
+  background: #ffffff;
 }
 
 .campus-os-section-label {

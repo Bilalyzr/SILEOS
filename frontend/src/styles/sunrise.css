@@ -11,18 +11,16 @@ body.astra-theme[data-page-family] {
   --accent-deep: #9a390b;
   --field-lead: 255, 174, 105;
   --field-second: 255, 212, 166;
-  --glass-1: rgba(255, 249, 242, 0.62);
-  --glass-2: rgba(255, 253, 249, 0.78);
-  --glass-3: rgba(255, 253, 250, 0.94);
+  --glass-1: rgba(255, 255, 255, 0.72);
+  --glass-2: rgba(255, 255, 255, 0.86);
+  --glass-3: rgba(255, 255, 255, 0.96);
   --hairline: rgba(157, 85, 36, 0.15);
   --ring: 25 78% 38%;
-  background: #fff8f1;
+  /* Plain white page (2026-10-29): the gold/cream wash was removed. */
+  background: #ffffff;
 }
 body.astra-theme::before {
-  background:
-    radial-gradient(ellipse at 4% 0%, #ffd9b2a6, transparent 55%),
-    radial-gradient(ellipse at 95% 45%, #ffe4cbb3, transparent 55%),
-    linear-gradient(135deg, #fff8f0, #fffaf7 50%, #ffefdf);
+  background: #ffffff;
 }
 .astra-theme
   :is(
@@ -56,7 +54,7 @@ body.astra-theme::before {
     .si-btn-secondary
   ) {
   color: #843711 !important;
-  background: linear-gradient(120deg, #fff8ef, #ffecd7) !important;
+  background: #ffffff !important;
   border-color: #edc7a7 !important;
 }
 .astra-theme
@@ -76,8 +74,8 @@ body.astra-theme::before {
 }
 .astra-theme
   :is(.sf-auth-story, .rd-home-hero, .rd-page-heading, .rd-migrated-heading) {
-  background: linear-gradient(120deg, #fff9f0dd, #ffead4c4) !important;
-  border: 1px solid #ffffffd9;
+  background: #ffffff !important;
+  border: 1px solid rgba(157, 85, 36, 0.14);
   border-radius: 23px;
 }
 .astra-theme :is(.rd-page-heading, .rd-migrated-heading) {
@@ -105,7 +103,7 @@ body.astra-theme::before {
   z-index: 1;
 }
 .astra-theme :is(.sf-card, .rd-panel, .rd-stat, .campus-panel) {
-  border-color: #fff9 !important;
+  border-color: rgba(157, 85, 36, 0.13) !important; /* visible on the white page */
   box-shadow:
     0 8px 28px #8e4d1710,
     inset 0 1px 0 #fff !important;
@@ -133,10 +131,8 @@ body.astra-theme::before {
   gap: 20px;
   padding: 32px 36px;
   border-radius: 26px;
-  border: 1px solid #fff;
-  background:
-    radial-gradient(ellipse at 80% 0%, #fff9e4b0, transparent 60%),
-    linear-gradient(120deg, #fff7e9, #ffe2c0 65%, #ffcc9b);
+  border: 1px solid rgba(157, 85, 36, 0.14);
+  background: #ffffff;
   box-shadow:
     0 12px 38px #b3631810,
     inset 0 1px 0 white;
@@ -548,4 +544,429 @@ body.astra-theme {
   height: 32px;
   border-radius: 9px;
   display: block;
+}
+
+/* Phones: the decorative ring on page headings sat on top of the title and
+   actions (only ~360px of card width), so drop it below 640px. */
+@media (max-width: 640px) {
+  .astra-theme :is(.rd-page-heading, .rd-migrated-heading)::before,
+  .astra-theme :is(.rd-page-heading, .rd-migrated-heading)::after {
+    display: none;
+  }
+}
+
+/* =====================================================================
+   WHITE THEME (2026-10-29) — final palette for the white page.
+   Surfaces white · borders neutral slate · text navy/slate · one orange
+   accent (#C2410C: white text 5.2:1, AA) for CTAs and active states.
+   Replaces the peach gradients/hairlines that read as stains on white.
+   ===================================================================== */
+body.astra-theme,
+body.astra-theme[data-page-family],
+:root {
+  --campus-gradient: linear-gradient(0deg, #c2410c, #c2410c);
+  --campus-glow: 0 4px 14px rgba(194, 65, 12, 0.18);
+  --accent-deep: #c2410c;
+  --hairline: #e2e8f0;
+  --ring: 21 88% 40%;
+  --sf-tint: #fff7ed;
+  --primary-50: #fff7ed;
+  --primary-100: #ffedd5;
+}
+:root {
+  --sileos-gradient: linear-gradient(0deg, #c2410c, #c2410c);
+}
+
+/* Primary actions + active navigation: solid brand orange, white text. */
+.astra-theme
+  :is(
+    .sf-primary,
+    .si-btn-primary,
+    .astra-primary,
+    .sf-button[data-variant="default"],
+    .btn-primary,
+    .hero-btn-fill,
+    .rd-signup,
+    .si-gradient,
+    button.bg-primary-500,
+    a.bg-primary-500,
+    .rd-section-nav a[aria-current="page"],
+    [role="tab"][data-state="active"],
+    .rd-sidebar a[aria-current="page"],
+    .rd-sidebar .dash-nav-active,
+    .campus-tabs a[aria-current="page"]
+  ),
+body.astra-theme .sympho-scope .bg-copper-500,
+.sympho-scope .bg-copper-500 {
+  background: #c2410c !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border-color: #c2410c !important;
+  box-shadow: 0 4px 14px rgba(194, 65, 12, 0.18) !important;
+}
+.astra-theme
+  :is(
+    .sf-primary,
+    .si-btn-primary,
+    .astra-primary,
+    .sf-button[data-variant="default"],
+    .btn-primary,
+    .rd-signup
+  ):hover:not(:disabled),
+.sympho-scope .bg-copper-500:hover {
+  background: #9a3412 !important;
+  border-color: #9a3412 !important;
+  filter: none;
+}
+/* Icons/labels inside active items inherit white instead of keeping their
+   own orange utility colour (which would vanish on the orange fill). */
+.astra-theme
+  :is(
+    .rd-section-nav a[aria-current="page"],
+    [role="tab"][data-state="active"],
+    .rd-sidebar a[aria-current="page"],
+    .rd-sidebar .dash-nav-active,
+    .campus-tabs a[aria-current="page"],
+    .sf-button[data-variant="default"]
+  )
+  :is(svg, span:not([class*="bg-"]), i) {
+  color: inherit !important;
+}
+
+/* Secondary / outline actions: white with a neutral border. */
+.astra-theme
+  :is(
+    .sf-button[data-variant="secondary"],
+    .sf-button[data-variant="outline"],
+    .si-btn-secondary
+  ) {
+  background: #ffffff !important;
+  color: #9a3412 !important;
+  border-color: #e2e8f0 !important;
+}
+.astra-theme
+  :is(
+    .sf-button[data-variant="secondary"],
+    .sf-button[data-variant="outline"],
+    .si-btn-secondary
+  ):hover:not(:disabled) {
+  background: #fff7ed !important;
+  border-color: #fdba74 !important;
+}
+.sympho-scope .sympho-nav-btn:hover {
+  background: #fff7ed;
+  color: #9a3412;
+  border-color: #fdba74;
+}
+
+/* Text accents. */
+.astra-theme :is(.rd-eyebrow, .sf-eyebrow, .dash-role-pill, .rd-role-badge) {
+  color: #c2410c !important;
+}
+
+/* Surfaces: white cards, neutral borders, soft neutral shadow. */
+.astra-theme :is(.sf-card, .rd-panel, .rd-stat, .campus-panel) {
+  border-color: #e2e8f0 !important;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 4px 16px rgba(15, 23, 42, 0.04) !important;
+}
+.astra-theme
+  :is(.sf-auth-story, .rd-home-hero, .rd-page-heading, .rd-migrated-heading),
+.brand-banner {
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+.astra-theme :is(.rd-page-heading, .rd-migrated-heading)::before {
+  display: none;
+}
+
+/* Workspace chrome. */
+.astra-theme :is(.rd-sidebar, .rd-workspace-header, .rd-section-nav) {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: none !important;
+}
+
+/* Decorative peach blobs looked like stains on white. */
+.astra-theme :is(.dash-bg-shape, .sf-orb) {
+  display: none !important;
+}
+
+/* Public site: neutral borders on the header pill + icon buttons. */
+.sympho-scope :is(.border-limestone-300, .border-limestone-300\/75, .border-limestone-300\/80) {
+  border-color: #e2e8f0 !important;
+}
+body.astra-theme .sympho-header,
+.sympho-header {
+  border-bottom-color: #e2e8f0 !important;
+  box-shadow: 0 1px 0 #e2e8f0 !important;
+}
+
+/* Header search is one pill: beat the global field rule
+   (.astra-theme :is(input:not(...)x4) — specificity 0,5,1). */
+body.astra-theme .rd-workspace-header form[role="search"]
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="hidden"]) {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+body.astra-theme .rd-workspace-header form[role="search"] {
+  border-radius: 999px;
+}
+
+/* Banner copy in the same navy as every other heading. */
+.brand-banner,
+.brand-banner h2 {
+  color: #17233a;
+}
+.brand-banner p {
+  color: #475569;
+}
+
+/* Wordmark accent legible on white (#fb923c was ~2.6:1). */
+.sf-auth-story > a span {
+  color: #ea580c;
+}
+
+/* =====================================================================
+   LAYERED PALETTE (2026-10-29) — supersedes the all-white pass above.
+   Canvas #F4F6FA · cards #FFF · borders #E4E7EC · navy chrome #17233A ·
+   orange #C2410C = actions · teal #0D9488/#0F766E = progress/completion.
+   All text pairs ≥ 4.5:1 (navy links 10.6:1, muted 6.1:1).
+   ===================================================================== */
+body.astra-theme,
+body.astra-theme[data-page-family] {
+  --hairline: #e4e7ec;
+  background: #f4f6fa;
+}
+body.astra-theme::before {
+  background: #f4f6fa;
+}
+.astra-theme :is(.sf-card, .rd-panel, .rd-stat, .campus-panel),
+.astra-theme
+  :is(.sf-auth-story, .rd-home-hero, .rd-page-heading, .rd-migrated-heading),
+.brand-banner {
+  background-color: #ffffff;
+  border-color: #e4e7ec !important;
+}
+.astra-theme :is(.rd-workspace-header, .rd-section-nav) {
+  background: #ffffff !important;
+  border: 1px solid #e4e7ec !important;
+}
+
+/* ── Navy workspace sidebar ─────────────────────────────────────────── */
+.astra-theme .rd-sidebar {
+  background: #17233a !important;
+  border-color: #17233a !important;
+  color: #cbd5e1;
+  box-shadow: 0 8px 28px rgba(15, 26, 46, 0.18) !important;
+  backdrop-filter: none !important;
+}
+.astra-theme .rd-sidebar :is(.border-b, .border-t, .border-r) {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+/* Wordmark */
+.astra-theme .rd-sidebar > div:first-child .text-secondary-900 {
+  color: #ffffff !important;
+}
+.astra-theme .rd-sidebar > div:first-child .text-orange-500 {
+  color: #fdba74 !important;
+}
+.astra-theme .rd-sidebar > div:first-child button {
+  color: #94a3b8 !important;
+}
+.astra-theme .rd-sidebar > div:first-child button:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+}
+/* Links and group headers */
+.astra-theme .rd-sidebar nav :is(a, button) {
+  color: #cbd5e1 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.astra-theme .rd-sidebar nav :is(a, button) :is(svg, span:not([class*="bg-"])) {
+  color: inherit !important;
+}
+.astra-theme .rd-sidebar nav div:not(:has(a[aria-current="page"])) > button {
+  color: #94a3b8 !important;
+}
+.astra-theme .rd-sidebar nav div:has(a[aria-current="page"]) > button {
+  color: #fdba74 !important;
+}
+.astra-theme .rd-sidebar nav :is(a, button):hover:not([aria-current="page"]):not(.dash-nav-active) {
+  background: rgba(255, 255, 255, 0.07) !important;
+  color: #ffffff !important;
+}
+.astra-theme .rd-sidebar nav :is(a[aria-current="page"], .dash-nav-active) {
+  background: #c2410c !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(194, 65, 12, 0.35) !important;
+}
+.astra-theme .rd-sidebar :focus-visible {
+  outline: 2px solid #fdba74 !important;
+  outline-offset: 2px;
+}
+/* Profile footer (the dropdown .dash-card above it stays light) */
+.astra-theme .rd-sidebar > div:last-child > button .text-secondary-900 {
+  color: #ffffff !important;
+}
+.astra-theme .rd-sidebar > div:last-child > button :is(.text-slate-500, .text-slate-400) {
+  color: #94a3b8 !important;
+}
+.astra-theme .rd-sidebar > div:last-child > button:hover {
+  background: rgba(255, 255, 255, 0.07) !important;
+}
+.astra-theme .rd-sidebar .dash-card {
+  background: #ffffff !important;
+  color: #17233a;
+}
+/* Collapse/expand control when the rail is collapsed */
+.astra-theme .rd-sidebar > button {
+  color: #94a3b8 !important;
+}
+
+/* ── Teal = progress / completion ───────────────────────────────────── */
+.campus-progress span,
+.campus-os-capacity-track span {
+  background: #0d9488 !important;
+}
+
+/* Course "Manage" disclosure: the browser's default ▶ marker sat on its own
+   line above the label. Hide it and draw an inline chevron instead. */
+.rd-course-manage > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  list-style: none;
+  white-space: nowrap;
+  font-weight: 600;
+  color: #17233a;
+  background: #ffffff;
+  border-color: #e4e7ec;
+}
+.rd-course-manage > summary::-webkit-details-marker {
+  display: none;
+}
+.rd-course-manage > summary::marker {
+  content: "";
+}
+.rd-course-manage > summary::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform 160ms ease;
+}
+.rd-course-manage[open] > summary::after {
+  transform: rotate(-135deg) translateY(-1px);
+}
+.rd-course-manage > summary:hover {
+  border-color: #fdba74;
+  background: #fff7ed;
+}
+
+/* Banner title may render as h1 (page roots) or h2. */
+.brand-banner :is(h1, h2, h3) {
+  color: #17233a;
+}
+
+/* Workspace CTAs (Greeting "Browse Courses" etc.): white on orange, not
+   brown — #51230d on the solid #C2410C fill was ~2.2:1. */
+.astra-theme :is(.dash-cta, .dash-cta-primary, .rd-primary-button) {
+  background: #c2410c !important;
+  color: #ffffff !important;
+  border-color: #c2410c !important;
+}
+.astra-theme :is(.dash-cta, .dash-cta-primary, .rd-primary-button):hover {
+  background: #9a3412 !important;
+  border-color: #9a3412 !important;
+}
+
+/* ── InfinityTrace: in-app loading state (components/loading) ─────────── */
+.si-trace {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 260px;
+  padding: 32px 16px;
+  color: #475569;
+}
+.si-trace-full {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+.si-trace-svg {
+  width: min(220px, 60vw);
+  height: auto;
+  overflow: visible;
+}
+.si-trace-svg path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.si-trace-rail {
+  stroke: #e4e7ec;
+  stroke-width: 5;
+}
+.si-trace-draw {
+  stroke: #fdba74;
+  stroke-width: 3;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: si-trace-draw 1.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+.si-trace-comet {
+  stroke: #c2410c;
+  stroke-width: 4.5;
+  stroke-dasharray: 9 91;
+  stroke-dashoffset: 100;
+  opacity: 0;
+  filter: drop-shadow(0 0 4px rgba(249, 115, 22, 0.65));
+  animation:
+    si-trace-fade 0.4s ease 1.2s forwards,
+    si-trace-travel 2.2s linear 1.2s infinite;
+}
+.si-trace-node {
+  fill: #ffffff;
+  stroke: #e4e7ec;
+  stroke-width: 1.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: si-trace-ignite 0.6s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+.si-trace-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  opacity: 0;
+  animation: si-trace-fade 0.6s ease 0.5s forwards;
+}
+@keyframes si-trace-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes si-trace-travel {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes si-trace-fade {
+  to { opacity: 1; }
+}
+@keyframes si-trace-ignite {
+  0% { transform: scale(0.6); fill: #ffffff; stroke: #e4e7ec; }
+  60% { transform: scale(1.35); fill: #fdba74; stroke: #f97316; }
+  100% { transform: scale(1); fill: #f97316; stroke: #fff7ed; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .si-trace-draw { animation: none; stroke-dashoffset: 0; }
+  .si-trace-comet { display: none; }
+  .si-trace-node { animation: none; fill: #f97316; stroke: #fff7ed; }
+  .si-trace-label { animation: none; opacity: 1; }
 }

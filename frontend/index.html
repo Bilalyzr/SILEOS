@@ -41,6 +41,334 @@
   </head>
   <body class="astra-theme" data-page-family="dashboard">
     <div id="root" class="sf-app"></div>
+    <!--
+      Opening sequence ("knowledge becoming infinite"). Inline + dependency-
+      free so it paints before the app bundle downloads. Stages: darkness →
+      knowledge fragments drift in and link → the network becomes the ∞ path
+      → the name forms → light ring reveals the app. Progress is real (DOM,
+      assets, fonts, first non-loading render) and never holds the page:
+      9s failsafe, ~0.5s on repeat visits, static fade for reduced motion.
+      The app marks its own loading states with [data-app-loading].
+    -->
+    <style>
+      #si-loader{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;overflow:hidden;
+        background:radial-gradient(120% 90% at 50% 45%,#16233c 0%,#0f1a2e 45%,#080f1c 100%);color:#fff;
+        font-family:"Plus Jakarta Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+        transition:opacity .7s cubic-bezier(.2,.7,.3,1),filter .7s ease,transform .9s cubic-bezier(.2,.7,.3,1)}
+      #si-loader canvas{position:absolute;inset:0;width:100%;height:100%}
+      #si-loader .si-mark{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;
+        margin-top:calc(min(42vh,340px));pointer-events:none;text-align:center}
+      #si-loader .si-word{font-size:clamp(26px,3.4vw,40px);font-weight:700;letter-spacing:-.03em;white-space:nowrap}
+      #si-loader .si-word span{display:inline-block;opacity:0;filter:blur(10px);transform:translateY(10px);
+        transition:opacity .7s ease,filter .9s ease,transform .9s cubic-bezier(.2,.7,.3,1)}
+      #si-loader .si-word .si-accent{color:#fdba74}
+      #si-loader .si-tag{font:600 11px/1 "JetBrains Mono",ui-monospace,monospace;letter-spacing:.32em;color:#94a3b8;
+        opacity:0;transition:opacity 1s ease .3s}
+      #si-loader.si-named .si-word span{opacity:1;filter:none;transform:none}
+      #si-loader.si-named .si-tag{opacity:1}
+      #si-loader .si-static{display:none}
+      #si-loader .si-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+      #si-loader.si-out{opacity:0;filter:blur(6px);transform:scale(1.06);pointer-events:none}
+      html.si-loading #root{opacity:0}
+      html.si-revealing #root{animation:si-emerge .9s cubic-bezier(.2,.7,.3,1) both}
+      @keyframes si-emerge{from{opacity:0;transform:scale(.985);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+      @media (max-width:640px){#si-loader .si-mark{margin-top:calc(min(30vh,240px))}#si-loader .si-tag{letter-spacing:.2em;font-size:10px}}
+      @media (prefers-reduced-motion:reduce){
+        #si-loader canvas{display:none}
+        #si-loader .si-static{display:block;width:min(46vw,260px);height:auto;margin-bottom:-6px}
+        #si-loader .si-mark{margin-top:0}
+        #si-loader .si-word span{opacity:1;filter:none;transform:none;transition:none}
+        #si-loader .si-tag{opacity:1;transition:none}
+        #si-loader,#si-loader.si-out{transform:none;filter:none;transition:opacity .35s ease}
+        html.si-revealing #root{animation:si-fade .35s ease both}
+        @keyframes si-fade{from{opacity:0}to{opacity:1}}
+      }
+    </style>
+    <div id="si-loader" role="status" aria-live="polite" aria-busy="true">
+      <canvas aria-hidden="true"></canvas>
+      <div class="si-mark">
+        <svg class="si-static" viewBox="-112 -48 224 96" aria-hidden="true"><path d="M98.0 0.0 L97.4 6.4 L95.5 12.5 L92.6 18.1 L88.7 23.0 L84.1 27.0 L79.0 30.2 L73.5 32.5 L67.9 33.9 L62.3 34.6 L56.7 34.5 L51.4 33.9 L46.2 32.7 L41.3 31.0 L36.6 29.0 L32.2 26.8 L28.0 24.2 L24.0 21.5 L20.2 18.7 L16.6 15.7 L13.1 12.7 L9.7 9.6 L6.5 6.4 L3.2 3.2 L0.0 0.0 L-3.2 -3.2 L-6.5 -6.4 L-9.7 -9.6 L-13.1 -12.7 L-16.6 -15.7 L-20.2 -18.7 L-24.0 -21.5 L-28.0 -24.2 L-32.2 -26.8 L-36.6 -29.0 L-41.3 -31.0 L-46.2 -32.7 L-51.4 -33.9 L-56.7 -34.5 L-62.3 -34.6 L-67.9 -33.9 L-73.5 -32.5 L-79.0 -30.2 L-84.1 -27.0 L-88.7 -23.0 L-92.6 -18.1 L-95.5 -12.5 L-97.4 -6.4 L-98.0 -0.0 L-97.4 6.4 L-95.5 12.5 L-92.6 18.1 L-88.7 23.0 L-84.1 27.0 L-79.0 30.2 L-73.5 32.5 L-67.9 33.9 L-62.3 34.6 L-56.7 34.5 L-51.4 33.9 L-46.2 32.7 L-41.3 31.0 L-36.6 29.0 L-32.2 26.8 L-28.0 24.2 L-24.0 21.5 L-20.2 18.7 L-16.6 15.7 L-13.1 12.7 L-9.7 9.6 L-6.5 6.4 L-3.2 3.2 L-0.0 0.0 L3.2 -3.2 L6.5 -6.4 L9.7 -9.6 L13.1 -12.7 L16.6 -15.7 L20.2 -18.7 L24.0 -21.5 L28.0 -24.2 L32.2 -26.8 L36.6 -29.0 L41.3 -31.0 L46.2 -32.7 L51.4 -33.9 L56.7 -34.5 L62.3 -34.6 L67.9 -33.9 L73.5 -32.5 L79.0 -30.2 L84.1 -27.0 L88.7 -23.0 L92.6 -18.1 L95.5 -12.5 L97.4 -6.4Z" fill="none" stroke="#fdba74" stroke-width="5" stroke-linecap="round"/></svg>
+        <div class="si-word" aria-hidden="true"></div>
+        <div class="si-tag" aria-hidden="true">A LITTLE CURIOSITY · A WORLD OF POSSIBILITY</div>
+      </div>
+      <span class="si-sr">Loading Sasha Infinity…</span>
+    </div>
+    <script>
+    (function () {
+      var root = document.documentElement, el = document.getElementById("si-loader");
+      if (!el) return;
+      var done = false, ready = false, t0 = performance.now();
+      var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var repeat = false;
+      try { repeat = sessionStorage.getItem("si-intro") === "1"; sessionStorage.setItem("si-intro", "1"); } catch (e) {}
+      var MIN = reduce ? 250 : repeat ? 450 : 1700;          // story length on first visit
+      root.classList.add("si-loading");
+
+      // Wordmark letters (staggered blur-to-sharp).
+      var word = el.querySelector(".si-word"), html = "", txt = "Sasha Infinity";
+      for (var i = 0; i < txt.length; i++) {
+        var ch = txt[i] === " " ? "&nbsp;" : txt[i];
+        html += '<span class="' + (i > 5 ? "si-accent" : "") + '" style="transition-delay:' + (i * 45) + 'ms">' + ch + "</span>";
+      }
+      word.innerHTML = html;
+
+      // ── Real progress milestones ──────────────────────────────────────
+      var real = 0.12;
+      function bump(v) { if (v > real) real = v; }
+      if (document.readyState !== "loading") bump(0.35); else document.addEventListener("DOMContentLoaded", function () { bump(0.35); });
+      if (document.readyState === "complete") bump(0.6); else addEventListener("load", function () { bump(0.6); });
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { bump(Math.max(real, 0.5) + 0.08); });
+
+      // App is ready when #root shows content that is not itself a loading state.
+      // One pending check at a time: live pages mutate constantly (counters,
+      // motion), so a "stay quiet for 160ms" debounce would never settle.
+      var rootEl = document.getElementById("root"), pending = false;
+      function contentReady() { return rootEl.firstElementChild && !rootEl.querySelector("[data-app-loading]"); }
+      function check() {
+        if (ready || pending || !rootEl || !contentReady()) return;
+        pending = true;
+        setTimeout(function () { pending = false; if (contentReady()) markReady(); }, 160);
+      }
+      var mo = new MutationObserver(check);
+      if (rootEl) mo.observe(rootEl, { childList: true, subtree: true, attributes: true, attributeFilter: ["data-app-loading"] });
+      function markReady() {
+        if (ready) return;
+        ready = true; bump(1); try { mo.disconnect(); } catch (e) {}
+        // Reveal within ~1.5s of readiness even if animation frames are starved.
+        setTimeout(function () { finish(); }, Math.max(0, MIN - (performance.now() - t0)) + 1500);
+      }
+      window.__siLoader = { ready: markReady };
+      setTimeout(markReady, 9000);                               // never hold the page
+      setTimeout(function () { finish(); }, 12000);              // hard stop, whatever happens
+
+      function finish() {
+        if (done) return; done = true;
+        root.classList.remove("si-loading"); root.classList.add("si-revealing");
+        el.classList.add("si-out"); el.setAttribute("aria-busy", "false");
+        setTimeout(function () { el.remove(); root.classList.remove("si-revealing"); }, reduce ? 400 : 950);
+      }
+
+      if (reduce) {
+        el.classList.add("si-named");
+        (function wait() {
+          if (ready && performance.now() - t0 > MIN) return finish();
+          setTimeout(wait, 60);
+        })();
+        return;
+      }
+
+      // ── Canvas scene ──────────────────────────────────────────────────
+      try {
+        var cv = el.querySelector("canvas"), cx = cv.getContext("2d");
+        var touch = matchMedia("(pointer: coarse)").matches;
+        var lowPower = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.connection && navigator.connection.saveData);
+        var W, H, DPR, A, N, nodes = [], stars = [];
+        var mouse = { x: -9999, y: -9999, on: false };
+        var ORANGE = [253, 186, 116], DEEP = [249, 115, 22], TEAL = [45, 212, 191];
+
+        // Pre-rendered glow sprite = cheap bloom.
+        var glow = document.createElement("canvas"); glow.width = glow.height = 64;
+        var g = glow.getContext("2d"), gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+        gr.addColorStop(0, "rgba(255,255,255,1)"); gr.addColorStop(.18, "rgba(255,214,170,.85)");
+        gr.addColorStop(.45, "rgba(249,115,22,.28)"); gr.addColorStop(1, "rgba(249,115,22,0)");
+        g.fillStyle = gr; g.fillRect(0, 0, 64, 64);
+
+        function lem(t) {                                      // lemniscate of Bernoulli
+          var s = Math.sin(t), c = Math.cos(t), d = 1 + s * s;
+          return [A * c / d, A * s * c / d];
+        }
+        function rnd(a, b) { return a + Math.random() * (b - a); }
+
+        var starLayer = document.createElement("canvas");
+        function size() {
+          W = innerWidth; H = innerHeight;
+          DPR = Math.min(devicePixelRatio || 1, W < 700 ? 1.5 : 2);
+          cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0);
+          A = Math.min(W * 0.34, H * 0.36, 340);
+          if (W < 640) A = Math.min(W * 0.4, H * 0.26);
+          if (stars.length) paintStars();
+        }
+        size();
+        N = lowPower || W < 640 ? 46 : W < 1024 ? 66 : 96;
+
+        for (var k = 0; k < N; k++) {
+          var side = k % 4, sx, sy;                              // arrive from every edge
+          if (side === 0) { sx = rnd(-80, W + 80); sy = -60; } else if (side === 1) { sx = W + 60; sy = rnd(-80, H + 80); }
+          else if (side === 2) { sx = rnd(-80, W + 80); sy = H + 60; } else { sx = -60; sy = rnd(-80, H + 80); }
+          var ang = rnd(0, Math.PI * 2), rad = Math.sqrt(Math.random()) * A * 1.15;
+          nodes.push({
+            sx: sx - W / 2, sy: sy - H / 2,                      // start (centre-relative)
+            cxp: Math.cos(ang) * rad * 1.25, cyp: Math.sin(ang) * rad * 0.75,   // concept-map cloud
+            t: (k / N) * Math.PI * 2,                             // place on the ∞ path
+            ph: rnd(0, Math.PI * 2), sp: rnd(.4, 1.1), r: rnd(1.2, 2.6),
+            col: k % 7 === 0 ? TEAL : k % 3 === 0 ? DEEP : ORANGE,
+            gate: k / N, x: 0, y: 0, mx: 0, my: 0
+          });
+        }
+        for (var s2 = 0; s2 < (lowPower ? 60 : 140); s2++) stars.push({ x: Math.random(), y: Math.random(), z: rnd(.2, 1), a: rnd(.15, .5) });
+        // Far layer is painted once (one drawImage per frame, parallax by offset).
+        function paintStars() {
+          starLayer.width = W + 40; starLayer.height = H + 40;
+          var sc = starLayer.getContext("2d");
+          for (var si = 0; si < stars.length; si++) {
+            var st = stars[si];
+            sc.fillStyle = "rgba(203,213,225," + st.a + ")";
+            sc.fillRect(20 + st.x * W, 20 + st.y * H, st.z * 1.4, st.z * 1.4);
+          }
+        }
+        paintStars();
+
+        if (!touch) {
+          addEventListener("pointermove", function (e) { mouse.x = e.clientX; mouse.y = e.clientY; mouse.on = true; }, { passive: true });
+          addEventListener("pointerleave", function () { mouse.on = false; });
+        }
+        addEventListener("resize", function () { size(); }, { passive: true });
+
+        var p = 0, last = t0, outro = -1, named = false;
+        var slowFrames = 0, lite = false;                      // adaptive quality
+        function ease(x) { return x < 0 ? 0 : x > 1 ? 1 : x * x * (3 - 2 * x); }
+
+        function frame(now) {
+          if (!el.isConnected) return;
+          try { draw(now); } catch (e) { markReady(); finish(); return; }
+          if (!done) requestAnimationFrame(frame);
+        }
+        function draw(now) {
+          var rawDt = now - last, dt = Math.min(50, rawDt); last = now;
+          if (!lite) { slowFrames = rawDt > 28 ? slowFrames + 1 : Math.max(0, slowFrames - 1); if (slowFrames > 20) lite = true; }
+          var el_ms = now - t0;
+          // Felt progress: real milestones, time keeps the story moving, never claims "done" early.
+          var timeP = 1 - Math.exp(-el_ms / (MIN * 0.55));
+          var target = ready ? 1 : Math.min(0.86, Math.max(real * 0.9, timeP * 0.86));
+          p += (target - p) * Math.min(1, rawDt / (ready ? 160 : 420));
+          if (ready && p > 0.985 && el_ms > MIN && outro < 0) outro = now;
+          var o = outro < 0 ? 0 : Math.min(1, (now - outro) / 650);
+          if (o >= 1) { finish(); }
+
+          if (!named && p > 0.72) { named = true; el.classList.add("si-named"); }
+
+          var cxm = W / 2, cym = H / 2 - (W < 640 ? H * 0.06 : H * 0.04);
+          var par = mouse.on ? [(mouse.x - W / 2) / W, (mouse.y - H / 2) / H] : [0, 0];
+          var cam = 1.08 - 0.08 * ease(p) + 0.05 * o;           // slow dolly-in, push on reveal
+
+          cx.clearRect(0, 0, W, H);
+
+          // Atmosphere: breathing orange glow behind the mark.
+          var breathe = 0.5 + 0.5 * Math.sin(now / 1400);
+          var gR = A * (1.6 + 0.2 * breathe);
+          var ag = cx.createRadialGradient(cxm, cym, 0, cxm, cym, gR);
+          ag.addColorStop(0, "rgba(249,115,22," + (0.10 + 0.10 * p + 0.25 * o) + ")");
+          ag.addColorStop(1, "rgba(249,115,22,0)");
+          cx.fillStyle = ag; cx.fillRect(cxm - gR, cym - gR, gR * 2, gR * 2);   // only the glow's box
+
+          // Far stars with parallax (pre-painted layer, one draw).
+          cx.globalAlpha = 0.4 + 0.6 * ease(p * 2);
+          cx.drawImage(starLayer, -20 - par[0] * 12, -20 - par[1] * 12);
+          cx.globalAlpha = 1;
+
+          // Mouse-driven light.
+          if (mouse.on) {
+            var ml = cx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 180);
+            ml.addColorStop(0, "rgba(253,186,116,.10)"); ml.addColorStop(1, "rgba(253,186,116,0)");
+            cx.fillStyle = ml; cx.fillRect(mouse.x - 180, mouse.y - 180, 360, 360);
+          }
+
+          // Node positions: edges → concept cloud → ∞ path.
+          var arrive = ease(p / 0.42), morphBase = (p - 0.42) / 0.4;
+          var visible = 0;
+          for (var n = 0; n < N; n++) {
+            var d = nodes[n];
+            var a1 = ease((arrive * 1.35) - d.gate * 0.35);       // staggered arrival = network grows with progress
+            var m = ease(morphBase * 1.3 - d.gate * 0.3);
+            var drift = (1 - m) * 6;
+            var cxx = d.cxp + Math.cos(now / 1000 * d.sp + d.ph) * drift;
+            var cyy = d.cyp + Math.sin(now / 1100 * d.sp + d.ph) * drift;
+            var lp = lem(d.t + now / 9000);                       // the path itself slowly flows
+            var tx = cxx + (lp[0] - cxx) * m, ty = cyy + (lp[1] - cyy) * m;
+            var x = d.sx + (tx - d.sx) * a1, y = d.sy + (ty - d.sy) * a1;
+            x = cxm + x * cam - par[0] * 30; y = cym + y * cam - par[1] * 30;
+            if (mouse.on) {                                       // magnetic pull toward the cursor
+              var dx = mouse.x - x, dy = mouse.y - y, dd = Math.sqrt(dx * dx + dy * dy);
+              var pull = dd < 160 ? (1 - dd / 160) * 0.22 : 0;
+              d.mx += (dx * pull - d.mx) * 0.12; d.my += (dy * pull - d.my) * 0.12;
+            } else { d.mx *= 0.9; d.my *= 0.9; }
+            d.x = x + d.mx; d.y = y + d.my; d.a = a1;
+            if (a1 > 0.05) visible++;
+          }
+
+          // Links: proximity web while it is a concept map, path links once it is ∞.
+          // Batched into 4 opacity buckets → 4 strokes per frame, not hundreds.
+          cx.lineWidth = 1;
+          var linkR = (W < 640 ? 70 : 110) * cam, linkR2 = linkR * linkR, morphG = ease(morphBase);
+          var web = !lite && morphG < 0.98;
+          var buckets = [[], [], [], []];
+          for (var i2 = 0; i2 < N; i2++) {
+            var u = nodes[i2]; if (u.a < 0.2) continue;
+            for (var j = i2 + 1; j < N; j++) {
+              var neighbour = (j === i2 + 1 || (i2 === 0 && j === N - 1));
+              if (!web && !neighbour) continue;
+              var v = nodes[j]; if (v.a < 0.2) continue;
+              var alpha = 0;
+              if (web) {
+                var ddx = u.x - v.x, ddy = u.y - v.y, d2 = ddx * ddx + ddy * ddy;
+                if (d2 < linkR2) alpha = (1 - Math.sqrt(d2) / linkR) * 0.35 * (1 - morphG);
+              }
+              if (neighbour) alpha = Math.max(alpha, 0.55 * morphG);
+              alpha *= Math.min(u.a, v.a) * (1 - o);
+              if (alpha < 0.02) continue;
+              buckets[Math.min(3, (alpha * 7) | 0)].push(u.x, u.y, v.x, v.y);
+            }
+          }
+          for (var bk = 0; bk < 4; bk++) {
+            var seg = buckets[bk]; if (!seg.length) continue;
+            cx.strokeStyle = "rgba(253,186,116," + (0.07 + bk * 0.14) + ")";
+            cx.beginPath();
+            for (var sgi = 0; sgi < seg.length; sgi += 4) { cx.moveTo(seg[sgi], seg[sgi + 1]); cx.lineTo(seg[sgi + 2], seg[sgi + 3]); }
+            cx.stroke();
+          }
+
+          // Nodes + bloom.
+          cx.globalCompositeOperation = "lighter";
+          for (var q = 0; q < N; q++) {
+            var w = nodes[q]; if (w.a < 0.02 || (lite && q % 2)) continue;
+            var tw = 0.75 + 0.25 * Math.sin(now / 600 * w.sp + w.ph);
+            var gs = (w.r * 7 + 10 * o) * tw;
+            cx.globalAlpha = w.a * (0.55 + 0.45 * morphG) * (1 - o * 0.4);
+            cx.drawImage(glow, w.x - gs, w.y - gs, gs * 2, gs * 2);
+            cx.globalAlpha = w.a;
+            cx.fillStyle = "rgb(" + w.col[0] + "," + w.col[1] + "," + w.col[2] + ")";
+            cx.beginPath(); cx.arc(w.x, w.y, w.r, 0, 6.283); cx.fill();
+          }
+
+          // Comet of light tracing the learning pathway.
+          if (morphG > 0.15) {
+            var speed = 1 + 4 * o;
+            for (var c2 = 0; c2 < 14; c2++) {
+              var ct = (now / 1500) * speed - c2 * 0.045;
+              var cp = lem(ct + now / 9000);
+              var px = cxm + cp[0] * cam - par[0] * 30, py = cym + cp[1] * cam - par[1] * 30;
+              var cs = (22 - c2 * 1.3) * (0.6 + 0.4 * morphG);
+              cx.globalAlpha = (1 - c2 / 14) * morphG * 0.9;
+              cx.drawImage(glow, px - cs, py - cs, cs * 2, cs * 2);
+            }
+          }
+
+          // Reveal: expanding light ring.
+          if (o > 0) {
+            var rr = Math.max(W, H) * 0.9 * ease(o);
+            cx.globalAlpha = (1 - o) * 0.9;
+            cx.strokeStyle = "rgba(255,226,196,1)"; cx.lineWidth = 2 + 30 * (1 - o);
+            cx.beginPath(); cx.arc(cxm, cym, rr, 0, 6.283); cx.stroke();
+          }
+          cx.globalAlpha = 1; cx.globalCompositeOperation = "source-over";
+        }
+        requestAnimationFrame(frame);
+      } catch (err) {
+        // A loader must never break the page.
+        markReady(); finish();
+      }
+    })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
