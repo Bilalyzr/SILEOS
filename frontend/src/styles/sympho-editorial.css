@@ -172,9 +172,9 @@ body.astra-theme .sympho-scope .bg-copper-500,
 body.astra-theme .sympho-header,
 .sympho-header {
   background: rgba(255, 255, 255, 0.94) !important;
-  color: #442714 !important;
-  border-bottom: 1px solid rgba(157, 85, 36, 0.13) !important;
-  box-shadow: 0 4px 20px -6px rgba(142, 77, 23, 0.08), inset 0 -1px 0 rgba(255, 255, 255, 0.8) !important;
+  color: #17233a !important;
+  border-bottom: 1px solid #e4e7ec !important;
+  box-shadow: 0 6px 20px -12px rgba(15, 26, 46, 0.12) !important;
   backdrop-filter: blur(20px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
 }
@@ -192,23 +192,24 @@ body.astra-theme .sympho-header input,
   border-radius: 0 !important;
   box-shadow: none !important;
   min-height: 0 !important;
-  color: #442714 !important;
+  color: #17233a !important;
   font-family: var(--font-sans) !important;
 }
 
 body.astra-theme .sympho-header input::placeholder,
 .sympho-header input::placeholder {
-  color: #8b522a !important;
+  color: #94a3b8 !important;
 }
 
-/* Clean White Architectural Footer */
+/* Navy footer: anchors the light pages and matches the dashboard sidebar
+   and the dark page heroes. Orange stays the accent. */
 body.astra-theme .sympho-footer,
 .sympho-footer {
-  background: #ffffff !important;
-  background-color: #ffffff !important;
-  color: #442714 !important;
-  border-top: 1px solid rgba(157, 85, 36, 0.16) !important;
-  box-shadow: 0 -8px 28px rgba(179, 99, 24, 0.05) !important;
+  background: #0f1a2e !important;
+  background-color: #0f1a2e !important;
+  color: #cbd5e1 !important;
+  border-top: 3px solid #c2410c !important;
+  box-shadow: none !important;
 }
 
 body.astra-theme .sympho-scope :is(h1, h2, h3, h4) {
@@ -525,9 +526,9 @@ html {
 }
 
 .sympho-scope .sympho-scroll-progress {
-  background: linear-gradient(90deg, #ffd5a5 0%, #ff9b54 55%, #9a390b 100%);
+  background: linear-gradient(90deg, #fb923c 0%, #ea580c 55%, #c2410c 100%);
   transform: scaleX(var(--scroll-progress, 0));
-  box-shadow: 0 1px 8px rgba(255, 117, 31, 0.35);
+  box-shadow: 0 1px 6px rgba(194, 65, 12, 0.3);
   transition: transform 0.08s linear;
 }
 
