@@ -19,7 +19,8 @@ Business rules (enforced centrally so every call site behaves the same):
     legitimately covers the full price.
   * Free courses: either code enrols the user; if the code has a cohort
     it becomes a CohortMembership too.
-  * Code lookup is case-insensitive via `ilike`.
+  * Code lookup is an exact, case-insensitive match (never `ilike`: `%`/`_`
+    in a typed code would act as wildcards).
   * Cohort capacity, referral max_uses and expiry, coupon is_active /
     valid_from / valid_until / usage_limit / per_user_limit /
     minimum_purchase_amount / course restrictions are all checked here.
@@ -113,7 +114,7 @@ def validate_and_compute(
     if not code:
         raise CouponError("Invalid coupon code")
 
-    coupon = db.query(Coupon).filter(Coupon.code.ilike(code.strip())).first()
+    coupon = db.query(Coupon).filter(func.lower(Coupon.code) == code.strip().lower()).first()
     if not coupon:
         raise CouponError("Invalid coupon code")
 
@@ -227,7 +228,7 @@ def resolve_checkout_code(
     # a 100% discount the other tables can't express.
     voucher = (
         db.query(InternshipVoucher)
-        .filter(InternshipVoucher.code.ilike(normalized))
+        .filter(func.lower(InternshipVoucher.code) == normalized.lower())
         .first()
     )
     if voucher:
@@ -255,7 +256,7 @@ def resolve_checkout_code(
         )
 
     # 2) ReferralCode lookup (case-insensitive)
-    rc = db.query(ReferralCode).filter(ReferralCode.code.ilike(normalized)).first()
+    rc = db.query(ReferralCode).filter(func.lower(ReferralCode.code) == normalized.lower()).first()
     if rc:
         now = datetime.now(timezone.utc)
         expires_at = _aware(rc.expires_at)
@@ -300,7 +301,7 @@ def resolve_checkout_code(
         # invalid" — validate_and_compute raises "Invalid coupon code"
         # for the miss case; re-raise as a generic unified message when
         # neither table matched.
-        any_coupon = db.query(Coupon).filter(Coupon.code.ilike(normalized)).first()
+        any_coupon = db.query(Coupon).filter(func.lower(Coupon.code) == normalized.lower()).first()
         if not any_coupon:
             raise CouponError("Invalid code")
         raise

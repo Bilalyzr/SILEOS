@@ -2876,6 +2876,10 @@ async def import_data(
                     user_id = row.get("id")
                     user = db.query(User).filter(User.id == user_id).first()
 
+                    if update_by_id and user and user.role == "superadmin" and current_user.role != "superadmin":
+                        errors.append({"row": idx, "error": "Cannot modify a superadmin account"})
+                        error_count += 1
+                        continue
                     if update_by_id and user:
                         user.user_login = row.get("user_login", user.user_login)
                         user.user_email = row.get("user_email", user.user_email)

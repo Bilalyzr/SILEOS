@@ -5,7 +5,7 @@ import re
 from pydantic import BaseModel
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
-from sqlalchemy import or_
+from sqlalchemy import or_, func
 from typing import List, Optional
 from datetime import datetime, timezone
 from decimal import Decimal
@@ -54,7 +54,7 @@ async def create_coupon(
         )
 
     # Check if coupon code already exists (case-insensitive)
-    existing_coupon = db.query(Coupon).filter(Coupon.code.ilike(normalized_code)).first()
+    existing_coupon = db.query(Coupon).filter(func.lower(Coupon.code) == normalized_code.lower()).first()
     if existing_coupon:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -447,7 +447,7 @@ async def validate_coupon(
     # distinct, so they take priority.
     voucher = (
         db.query(InternshipVoucher)
-        .filter(InternshipVoucher.code.ilike(raw_code))
+        .filter(func.lower(InternshipVoucher.code) == raw_code.lower())
         .first()
     )
     if voucher:

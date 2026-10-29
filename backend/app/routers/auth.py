@@ -8,6 +8,7 @@ import secrets
 
 from fastapi import APIRouter, Depends, HTTPException, status, Request, Response, BackgroundTasks
 from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from typing import Any, Optional
 
@@ -159,6 +160,11 @@ async def login(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid email or password",
                 headers={"WWW-Authenticate": "Bearer"},
+            )
+        elif auth_error == "inactive":
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Your account is inactive. Please contact support.",
             )
         elif auth_error == "instructor_not_approved":
             raise HTTPException(
@@ -643,7 +649,7 @@ async def register(
 
             # Case-insensitive lookup to match Batch 1's checkout paths.
             code_row = db.query(ReferralCode).filter(
-                ReferralCode.code.ilike(referral_code_raw.strip())
+                func.lower(ReferralCode.code) == referral_code_raw.strip().lower()
             ).first()
             if not code_row:
                 raise ValueError("Invalid referral code")
@@ -1294,6 +1300,24 @@ def _validate_federated_claims(decoded_token: dict) -> None:
         )
 
 
+def _assert_login_allowed(user: User, db: Session) -> None:
+    """Gates every login path shares with password /login: a deactivated
+    account gets no tokens, and an instructor gets none until approved.
+    Federated (Google/LinkedIn) logins used to skip both."""
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Your account is inactive. Please contact support.",
+        )
+    if user.role == "instructor":
+        profile = db.query(InstructorProfile).filter(InstructorProfile.user_id == user.id).first()
+        if not profile or not profile.is_approved:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Your instructor account is pending approval. Please wait for admin approval to access the system.",
+            )
+
+
 def _federated_totp_gate(user: User, otp_code: Optional[str]) -> None:
     """Apply the password-login 2FA gate (see /login ~117-139) to federated
     logins of an EXISTING matched account.
@@ -1466,6 +1490,7 @@ async def google_login(
         # privileged account that must have it) is challenged here — BEFORE
         # any tokens are minted. Same shapes as the password path.
         _federated_totp_gate(user, request.get("otp_code"))
+        _assert_login_allowed(user, db)
 
         try:
             # User exists - get existing profile
@@ -1642,6 +1667,7 @@ async def complete_google_login(
         # enrolled, it must clear the same challenge as /login before the
         # tokens below are minted (a brand-new account cannot have TOTP).
         _federated_totp_gate(existing_user, request.get("otp_code"))
+        _assert_login_allowed(existing_user, db)
 
         profile = db.query(UserProfile).filter(UserProfile.user_id == existing_user.id).first()
 
@@ -1763,6 +1789,16 @@ async def complete_google_login(
         role=role,
     )
 
+    # Same as password registration: an instructor gets no tokens until an
+    # admin approves. JSONResponse (not raise) so the welcome email still runs.
+    if role == "instructor":
+        from fastapi.responses import JSONResponse
+        return JSONResponse(
+            status_code=status.HTTP_403_FORBIDDEN,
+            content={"detail": "Registration successful! Your instructor account is pending admin approval. You will be notified once approved."},
+            background=background_tasks,
+        )
+
     # Create auth tokens
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
@@ -1871,6 +1907,8 @@ async def linkedin_login(
     name = profile.get("name", "")
     if not email:
         raise HTTPException(status_code=400, detail="Email not provided by LinkedIn")
+    if profile.get("email_verified") is not True:
+        raise HTTPException(status_code=403, detail="LinkedIn email is not verified")
 
     # Find or create user
     user = db.query(User).filter(User.user_email == email).first()
@@ -1890,6 +1928,9 @@ async def linkedin_login(
         db.add(user)
         db.commit()
         db.refresh(user)
+    else:
+        _federated_totp_gate(user, payload.get("otp_code"))
+        _assert_login_allowed(user, db)
 
     access_token = create_access_token({"sub": str(user.id)})
     refresh_token = create_refresh_token({"sub": str(user.id)})

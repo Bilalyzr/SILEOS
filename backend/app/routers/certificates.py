@@ -605,9 +605,29 @@ async def view_certificate_html(
     )
 
 
+def _require_cert_access(certificate, token: Optional[str], user: Optional[User]) -> None:
+    """Certificate ids are sequential, so an id alone must not unlock the
+    learner's PDF or verification hash. Allow the owner, an admin, or anyone
+    holding the share token (the certificate hash), like /view. Same 404 for
+    every refusal so ids can't be probed."""
+    import hmac as _hmac
+    ok = bool(
+        certificate is not None
+        and certificate.is_valid is not False
+        and (
+            (user is not None and (user.id == certificate.user_id or user.role in ("admin", "superadmin")))
+            or (token and certificate.certificate_hash and _hmac.compare_digest(token, certificate.certificate_hash))
+        )
+    )
+    if not ok:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Certificate not found")
+
+
 @router.get("/download/{certificate_id}")
 async def download_certificate(
     certificate_id: int,
+    token: Optional[str] = Query(default=None),
+    current_user: Optional[User] = Depends(AuthService.get_optional_current_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -625,12 +645,7 @@ async def download_certificate(
     certificate = db.query(IssuedCertificate).filter(
         IssuedCertificate.id == certificate_id
     ).first()
-
-    if not certificate:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Certificate not found"
-        )
+    _require_cert_access(certificate, token, current_user)
 
     pdf_content = await asyncio.to_thread(
         CertificateService.get_or_render_html_pdf, certificate
@@ -1418,6 +1433,8 @@ async def download_certificate_public(
 async def get_public_certificate_url(
     certificate_id: int,
     request: Request,
+    token: Optional[str] = Query(default=None),
+    current_user: Optional[User] = Depends(AuthService.get_optional_current_user),
     db: Session = Depends(get_db),
 ):
     """
@@ -1432,16 +1449,12 @@ async def get_public_certificate_url(
 
     Registered BEFORE the catch-all `/{certificate_id}` route so FastAPI
     matches it instead of treating "public-url" as a certificate id.
-    No auth: this only returns data already public on the verify page.
+    Owner, admin, or share-token holder only (see _require_cert_access).
     """
     certificate = db.query(IssuedCertificate).filter(
         IssuedCertificate.id == certificate_id
     ).first()
-    if not certificate:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Certificate not found",
-        )
+    _require_cert_access(certificate, token, current_user)
 
     base_url = _public_base_url(request)
     secure_id = certificate.secure_certificate_id or ""
@@ -1549,7 +1562,6 @@ async def verify_certificate(
         "valid": True,
         "certificate_id": certificate.certificate_hash,
         "student_name": certificate.student.display_name,
-        "student_email": certificate.student.user_email,
         "course_title": certificate.course.post_title,
         "course_description": certificate.course.post_content[:200] if certificate.course.post_content else "",
         "instructor_name": certificate.course.instructor.display_name,

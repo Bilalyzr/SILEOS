@@ -53,9 +53,17 @@ def verify_token(token: str) -> dict:
 
 
 async def get_stream_url(youtube_url: str) -> str:
-    cmd = [YTDLP, "--cookies", COOKIES, "--js-runtimes", "node",
+    # lesson_video_url is instructor-controlled: never hand it to yt-dlp raw
+    # (a leading "-" is parsed as an option, any other URL is fetched).
+    # Rebuild a canonical watch URL from a validated 11-char id, as video.py does.
+    from app.routers.video import get_video_id
+    vid = get_video_id(youtube_url or "")
+    if not vid:
+        raise HTTPException(status_code=400, detail="Unsupported video URL")
+    cmd = [YTDLP, "--ignore-config", "--cookies", COOKIES, "--js-runtimes", "node",
            "-f", "best[height<=720][ext=mp4]/best[ext=mp4]/best",
-           "--get-url", "--no-playlist", "--quiet", youtube_url]
+           "--get-url", "--no-playlist", "--quiet",
+           "--", f"https://www.youtube.com/watch?v={vid}"]
     proc = await asyncio.create_subprocess_exec(*cmd,
         stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
     stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=90)

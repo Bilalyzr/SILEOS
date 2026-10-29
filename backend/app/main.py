@@ -1197,6 +1197,15 @@ async def prerender_proxy(path: str, request: Request):
 
     og_image = optimize_cloudinary_url(og_image)
 
+    # path comes from the URL and titles from user-editable records: escape
+    # everything interpolated below (redirect target goes through JSON).
+    import json as _json
+    redirect_js = _json.dumps("/" + path).replace("<", "\\u003c")
+    path = escape(path, quote=True)
+    og_title, og_description, og_image, og_url = (
+        escape(str(v or ""), quote=True) for v in (og_title, og_description, og_image, og_url)
+    )
+
     # Generate HTML with correct OG tags
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -1221,7 +1230,7 @@ async def prerender_proxy(path: str, request: Request):
     <meta name="twitter:description" content="{og_description}">
     <meta name="twitter:image" content="{og_image}">
 
-    <script>window.location.href = "/{path}";</script>
+    <script>window.location.href = {redirect_js};</script>
     <noscript><meta http-equiv="refresh" content="0;url=/{path}"></noscript>
 </head>
 <body>

@@ -95,7 +95,7 @@ export const CertificatePage: React.FC = () => {
     const downloadUrl =
       certificate.secure_certificate_id && certificate.certificate_hash
         ? `/api/v1/certificates/download-html-pdf/${certificate.secure_certificate_id}/${certificate.certificate_hash}.pdf`
-        : `/api/v1/certificates/download/${certificate.id}`;
+        : `/api/v1/certificates/download/${certificate.id}?token=${certificate.certificate_hash}`;
     window.open(downloadUrl, "_blank");
   };
 

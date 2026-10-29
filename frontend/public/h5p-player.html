@@ -77,6 +77,15 @@
 </style>
 </head>
 <body>
+  <script>
+    // Package JS runs in this document, so it must only ever run in an opaque
+    // (sandboxed) origin. Opened top-level or framed with allow-same-origin,
+    // it would run on the site origin and could read the user's session.
+    if (window.origin !== "null") {
+      document.documentElement.innerHTML = "";
+      throw new Error("h5p-player must run sandboxed");
+    }
+  </script>
   <div id="boot-loading">
     <div class="spinner"></div>
     <p>Loading interactive content&hellip;</p>

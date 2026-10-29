@@ -142,7 +142,9 @@ def invite_manager(
         name=target.display_name,
         accepted_at=link.accepted_at,
         invited_at=link.invited_at,
-        setup_token=token,
+        # The setup token is a password-setting credential for the invitee's
+        # account; it goes only to the invitee's inbox, never to the inviter.
+        setup_token=None,
     )
 
 

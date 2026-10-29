@@ -451,7 +451,7 @@ export const AdminCertificates: React.FC = () => {
                                   certificate.secure_certificate_id &&
                                   certificate.certificate_hash
                                     ? `/api/v1/certificates/download-html-pdf/${certificate.secure_certificate_id}/${certificate.certificate_hash}.pdf`
-                                    : `/api/v1/certificates/download/${certificate.id}`;
+                                    : `/api/v1/certificates/download/${certificate.id}?token=${certificate.certificate_hash}`;
                                 window.open(downloadUrl, "_blank");
                               }}
                               className="text-green-600 hover:text-green-900"

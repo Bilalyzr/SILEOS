@@ -2,6 +2,7 @@ import { PageLayout, PageHeader } from "@/components/design-system/PageLayout";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { companyAPI, InterestCandidateView } from "@/api/company";
+import { safeHref } from "@/lib/safeHref"
 
 /**
  * SS3 — Student-side internship inbox.
@@ -111,7 +112,7 @@ export function InternshipInboxPage() {
                       <>
                         {" · "}
                         <a
-                          href={r.company_website}
+                          href={safeHref(r.company_website)}
                           target="_blank"
                           rel="noreferrer"
                           className="text-indigo-600"

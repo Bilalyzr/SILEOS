@@ -643,11 +643,11 @@ async def delete_file(
     current_user: User = Depends(AuthService.get_current_user)
 ):
     """
-    Delete uploaded file from local filesystem
-    Only instructors and admins can delete files
+    Delete uploaded file from local filesystem. Admins only: uploads carry
+    no owner record, so an instructor could otherwise delete other
+    instructors' media or students' assignment submissions.
     """
-    # Check if user is admin or instructor
-    if current_user.role not in ["instructor", "admin"]:
+    if current_user.role not in ["admin", "superadmin"]:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Insufficient permissions"

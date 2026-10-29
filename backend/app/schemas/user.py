@@ -2,6 +2,7 @@
 User Schemas - Pydantic models for user endpoints
 """
 
+import re
 from pydantic import BaseModel, EmailStr, validator
 from typing import Dict, List, Optional, Any
 from datetime import datetime
@@ -28,6 +29,18 @@ class UserProfileUpdate(BaseModel):
     def validate_phone(cls, v):
         if v and len(v) < 10:
             raise ValueError('Phone number must be at least 10 digits')
+        return v
+
+    @validator('facebook', 'twitter', 'linkedin', 'website')
+    def validate_link_scheme(cls, v):
+        # These render as <a href> on public profiles: refuse javascript:,
+        # data: etc. Browsers ignore tabs/newlines/control chars in a scheme,
+        # so strip them before checking. Bare domains (no scheme) are fine.
+        if v:
+            probe = re.sub(r'[\x00-\x20]', '', v).lower()
+            m = re.match(r'^([a-z][a-z0-9+.\-]*):', probe)
+            if m and m.group(1) not in ('http', 'https'):
+                raise ValueError('Links must start with http:// or https://')
         return v
 
 class UserProfileResponse(BaseModel):

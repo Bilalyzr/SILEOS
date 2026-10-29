@@ -20,6 +20,7 @@ import { api } from "@/api/axios"
 import { getMediaUrl } from "@/utils/media"
 import { ShareButton } from "@/components/ui/share-button"
 import { SymphoPageHero } from "@/components/sympho/SymphoSystem"
+import { safeHref } from "@/lib/safeHref"
 
 interface PublicProfile {
   username: string
@@ -121,7 +122,7 @@ export const PublicProfilePage = () => {
     { url: profile.social_links.facebook, Icon: Facebook },
     { url: profile.social_links.twitter, Icon: Twitter },
     { url: profile.social_links.linkedin, Icon: Linkedin },
-  ].filter((s) => s.url)
+  ].map((s) => ({ ...s, url: safeHref(s.url) })).filter((s) => s.url)
 
   return (
     <div className="sympho-scope min-h-screen bg-limestone-100 text-ink-900">

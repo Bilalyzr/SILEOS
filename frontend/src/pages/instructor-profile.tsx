@@ -23,6 +23,7 @@ import { Course } from "@/types"
 import { api } from "@/api/axios"
 import { getMediaUrl } from "@/utils/media"
 import { useSEO } from "@/hooks/use-seo"
+import { safeHref } from "@/lib/safeHref"
 
 interface InstructorProfile {
   id: number
@@ -353,7 +354,7 @@ export const InstructorProfilePage = () => {
             <div className="flex items-center gap-3">
               {instructor.social_links.website && (
                 <a
-                  href={instructor.social_links.website}
+                  href={safeHref(instructor.social_links.website)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-ink-900/5 hover:bg-ink-900/10 text-ink-700 p-3 rounded-full transition-colors"
@@ -363,7 +364,7 @@ export const InstructorProfilePage = () => {
               )}
               {instructor.social_links.facebook && (
                 <a
-                  href={instructor.social_links.facebook}
+                  href={safeHref(instructor.social_links.facebook)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-ink-900/5 hover:bg-ink-900/10 text-ink-700 p-3 rounded-full transition-colors"
@@ -373,7 +374,7 @@ export const InstructorProfilePage = () => {
               )}
               {instructor.social_links.twitter && (
                 <a
-                  href={instructor.social_links.twitter}
+                  href={safeHref(instructor.social_links.twitter)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-ink-900/5 hover:bg-ink-900/10 text-ink-700 p-3 rounded-full transition-colors"
@@ -383,7 +384,7 @@ export const InstructorProfilePage = () => {
               )}
               {instructor.social_links.linkedin && (
                 <a
-                  href={instructor.social_links.linkedin}
+                  href={safeHref(instructor.social_links.linkedin)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-ink-900/5 hover:bg-ink-900/10 text-ink-700 p-3 rounded-full transition-colors"

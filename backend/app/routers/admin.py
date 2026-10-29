@@ -1196,6 +1196,13 @@ async def get_user_stats(
     logging.info(f"[SPOC_STATS] user_id={user_id}, result={result}")
     return result
 
+def _forbid_superadmin_target(user: User, current_user: User) -> None:
+    """Superadmin is a tier above admin: a plain admin must not change its
+    role or status, delete it, or mint a password-reset link for it."""
+    if user.role == "superadmin" and current_user.role != "superadmin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Cannot modify a superadmin account")
+
+
 @router.put("/users/{user_id}/status")
 async def update_user_status(
     user_id: int,
@@ -1216,6 +1223,7 @@ async def update_user_status(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
+    _forbid_superadmin_target(user, current_user)
 
     if not new_status:
         raise HTTPException(
@@ -1268,6 +1276,7 @@ async def update_user_role(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
+    _forbid_superadmin_target(user, current_user)
 
     if role not in ["student", "instructor", "admin"]:
         raise HTTPException(
@@ -1514,6 +1523,7 @@ async def delete_user(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
+    _forbid_superadmin_target(user, current_user)
 
     # Prevent deleting yourself
     if user_id == current_user.id:
@@ -1727,6 +1737,7 @@ async def generate_user_password_reset_link(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
+    _forbid_superadmin_target(user, current_user)
 
     reset_jti = secrets.token_urlsafe(24)
     reset_token = create_access_token(

@@ -22,6 +22,7 @@ from app.services.coupon_service import (
     lock_referral_and_bump,
 )
 from app.services.pricing import effective_course_price
+from app.routers.courses import PUBLISHED_STATUSES
 from pydantic import BaseModel
 from sqlalchemy import and_
 
@@ -72,6 +73,13 @@ async def create_order(
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Course with ID {course_id} not found"
+            )
+        # Same rule as /courses/{id}/enroll and /payments/create-order: drafts
+        # and private courses can't be bought (an unpriced draft would enroll free).
+        if course.post_status not in PUBLISHED_STATUSES:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Course is not available for enrollment"
             )
 
         # Check if already enrolled

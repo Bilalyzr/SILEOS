@@ -35,6 +35,8 @@ class AuthService:
             return None, "email_not_found"
         if not verify_password(password, user.user_pass):
             return None, "incorrect_password"
+        if not user.is_active:
+            return None, "inactive"
 
         # Check if instructor is approved
         if user.role == "instructor":
@@ -92,7 +94,7 @@ class AuthService:
             raise credentials_exception
 
         user = db.query(User).filter(User.id == int(user_id)).first()
-        if user is None:
+        if user is None or not user.is_active:
             raise credentials_exception
 
         if request is not None:

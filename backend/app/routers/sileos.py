@@ -377,6 +377,12 @@ def student_mastery(
                    .filter(Enrollment.user_id == user_id,
                            Enrollment.enrollment_status.in_(["enrolled", "completed"]))
                    .all())
+    if current_user.id != user_id and current_user.role == "instructor":
+        # An instructor sees mastery only for courses they can edit, never a
+        # student's results in other instructors' courses.
+        from app.services.course_access import can_edit
+        enrollments = [e for e in enrollments
+                       if can_edit(db, db.query(Course).filter(Course.id == e.course_id).first(), current_user)]
     courses = [
         m for m in (_course_mastery(db, user_id, e.course_id) for e in enrollments)
         if m is not None
@@ -408,6 +414,10 @@ def cumulative_grade(
             and current_user.role not in ("admin", "superadmin", "instructor")):
         raise HTTPException(status.HTTP_403_FORBIDDEN,
                             detail="Students may only view their own grade")
+    if current_user.id != user_id and current_user.role == "instructor":
+        from app.services.course_access import can_edit
+        if not can_edit(db, db.query(Course).filter(Course.id == course_id).first(), current_user):
+            raise HTTPException(status.HTTP_403_FORBIDDEN, detail="Not your course")
     enrollment = (db.query(Enrollment)
                   .filter(Enrollment.course_id == course_id,
                           Enrollment.user_id == user_id,

@@ -213,6 +213,8 @@ def create_impersonation_token(target_user_id: int, admin_id: int) -> str:
         "type": "impersonation_access",
         "impersonated_by": admin_id,
         "exp": expire,
+        # iat lets logout / password change / global revoke kill it too.
+        "iat": int(datetime.utcnow().timestamp()),
     }
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
 
