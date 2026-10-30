@@ -15,7 +15,6 @@ import {
 } from "@/components/sympho/TowerScene";
 import {
   SplitHeading,
-  SymphoBlueprintSvg,
   SymphoButton,
   SymphoCountUp,
   SymphoCtaBanner,
@@ -588,7 +587,6 @@ export function HomePage() {
   const heroRef = useRef<HTMLElement | null>(null);
   const stageItemRefs = useRef<(HTMLLIElement | null)[]>([]);
   const [sceneReady, setSceneReady] = useState(false);
-  const [blueprintFaded, setBlueprintFaded] = useState(false);
   const [heroProgress, setHeroProgress] = useState(0);
   const [activeStageIdx, setActiveStageIdx] = useState(-1);
   const [stageLocalProgress, setStageLocalProgress] = useState(0);
@@ -679,34 +677,39 @@ export function HomePage() {
     let scene: TowerScene | undefined;
     let disposed = false;
     let scrollRaf = 0;
-    let fadeTimer: ReturnType<typeof setTimeout> | undefined;
 
     const reducedMotion =
       typeof window !== "undefined" &&
       window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
+    // Reads every rect first and writes styles last: interleaving writes and
+    // getBoundingClientRect forced a full page layout per read, which stalled
+    // the opening loader on first mount and every scroll frame after.
+    let stageVpMode = "";
     const computeScrollState = () => {
       scrollRaf = 0;
       const vh = window.innerHeight || 1;
       const wrapRect = wrapEl.getBoundingClientRect();
+      const heroRect = heroEl.getBoundingClientRect();
+      const stageRects = stageItemRefs.current.map((li) =>
+        li ? li.getBoundingClientRect() : null
+      );
+      const plateRects = reducedMotion
+        ? []
+        : coursePlateRefs.current.map((plateEl) =>
+            plateEl ? plateEl.getBoundingClientRect() : null
+          );
+
       const stageVp = stageViewportRef.current;
-      if (stageVp) {
-        if (wrapRect.top >= 0) {
-          stageVp.style.position = "absolute";
-          stageVp.style.top = "0px";
-          stageVp.style.bottom = "auto";
-        } else if (wrapRect.bottom <= vh) {
-          stageVp.style.position = "absolute";
-          stageVp.style.top = "auto";
-          stageVp.style.bottom = "0px";
-        } else {
-          stageVp.style.position = "fixed";
-          stageVp.style.top = "0px";
-          stageVp.style.bottom = "auto";
-        }
+      const mode =
+        wrapRect.top >= 0 ? "top" : wrapRect.bottom <= vh ? "bottom" : "fixed";
+      if (stageVp && mode !== stageVpMode) {
+        stageVpMode = mode;
+        stageVp.style.position = mode === "fixed" ? "fixed" : "absolute";
+        stageVp.style.top = mode === "bottom" ? "auto" : "0px";
+        stageVp.style.bottom = mode === "bottom" ? "0px" : "auto";
       }
 
-      const heroRect = heroEl.getBoundingClientRect();
       const hp = Math.min(
         1,
         Math.max(0, -heroRect.top / Math.max(1, heroRect.height * 0.85))
@@ -717,9 +720,8 @@ export function HomePage() {
       let localProg = 0;
       const triggerY = vh * 0.55;
 
-      stageItemRefs.current.forEach((li, idx) => {
-        if (!li) return;
-        const r = li.getBoundingClientRect();
+      stageRects.forEach((r, idx) => {
+        if (!r) return;
         if (r.top <= triggerY) {
           currentIdx = idx;
           localProg = Math.min(
@@ -746,10 +748,9 @@ export function HomePage() {
       scene?.setBuild(buildVal);
 
       // Update continuous scroll parallax on SI—02 course plates
-      coursePlateRefs.current.forEach((plateEl, idx) => {
+      plateRects.forEach((pr, idx) => {
         const innerEl = courseImgInnerRefs.current[idx];
-        if (!plateEl || !innerEl || reducedMotion) return;
-        const pr = plateEl.getBoundingClientRect();
+        if (!pr || !innerEl) return;
         if (pr.bottom < -100 || pr.top > vh + 100) return;
         const prog = Math.min(1, Math.max(0, (vh - pr.top) / (vh + pr.height)));
         const shift = ((prog - 0.5) * 12).toFixed(2);
@@ -792,38 +793,69 @@ export function HomePage() {
       });
     }
 
-    if (canvas && supportsWebGL() && !disposed) {
-      const nav = navigator as any;
-      const isLow =
-        window.innerWidth < 768 ||
-        (nav.hardwareConcurrency ?? 8) <= 4 ||
-        (nav.deviceMemory ?? 8) <= 4;
-      try {
-        scene = new TowerScene(canvas, {
-          quality: isLow ? "low" : isIntegratedGPU() ? "medium" : "high",
-          reducedMotion,
-          layout: window.innerWidth >= 1024 ? "split" : "center",
-          onError: () => setSceneReady(false),
-        });
-        const rect = canvas.getBoundingClientRect();
-        scene.setLayout(window.innerWidth >= 1024 ? "split" : "center");
-        scene.resize(rect.width, rect.height);
-        ro?.observe(canvas);
-        window.addEventListener("pointermove", onPointerMove, {
-          passive: true,
-        });
-        computeScrollState();
-        requestAnimationFrame(() => setSceneReady(true));
-        fadeTimer = setTimeout(() => setBlueprintFaded(true), 1800);
-      } catch {
-        setSceneReady(false);
+    // Build the 3D scene only after the opening loader (index.html) has
+    // gone: its setup (environment map, textures, GLB parsing) runs on the
+    // main thread and froze the loader animation mid-story.
+    let loaderMo: MutationObserver | undefined;
+    let idleHandle: number | undefined;
+    const startScene = () => {
+      if (canvas && supportsWebGL() && !disposed) {
+        const nav = navigator as any;
+        const isLow =
+          window.innerWidth < 768 ||
+          (nav.hardwareConcurrency ?? 8) <= 4 ||
+          (nav.deviceMemory ?? 8) <= 4;
+        try {
+          scene = new TowerScene(canvas, {
+            quality: isLow ? "low" : isIntegratedGPU() ? "medium" : "high",
+            reducedMotion,
+            layout: window.innerWidth >= 1024 ? "split" : "center",
+            onError: () => setSceneReady(false),
+          });
+          const rect = canvas.getBoundingClientRect();
+          scene.setLayout(window.innerWidth >= 1024 ? "split" : "center");
+          scene.resize(rect.width, rect.height);
+          ro?.observe(canvas);
+          window.addEventListener("pointermove", onPointerMove, {
+            passive: true,
+          });
+          computeScrollState();
+          requestAnimationFrame(() => setSceneReady(true));
+        } catch {
+          setSceneReady(false);
+        }
       }
+    };
+    const startWhenIdle = () => {
+      const ric = (window as any).requestIdleCallback as
+        | ((cb: () => void, o?: { timeout: number }) => number)
+        | undefined;
+      idleHandle = ric
+        ? ric(startScene, { timeout: 400 })
+        : window.setTimeout(startScene, 50);
+    };
+    if (document.getElementById("si-loader")) {
+      loaderMo = new MutationObserver(() => {
+        if (document.getElementById("si-loader")) return;
+        loaderMo?.disconnect();
+        startWhenIdle();
+      });
+      loaderMo.observe(document.body, { childList: true });
+    } else {
+      startWhenIdle();
     }
 
     return () => {
       disposed = true;
+      loaderMo?.disconnect();
+      if (idleHandle !== undefined) {
+        const cic = (window as any).cancelIdleCallback as
+          | ((h: number) => void)
+          | undefined;
+        if (cic) cic(idleHandle);
+        else clearTimeout(idleHandle);
+      }
       cancelAnimationFrame(scrollRaf);
-      if (fadeTimer) clearTimeout(fadeTimer);
       visIo?.disconnect();
       ro?.disconnect();
       window.removeEventListener("scroll", scheduleScrollUpdate);
@@ -906,7 +938,7 @@ export function HomePage() {
         aria-label="Introduction and knowledge construction process"
         className="on-dark relative bg-ink-900 text-limestone-50"
       >
-        {/* Pinned Full-Viewport 3D AR/VR Learning Glass Stage & Blueprint Backdrop */}
+        {/* Pinned full-viewport 3D stage */}
         <div
           ref={stageViewportRef}
           aria-hidden="true"
@@ -919,21 +951,6 @@ export function HomePage() {
             height: "100vh",
           }}
         >
-          {!(sceneReady && blueprintFaded) && (
-            <>
-              <div className="blueprint-grid absolute inset-0" />
-              <div
-                className={`absolute inset-0 flex items-start justify-center pt-[14svh] text-copper-400 transition-opacity duration-1000 lg:items-center lg:justify-end lg:pt-0 lg:pr-[6vw] ${
-                  sceneReady ? "opacity-0" : "opacity-100"
-                }`}
-              >
-                <div className="w-[min(92vw,34rem)] lg:w-[min(46vw,44rem)]">
-                  <SymphoBlueprintSvg className="h-full w-full text-copper-400" />
-                </div>
-              </div>
-            </>
-          )}
-
           <canvas
             ref={canvasRef}
             style={{ transitionDuration: "1600ms" }}

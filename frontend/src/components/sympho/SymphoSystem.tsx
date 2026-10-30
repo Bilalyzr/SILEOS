@@ -614,6 +614,18 @@ export const SymphoDimensionLine: React.FC<{ className?: string }> = ({
   );
 };
 
+// The ∞ learning pathway (lemniscate of Bernoulli, the same curve as the
+// opening loader and InfinityTrace), scaled into the 800×500 sheet.
+const BLUEPRINT_PATH =
+  "M649.9 250.0 L648.3 266.2 L643.6 281.8 L636.1 296.1 L626.2 308.6 L614.5 318.9 L601.4 327.1 L587.5 332.9 L573.1 336.6 L558.8 338.2 L544.7 338.1 L531.0 336.3 L517.8 333.3 L505.3 329.1 L493.4 324.1 L482.1 318.3 L471.4 311.8 L461.3 304.9 L451.6 297.7 L442.4 290.1 L433.5 282.3 L424.8 274.4 L416.4 266.3 L408.2 258.2 L400.0 250.0 L391.8 241.8 L383.6 233.7 L375.2 225.6 L366.5 217.7 L357.6 209.9 L348.4 202.3 L338.7 195.1 L328.6 188.2 L317.9 181.7 L306.6 175.9 L294.7 170.9 L282.2 166.7 L269.0 163.7 L255.3 161.9 L241.2 161.8 L226.9 163.4 L212.5 167.1 L198.6 172.9 L185.5 181.1 L173.8 191.4 L163.9 203.9 L156.4 218.2 L151.7 233.8 L150.1 250.0 L151.7 266.2 L156.4 281.8 L163.9 296.1 L173.8 308.6 L185.5 318.9 L198.6 327.1 L212.5 332.9 L226.9 336.6 L241.2 338.2 L255.3 338.1 L269.0 336.3 L282.2 333.3 L294.7 329.1 L306.6 324.1 L317.9 318.3 L328.6 311.8 L338.7 304.9 L348.4 297.7 L357.6 290.1 L366.5 282.3 L375.2 274.4 L383.6 266.3 L391.8 258.2 L400.0 250.0 L408.2 241.8 L416.4 233.7 L424.8 225.6 L433.5 217.7 L442.4 209.9 L451.6 202.3 L461.3 195.1 L471.4 188.2 L482.1 181.7 L493.4 175.9 L505.3 170.9 L517.8 166.7 L531.0 163.7 L544.7 161.9 L558.8 161.8 L573.1 163.4 L587.5 167.1 L601.4 172.9 L614.5 181.1 L626.2 191.4 L636.1 203.9 L643.6 218.2 L648.3 233.8Z";
+
+/**
+ * Page-hero watermark: a knowledge-architecture drawing of the site's own
+ * concept. The ∞ pathway carries the Learn → Practice → Build → Career
+ * milestones; the Tamil Knowledge Triad (Meiporul · Seyappaduporul ·
+ * Utporul) orbits it as a triangle, with a Meiporul solid at its apex. A
+ * point of light travels the path (hidden under reduced motion).
+ */
 export const SymphoBlueprintSvg: React.FC<{ className?: string }> = ({
   className = "h-full w-full text-limestone-100",
 }) => (
@@ -624,86 +636,103 @@ export const SymphoBlueprintSvg: React.FC<{ className?: string }> = ({
     strokeWidth="1"
     className={className}
   >
-    <g opacity="0.2" strokeDasharray="3 5">
-      <line x1="60" y1="90" x2="740" y2="90" />
-      <line x1="60" y1="250" x2="740" y2="250" />
-      <line x1="60" y1="410" x2="740" y2="410" />
-      <line x1="180" y1="40" x2="180" y2="460" />
-      <line x1="400" y1="40" x2="400" y2="460" />
-      <line x1="620" y1="40" x2="620" y2="460" />
+    <style>
+      {"@media (prefers-reduced-motion: reduce){.si-bp-comet{display:none}}"}
+    </style>
+    {/* Drafting grid and centre lines */}
+    <g opacity="0.18" strokeDasharray="3 5">
+      <line x1="40" y1="250" x2="760" y2="250" />
+      <line x1="400" y1="20" x2="400" y2="480" />
+      <line x1="150" y1="120" x2="150" y2="380" />
+      <line x1="650" y1="120" x2="650" y2="380" />
     </g>
-    {/* Orbital Knowledge Rings */}
+
+    {/* Triad orbit and triangle */}
     <ellipse
       cx="400"
       cy="250"
-      rx="280"
-      ry="95"
-      strokeDasharray="6 4"
-      opacity="0.45"
+      rx="340"
+      ry="215"
+      strokeDasharray="6 5"
+      opacity="0.4"
     />
-    <ellipse
-      cx="400"
-      cy="250"
-      rx="220"
-      ry="155"
-      transform="rotate(-18 400 250)"
+    <path
+      d="M400 35 L106 357 L694 357 Z"
+      strokeDasharray="2 6"
       opacity="0.35"
     />
-    {/* AR/VR Spatial Learning Glasses Chassis & Dual Waveguide Lenses */}
+
+    {/* Inner rings framing the pathway */}
+    <ellipse cx="400" cy="250" rx="275" ry="118" opacity="0.28" />
+    <ellipse
+      cx="400"
+      cy="250"
+      rx="210"
+      ry="150"
+      transform="rotate(-14 400 250)"
+      opacity="0.22"
+    />
+
+    {/* The ∞ learning pathway */}
+    <path d={BLUEPRINT_PATH} strokeWidth="1.8" />
     <path
-      d="M175 235 C175 190, 240 175, 390 182 L410 182 C560 175, 625 190, 625 235 L620 292 C616 328, 540 338, 455 322 C432 316, 416 286, 400 286 C384 286, 368 316, 345 322 C260 338, 184 328, 180 292 Z"
-      strokeWidth="1.6"
+      d={BLUEPRINT_PATH}
+      strokeWidth="7"
+      opacity="0.08"
+      strokeLinejoin="round"
     />
-    {/* Left & Right Waveguide Optical Lenses */}
-    <rect x="202" y="200" width="166" height="106" rx="28" strokeWidth="1.3" />
-    <rect x="432" y="200" width="166" height="106" rx="28" strokeWidth="1.3" />
-    {/* Inner Fresnel / Waveguide HUD Reticles */}
-    <circle cx="285" cy="253" r="34" strokeDasharray="4 3" opacity="0.65" />
-    <circle cx="515" cy="253" r="34" strokeDasharray="4 3" opacity="0.65" />
-    <path d="M265 253 H305 M285 233 V273" opacity="0.6" />
-    <path d="M495 253 H535 M515 233 V273" opacity="0.6" />
-    {/* Articulated Temple Compute Arms */}
-    <path d="M175 225 L110 165 L95 178 L168 258" opacity="0.75" />
-    <path d="M625 225 L690 165 L705 178 L632 258" opacity="0.75" />
-    {/* Projected Spatial Polyhedron above Bridge */}
-    <polygon
-      points="400,72 452,102 452,154 400,184 348,154 348,102"
-      strokeWidth="1.2"
-    />
-    <path
-      d="M400 72 L400 184 M348 102 L452 154 M452 102 L348 154"
-      opacity="0.5"
-    />
-    {/* Projection Frustum Rays */}
-    <path
-      d="M285 200 L348 128 M515 200 L452 128"
-      strokeDasharray="3 4"
-      opacity="0.55"
-    />
-    <circle cx="285" cy="253" r="4" fill="#bd6a45" stroke="none" />
-    <circle cx="515" cy="253" r="4" fill="#bd6a45" stroke="none" />
-    <circle cx="400" cy="72" r="4.5" fill="#bd6a45" stroke="none" />
-    <circle cx="175" cy="235" r="4" fill="#bd6a45" stroke="none" />
-    <circle cx="625" cy="235" r="4" fill="#bd6a45" stroke="none" />
+
+    {/* Dimension line across the pathway */}
+    <g opacity="0.55">
+      <path d="M150 412 H650 M150 404 V420 M650 404 V420" />
+      <path d="M150 412 l8 -4 v8 Z M650 412 l-8 -4 v8 Z" fill="currentColor" />
+    </g>
+
+    {/* Meiporul solid at the triad apex (isometric cube) */}
+    <g strokeWidth="1.2">
+      <polygon points="400,12 420,24 420,47 400,59 380,47 380,24" />
+      <path d="M380 24 L400 36 L420 24 M400 36 V59" opacity="0.7" />
+    </g>
+
+    {/* Milestones on the pathway and triad vertices */}
+    <g fill="#bd6a45" stroke="none">
+      <circle cx="150.1" cy="250" r="5" />
+      <circle cx="558.9" cy="161.8" r="4.5" />
+      <circle cx="649.9" cy="250" r="5" />
+      <circle cx="241.1" cy="338.2" r="4.5" />
+      <circle cx="400" cy="250" r="4" />
+      <circle cx="106" cy="357" r="4" />
+      <circle cx="694" cy="357" r="4" />
+    </g>
+    <g opacity="0.6">
+      <circle cx="150.1" cy="250" r="11" />
+      <circle cx="649.9" cy="250" r="11" />
+      <circle cx="400" cy="250" r="10" strokeDasharray="2 3" />
+    </g>
+
+    {/* Travelling point of light */}
+    <circle className="si-bp-comet" r="4" fill="#f0a36b" stroke="none">
+      <animateMotion dur="12s" repeatCount="indefinite" path={BLUEPRINT_PATH} />
+    </circle>
+
     <g
       fill="currentColor"
       stroke="none"
       fontFamily="IBM Plex Mono, monospace"
       fontSize="10"
-      opacity="0.7"
+      letterSpacing="1.5"
+      opacity="0.75"
     >
-      <text x="72" y="82">
-        FOV 110° · DUAL WAVEGUIDE
-      </text>
-      <text x="72" y="242">
-        OPTICAL AXIS ±0.00mm
-      </text>
-      <text x="72" y="402">
-        PEDESTAL Ø 240mm
-      </text>
-      <text x="485" y="82">
-        MEIPORUL AR/VR LEARNING RIG
-      </text>
+      <text x="60" y="246">01 LEARN</text>
+      <text x="572" y="152">02 PRACTICE</text>
+      <text x="668" y="246">03 BUILD</text>
+      <text x="252" y="358">04 CAREER</text>
+      <text x="412" y="276">CURIOSITY</text>
+      <text x="432" y="34">MEIPORUL</text>
+      <text x="40" y="380">SEYAPPADUPORUL</text>
+      <text x="640" y="380">UTPORUL</text>
+      <text x="318" y="438">KNOWLEDGE PATH · ∞</text>
+      <text x="560" y="478">SALEM · 11.66°N 78.14°E</text>
     </g>
   </svg>
 );
@@ -815,7 +844,7 @@ export const SymphoPageHero: React.FC<SymphoPageHeroProps> = ({
       )}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-20 -bottom-16 w-[38rem] max-w-[65vw] opacity-20"
+        className="pointer-events-none absolute -right-16 -bottom-24 w-[44rem] max-w-[70vw] opacity-[0.22]"
       >
         <SymphoBlueprintSvg
           className={`h-full w-full ${

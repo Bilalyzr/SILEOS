@@ -436,6 +436,8 @@ export class TowerScene {
   dpr = 1;
   maxDpr = 1;
   visible = true;
+  warmed = false;
+  warm: Promise<void> = Promise.resolve();
   disposed = false;
   width = 1;
   height = 1;
@@ -632,7 +634,6 @@ export class TowerScene {
     this.unit = this.geo(new THREE.BoxGeometry(1, 1, 1));
     this.buildSky();
     this.buildArVrLearningWorld();
-    void this.loadRealGlbModels();
 
     if (this.opts.reducedMotion) {
       this.intro = 1;
@@ -645,23 +646,45 @@ export class TowerScene {
     );
 
     this.apply(0);
+    this.warm = this.warmUp();
+    void this.loadRealGlbModels();
+  }
 
+  /**
+   * Compile every shader before the first frame without blocking the main
+   * thread (KHR_parallel_shader_compile). The old warm-up rendered twice
+   * synchronously, and the program links froze the page for seconds; hidden
+   * stage objects are compiled too, so later scroll stages don't stall.
+   */
+  private async warmUp() {
+    const hidden: THREE.Object3D[] = [];
     const culled: THREE.Object3D[] = [];
     this.scene.traverse((obj) => {
+      if (!obj.visible) {
+        obj.visible = true;
+        hidden.push(obj);
+      }
       if (obj.frustumCulled) {
         obj.frustumCulled = false;
         culled.push(obj);
       }
     });
-    for (let i = 0; i < 2; i++) {
-      this.renderer.shadowMap.needsUpdate = true;
-      this.renderer.render(this.scene, this.camera);
+    try {
+      await this.renderer.compileAsync(this.scene, this.camera);
+    } catch {
+      // Falls back to compiling on the first render
     }
+    hidden.forEach((obj) => {
+      obj.visible = false;
+    });
     culled.forEach((obj) => {
       obj.frustumCulled = true;
     });
-
+    if (this.disposed) return;
+    this.warmed = true;
     this.apply(0);
+    this.renderer.shadowMap.needsUpdate = true;
+    this.last = performance.now();
     this.requestFrame();
   }
 
@@ -928,17 +951,31 @@ export class TowerScene {
       g.fillStyle = grad;
       g.fillRect(x - r, y - r, r * 2, r * 2);
     }
-    for (let i = 0; i < 40000; i++) {
-      const v = Math.random();
-      g.fillStyle =
-        v < 0.55
-          ? `rgba(18,19,22,${0.35 + Math.random() * 0.4})`
-          : v < 0.92
-          ? `rgba(120,124,130,${0.18 + Math.random() * 0.3})`
-          : `rgba(205,196,182,${0.25 + Math.random() * 0.35})`;
-      const sz = Math.random() < 0.85 ? 1 : 2;
-      g.fillRect(Math.random() * 1024, Math.random() * 1024, sz, sz);
+    // Mineral speckle written straight into pixels: one pass instead of
+    // tens of thousands of fillRect calls (which cost ~0.5s of main thread).
+    const img = g.getImageData(0, 0, 1024, 1024);
+    const d = img.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const r = Math.random();
+      if (r > 0.055) continue;
+      if (r < 0.03) {
+        const k = 0.35 + Math.random() * 0.4;
+        d[i] *= 1 - k * 0.6;
+        d[i + 1] *= 1 - k * 0.6;
+        d[i + 2] *= 1 - k * 0.55;
+      } else if (r < 0.05) {
+        const k = 0.18 + Math.random() * 0.3;
+        d[i] += (120 - d[i]) * k;
+        d[i + 1] += (124 - d[i + 1]) * k;
+        d[i + 2] += (130 - d[i + 2]) * k;
+      } else {
+        const k = 0.25 + Math.random() * 0.35;
+        d[i] += (205 - d[i]) * k;
+        d[i + 1] += (196 - d[i + 1]) * k;
+        d[i + 2] += (182 - d[i + 2]) * k;
+      }
     }
+    g.putImageData(img, 0, 0);
     const t = this.tex(c, true);
     t.repeat.set(2, 2);
     return t;
@@ -1816,6 +1853,15 @@ export class TowerScene {
         });
       }
 
+      // Compile the headset's materials off the main thread before mounting
+      await this.warm;
+      if (this.disposed) return;
+      try {
+        await this.renderer.compileAsync(pivot, this.camera, this.scene);
+      } catch {
+        // Compiles on first render instead
+      }
+      if (this.disposed) return;
       this.realHeadsetRoot.add(pivot);
       this.realHeadsetLoaded = true;
       this.contactShadow.visible = true;
@@ -1864,6 +1910,14 @@ export class TowerScene {
         }
       });
 
+      await this.warm;
+      if (this.disposed) return;
+      try {
+        await this.renderer.compileAsync(mathWrap, this.camera, this.scene);
+      } catch {
+        // Compiles on first render instead
+      }
+      if (this.disposed) return;
       this.holoCore.clear();
       this.holoCore.add(mathWrap);
       this.requestFrame();
@@ -1885,6 +1939,7 @@ export class TowerScene {
 
   private frame = (now: number) => {
     this.raf = 0;
+    if (!this.warmed) return;
     const rawDt = Math.max(0.001, (now - (this.last || now)) / 1000);
     const dt = Math.min(0.1, rawDt);
     this.last = now;
