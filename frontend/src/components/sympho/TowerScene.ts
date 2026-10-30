@@ -147,6 +147,41 @@ const HEADSET_MODEL = {
   explode: 0.16,
 };
 
+// Physically based finishes for the headset, keyed by the GLB's material
+// names (the file ships with flat placeholder colours).
+const HEADSET_FINISH: Record<string, THREE.MeshPhysicalMaterialParameters> = {
+  // Front shell: satin white polycarbonate under a light clear coat
+  Icosphere__0: {
+    color: "#efefeb",
+    roughness: 0.36,
+    clearcoat: 0.45,
+    clearcoatRoughness: 0.28,
+  },
+  // Side arms and top strap: matte textured plastic
+  "Quest_Mat.004": { color: "#e4e4e0", roughness: 0.62 },
+  "Quest_Mat.005": { color: "#e8e8e4", roughness: 0.58 },
+  // Camera clusters and inner housing: glossy black
+  "Quest_Mat.002": {
+    color: "#151618",
+    roughness: 0.4,
+    clearcoat: 0.6,
+    clearcoatRoughness: 0.18,
+  },
+  // Facial interface: soft dark fabric
+  "Material.004": { color: "#1f2023", roughness: 0.95 },
+  // Buttons
+  "Material.002": { color: "#121314", roughness: 0.35 },
+  // Pancake lenses: coated glass with a faint green reflection
+  "Material.001": {
+    color: "#0c1411",
+    roughness: 0.05,
+    metalness: 0.1,
+    clearcoat: 1,
+    emissive: "#06261a",
+    emissiveIntensity: 0.5,
+  },
+};
+
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const rangeProgress = (v: number, [a, b]: [number, number]) =>
   clamp01((v - a) / (b - a));
@@ -479,11 +514,7 @@ export class TowerScene {
   // Real 3D GLB AR/VR Headset & Real Meiporul AR Mathematical Model
   realHeadsetRoot = new THREE.Group();
   realHeadsetLoaded = false;
-  realWireMat = new THREE.LineBasicMaterial({
-    color: COPPER_COLOR,
-    transparent: true,
-    opacity: 0.52,
-  });
+  contactShadow!: THREE.Mesh;
   realSubAssemblies: {
     node: THREE.Object3D;
     basePos: THREE.Vector3;
@@ -875,6 +906,58 @@ export class TowerScene {
     return this.tex(c, false);
   }
 
+  /** Honed dark granite: fine mineral speckle over soft tonal drift. */
+  private makeStoneTexture() {
+    const { c, g } = makeCanvas(1024, 1024);
+    g.fillStyle = "#2c2f34";
+    g.fillRect(0, 0, 1024, 1024);
+    for (let i = 0; i < 160; i++) {
+      const x = Math.random() * 1024;
+      const y = Math.random() * 1024;
+      const r = 30 + Math.random() * 90;
+      const grad = g.createRadialGradient(x, y, 0, x, y, r);
+      const tone = Math.random() < 0.5 ? "255,255,255" : "0,0,0";
+      grad.addColorStop(0, `rgba(${tone},0.05)`);
+      grad.addColorStop(1, `rgba(${tone},0)`);
+      g.fillStyle = grad;
+      g.fillRect(x - r, y - r, r * 2, r * 2);
+    }
+    for (let i = 0; i < 40000; i++) {
+      const v = Math.random();
+      g.fillStyle =
+        v < 0.55
+          ? `rgba(18,19,22,${0.35 + Math.random() * 0.4})`
+          : v < 0.92
+          ? `rgba(120,124,130,${0.18 + Math.random() * 0.3})`
+          : `rgba(205,196,182,${0.25 + Math.random() * 0.35})`;
+      const sz = Math.random() < 0.85 ? 1 : 2;
+      g.fillRect(Math.random() * 1024, Math.random() * 1024, sz, sz);
+    }
+    const t = this.tex(c, true);
+    t.repeat.set(2, 2);
+    return t;
+  }
+
+  /** Roughness map for the top plate: fine concentric brushing (cap UVs are planar). */
+  private makeBrushedTexture() {
+    const size = 1024;
+    const { c, g } = makeCanvas(size, size);
+    g.fillStyle = "#808080";
+    g.fillRect(0, 0, size, size);
+    const mid = size / 2;
+    for (let r = 2; r < mid; r += 1.25) {
+      const v = 96 + Math.floor(Math.random() * 64);
+      g.strokeStyle = `rgba(${v},${v},${v},${0.35 + Math.random() * 0.4})`;
+      g.lineWidth = 0.6 + Math.random() * 0.8;
+      g.beginPath();
+      g.arc(mid, mid, r, 0, Math.PI * 2);
+      g.stroke();
+    }
+    const t = this.tex(c);
+    t.colorSpace = THREE.NoColorSpace;
+    return t;
+  }
+
   private makeTextures() {
     const dotC = makeCanvas(64, 64);
     {
@@ -1046,11 +1129,6 @@ export class TowerScene {
       envMap: env,
       envMapIntensity: 1.4,
     });
-    const pedestalMat = stdMat({
-      color: "#181b1f",
-      roughness: 0.78,
-      metalness: 0.18,
-    });
     const holoPolyMat = stdMat({
       color: "#d0845f",
       emissive: "#bd6a45",
@@ -1087,30 +1165,110 @@ export class TowerScene {
     ground.receiveShadow = true;
     this.scene.add(ground);
 
-    // Studio calibration turntable base
-    const baseDisc = new THREE.Mesh(
-      this.geo(new THREE.CylinderGeometry(11.5, 12.2, 0.36, 64)),
-      pedestalMat
-    );
-    baseDisc.position.set(0, 0.18, 0);
+    // Display plinth: honed stone base with chamfered edges, a satin
+    // aluminium top plate brushed in concentric rings, and a slim copper rim
+    // where the two meet. The base is lathed so its edges carry real bevels.
+    const stoneMat = stdMat({
+      map: this.makeStoneTexture(),
+      roughness: 0.86,
+      metalness: 0.02,
+      envMap: env,
+      envMapIntensity: 0.35,
+    });
+    const plateMat = stdMat({
+      color: "#4a5058",
+      roughnessMap: this.makeBrushedTexture(),
+      roughness: 0.46,
+      metalness: 0.9,
+      envMap: env,
+      envMapIntensity: 0.55,
+    });
+    const grooveMat = stdMat({
+      color: "#0b0c0e",
+      roughness: 0.7,
+      metalness: 0.3,
+    });
+
+    const baseProfile = [
+      [0, 0],
+      [12.05, 0],
+      [12.2, 0.05],
+      [12.2, 0.28],
+      [12.14, 0.33],
+      [12.02, 0.36],
+      [0, 0.36],
+    ].map(([r, y]) => new THREE.Vector2(r, y));
+    const baseGeo = this.geo(new THREE.LatheGeometry(baseProfile, 128));
+    // Lathe UVs run around and along the profile, which smears the speckle
+    // into radial streaks; project them top-down instead.
+    {
+      const pos = baseGeo.getAttribute("position");
+      const uv = baseGeo.getAttribute("uv");
+      for (let i = 0; i < pos.count; i++) {
+        uv.setXY(i, pos.getX(i) / 24.4 + 0.5, pos.getZ(i) / 24.4 + 0.5);
+      }
+      uv.needsUpdate = true;
+    }
+    const baseDisc = new THREE.Mesh(baseGeo, stoneMat);
+    baseDisc.castShadow = this.high;
     baseDisc.receiveShadow = true;
     this.scene.add(baseDisc);
 
-    const innerDisc = new THREE.Mesh(
-      this.geo(new THREE.CylinderGeometry(8.2, 8.5, 0.18, 64)),
-      titaniumDark
+    // Shadow gap between stone and plate
+    const groove = new THREE.Mesh(
+      this.geo(new THREE.TorusGeometry(8.62, 0.07, 10, 128)),
+      grooveMat
     );
-    innerDisc.position.set(0, 0.42, 0);
+    groove.rotation.x = Math.PI / 2;
+    groove.position.set(0, 0.36, 0);
+    this.scene.add(groove);
+
+    const innerDisc = new THREE.Mesh(
+      this.geo(new THREE.CylinderGeometry(8.32, 8.46, 0.15, 128)),
+      plateMat
+    );
+    innerDisc.position.set(0, 0.435, 0);
+    innerDisc.castShadow = this.high;
     innerDisc.receiveShadow = true;
     this.scene.add(innerDisc);
 
+    // Polished copper rim on the plate edge (the bevel that catches light)
     const copperRingBase = new THREE.Mesh(
-      this.geo(new THREE.TorusGeometry(8.35, 0.06, 12, 96)),
+      this.geo(new THREE.TorusGeometry(8.33, 0.035, 12, 160)),
       brushedCopper
     );
     copperRingBase.rotation.x = Math.PI / 2;
-    copperRingBase.position.set(0, 0.51, 0);
+    copperRingBase.position.set(0, 0.505, 0);
     this.scene.add(copperRingBase);
+
+    // Soft contact shadow under the floating headset, so it reads as
+    // hovering above the plate rather than pasted over it
+    const shadowCanvas = makeCanvas(256, 256);
+    {
+      const { g } = shadowCanvas;
+      const grad = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+      grad.addColorStop(0, "rgba(0,0,0,0.62)");
+      grad.addColorStop(0.45, "rgba(0,0,0,0.32)");
+      grad.addColorStop(1, "rgba(0,0,0,0)");
+      g.fillStyle = grad;
+      g.fillRect(0, 0, 256, 256);
+    }
+    this.contactShadow = new THREE.Mesh(
+      this.geo(new THREE.PlaneGeometry(10.5, 7.5)),
+      this.mat(
+        new THREE.MeshBasicMaterial({
+          map: this.tex(shadowCanvas.c),
+          transparent: true,
+          depthWrite: false,
+          color: "#000000",
+        })
+      )
+    );
+    this.contactShadow.rotation.x = -Math.PI / 2;
+    this.contactShadow.position.set(0, 0.515, 0.2);
+    this.contactShadow.renderOrder = 1;
+    this.contactShadow.visible = false;
+    this.scene.add(this.contactShadow);
 
     // Dashed copper calibration boundary ring
     const boundaryPts: THREE.Vector3[] = [];
@@ -1371,26 +1529,6 @@ export class TowerScene {
       b: [number, number, number]
     ) => bpVerts.push(...a, ...b);
 
-    // Pedestal radial & concentric CAD lines
-    for (const rad of [4.2, 8.35, 11.5]) {
-      const segs = 48;
-      for (let i = 0; i < segs; i++) {
-        const a0 = (i / segs) * Math.PI * 2;
-        const a1 = ((i + 1) / segs) * Math.PI * 2;
-        pushSeg(
-          [Math.cos(a0) * rad, 0.52, Math.sin(a0) * rad],
-          [Math.cos(a1) * rad, 0.52, Math.sin(a1) * rad]
-        );
-      }
-    }
-    for (let i = 0; i < 12; i++) {
-      const a = (i / 12) * Math.PI * 2;
-      pushSeg(
-        [Math.cos(a) * 2.5, 0.52, Math.sin(a) * 2.5],
-        [Math.cos(a) * 11.5, 0.52, Math.sin(a) * 11.5]
-      );
-    }
-
     // CAD wireframe of the upper Orbital Knowledge Sphere
     for (let ring = 0; ring < 3; ring++) {
       const N = 36;
@@ -1508,40 +1646,22 @@ export class TowerScene {
       const maxSpan = Math.max(size.x, size.y, size.z, 0.001);
       pivot.scale.setScalar(HEADSET_MODEL.span / maxSpan);
 
-      this.materials.push(this.realWireMat);
-
-      // Enhance PBR materials under RoomEnvironment & extract copper CAD wireframe edges
+      // Swap the placeholder materials for physically based finishes
       model.traverse((obj: any) => {
         if (!obj?.isMesh) return;
         obj.castShadow = this.high;
         obj.receiveShadow = this.high;
-
-        const mats = Array.isArray(obj.material)
-          ? obj.material
-          : obj.material
-          ? [obj.material]
-          : [];
-        for (const m of mats) {
-          if (!m) continue;
-          m.envMap = this.envTex;
-          if (typeof m.envMapIntensity === "number") {
-            m.envMapIntensity = 1.75;
-          }
-          m.needsUpdate = true;
-        }
-
-        const geo = obj.geometry as THREE.BufferGeometry | undefined;
-        const posCount = geo?.getAttribute("position")?.count ?? 0;
-        if (geo && posCount >= 120 && posCount <= 18000) {
-          try {
-            const edgeGeo = this.geo(new THREE.EdgesGeometry(geo, 30));
-            const wireSeg = new THREE.LineSegments(edgeGeo, this.realWireMat);
-            wireSeg.renderOrder = 2;
-            obj.add(wireSeg);
-          } catch {
-            // Skip edge extraction on non-manifold sub-meshes
-          }
-        }
+        const finish = HEADSET_FINISH[obj.material?.name];
+        obj.material = this.mat(
+          new THREE.MeshPhysicalMaterial({
+            color: "#d8d8d4",
+            roughness: 0.5,
+            metalness: 0,
+            ...finish,
+            envMap: this.envTex,
+            envMapIntensity: 1.1,
+          })
+        );
       });
 
       // Scroll-driven exploded -> assembled animation. Each part drifts out
@@ -1554,10 +1674,12 @@ export class TowerScene {
       );
       model.traverse((obj: any) => {
         if (!obj?.isMesh || !obj.parent) return;
-        const c = new THREE.Box3()
-          .setFromObject(obj)
-          .getCenter(new THREE.Vector3())
-          .sub(centreWorld);
+        const partBox = new THREE.Box3().setFromObject(obj);
+        // Small trims (buttons, sensors) stay attached; floating alone they
+        // read as stray fragments rather than an assembly.
+        const partSpan = partBox.getSize(new THREE.Vector3()).length();
+        if (partSpan < maxSpan * 0.08) return;
+        const c = partBox.getCenter(new THREE.Vector3()).sub(centreWorld);
         parts.push({ node: obj, dir: c });
       });
       const reach = Math.max(...parts.map((p) => p.dir.length()), 0.001);
@@ -1590,6 +1712,7 @@ export class TowerScene {
 
       this.realHeadsetRoot.add(pivot);
       this.realHeadsetLoaded = true;
+      this.contactShadow.visible = true;
 
       this.apply(0);
       this.renderer.shadowMap.needsUpdate = true;
@@ -1801,10 +1924,6 @@ export class TowerScene {
     this.lineMat.opacity = this.realHeadsetLoaded
       ? baseWireOpacity * 0.28
       : baseWireOpacity;
-    this.realWireMat.opacity =
-      easeInOutCubic(this.intro) *
-      lerp(0.68, 0.24, pStruct) *
-      lerp(1, 0.12, smoothstep01(pFin));
 
     this.boundaryMat.opacity =
       0.75 * easeOutCubic(clamp01(effectiveBuild * 4));
