@@ -305,6 +305,10 @@ declare global {
 
 type ViewerStatus = "idle" | "loading" | "ready" | "error";
 const MODEL_VIEWER_SRC = "/vendor/model-viewer.min.js";
+// The heaviest meshes are meshopt-compressed (EXT_meshopt_compression);
+// model-viewer only decodes them when told where the decoder lives. Served
+// from our own origin rather than a CDN.
+const MESHOPT_DECODER_SRC = "/vendor/meshopt_decoder.js";
 
 function LazyModelPreview({
   file,
@@ -395,6 +399,11 @@ export function MeiporulARPage() {
       return;
     }
     setViewerStatus("loading");
+    // model-viewer reads this global config when its element class registers
+    (window as any).ModelViewerElement = {
+      ...((window as any).ModelViewerElement ?? {}),
+      meshoptDecoderLocation: MESHOPT_DECODER_SRC,
+    };
     const script = document.createElement("script");
     script.type = "module";
     script.src = MODEL_VIEWER_SRC;
