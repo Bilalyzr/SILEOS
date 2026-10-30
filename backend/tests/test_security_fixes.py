@@ -449,7 +449,11 @@ def test_certificate_view_escapes_xss_display_name(
     db.commit()
     cert = _make_certificate(db, instructor, student, course)
 
-    r = client.get(f"/api/v1/certificates/view/{cert.id}")
+    # /view requires the certificate's hash (anti-enumeration gate).
+    r = client.get(
+        f"/api/v1/certificates/view/{cert.id}",
+        params={"token": cert.certificate_hash},
+    )
     assert r.status_code == 200, r.text
     html = r.text
 
@@ -457,6 +461,20 @@ def test_certificate_view_escapes_xss_display_name(
     assert ESCAPED_NAME in html  # escaped form present
     assert "<script>alert(1)</script>" not in html
     assert "&lt;script&gt;alert(1)&lt;/script&gt; Course" in html
+
+
+def test_certificate_view_requires_hash(client, db, make_user, xss_template):
+    instructor = make_user(role="instructor", email="instructor@example.com")
+    student = make_user(email="student@example.com")
+    course = _make_course(db, instructor)
+    cert = _make_certificate(db, instructor, student, course)
+
+    # A bare sequential id (or a wrong hash) must not reveal the certificate.
+    assert client.get(f"/api/v1/certificates/view/{cert.id}").status_code == 404
+    r = client.get(
+        f"/api/v1/certificates/view/{cert.id}", params={"token": "0" * 32}
+    )
+    assert r.status_code == 404
 
 
 def test_certificate_verify_page_escapes_xss_display_name(
@@ -487,7 +505,11 @@ def test_instructor_name_is_escaped_too(client, db, make_user, xss_template):
     db.commit()
     cert = _make_certificate(db, instructor, student, course)
 
-    r = client.get(f"/api/v1/certificates/view/{cert.id}")
+    # /view requires the certificate's hash (anti-enumeration gate).
+    r = client.get(
+        f"/api/v1/certificates/view/{cert.id}",
+        params={"token": cert.certificate_hash},
+    )
     assert r.status_code == 200, r.text
     assert XSS_NAME not in r.text
     assert r.text.count(ESCAPED_NAME) >= 2  # student + instructor slots
