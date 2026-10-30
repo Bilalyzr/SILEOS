@@ -134,6 +134,19 @@ export const STAGE_RANGES: Record<string, [number, number]> = {
 
 const COPPER_COLOR = new THREE.Color("#ff9b54");
 
+// Hero headset: Meta Quest 3S (from github.com/CourseDesignUK/Quest3s, with
+// stray controller fragments stripped). Its faceplate already faces +Z, so
+// rotation stays zero; span is its longest side (front to back) in scene
+// units; explode is how far parts drift apart in the hero, as a share of
+// that span.
+const HEADSET_MODEL = {
+  url: "/models/ar/meta-quest-3s.glb",
+  hideNodes: [] as string[],
+  rotation: [0, 0, 0] as [number, number, number],
+  span: 10.4,
+  explode: 0.16,
+};
+
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const rangeProgress = (v: number, [a, b]: [number, number]) =>
   clamp01((v - a) / (b - a));
@@ -462,12 +475,6 @@ export class TowerScene {
 
   // Articulated 3D groups for the AR/VR Learning Glass & Spatial Rig
   rigRoot = new THREE.Group();
-  glassesGroup = new THREE.Group();
-  leftLensGroup = new THREE.Group();
-  rightLensGroup = new THREE.Group();
-  leftTempleGroup = new THREE.Group();
-  rightTempleGroup = new THREE.Group();
-  visorShield!: THREE.Mesh;
 
   // Real 3D GLB AR/VR Headset & Real Meiporul AR Mathematical Model
   realHeadsetRoot = new THREE.Group();
@@ -484,7 +491,6 @@ export class TowerScene {
     t0: number;
     t1: number;
   }[] = [];
-  proceduralGlassesBatches: AnimatedBatch[] = [];
 
   // Holographic Learning Suite (Stage 04 & 05)
   holoGroup = new THREE.Group();
@@ -1040,40 +1046,6 @@ export class TowerScene {
       envMap: env,
       envMapIntensity: 1.4,
     });
-    const waveguideLensMat = stdMat({
-      color: "#38bdf8",
-      emissive: "#0c4a6e",
-      emissiveIntensity: 0.45,
-      metalness: 0.85,
-      roughness: 0.06,
-      transparent: true,
-      opacity: 0.82,
-      envMap: env,
-      envMapIntensity: 1.8,
-    });
-    const lensReticleMat = this.mat(
-      new THREE.MeshBasicMaterial({
-        map: tex.lensHud,
-        transparent: true,
-        opacity: 0.9,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-      })
-    );
-    const visorGlassMat = stdMat({
-      color: "#16202a",
-      metalness: 0.9,
-      roughness: 0.05,
-      transparent: true,
-      opacity: 0.58,
-      envMap: env,
-      envMapIntensity: 2.0,
-    });
-    const cushionMat = stdMat({
-      color: "#34383e",
-      roughness: 0.88,
-      metalness: 0.05,
-    });
     const pedestalMat = stdMat({
       color: "#181b1f",
       roughness: 0.78,
@@ -1204,39 +1176,12 @@ export class TowerScene {
     }
 
     this.scene.add(this.rigRoot);
-    this.rigRoot.add(this.glassesGroup);
-    this.glassesGroup.position.set(0, 3.2, 0.4);
-    // Product decision: only the real Apple Vision Pro GLB may ever render.
-    // The procedural fallback glasses stay mounted (scroll choreography and
-    // batches still reference their groups) but are invisible from birth —
-    // including while the GLB fetches and if that fetch ever fails.
-    this.glassesGroup.visible = false;
-    this.realHeadsetRoot.position.set(0, 3.4, 0.2);
+    // Product decision: the only headset on stage is the real Meta Quest 3S
+    // GLB. Nothing procedural stands in while it fetches or if it fails.
+    this.realHeadsetRoot.position.set(0, 5.3, 0.2);
     this.rigRoot.add(this.realHeadsetRoot);
 
-    // ========================================================================
-    // STAGE 01 & 02: AR/VR GLASSES CHASSIS, BROW BAR, BRIDGE & OPTICAL RIMS
-    // ========================================================================
-    const frameBatch = this.batch(unit, titaniumDark, "fly", 0.09);
-    const limestoneBatch = this.batch(unit, limestoneBody, "fly", 0.09);
-    const copperBatch = this.batch(unit, brushedCopper, "fly", 0.08);
-    const cushionBatch = this.batch(unit, cushionMat, "fly", 0.08);
-    const sensorBatch = this.batch(
-      this.geo(new THREE.SphereGeometry(1, 12, 10)),
-      this.cyanGlowMat,
-      "xyz",
-      0.06,
-      { cast: false, receive: false }
-    );
-    this.proceduralGlassesBatches.push(
-      frameBatch,
-      limestoneBatch,
-      copperBatch,
-      cushionBatch,
-      sensorBatch
-    );
-
-    // Central optical pedestal stand supporting the glasses during calibration
+    // Central optical pedestal stand supporting the headset during calibration
     const standBatch = this.batch(unit, titaniumDark, "y", 0.12);
     standBatch.add({
       x: 0,
@@ -1258,277 +1203,6 @@ export class TowerScene {
       t0: 0.05,
       t1: 0.85,
     });
-
-    // Sculpted upper brow bar (spans x: -4.4 to +4.4 at y: +1.15 relative to glasses center 3.2 -> y=4.35)
-    const gy = 3.2;
-    const gz = 0.4;
-
-    // Main Titanium & Limestone Brow-Bar segments
-    limestoneBatch.add({
-      x: 0,
-      y: gy + 1.18,
-      z: gz + 0.55,
-      sx: 8.6,
-      sy: 0.32,
-      sz: 0.62,
-      t0: 0.01,
-      fromY: 1.8,
-    });
-    copperBatch.add({
-      x: 0,
-      y: gy + 1.36,
-      z: gz + 0.58,
-      sx: 8.7,
-      sy: 0.07,
-      sz: 0.66,
-      t0: 0.03,
-      fromY: 2.0,
-    });
-    frameBatch.add({
-      x: 0,
-      y: gy + 1.0,
-      z: gz + 0.48,
-      sx: 8.4,
-      sy: 0.16,
-      sz: 0.56,
-      t0: 0.02,
-      fromY: 1.4,
-    });
-
-    // Ergonomic Nose Bridge Saddle
-    copperBatch.add({
-      x: 0,
-      y: gy + 0.25,
-      z: gz + 0.65,
-      sx: 1.15,
-      sy: 0.24,
-      sz: 0.45,
-      t0: 0.05,
-      fromY: -1.2,
-    });
-    frameBatch.add({
-      x: -0.48,
-      y: gy - 0.18,
-      z: gz + 0.58,
-      sx: 0.18,
-      sy: 0.72,
-      sz: 0.36,
-      rz: -0.28,
-      t0: 0.06,
-      fromY: -1.4,
-    });
-    frameBatch.add({
-      x: 0.48,
-      y: gy - 0.18,
-      z: gz + 0.58,
-      sx: 0.18,
-      sy: 0.72,
-      sz: 0.36,
-      rz: 0.28,
-      t0: 0.06,
-      fromY: -1.4,
-    });
-
-    // Left and Right Optical Lens Rims (centered at x = -2.35 and x = +2.35)
-    for (const side of [-1, 1]) {
-      const lx = side * 2.35;
-      // Lower rim
-      frameBatch.add({
-        x: lx,
-        y: gy - 0.88,
-        z: gz + 0.52,
-        sx: 3.3,
-        sy: 0.22,
-        sz: 0.52,
-        t0: 0.08,
-        fromY: -1.8,
-      });
-      copperBatch.add({
-        x: lx,
-        y: gy - 1.01,
-        z: gz + 0.55,
-        sx: 3.1,
-        sy: 0.06,
-        sz: 0.54,
-        t0: 0.1,
-        fromY: -2.0,
-      });
-      // Outer vertical stile
-      limestoneBatch.add({
-        x: side * 4.12,
-        y: gy + 0.12,
-        z: gz + 0.42,
-        sx: 0.36,
-        sy: 2.05,
-        sz: 0.65,
-        t0: 0.09,
-        fromY: 1.5,
-      });
-      // Inner vertical stile near bridge
-      frameBatch.add({
-        x: side * 0.68,
-        y: gy + 0.15,
-        z: gz + 0.54,
-        sx: 0.24,
-        sy: 1.75,
-        sz: 0.48,
-        t0: 0.09,
-        fromY: 1.2,
-      });
-      // Precision Copper Hinge Block
-      copperBatch.add({
-        x: side * 4.42,
-        y: gy + 0.45,
-        z: gz + 0.18,
-        sx: 0.48,
-        sy: 0.62,
-        sz: 0.85,
-        t0: 0.12,
-        fromY: 1.5,
-      });
-      // Forehead & cheek soft cushion pads
-      cushionBatch.add({
-        x: lx,
-        y: gy + 0.95,
-        z: gz + 0.08,
-        sx: 3.1,
-        sy: 0.24,
-        sz: 0.35,
-        t0: 0.14,
-        fromY: 1.0,
-      });
-    }
-
-    // Eye-tracking & LiDAR sensor array along brow and bridge (Stage 02-03)
-    for (const sx of [-3.8, -2.35, -1.1, 0, 1.1, 2.35, 3.8]) {
-      sensorBatch.add({
-        x: sx,
-        y: gy + 1.18,
-        z: gz + 0.88,
-        sx: 0.09,
-        sy: 0.09,
-        sz: 0.09,
-        t0: 0.28 + Math.abs(sx) * 0.01,
-      });
-    }
-
-    // ========================================================================
-    // STAGE 02-03: DUAL WAVEGUIDE LENSES, PANCAKE OPTICS & VISOR SHIELD
-    // ========================================================================
-    const lensCylGeo = this.geo(
-      new THREE.CylinderGeometry(1.45, 1.45, 0.14, 48)
-    );
-    lensCylGeo.rotateX(Math.PI / 2);
-
-    const reticlePlaneGeo = this.geo(new THREE.PlaneGeometry(2.6, 2.6));
-    const ringTorusGeo = this.geo(new THREE.TorusGeometry(1.48, 0.06, 16, 64));
-    const innerRingGeo = this.geo(new THREE.TorusGeometry(1.08, 0.035, 12, 48));
-
-    for (const [side, group] of [
-      [-1, this.leftLensGroup] as const,
-      [1, this.rightLensGroup] as const,
-    ]) {
-      group.position.set(side * 2.35, 0.12, 0.56);
-      this.glassesGroup.add(group);
-
-      const primaryLens = new THREE.Mesh(lensCylGeo, waveguideLensMat);
-      primaryLens.scale.set(1.12, 0.82, 1);
-      group.add(primaryLens);
-
-      const outerCopperBezel = new THREE.Mesh(ringTorusGeo, brushedCopper);
-      outerCopperBezel.scale.set(1.12, 0.82, 1);
-      outerCopperBezel.position.z = 0.06;
-      group.add(outerCopperBezel);
-
-      const innerPancakeRing = new THREE.Mesh(innerRingGeo, warmGold);
-      innerPancakeRing.scale.set(1.12, 0.82, 1);
-      innerPancakeRing.position.z = -0.05;
-      group.add(innerPancakeRing);
-
-      const hudPlane = new THREE.Mesh(reticlePlaneGeo, lensReticleMat);
-      hudPlane.scale.set(1.05, 0.78, 1);
-      hudPlane.position.z = 0.09;
-      group.add(hudPlane);
-    }
-
-    // Wrap-around curved front visor shield
-    const visorGeo = this.geo(
-      new THREE.CylinderGeometry(
-        4.65,
-        4.65,
-        2.15,
-        64,
-        1,
-        true,
-        -Math.PI * 0.34,
-        Math.PI * 0.68
-      )
-    );
-    this.visorShield = new THREE.Mesh(visorGeo, visorGlassMat);
-    this.visorShield.position.set(0, 0.15, -3.55);
-    this.glassesGroup.add(this.visorShield);
-
-    // ========================================================================
-    // STAGE 03: ARTICULATED TEMPLE COMPUTE ARMS (LEFT & RIGHT)
-    // ========================================================================
-    for (const [side, tGroup] of [
-      [-1, this.leftTempleGroup] as const,
-      [1, this.rightTempleGroup] as const,
-    ]) {
-      tGroup.position.set(side * 4.42, 0.45, 0.15);
-      this.glassesGroup.add(tGroup);
-
-      // Main carbon/limestone temple arm extending from z=0 to z=-5.6
-      this.box(limestoneBody, 0, 0, -2.6, 0.26, 0.44, 5.2, tGroup);
-      // Exposed copper neural heat-pipe along outer temple
-      this.box(
-        brushedCopper,
-        side * 0.15,
-        0.04,
-        -2.2,
-        0.06,
-        0.16,
-        4.1,
-        tGroup
-      );
-      // Neural Compute Module pod
-      this.box(titaniumDark, side * 0.08, 0, -1.6, 0.34, 0.54, 1.6, tGroup);
-      // Glowing neural compute status strip
-      this.box(
-        this.litMat,
-        side * 0.26,
-        0.08,
-        -1.6,
-        0.03,
-        0.09,
-        1.2,
-        tGroup,
-        false
-      );
-      // Spatial Audio directional speaker pod
-      this.box(titaniumDark, -side * 0.08, -0.26, -3.6, 0.28, 0.32, 0.95, tGroup);
-      this.box(brushedCopper, -side * 0.23, -0.26, -3.6, 0.04, 0.2, 0.7, tGroup);
-      // Curved ergonomic ear tip
-      const tip = this.box(
-        cushionMat,
-        0,
-        -0.38,
-        -5.45,
-        0.24,
-        0.34,
-        1.4,
-        tGroup
-      );
-      tip.rotation.x = 0.38;
-
-      // Beacon status LED on temple hinge
-      const led = new THREE.Mesh(
-        this.geo(new THREE.SphereGeometry(0.09, 10, 8)),
-        this.beaconMat
-      );
-      led.position.set(side * 0.22, 0.22, -0.2);
-      tGroup.add(led);
-    }
 
     // ========================================================================
     // STAGE 02-03: TWIN PRECISION OPTICAL CALIBRATION GANTRIES
@@ -1717,40 +1391,6 @@ export class TowerScene {
       );
     }
 
-    // CAD wireframe of the AR/VR Glasses front frame, lenses, temples, and projection frustum
-    const wy = 3.2;
-    const wz = 0.95;
-    // Brow & bottom frame lines
-    pushSeg([-4.4, wy + 1.25, wz], [4.4, wy + 1.25, wz]);
-    pushSeg([-4.4, wy + 1.0, wz], [4.4, wy + 1.0, wz]);
-    // Left & right lens octagons in CAD wireframe
-    for (const side of [-1, 1]) {
-      const cx = side * 2.35;
-      const cy = wy + 0.12;
-      const rx = 1.65;
-      const ry = 1.15;
-      const N = 24;
-      for (let i = 0; i < N; i++) {
-        const a0 = (i / N) * Math.PI * 2;
-        const a1 = ((i + 1) / N) * Math.PI * 2;
-        pushSeg(
-          [cx + Math.cos(a0) * rx, cy + Math.sin(a0) * ry, wz],
-          [cx + Math.cos(a1) * rx, cy + Math.sin(a1) * ry, wz]
-        );
-        pushSeg(
-          [cx + Math.cos(a0) * rx * 0.68, cy + Math.sin(a0) * ry * 0.68, wz],
-          [cx + Math.cos(a1) * rx * 0.68, cy + Math.sin(a1) * ry * 0.68, wz]
-        );
-      }
-      // Temple wireframe lines
-      pushSeg([side * 4.4, wy + 0.65, wz], [side * 4.4, wy + 0.65, wz - 5.4]);
-      pushSeg([side * 4.4, wy + 0.25, wz], [side * 4.4, wy + 0.25, wz - 5.4]);
-      // Projection frustum rays up to hologram sphere
-      pushSeg([cx - 1.1, cy, wz], [-2.2, 6.3, 0.6]);
-      pushSeg([cx + 1.1, cy, wz], [2.2, 6.3, 0.6]);
-      pushSeg([cx, cy + 0.9, wz], [0, 7.8, 0.6]);
-    }
-
     // CAD wireframe of the upper Orbital Knowledge Sphere
     for (let ring = 0; ring < 3; ring++) {
       const N = 36;
@@ -1836,7 +1476,7 @@ export class TowerScene {
 
   private async loadRealGlbModels() {
     try {
-      const res = await fetch("/models/ar/apple-vision-pro.glb");
+      const res = await fetch(HEADSET_MODEL.url);
       if (!res.ok || this.disposed) return;
       const buf = await res.arrayBuffer();
       if (this.disposed) return;
@@ -1845,6 +1485,10 @@ export class TowerScene {
       if (this.disposed) return;
 
       const model = gltf.scene;
+      for (const name of HEADSET_MODEL.hideNodes) {
+        const node = model.getObjectByName(name);
+        if (node) node.removeFromParent();
+      }
       model.updateMatrixWorld(true);
 
       const box = new THREE.Box3().setFromObject(model);
@@ -1855,11 +1499,14 @@ export class TowerScene {
       model.position.sub(center);
       pivot.add(model);
 
-      // Orient front laminated glass visor (+X in GLB world) toward +Z (viewer)
-      pivot.rotation.y = -Math.PI / 2;
+      // Turn the front faceplate toward the viewer (+Z)
+      pivot.rotation.set(
+        HEADSET_MODEL.rotation[0],
+        HEADSET_MODEL.rotation[1],
+        HEADSET_MODEL.rotation[2]
+      );
       const maxSpan = Math.max(size.x, size.y, size.z, 0.001);
-      const targetSpan = 10.6;
-      pivot.scale.setScalar(targetSpan / maxSpan);
+      pivot.scale.setScalar(HEADSET_MODEL.span / maxSpan);
 
       this.materials.push(this.realWireMat);
 
@@ -1897,63 +1544,52 @@ export class TowerScene {
         }
       });
 
-      // Bind real engineering sub-assemblies inside apple-vision-pro.glb for scroll-driven exploded -> assembled animation
-      // In QYiyPSizLHGUrqw local coordinates: +X = Front Visor, -X = Rear Solo Band, ±Y = Right/Left, -Z = Top
-      const explodedSpec: {
-        name: string;
-        dx: number;
-        dy: number;
-        dz: number;
-        t0: number;
-        t1: number;
-      }[] = [
-        // Curved Laminated Front Glass Shield & Bezel
-        { name: "jjJIZDrSILBzxpu", dx: 5.2, dy: 0, dz: 0, t0: 0.22, t1: 0.50 },
-        { name: "sAgjMlMZDvwGuaG", dx: 4.0, dy: 0, dz: 0, t0: 0.20, t1: 0.48 },
-        { name: "ueCvCVRqPVTUdjQ", dx: 3.2, dy: 0, dz: 0, t0: 0.18, t1: 0.46 },
-        // Digital Crown & Top Capture Button
-        { name: "sdZTCdioMLSEJyx", dx: 1.6, dy: 0, dz: -2.6, t0: 0.16, t1: 0.40 },
-        // Machined Aluminum Unibody Frame
-        { name: "ebhwPuFAweGgfLf", dx: 1.1, dy: 0, dz: 0, t0: 0.06, t1: 0.26 },
-        // Left Pancake Optical Lens Barrel & Eye-Tracking Ring
-        { name: "cqDpjysIDbeaHGW", dx: -1.8, dy: -2.2, dz: 0, t0: 0.10, t1: 0.34 },
-        { name: "zpoQgybStAEjzdB", dx: -2.4, dy: -2.6, dz: 0, t0: 0.12, t1: 0.36 },
-        // Right Pancake Optical Lens Barrel & Eye-Tracking Ring
-        { name: "dQauJkamRIzUDkH", dx: -1.8, dy: 2.2, dz: 0, t0: 0.10, t1: 0.34 },
-        { name: "SWQhQzMpkCoHddc", dx: -2.4, dy: 2.6, dz: 0, t0: 0.12, t1: 0.36 },
-        // Internal Optical Shroud
-        { name: "mVSPBjPnCvaDnYB", dx: -1.4, dy: 0, dz: 0, t0: 0.12, t1: 0.34 },
-        // Modular Light Seal & Face Cushion
-        { name: "ILTUsvoAEbTklIF", dx: -3.6, dy: 0, dz: 0, t0: 0.20, t1: 0.44 },
-        // Spatial Audio Straps & Side Fit Dial
-        { name: "oUqvyVjpvXutbGz", dx: -5.2, dy: 0, dz: 0, t0: 0.26, t1: 0.50 },
-        { name: "hXmiHnglcDqNZLA", dx: -5.8, dy: -1.6, dz: 0, t0: 0.28, t1: 0.52 },
-        // 3D Knitted Solo Loop Headband
-        { name: "nIENOhThDsFhBdC", dx: -8.2, dy: 0, dz: 0, t0: 0.30, t1: 0.54 },
-      ];
-
+      // Scroll-driven exploded -> assembled animation. Each part drifts out
+      // from the headset centre along its own direction, then locks home
+      // across Stages 01..03 (outer parts later, so the shell closes last).
       this.realSubAssemblies = [];
-      for (const spec of explodedSpec) {
-        const subNode = model.getObjectByName(spec.name);
-        if (subNode) {
-          this.realSubAssemblies.push({
-            node: subNode,
-            basePos: subNode.position.clone(),
-            explodeOffset: new THREE.Vector3(spec.dx, spec.dy, spec.dz),
-            t0: spec.t0,
-            t1: spec.t1,
-          });
-        }
+      const parts: { node: THREE.Object3D; dir: THREE.Vector3 }[] = [];
+      const centreWorld = new THREE.Box3().setFromObject(model).getCenter(
+        new THREE.Vector3()
+      );
+      model.traverse((obj: any) => {
+        if (!obj?.isMesh || !obj.parent) return;
+        const c = new THREE.Box3()
+          .setFromObject(obj)
+          .getCenter(new THREE.Vector3())
+          .sub(centreWorld);
+        parts.push({ node: obj, dir: c });
+      });
+      const reach = Math.max(...parts.map((p) => p.dir.length()), 0.001);
+      for (const part of parts) {
+        const k = part.dir.length() / reach;
+        const push =
+          part.dir.length() < 1e-6
+            ? new THREE.Vector3(0, 0, 0)
+            : part.dir
+                .clone()
+                .setLength(HEADSET_MODEL.explode * maxSpan * (0.35 + k));
+        // Express the push in the parent's local space so nested transforms stay correct
+        const inv = new THREE.Matrix4()
+          .copy(part.node.parent!.matrixWorld)
+          .invert();
+        const offset = centreWorld
+          .clone()
+          .add(push)
+          .applyMatrix4(inv)
+          .sub(centreWorld.clone().applyMatrix4(inv));
+        const t0 = 0.06 + k * 0.22;
+        this.realSubAssemblies.push({
+          node: part.node,
+          basePos: part.node.position.clone(),
+          explodeOffset: offset,
+          t0,
+          t1: t0 + 0.24,
+        });
       }
 
       this.realHeadsetRoot.add(pivot);
       this.realHeadsetLoaded = true;
-
-      // Hide procedural box-built glasses once real 3D GLB AR/VR Headset is mounted
-      this.glassesGroup.visible = false;
-      for (const b of this.proceduralGlassesBatches) {
-        if (b.mesh) b.mesh.visible = false;
-      }
 
       this.apply(0);
       this.renderer.shadowMap.needsUpdate = true;
@@ -2173,25 +1809,19 @@ export class TowerScene {
     this.boundaryMat.opacity =
       0.75 * easeOutCubic(clamp01(effectiveBuild * 4));
 
-    // Update all instanced batches (turntable always updates; procedural glasses hidden once real GLB loads)
+    // Update all instanced batches (turntable, pedestal, gantries)
     for (const b of this.batches) {
       b.update(effectiveBuild);
     }
-    if (this.realHeadsetLoaded) {
-      for (const b of this.proceduralGlassesBatches) {
-        if (b.mesh) b.mesh.visible = false;
-      }
-      this.glassesGroup.visible = false;
-    }
 
-    // Gentle floating levitation of the AR/VR glasses / Real 3D Headset
+    // Gentle floating levitation of the Quest 3S headset
     const floatOffset = this.opts.reducedMotion
       ? 0
       : Math.sin(clk * 1.3) * 0.14;
 
     if (this.realHeadsetLoaded) {
       this.realHeadsetRoot.visible = true;
-      this.realHeadsetRoot.position.y = 3.45 + floatOffset;
+      this.realHeadsetRoot.position.y = 5.3 + floatOffset;
       this.realHeadsetRoot.rotation.z = this.opts.reducedMotion
         ? 0
         : Math.sin(clk * 0.7) * 0.022;
@@ -2216,48 +1846,7 @@ export class TowerScene {
           .addScaledVector(sub.explodeOffset, explodeFactor);
       }
     } else {
-      // Fallback procedural assembly while GLB is fetching
-      const lensProg = easeOutCubic(
-        rangeProgress(effectiveBuild, [0.12, 0.34])
-      );
-      this.leftLensGroup.visible = lensProg > 0.01;
-      this.rightLensGroup.visible = lensProg > 0.01;
-      const lensScale = Math.max(0.001, lensProg);
-      this.leftLensGroup.scale.setScalar(lensScale);
-      this.rightLensGroup.scale.setScalar(lensScale);
-      this.leftLensGroup.position.z = 0.56 + (1 - lensProg) * 1.6;
-      this.rightLensGroup.position.z = 0.56 + (1 - lensProg) * 1.6;
-
-      const visorProg = easeOutCubic(
-        rangeProgress(effectiveBuild, [0.18, 0.42])
-      );
-      this.visorShield.visible = visorProg > 0.01;
-      this.visorShield.scale.set(
-        Math.max(0.001, visorProg),
-        Math.max(0.001, visorProg),
-        Math.max(0.001, visorProg)
-      );
-      this.visorShield.position.y = 0.15 + (1 - visorProg) * 1.2;
-
-      const templeProg = easeInOutCubic(
-        rangeProgress(effectiveBuild, [0.28, 0.52])
-      );
-      this.leftTempleGroup.visible = templeProg > 0.01;
-      this.rightTempleGroup.visible = templeProg > 0.01;
-      const templeScale = Math.max(
-        0.001,
-        smoothstep01(clamp01(templeProg * 1.4))
-      );
-      this.leftTempleGroup.scale.setScalar(templeScale);
-      this.rightTempleGroup.scale.setScalar(templeScale);
-      const foldAngle = (1 - templeProg) * 1.25;
-      this.leftTempleGroup.rotation.y = foldAngle;
-      this.rightTempleGroup.rotation.y = -foldAngle;
-
-      this.glassesGroup.position.y = 3.2 + floatOffset;
-      this.glassesGroup.rotation.z = this.opts.reducedMotion
-        ? 0
-        : Math.sin(clk * 0.7) * 0.025;
+      this.realHeadsetRoot.visible = false;
     }
 
     // 4. Precision Calibration Gantries (active during Stages 02-04, retract in Stage 05)
