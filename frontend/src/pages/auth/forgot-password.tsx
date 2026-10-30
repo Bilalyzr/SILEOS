@@ -3,15 +3,15 @@ import { Link } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { Mail, ArrowLeft } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { motion } from "framer-motion"
+import { Mail, ArrowLeft, MailCheck } from "lucide-react"
+import { GatewayField } from "@/components/auth/gateway/GatewayField"
+import { MagneticButton } from "@/components/auth/gateway/GatewayControls"
 import { authAPI } from "@/api/auth"
 import toast from "react-hot-toast"
 
 const forgotPasswordSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().email("Enter the email you signed up with, like name@example.com."),
 })
 
 type ForgotPasswordForm = z.infer<typeof forgotPasswordSchema>
@@ -42,82 +42,68 @@ export const ForgotPasswordPage = () => {
 
   if (isSubmitted) {
     return (
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="w-16 h-16 mx-auto mb-4 bg-success-100 rounded-full flex items-center justify-center">
-            <Mail className="w-8 h-8 text-success-600" />
-          </div>
-          <CardTitle className="text-2xl font-bold">Check Your Email</CardTitle>
-          <CardDescription>
-            We've sent password reset instructions to {email}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="text-center space-y-4">
-            <p className="text-sm text-neutral-600">
-              Didn't receive the email? Check your spam folder or
-            </p>
-            <Button
-              variant="outline"
-              onClick={() => setIsSubmitted(false)}
-              className="w-full"
-            >
-              Try Again
-            </Button>
-          </div>
-          <div className="text-center">
-            <Link
-              to="/login"
-              className="inline-flex items-center text-primary-600 hover:text-primary-700 text-sm font-medium"
-            >
-              <ArrowLeft className="w-4 h-4 mr-1" />
-              Back to Sign In
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
+      <motion.div
+        className="w-full py-1 text-center"
+        initial={{ opacity: 0, scale: 0.97 }}
+        animate={{ opacity: 1, scale: 1 }}
+        role="status"
+      >
+        <motion.div
+          className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-[rgba(45,212,191,0.12)] text-[#2dd4bf] shadow-[0_0_0_1px_rgba(45,212,191,0.3)_inset,0_0_40px_rgba(45,212,191,0.25)]"
+          initial={{ rotate: -12, scale: 0.6 }}
+          animate={{ rotate: 0, scale: 1 }}
+          transition={{ type: "spring", stiffness: 300, damping: 16 }}
+        >
+          <MailCheck className="h-8 w-8" aria-hidden="true" />
+        </motion.div>
+        <div className="ag-head mt-5">
+          <h2>Check your inbox</h2>
+          <p>
+            If an account exists for <strong className="text-white">{email}</strong>, a reset link is on its way.
+          </p>
+        </div>
+        <p className="ag-foot">Nothing yet? Check spam, or send it again.</p>
+        <div className="mt-3 flex flex-wrap items-center justify-center gap-3">
+          <button type="button" className="ag-ghost" onClick={() => setIsSubmitted(false)}>
+            Try again
+          </button>
+          <Link to="/login" className="ag-link gap-1.5">
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+            Back to sign in
+          </Link>
+        </div>
+      </motion.div>
     )
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center">Forgot Password?</CardTitle>
-        <CardDescription className="text-center">
-          Enter your email address and we'll send you instructions to reset your password
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <Input
-            {...register("email")}
-            type="email"
-            placeholder="Enter your email address"
-            leftIcon={<Mail className="w-4 h-4" />}
-            error={errors.email?.message}
-            disabled={isSubmitting}
-          />
-
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={isSubmitting}
-            loading={isSubmitting}
-          >
-            Send Reset Instructions
-          </Button>
-        </form>
-
-        <div className="mt-6 text-center">
-          <Link
-            to="/login"
-            className="inline-flex items-center text-primary-600 hover:text-primary-700 text-sm font-medium"
-          >
-            <ArrowLeft className="w-4 h-4 mr-1" />
-            Back to Sign In
-          </Link>
-        </div>
-      </CardContent>
-    </Card>
+    <div className="w-full">
+      <div className="ag-head">
+        <h2>Reset your password</h2>
+        <p>Enter your email and we'll send you a secure link to choose a new one.</p>
+      </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="ag-form" noValidate>
+        <GatewayField
+          {...register("email")}
+          id="forgot_email"
+          label="Email address"
+          type="email"
+          autoComplete="email"
+          inputMode="email"
+          icon={<Mail className="h-[18px] w-[18px]" />}
+          error={errors.email?.message}
+          disabled={isSubmitting}
+        />
+        <MagneticButton type="submit" disabled={isSubmitting} loading={isSubmitting} loadingLabel="Sending link…">
+          Send reset link
+        </MagneticButton>
+      </form>
+      <div className="ag-foot">
+        <Link to="/login" className="ag-link gap-1.5">
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+          Back to sign in
+        </Link>
+      </div>
+    </div>
   )
 }

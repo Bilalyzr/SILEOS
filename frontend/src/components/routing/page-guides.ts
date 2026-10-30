@@ -13,6 +13,8 @@ type Rule = [RegExp, string, string, [string, string, string], string];
 export function needsPageBack(pathname: string, _search = ""): boolean {
   const path = pathname.replace(/\/$/, "") || "/";
   if (path === "/") return false;
+  // The auth gateway carries its own "Back to site" control
+  if (/^\/(login|register|forgot-password|reset-password|verify-email)$/.test(path)) return false;
   if (/^\/labs\/[^/]+$/.test(path) || /^\/courses\/[^/]+\/(learn|lessons)(\/|$)/.test(path) || /^\/(instructor|admin)\/courses\/[^/]+\/(edit|quiz-builder|assignment-builder)(\/|$)/.test(path)) return false;
   return true;
 }

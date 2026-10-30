@@ -1,23 +1,34 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { User, GraduationCap, Loader2, CheckCircle } from 'lucide-react'
-import { cn } from '@/utils/cn'
+import { AnimatePresence, motion } from 'framer-motion'
+import { User, GraduationCap, Mail, Lock, Briefcase, MailCheck, Hourglass } from 'lucide-react'
 import { api } from '@/api/axios'
 import toast from 'react-hot-toast'
 import { useGoogleOAuth } from '@/hooks/use-google-oauth'
 import { RoleSelectionModal } from '@/components/auth/RoleSelectionModal'
 import { isFirebaseConfigured } from '@/lib/firebase'
+import { GatewayField } from '@/components/auth/gateway/GatewayField'
+import { GoogleMark, MagneticButton, PasswordField, ProviderCard } from '@/components/auth/gateway/GatewayControls'
+import { useGateway } from '@/components/auth/gateway/GatewayContext'
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+
+type FieldErrors = Partial<Record<'firstName' | 'lastName' | 'email' | 'password' | 'confirmPassword' | 'designation' | 'bio' | 'agreeToTerms', string>>
+
+const ROLES = [
+  { id: 'student' as const, title: 'Student', note: 'Learn from experts', Icon: User },
+  { id: 'instructor' as const, title: 'Instructor', note: 'Teach and earn', Icon: GraduationCap },
+]
 
 export const UnifiedRegisterForm = () => {
   const navigate = useNavigate()
+  const { reportFocus } = useGateway()
   const [userType, setUserType] = useState<'student' | 'instructor'>('student')
   const [loading, setLoading] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const { signInWithGoogle, isLoading: isGoogleLoading, pendingGoogleUser } = useGoogleOAuth()
   const [completingGoogleAuth, setCompletingGoogleAuth] = useState(false)
+  const [errors, setErrors] = useState<FieldErrors>({})
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -30,28 +41,40 @@ export const UnifiedRegisterForm = () => {
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const name = e.target.name as keyof FieldErrors
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     })
+    // Guidance clears as soon as the visitor starts fixing the field
+    if (errors[name]) setErrors({ ...errors, [name]: undefined })
+  }
+
+  const validate = (): FieldErrors => {
+    const next: FieldErrors = {}
+    if (!formData.firstName.trim()) next.firstName = 'Add your first name.'
+    if (!formData.lastName.trim()) next.lastName = 'Add your last name.'
+    if (!EMAIL_RE.test(formData.email)) next.email = 'Enter an email you can open, like name@example.com.'
+    if (formData.password.length < 8) next.password = 'Use at least 8 characters.'
+    if (formData.password !== formData.confirmPassword) next.confirmPassword = "These passwords don't match yet."
+    if (userType === 'instructor') {
+      if (!formData.designation.trim()) next.designation = 'Tell learners your current role.'
+      if (!formData.bio.trim()) next.bio = 'A short bio helps our team review your application.'
+    }
+    if (!formData.agreeToTerms) next.agreeToTerms = 'Please accept the Terms and Privacy Policy to continue.'
+    return next
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Validation
-    if (formData.password !== formData.confirmPassword) {
-      toast.error('Passwords do not match')
-      return
-    }
-
-    if (!formData.agreeToTerms) {
-      toast.error('Please agree to the Terms of Service and Privacy Policy')
-      return
-    }
-
-    if (userType === 'instructor' && (!formData.designation || !formData.bio)) {
-      toast.error('Please fill in your designation and bio')
+    const found = validate()
+    setErrors(found)
+    if (Object.keys(found).length > 0) {
+      // Take the visitor straight to the first thing to fix
+      const first = Object.keys(found)[0]
+      const el = document.getElementById(first === 'agreeToTerms' ? 'terms' : first)
+      el?.focus()
       return
     }
 
@@ -101,7 +124,13 @@ export const UnifiedRegisterForm = () => {
           .filter(Boolean)
           .join(', ') || message
       }
-      toast.error(message)
+      // An address that is already registered is a field problem with a
+      // clear recovery path, not a generic failure.
+      if (/already|exists|registered/i.test(message) && /email/i.test(message)) {
+        setErrors({ email: 'This email already has an account. Sign in instead, or reset your password.' })
+      } else {
+        toast.error(message)
+      }
     } finally {
       setLoading(false)
     }
@@ -166,254 +195,243 @@ export const UnifiedRegisterForm = () => {
 
   if (showSuccess) {
     return (
-      <Card className="w-full max-w-md">
-        <CardContent className="pt-6">
-          <div className="text-center space-y-4">
-            <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-              <CheckCircle className="w-10 h-10 text-green-600" />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900">Registration Successful!</h2>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p className="text-sm text-blue-900">
-                <strong>Check your email!</strong>
-              </p>
-              <p className="text-sm text-blue-800 mt-2">
-                We've sent a verification link to <strong>{formData.email}</strong>
-              </p>
-              <p className="text-xs text-blue-700 mt-2">
-                Please verify your email address to complete registration.
-              </p>
-            </div>
-            {userType === 'instructor' && (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                <p className="text-sm text-yellow-900">
-                  ⏳ <strong>Pending Approval</strong>
-                </p>
-                <p className="text-xs text-yellow-800 mt-1">
-                  Your instructor account will be reviewed by our admin team.
-                </p>
-              </div>
-            )}
-            <p className="text-sm text-gray-600">
-              Redirecting to login page...
-            </p>
+      <motion.div
+        className="w-full py-2 text-center"
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4 }}
+        role="status"
+      >
+        <motion.div
+          className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-[rgba(45,212,191,0.12)] text-[#2dd4bf] shadow-[0_0_0_1px_rgba(45,212,191,0.3)_inset,0_0_40px_rgba(45,212,191,0.25)]"
+          initial={{ rotate: -12, scale: 0.6 }}
+          animate={{ rotate: 0, scale: 1 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 16, delay: 0.1 }}
+        >
+          <MailCheck className="h-8 w-8" aria-hidden="true" />
+        </motion.div>
+        <div className="ag-head mt-5">
+          <h2>You're in. Check your inbox.</h2>
+          <p>
+            We sent a verification link to <strong className="text-white">{formData.email || 'your email'}</strong>.
+            Open it to activate your account.
+          </p>
+        </div>
+        {userType === 'instructor' && (
+          <div className="ag-callout text-left">
+            <h3 className="flex items-center gap-2">
+              <Hourglass className="h-4 w-4 text-[#fdba74]" aria-hidden="true" />
+              Instructor review
+            </h3>
+            <p>Our team reviews every instructor account before it goes live. We'll email you once it's approved.</p>
           </div>
-        </CardContent>
-      </Card>
+        )}
+        <p className="ag-foot">Taking you to sign in…</p>
+      </motion.div>
     )
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader className="text-center">
-        <CardTitle className="text-3xl font-bold">Create your account</CardTitle>
-        <CardDescription>Join thousands of learners and start your journey today</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* User Type Selection */}
-          <div>
-            <label className="text-sm font-medium mb-3 block">I want to join as</label>
-            <div className="grid grid-cols-2 gap-3">
+    <div className="w-full">
+      <div className="ag-head">
+        <h2>Create your account</h2>
+        <p>Free to join. Choose how you'll use Sasha Infinity.</p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="ag-form" noValidate>
+        <div className="ag-roles" role="radiogroup" aria-label="I want to join as">
+          {ROLES.map(({ id, title, note, Icon }) => {
+            const active = userType === id
+            return (
               <button
+                key={id}
                 type="button"
-                onClick={() => setUserType('student')}
-                className={cn(
-                  "p-4 border-2 rounded-lg transition-all text-left",
-                  userType === 'student'
-                    ? "border-orange-600 bg-orange-50"
-                    : "border-gray-200 hover:border-gray-300"
-                )}
+                role="radio"
+                aria-checked={active}
+                className="ag-role"
+                onClick={() => setUserType(id)}
+                onFocus={() => reportFocus(`role-${id}`, true)}
+                onBlur={() => reportFocus(`role-${id}`, false)}
               >
-                <User className={cn("w-6 h-6 mb-2", userType === 'student' ? "text-orange-700" : "text-gray-400")} />
-                <div className="font-semibold text-sm">Student</div>
-                <div className="text-xs text-gray-600">Learn from experts</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setUserType('instructor')}
-                className={cn(
-                  "p-4 border-2 rounded-lg transition-all text-left",
-                  userType === 'instructor'
-                    ? "border-purple-500 bg-purple-50"
-                    : "border-gray-200 hover:border-gray-300"
+                {active && (
+                  <motion.span
+                    layoutId="ag-role-active"
+                    className="ag-role-active"
+                    transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+                  />
                 )}
-              >
-                <GraduationCap className={cn("w-6 h-6 mb-2", userType === 'instructor' ? "text-purple-600" : "text-gray-400")} />
-                <div className="font-semibold text-sm">Instructor</div>
-                <div className="text-xs text-gray-600">Teach & earn</div>
+                <span className="ag-role-icon" aria-hidden="true">
+                  <Icon className="h-[18px] w-[18px]" />
+                </span>
+                <span className="ag-role-text">
+                  <b>{title}</b>
+                  <small>{note}</small>
+                </span>
               </button>
-            </div>
-          </div>
+            )
+          })}
+        </div>
 
-          {/* Name Fields */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label htmlFor="firstName" className="text-sm font-medium block mb-1">First name</label>
-              <Input
-                id="firstName"
-                name="firstName"
-                type="text"
-                required
-                value={formData.firstName}
-                onChange={handleChange}
-                placeholder="John"
-              />
-            </div>
-            <div>
-              <label htmlFor="lastName" className="text-sm font-medium block mb-1">Last name</label>
-              <Input
-                id="lastName"
-                name="lastName"
-                type="text"
-                required
-                value={formData.lastName}
-                onChange={handleChange}
-                placeholder="Doe"
-              />
-            </div>
-          </div>
+        <div className="ag-row-2">
+          <GatewayField
+            id="firstName"
+            name="firstName"
+            label="First name"
+            autoComplete="given-name"
+            value={formData.firstName}
+            onChange={handleChange}
+            error={errors.firstName}
+            valid={formData.firstName.trim().length > 0}
+          />
+          <GatewayField
+            id="lastName"
+            name="lastName"
+            label="Last name"
+            autoComplete="family-name"
+            value={formData.lastName}
+            onChange={handleChange}
+            error={errors.lastName}
+            valid={formData.lastName.trim().length > 0}
+          />
+        </div>
 
-          {/* Email */}
-          <div>
-            <label htmlFor="email" className="text-sm font-medium block mb-1">Email</label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              required
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-            />
-          </div>
+        <GatewayField
+          id="email"
+          name="email"
+          type="email"
+          label="Email address"
+          autoComplete="email"
+          inputMode="email"
+          icon={<Mail className="h-[18px] w-[18px]" />}
+          value={formData.email}
+          onChange={handleChange}
+          error={errors.email}
+          valid={EMAIL_RE.test(formData.email)}
+        />
 
-          {/* Instructor-specific fields */}
+        {/* Instructor-specific fields glide in when Instructor is chosen */}
+        <AnimatePresence initial={false}>
           {userType === 'instructor' && (
-            <>
-              <div>
-                <label htmlFor="designation" className="text-sm font-medium block mb-1">Designation *</label>
-                <Input
-                  id="designation"
-                  name="designation"
-                  type="text"
-                  required
-                  value={formData.designation}
-                  onChange={handleChange}
-                  placeholder="e.g., Senior Software Engineer"
-                />
+            <motion.div
+              key="instructor"
+              className="grid gap-[14px]"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: [0.2, 0.7, 0.3, 1] }}
+              style={{ overflow: 'hidden' }}
+            >
+              <GatewayField
+                id="designation"
+                name="designation"
+                label="Your role, e.g. Senior Software Engineer"
+                autoComplete="organization-title"
+                icon={<Briefcase className="h-[18px] w-[18px]" />}
+                value={formData.designation}
+                onChange={handleChange}
+                error={errors.designation}
+                valid={formData.designation.trim().length > 0}
+              />
+              <div className="ag-field-block">
+                <div className="ag-textarea">
+                  <label htmlFor="bio">About you and your teaching</label>
+                  <textarea
+                    id="bio"
+                    name="bio"
+                    rows={3}
+                    value={formData.bio}
+                    onChange={handleChange}
+                    onFocus={() => reportFocus('bio', true)}
+                    onBlur={() => reportFocus('bio', false)}
+                    aria-invalid={errors.bio ? true : undefined}
+                    aria-describedby={errors.bio ? 'bio-msg' : undefined}
+                    placeholder="What you teach, where you've worked, what learners will gain."
+                  />
+                </div>
+                {errors.bio && (
+                  <p id="bio-msg" className="ag-field-msg is-error" role="alert">
+                    {errors.bio}
+                  </p>
+                )}
               </div>
-
-              <div>
-                <label htmlFor="bio" className="text-sm font-medium block mb-1">Bio *</label>
-                <textarea
-                  id="bio"
-                  name="bio"
-                  required
-                  rows={3}
-                  value={formData.bio}
-                  onChange={handleChange}
-                  placeholder="Tell us about yourself and your teaching experience..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                />
-              </div>
-            </>
+            </motion.div>
           )}
+        </AnimatePresence>
 
-          {/* Password Fields */}
-          <div>
-            <label htmlFor="password" className="text-sm font-medium block mb-1">Create a password</label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              required
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="••••••••"
-            />
-          </div>
+        <PasswordField
+          id="password"
+          name="password"
+          label="Create a password"
+          autoComplete="new-password"
+          icon={<Lock className="h-[18px] w-[18px]" />}
+          value={formData.password}
+          onChange={handleChange}
+          error={errors.password}
+          meter
+        />
 
-          <div>
-            <label htmlFor="confirmPassword" className="text-sm font-medium block mb-1">Confirm your password</label>
-            <Input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              required
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="••••••••"
-            />
-          </div>
+        <PasswordField
+          id="confirmPassword"
+          name="confirmPassword"
+          label="Confirm password"
+          autoComplete="new-password"
+          icon={<Lock className="h-[18px] w-[18px]" />}
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          error={errors.confirmPassword}
+          valid={formData.confirmPassword.length > 0 && formData.confirmPassword === formData.password}
+          hint={
+            formData.confirmPassword && formData.confirmPassword !== formData.password
+              ? "Keep typing — this doesn't match yet."
+              : undefined
+          }
+        />
 
-          {/* Terms and Conditions */}
-          <div className="flex items-start space-x-2">
+        <div className="ag-field-block">
+          <label className="ag-check items-start py-1">
             <input
               type="checkbox"
               id="terms"
               checked={formData.agreeToTerms}
-              onChange={(e) => setFormData({ ...formData, agreeToTerms: e.target.checked })}
-              className="mt-1"
+              onChange={(e) => {
+                setFormData({ ...formData, agreeToTerms: e.target.checked })
+                if (errors.agreeToTerms) setErrors({ ...errors, agreeToTerms: undefined })
+              }}
+              aria-invalid={errors.agreeToTerms ? true : undefined}
+              aria-describedby={errors.agreeToTerms ? 'terms-msg' : undefined}
             />
-            <label htmlFor="terms" className="text-sm text-gray-600 leading-tight">
-              I agree to the <Link to="/terms" className="text-orange-700 hover:underline">Terms of Service</Link> and{' '}
-              <Link to="/privacy" className="text-orange-700 hover:underline">Privacy Policy</Link>
-            </label>
-          </div>
-
-          {/* Submit Button */}
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={loading}
-          >
-            {loading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Creating Account...
-              </>
-            ) : (
-              'Create Account'
-            )}
-          </Button>
-
-          {/* Divider */}
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300" />
-            </div>
-          </div>
-
-          {/* Social Login Buttons */}
-          <div className="space-y-3">
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full"
-              onClick={handleGoogleSignUp}
-              disabled={loading || isGoogleLoading || !isFirebaseConfigured}
-            >
-              <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+            <span className="ag-check-box mt-0.5" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3.5 8.5l3 3 6-7" />
               </svg>
-              Continue with Google
-            </Button>
-          </div>
+            </span>
+            <span className="leading-snug">
+              I agree to the <Link to="/terms">Terms of Service</Link> and <Link to="/privacy">Privacy Policy</Link>
+            </span>
+          </label>
+          {errors.agreeToTerms && (
+            <p id="terms-msg" className="ag-field-msg is-error" role="alert">
+              {errors.agreeToTerms}
+            </p>
+          )}
+        </div>
 
-          {/* Login Link */}
-          <p className="text-center text-sm text-gray-600">
-            Already have an account?{' '}
-            <Link to="/login" className="text-orange-700 hover:underline font-medium">
-              Sign in
-            </Link>
-          </p>
-        </form>
-      </CardContent>
-    </Card>
+        <MagneticButton type="submit" disabled={loading} loading={loading} loadingLabel="Creating your account…">
+          Create account
+        </MagneticButton>
+      </form>
+
+      <div className="ag-divider">or sign up with</div>
+      <div className="ag-providers is-single">
+        <ProviderCard
+          mark={<GoogleMark />}
+          name="Google"
+          note={isFirebaseConfigured ? "We'll ask whether you're a student or instructor" : 'Not available right now'}
+          onClick={handleGoogleSignUp}
+          disabled={loading || isGoogleLoading || !isFirebaseConfigured}
+          aria-busy={isGoogleLoading || undefined}
+        />
+      </div>
+    </div>
   )
 }

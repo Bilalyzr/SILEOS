@@ -1,10 +1,30 @@
-import { AstraSymbol } from "@/components/design-system/AstraSymbol";
-import { useEffect,useState } from 'react'
+import { useEffect,useState, type ReactNode } from 'react'
 import { useNavigate,useSearchParams,Link } from 'react-router-dom'
-import { Card,CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { CheckCircle,XCircle,Loader2,Info } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { CheckCircle,Info,MailX } from 'lucide-react'
 import { api } from '@/api/axios'
+import { MagneticButton } from '@/components/auth/gateway/GatewayControls'
+import { InfinityTrace } from '@/components/loading/InfinityTrace'
+
+/** Status badge for the gateway panel: teal for done, amber for attention. */
+function StatusMark({ tone, children }: { tone: 'teal' | 'amber'; children: ReactNode }) {
+  const teal = tone === 'teal'
+  return (
+    <motion.div
+      className={`mx-auto grid h-16 w-16 place-items-center rounded-2xl ${
+        teal
+          ? 'bg-[rgba(45,212,191,0.12)] text-[#2dd4bf] shadow-[0_0_0_1px_rgba(45,212,191,0.3)_inset,0_0_40px_rgba(45,212,191,0.25)]'
+          : 'bg-[rgba(253,186,116,0.1)] text-[#fdba74] shadow-[0_0_0_1px_rgba(253,186,116,0.3)_inset]'
+      }`}
+      initial={{ rotate: -12, scale: 0.6 }}
+      animate={{ rotate: 0, scale: 1 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 16 }}
+      aria-hidden="true"
+    >
+      {children}
+    </motion.div>
+  )
+}
 
 export const VerifyEmailPage = () => {
   const [searchParams] = useSearchParams()
@@ -69,20 +89,8 @@ export const VerifyEmailPage = () => {
 
   if (status === 'loading') {
     return (
-      <div className="w-full flex justify-center">
-        <Card className="w-full max-w-md">
-          <CardContent className="pt-6">
-            <div className="text-center space-y-4">
-              <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                <Loader2 className="w-10 h-10 text-blue-600 animate-spin" />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900">Verifying your email...</h2>
-              <p className="text-gray-600">
-                Please wait while we verify your email address.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="w-full py-2 text-center" role="status">
+        <InfinityTrace label="Verifying your email" />
       </div>
     )
   }
@@ -91,101 +99,57 @@ export const VerifyEmailPage = () => {
     const isAlreadyVerified = status === 'already-verified'
 
     return (
-      <div className="w-full flex justify-center">
-        <Card className="w-full max-w-md">
-          <CardContent className="pt-6">
-            <div className="text-center space-y-4">
-              <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center ${
-                isAlreadyVerified ? 'bg-blue-100' : 'bg-green-100'
-              }`}>
-                {isAlreadyVerified ? (
-                  <Info className="w-10 h-10 text-blue-600" />
-                ) : (
-                  <CheckCircle className="w-10 h-10 text-green-600" />
-                )}
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900">
-                {isAlreadyVerified ? 'Already Verified!' : 'Email Verified!'}
-              </h2>
-              <p className="text-gray-600">{message}</p>
-              <div className={`border rounded-lg p-4 ${
-                isAlreadyVerified
-                  ? 'bg-blue-50 border-blue-200'
-                  : 'bg-green-50 border-green-200'
-              }`}>
-                <p className={`text-sm ${isAlreadyVerified ? 'text-blue-900' : 'text-green-900'}`}>
-                  {isAlreadyVerified ? (
-                    <>
-                      <AstraSymbol value="ℹ️" /> <strong>Your email is already verified</strong>
-                    </>
-                  ) : (
-                    <>
-                      <AstraSymbol value="🎉" /> <strong>Your account is now active!</strong>
-                    </>
-                  )}
-                </p>
-                <p className={`text-xs mt-2 ${isAlreadyVerified ? 'text-blue-800' : 'text-green-800'}`}>
-                  You can now sign in and start learning.
-                </p>
-              </div>
-              <p className="text-sm text-gray-600">
-                Redirecting to login page...
-              </p>
-              <Button
-                onClick={() => navigate('/login')}
-                className="w-full"
-              >
-                Proceed to Login
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="w-full py-1 text-center" role="status">
+        <StatusMark tone="teal">
+          {isAlreadyVerified ? <Info className="h-8 w-8" /> : <CheckCircle className="h-8 w-8" />}
+        </StatusMark>
+        <div className="ag-head mt-5">
+          <h2>{isAlreadyVerified ? 'Already verified' : 'Email verified'}</h2>
+          <p>{message}</p>
+        </div>
+        <div className="ag-callout is-teal text-left">
+          <h3>{isAlreadyVerified ? 'Your email was already confirmed' : 'Your account is active'}</h3>
+          <p>You can sign in and start learning.</p>
+        </div>
+        <p className="ag-foot">Taking you to sign in…</p>
+        <div className="mt-3">
+          <MagneticButton type="button" onClick={() => navigate('/login')}>
+            Continue to sign in
+          </MagneticButton>
+        </div>
       </div>
     )
   }
 
   // Error state
   return (
-    <div className="w-full flex justify-center">
-      <Card className="w-full max-w-md">
-        <CardContent className="pt-6">
-          <div className="text-center space-y-4">
-            <div className="mx-auto w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
-              <XCircle className="w-10 h-10 text-red-600" />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900">Verification Failed</h2>
-            <p className="text-gray-600">{message}</p>
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <p className="text-sm text-red-900">
-                <strong>Common reasons:</strong>
-              </p>
-              <ul className="text-xs text-red-800 mt-2 text-left list-disc list-inside">
-                <li>Verification link has expired (24 hours)</li>
-                <li>Email already verified</li>
-                <li>Invalid verification token</li>
-              </ul>
-            </div>
-            <div className="space-y-2">
-              <Button
-                onClick={() => navigate('/register')}
-                className="w-full"
-              >
-                Register Again
-              </Button>
-              <Button
-                onClick={() => navigate('/login')}
-                variant="outline"
-                className="w-full"
-              >
-                Go to Login
-              </Button>
-            </div>
-            <p className="text-xs text-gray-500">
-              Need help? <Link to="/contact" className="text-blue-600 hover:underline">Contact Support</Link>
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+    <div className="w-full py-1 text-center">
+      <StatusMark tone="amber">
+        <MailX className="h-8 w-8" />
+      </StatusMark>
+      <div className="ag-head mt-5">
+        <h2>This link didn't work</h2>
+        <p>{message}</p>
+      </div>
+      <div className="ag-callout text-left">
+        <h3>Usually it's one of these</h3>
+        <ul className="mt-1 list-inside list-disc space-y-0.5 text-[13.5px] text-[#a9b4c6]">
+          <li>The link is older than 24 hours</li>
+          <li>Your email is already verified (try signing in)</li>
+          <li>The link was copied only partly</li>
+        </ul>
+      </div>
+      <div className="mt-4 grid gap-3">
+        <MagneticButton type="button" onClick={() => navigate('/login')}>
+          Go to sign in
+        </MagneticButton>
+        <button type="button" className="ag-ghost w-full" onClick={() => navigate('/register')}>
+          Create an account again
+        </button>
+      </div>
+      <p className="ag-foot">
+        Need help? <Link to="/contact" className="ag-link">Contact support</Link>
+      </p>
     </div>
   )
 }

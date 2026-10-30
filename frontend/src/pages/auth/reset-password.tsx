@@ -3,19 +3,17 @@ import { Link, useSearchParams, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { Eye, EyeOff, Lock, ArrowLeft } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Lock, ArrowLeft } from "lucide-react"
+import { MagneticButton, PasswordField } from "@/components/auth/gateway/GatewayControls"
 import { authAPI } from "@/api/auth"
 import toast from "react-hot-toast"
 
 const resetPasswordSchema = z.object({
-  password: z.string().min(8, "Password must be at least 8 characters")
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, "Password must contain at least one uppercase letter, one lowercase letter, and one number"),
+  password: z.string().min(8, "Use at least 8 characters.")
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, "Add an uppercase letter, a lowercase letter and a number."),
   confirm_password: z.string(),
 }).refine((data) => data.password === data.confirm_password, {
-  message: "Passwords don't match",
+  message: "These passwords don't match yet.",
   path: ["confirm_password"],
 })
 
@@ -24,8 +22,6 @@ type ResetPasswordForm = z.infer<typeof resetPasswordSchema>
 export const ResetPasswordPage = () => {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  const [showPassword, setShowPassword] = React.useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false)
 
   const token = searchParams.get('token')
 
@@ -61,83 +57,41 @@ export const ResetPasswordPage = () => {
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center">Reset Password</CardTitle>
-        <CardDescription className="text-center">
-          Enter your new password below
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* New Password */}
-          <div className="relative">
-            <Input
-              {...register("password")}
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter new password"
-              leftIcon={<Lock className="w-4 h-4" />}
-              error={errors.password?.message}
-              disabled={isSubmitting}
-            />
-            <button
-              type="button"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-500 hover:text-neutral-700"
-              onClick={() => setShowPassword(!showPassword)}
-              disabled={isSubmitting}
-            >
-              {showPassword ? (
-                <EyeOff className="w-4 h-4" />
-              ) : (
-                <Eye className="w-4 h-4" />
-              )}
-            </button>
-          </div>
-
-          {/* Confirm Password */}
-          <div className="relative">
-            <Input
-              {...register("confirm_password")}
-              type={showConfirmPassword ? "text" : "password"}
-              placeholder="Confirm new password"
-              leftIcon={<Lock className="w-4 h-4" />}
-              error={errors.confirm_password?.message}
-              disabled={isSubmitting}
-            />
-            <button
-              type="button"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-500 hover:text-neutral-700"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              disabled={isSubmitting}
-            >
-              {showConfirmPassword ? (
-                <EyeOff className="w-4 h-4" />
-              ) : (
-                <Eye className="w-4 h-4" />
-              )}
-            </button>
-          </div>
-
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={isSubmitting}
-            loading={isSubmitting}
-          >
-            Reset Password
-          </Button>
-        </form>
-
-        <div className="mt-6 text-center">
-          <Link
-            to="/login"
-            className="inline-flex items-center text-primary-600 hover:text-primary-700 text-sm font-medium"
-          >
-            <ArrowLeft className="w-4 h-4 mr-1" />
-            Back to Sign In
-          </Link>
-        </div>
-      </CardContent>
-    </Card>
+    <div className="w-full">
+      <div className="ag-head">
+        <h2>Choose a new password</h2>
+        <p>Make it something you haven't used here before.</p>
+      </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="ag-form" noValidate>
+        <PasswordField
+          {...register("password")}
+          id="reset_password"
+          label="New password"
+          autoComplete="new-password"
+          icon={<Lock className="h-[18px] w-[18px]" />}
+          error={errors.password?.message}
+          disabled={isSubmitting}
+          meter
+        />
+        <PasswordField
+          {...register("confirm_password")}
+          id="reset_confirm_password"
+          label="Confirm new password"
+          autoComplete="new-password"
+          icon={<Lock className="h-[18px] w-[18px]" />}
+          error={errors.confirm_password?.message}
+          disabled={isSubmitting}
+        />
+        <MagneticButton type="submit" disabled={isSubmitting} loading={isSubmitting} loadingLabel="Saving…">
+          Save new password
+        </MagneticButton>
+      </form>
+      <div className="ag-foot">
+        <Link to="/login" className="ag-link gap-1.5">
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+          Back to sign in
+        </Link>
+      </div>
+    </div>
   )
 }

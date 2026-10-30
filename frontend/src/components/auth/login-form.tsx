@@ -3,10 +3,16 @@ import { Link, useNavigate, useLocation, useSearchParams } from "react-router-do
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { Eye, EyeOff, Mail, Lock, ShieldCheck } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { AnimatePresence, motion } from "framer-motion"
+import { Mail, Lock, ShieldCheck, MailWarning } from "lucide-react"
+import { GatewayField } from "@/components/auth/gateway/GatewayField"
+import {
+  GoogleMark,
+  LinkedInMark,
+  MagneticButton,
+  PasswordField,
+  ProviderCard,
+} from "@/components/auth/gateway/GatewayControls"
 import { useAuth } from "@/hooks/use-auth"
 import { useGoogleOAuth } from "@/hooks/use-google-oauth"
 import { isFirebaseConfigured } from "@/lib/firebase"
@@ -16,8 +22,8 @@ import { roleHomePath, isNonStudentRole } from "@/utils/role-routing"
 import toast from "react-hot-toast"
 
 const loginSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  email: z.string().email("Enter the email you signed up with, like name@example.com."),
+  password: z.string().min(6, "Your password has at least 6 characters."),
   remember: z.boolean().optional(),
   // Only required once the server has answered "otp_required"; left optional
   // here so the first submit (which discovers whether 2FA applies) validates.
@@ -25,7 +31,6 @@ const loginSchema = z.object({
 })
 
 export const LoginForm: React.FC = () => {
-  const [showPassword, setShowPassword] = React.useState(false)
   // Tracks whether the last login attempt failed because the user is
   // unverified. Drives the inline "Resend verification email" button
   // so users stuck after an SMTP outage can retrigger delivery.
@@ -78,6 +83,7 @@ export const LoginForm: React.FC = () => {
     formState: { errors, isSubmitting },
     setError,
     getValues,
+    watch,
   } = useForm<LoginFormType>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -155,9 +161,9 @@ export const LoginForm: React.FC = () => {
         const attempted = getValues("email")
         if (attempted) setUnverifiedEmail(attempted)
       } else if (error.includes("No account found") || error.includes("email")) {
-        setError("email", { message: "No account found with this email address" })
+        setError("email", { message: "We couldn't find an account with this email. Check the spelling, or create an account above." })
       } else if (error.includes("Incorrect password") || error.includes("password")) {
-        setError("password", { message: "Incorrect password. Please try again" })
+        setError("password", { message: "That password doesn't match. Try again, or reset it with Forgot password." })
       } else if (error.includes("pending approval")) {
         toast.error(error, { duration: 6000 })
       } else {
@@ -335,259 +341,192 @@ export const LoginForm: React.FC = () => {
     window.location.href = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=${state}`
   }
 
+  const emailValue = watch("email")
+  const emailLooksValid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailValue || "")
+  const busy = isSubmitting || isLoading
+
   return (
-    // AuthLayout owns the page shell (story panel + surface); this form only
-    // fills the content column — a second min-h-screen background here
-    // doubled the page height and painted over the layout surface.
-    <div className="w-full max-w-md mx-auto">
-      <Card className="w-full">
-        <CardHeader className="space-y-2 text-center">
-          <CardTitle className="text-2xl sm:text-3xl font-bold tracking-tight">Welcome back</CardTitle>
-          <CardDescription>
-            Sign in to your account to continue learning
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
-            <Input
-              {...register("email")}
-              id="login_email"
-              label="Email address"
-              type="email"
-              autoComplete="email"
-              inputMode="email"
-              placeholder="you@example.com"
-              leftIcon={<Mail className="w-4 h-4" />}
-              error={errors.email?.message}
-              disabled={isSubmitting || isLoading}
-              className="h-12"
-            />
+    // AuthLayout (the gateway) owns the scene, panel and mode switch; this
+    // component fills the panel.
+    <div className="w-full">
+      <div className="ag-head">
+        <h2>Welcome back</h2>
+        <p>Sign in to continue your learning path.</p>
+      </div>
 
-            <Input
-              {...register("password")}
-              id="login_password"
-              label="Password"
-              type={showPassword ? "text" : "password"}
-              autoComplete="current-password"
-              placeholder="Enter your password"
-              leftIcon={<Lock className="w-4 h-4" />}
-              error={errors.password?.message}
-              disabled={isSubmitting || isLoading}
-              className="h-12"
-              rightElement={
-                <button
-                  type="button"
-                  className="flex h-11 w-11 items-center justify-center rounded-md text-neutral-500 transition-colors hover:text-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  onClick={() => setShowPassword(!showPassword)}
-                  disabled={isSubmitting || isLoading}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                  aria-pressed={showPassword}
-                >
-                  {showPassword ? (
-                    <EyeOff className="w-4 h-4" aria-hidden="true" />
-                  ) : (
-                    <Eye className="w-4 h-4" aria-hidden="true" />
-                  )}
-                </button>
-              }
-            />
+      <form onSubmit={handleSubmit(onSubmit)} className="ag-form" noValidate>
+        <GatewayField
+          {...register("email")}
+          id="login_email"
+          label="Email address"
+          type="email"
+          autoComplete="email"
+          inputMode="email"
+          icon={<Mail className="h-[18px] w-[18px]" />}
+          error={errors.email?.message}
+          valid={emailLooksValid}
+          disabled={busy}
+        />
 
-            {/* Two-factor code — revealed only after the server says this
-                account has 2FA enabled, so ordinary logins are unaffected.
-                Suppressed while a GOOGLE 2FA challenge is in flight so only
-                one code field shows at a time. */}
-            {otpRequired && !pendingOtpToken && (
-              <div className="space-y-2">
-                <label htmlFor="otp_code" className="text-sm font-medium text-neutral-700">
-                  Authentication code
-                </label>
-                <Input
-                  {...register("otp_code")}
-                  id="otp_code"
-                  type="text"
-                  inputMode="numeric"
-                  autoComplete="one-time-code"
-                  maxLength={8}
-                  placeholder="6-digit code"
-                  leftIcon={<ShieldCheck className="w-4 h-4" />}
-                  error={errors.otp_code?.message}
-                  disabled={isSubmitting || isLoading}
-                  className="h-12 tracking-widest"
-                  autoFocus
-                />
-                <p className="text-xs text-neutral-500">
-                  Open your authenticator app and enter the current code for SashaInfinity LMS.
-                </p>
-              </div>
-            )}
+        <PasswordField
+          {...register("password")}
+          id="login_password"
+          label="Password"
+          autoComplete="current-password"
+          icon={<Lock className="h-[18px] w-[18px]" />}
+          error={errors.password?.message}
+          disabled={busy}
+        />
 
-            {/* Remember Me & Forgot Password */}
-            <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
-              <label className="flex min-h-[44px] cursor-pointer items-center gap-2 touch-action-manipulation">
-                <input
-                  {...register("remember")}
-                  type="checkbox"
-                  className="h-5 w-5 cursor-pointer rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
-                  disabled={isSubmitting || isLoading}
-                />
-                <span className="text-sm text-neutral-600">Remember me</span>
-              </label>
-              <Link
-                to="/forgot-password"
-                className="flex min-h-[44px] items-center text-sm font-medium text-primary-600 hover:text-primary-700"
-              >
-                Forgot password?
-              </Link>
-            </div>
-
-            {/* Button renders its own spinner when `loading` — adding a
-                Loader2 here as well showed two spinners side by side. */}
-            <Button
-              type="submit"
-              className="w-full h-12 text-base"
-              disabled={isSubmitting || isLoading}
-              loading={isSubmitting || isLoading}
+        {/* Two-factor code — revealed only after the server says this
+            account has 2FA enabled, so ordinary logins are unaffected.
+            Suppressed while a GOOGLE 2FA challenge is in flight so only
+            one code field shows at a time. */}
+        <AnimatePresence initial={false}>
+          {otpRequired && !pendingOtpToken && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              style={{ overflow: "hidden" }}
             >
-              {isSubmitting || isLoading ? "Signing in..." : "Sign in"}
-            </Button>
-          </form>
-
-          {/* Google sign-in + 2FA: the backend answered the Google credential
-              with the SAME "otp_required" marker the password login uses.
-              Same code-input pattern; submitting re-sends the held Google
-              token with the code to /auth/google. Kept OUTSIDE the password
-              form — a nested form would be invalid HTML. */}
-          {pendingOtpToken && (
-            <form onSubmit={onSubmitGoogleOtp} className="mt-4 space-y-3 rounded-lg border border-primary-200 bg-primary-50/60 p-4">
-              <div className="space-y-2">
-                <label htmlFor="google_otp_code" className="text-sm font-medium text-neutral-700">
-                  Authentication code (Google sign-in)
-                </label>
-                <Input
-                  id="google_otp_code"
-                  name="google_otp_code"
-                  type="text"
-                  inputMode="numeric"
-                  autoComplete="one-time-code"
-                  maxLength={8}
-                  placeholder="6-digit code"
-                  leftIcon={<ShieldCheck className="w-4 h-4" />}
-                  error={googleOtpError ?? undefined}
-                  disabled={completingGoogleOtp}
-                  className="h-12 tracking-widest"
-                  value={googleOtp}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGoogleOtp(e.target.value)}
-                  autoFocus
-                />
-                <p className="text-xs text-neutral-500">
-                  Google verified your account. Enter the current code from your
-                  authenticator app to finish signing in.
-                </p>
-              </div>
-              <div className="flex items-center gap-3">
-                <Button
-                  type="submit"
-                  className="h-10"
-                  loading={completingGoogleOtp}
-                  disabled={completingGoogleOtp}
-                >
-                  {completingGoogleOtp ? "Completing..." : "Complete sign-in"}
-                </Button>
-                <button
-                  type="button"
-                  onClick={handleCancelGoogleOtp}
-                  disabled={completingGoogleOtp}
-                  className="text-sm text-neutral-600 hover:text-neutral-800 min-h-[44px]"
-                >
-                  Use a different method
-                </button>
-              </div>
-            </form>
+              <GatewayField
+                {...register("otp_code")}
+                id="otp_code"
+                label="Authentication code"
+                type="text"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                maxLength={8}
+                icon={<ShieldCheck className="h-[18px] w-[18px]" />}
+                error={errors.otp_code?.message}
+                hint="Open your authenticator app and enter the current code for Sasha Infinity."
+                disabled={busy}
+                className="tracking-[0.3em]"
+                autoFocus
+              />
+            </motion.div>
           )}
+        </AnimatePresence>
 
-          {unverifiedEmail && (
-            <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm">
-              <p className="font-medium text-amber-900 mb-1">Email not verified yet</p>
-              <p className="text-amber-800 mb-3">
-                We sent a verification link to <span className="font-mono">{unverifiedEmail}</span>.
-                If it never arrived (or the server had mail trouble earlier), request a fresh one.
-              </p>
+        <div className="ag-between">
+          <label className="ag-check">
+            <input {...register("remember")} type="checkbox" disabled={busy} />
+            <span className="ag-check-box" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3.5 8.5l3 3 6-7" />
+              </svg>
+            </span>
+            Remember me
+          </label>
+          <Link to="/forgot-password" className="ag-link">
+            Forgot password?
+          </Link>
+        </div>
+
+        <MagneticButton type="submit" disabled={busy} loading={busy} loadingLabel="Signing you in…">
+          Sign in
+        </MagneticButton>
+      </form>
+
+      {/* Google sign-in + 2FA: the backend answered the Google credential
+          with the SAME "otp_required" marker the password login uses.
+          Submitting re-sends the held Google token with the code to
+          /auth/google. Kept OUTSIDE the password form — a nested form would
+          be invalid HTML. */}
+      <AnimatePresence initial={false}>
+        {pendingOtpToken && (
+          <motion.form
+            onSubmit={onSubmitGoogleOtp}
+            className="ag-callout is-teal"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+          >
+            <h3>One more step</h3>
+            <p className="mb-3">
+              Google verified your account. Enter the current code from your authenticator app to finish signing in.
+            </p>
+            <GatewayField
+              id="google_otp_code"
+              name="google_otp_code"
+              label="Authentication code"
+              type="text"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              maxLength={8}
+              icon={<ShieldCheck className="h-[18px] w-[18px]" />}
+              error={googleOtpError ?? undefined}
+              disabled={completingGoogleOtp}
+              className="tracking-[0.3em]"
+              value={googleOtp}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGoogleOtp(e.target.value)}
+              autoFocus
+            />
+            <div className="mt-3 flex flex-wrap items-center gap-3">
+              <button type="submit" className="ag-ghost" disabled={completingGoogleOtp}>
+                {completingGoogleOtp ? "Completing…" : "Complete sign-in"}
+              </button>
               <button
                 type="button"
-                onClick={handleResendVerification}
-                disabled={resendingVerification}
-                className="px-3 py-1.5 rounded-md bg-amber-600 text-white text-sm font-medium hover:bg-amber-700 disabled:opacity-50"
+                onClick={handleCancelGoogleOtp}
+                disabled={completingGoogleOtp}
+                className="ag-link"
               >
-                {resendingVerification ? "Sending…" : "Resend verification email"}
+                Use a different method
               </button>
             </div>
-          )}
+          </motion.form>
+        )}
+      </AnimatePresence>
 
-          {/* Divider */}
-          <div className="mt-6">
-            <div className="flex items-center gap-3 text-xs font-medium uppercase tracking-wider text-neutral-500">
-              <span className="h-px flex-1 bg-neutral-200" aria-hidden="true" />
-              or continue with
-              <span className="h-px flex-1 bg-neutral-200" aria-hidden="true" />
-            </div>
-
-            {/* Social Login Buttons */}
-            <div className="mt-5 grid grid-cols-2 gap-3">
-              <Button
-                variant="outline"
-                onClick={handleGoogleLogin}
-                disabled={isSubmitting || isLoading || isGoogleLoading || !isFirebaseConfigured}
-                title={!isFirebaseConfigured ? "Google sign-in not configured" : undefined}
-                className="h-11"
-              >
-                <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
-                  <path
-                    fill="currentColor"
-                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                  />
-                  <path
-                    fill="currentColor"
-                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                  />
-                  <path
-                    fill="currentColor"
-                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                  />
-                  <path
-                    fill="currentColor"
-                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                  />
-                </svg>
-                Google
-              </Button>
-              <Button
-                variant="outline"
-                onClick={handleLinkedInLogin}
-                disabled={isSubmitting || isLoading}
-                className="h-11"
-              >
-                <svg className="w-4 h-4 mr-2" fill="#0A66C2" viewBox="0 0 24 24">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                </svg>
-                LinkedIn
-              </Button>
-            </div>
-          </div>
-
-          {/* Sign up link */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-neutral-600">
-              Don't have an account?{" "}
-              <Link
-                to="/register"
-                className="font-medium text-primary-600 hover:text-primary-700"
-              >
-                Sign up for free
-              </Link>
+      <AnimatePresence initial={false}>
+        {unverifiedEmail && (
+          <motion.div
+            className="ag-callout"
+            role="status"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+          >
+            <h3 className="flex items-center gap-2">
+              <MailWarning className="h-4 w-4 text-[#fdba74]" aria-hidden="true" />
+              Confirm your email to continue
+            </h3>
+            <p className="mb-3">
+              We sent a verification link to <span className="font-mono text-[#e6ebf3]">{unverifiedEmail}</span>.
+              If it never arrived, we can send a fresh one.
             </p>
-          </div>
-        </CardContent>
-      </Card>
+            <button
+              type="button"
+              onClick={handleResendVerification}
+              disabled={resendingVerification}
+              className="ag-ghost"
+            >
+              {resendingVerification ? "Sending…" : "Resend verification email"}
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="ag-divider">or continue with</div>
+      <div className="ag-providers">
+        <ProviderCard
+          mark={<GoogleMark />}
+          name="Google"
+          note={isFirebaseConfigured ? "One tap, no password" : "Not available right now"}
+          onClick={handleGoogleLogin}
+          disabled={busy || isGoogleLoading || !isFirebaseConfigured}
+          aria-busy={isGoogleLoading || undefined}
+        />
+        <ProviderCard
+          mark={<LinkedInMark />}
+          name="LinkedIn"
+          note="Use your professional profile"
+          onClick={handleLinkedInLogin}
+          disabled={busy}
+        />
+      </div>
 
       <RoleSelectionModal
         isOpen={isRoleModalOpen}

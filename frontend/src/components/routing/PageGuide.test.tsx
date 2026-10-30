@@ -81,6 +81,8 @@ it.each([
   '/instructor/courses/12/edit',
   '/instructor/courses/12/quiz-builder',
   '/labs/own-1',
+  '/login',
+  '/register',
 ])("keeps page %s free of the shared Back control (home or self-managed)", (path) => {
   expect(needsPageBack(path)).toBe(false);
 });
@@ -94,7 +96,6 @@ it.each([
   "/instructor/lab-studio",
   "/courses/12",
   "/student/live-classes/8/join",
-  "/login",
 ])("shows the shared Back control on page %s", (path) =>
   expect(needsPageBack(path)).toBe(true),
 );
