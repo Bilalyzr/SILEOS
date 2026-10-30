@@ -73,8 +73,26 @@ export const authAPI = {
   },
 
   // Logout user
-  logout: async (refreshToken: string): Promise<void> => {
-    await api.post(`/auth/logout`, { refreshToken })
+  // Tokens are passed in explicitly: the store clears itself right after
+  // calling this, and the axios request interceptor (which reads the store
+  // asynchronously) used to send the logout with no bearer token at all.
+  // keepalive lets the request finish even when the caller immediately
+  // navigates away (window.location redirects abort a normal request).
+  logout: async (
+    accessToken?: string | null,
+    refreshToken?: string | null
+  ): Promise<void> => {
+    const base = String(api.defaults.baseURL || '/api/v1').replace(/\/$/, '')
+    await fetch(`${base}/auth/logout`, {
+      method: 'POST',
+      credentials: 'include',
+      keepalive: true,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+      },
+      body: JSON.stringify(refreshToken ? { refresh_token: refreshToken } : {}),
+    })
   },
 
   // Refresh access token

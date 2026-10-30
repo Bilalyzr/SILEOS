@@ -202,13 +202,24 @@ export const useAuthStore = create<AuthState>()(
         const offlineOwner = get().user?.id
         if (offlineOwner) void purgeOwner(offlineOwner).catch(()=>{})
         try {
-          // Call logout API to invalidate tokens on server
-          const { refreshToken } = get()
-          if (refreshToken) {
-            authAPI.logout(refreshToken).catch(console.error)
-          }
+          // Tell the server with the tokens captured NOW, before the store
+          // is cleared below. Always call it (even with no tokens): the
+          // server also clears the HttpOnly refresh cookie, which is what
+          // silently restored the session on the next page load.
+          const { accessToken, refreshToken } = get()
+          authAPI.logout(accessToken, refreshToken).catch(console.error)
         } catch (error) {
           console.error('Logout API error:', error)
+        }
+        // Drop the readable shared-session marker right away so the next
+        // page load skips the cookie-restore probe even if the request
+        // above never reaches the server (offline, tab closed).
+        if (typeof document !== 'undefined') {
+          const expire = 'sf_ss=; Max-Age=0; path=/'
+          document.cookie = expire
+          if (location.hostname.endsWith('sashainfinity.com')) {
+            document.cookie = `${expire}; domain=.sashainfinity.com`
+          }
         }
 
         set({

@@ -1091,24 +1091,62 @@ async def change_password(
 async def logout(
     request: Request,
     response: Response,
-    current_user: User = Depends(AuthService.get_current_user)
 ) -> Any:
     """
-    Logout user (client should remove tokens)
+    End the session on every origin and device.
+
+    Deliberately does NOT require a valid access token. It used to depend on
+    get_current_user, so a logout that arrived without its bearer token (the
+    SPA cleared its store before the request interceptor ran) or with an
+    expired one got a 401 and did nothing: the HttpOnly refresh cookie
+    survived and the next page load silently restored the session. Now the
+    shared cookies are always cleared, and the user is identified from the
+    bearer token or, failing that, the refresh token (body or cookie) so the
+    server-side revocation still happens.
     """
+    from app.core.security import revoke_access_token, revoke_all_user_sessions
+
     _clear_shared_session(response, request)
-    # Revoke the presented access token so it cannot keep calling the API
-    # until natural expiry. (The denylist entry self-expires at the token's
-    # own `exp` — see app/core/security.py.)
+
+    user_id: Optional[str] = None
+    impersonating = False
     auth_header = request.headers.get("authorization", "")
     if auth_header.lower().startswith("bearer "):
-        from app.core.security import revoke_access_token
-        revoke_access_token(auth_header[7:].strip())
+        access = auth_header[7:].strip()
+        try:
+            claims = verify_token(access, expected_type=["access", "impersonation_access"])
+            user_id = claims.get("sub")
+            impersonating = claims.get("type") == "impersonation_access"
+            # Revoke the presented token so it cannot keep calling the API
+            # until natural expiry (the denylist entry self-expires).
+            revoke_access_token(access)
+        except Exception:
+            pass
+
+    if user_id is None:
+        refresh = None
+        try:
+            body = await request.json()
+            if isinstance(body, dict):
+                refresh = body.get("refresh_token") or body.get("refreshToken")
+        except Exception:
+            pass
+        refresh = refresh or request.cookies.get(_SSO_REFRESH_COOKIE)
+        if refresh:
+            try:
+                user_id = verify_token(refresh, expected_type="refresh").get("sub")
+            except Exception:
+                pass
+
     # Kill every origin's and device's session for this user — sibling
     # subdomains keep their own localStorage tokens, which only a
-    # server-side revocation can reach.
-    from app.core.security import revoke_all_user_sessions
-    revoke_all_user_sessions(current_user.id)
+    # server-side revocation can reach. An admin ending an impersonation
+    # session only drops that token; the impersonated user stays signed in.
+    if user_id is not None and not impersonating:
+        try:
+            revoke_all_user_sessions(int(user_id))
+        except (TypeError, ValueError):
+            pass
     return {"message": "Logged out successfully"}
 
 @router.get("/me", response_model=UserResponse)
