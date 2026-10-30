@@ -434,6 +434,7 @@ export class TowerScene {
   perfN = 0;
   lowPower = false;
   dpr = 1;
+  maxDpr = 1;
   visible = true;
   disposed = false;
   width = 1;
@@ -573,7 +574,9 @@ export class TowerScene {
     try {
       this.renderer = new THREE.WebGLRenderer({
         canvas,
-        antialias: this.opts.quality === "high",
+        // MSAA is cheap on current integrated GPUs; without it the white
+        // headset edges shimmer and step. Only the low tier goes without.
+        antialias: this.opts.quality !== "low",
         alpha: false,
         powerPreference: "high-performance",
       });
@@ -586,10 +589,13 @@ export class TowerScene {
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.08;
-    this.dpr = Math.min(
+    // Render at the screen's real density (Retina / HiDPI laptops are 2x);
+    // the old 1.25-1.6 caps made the scene visibly soft.
+    this.maxDpr = Math.min(
       typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1,
-      this.opts.quality === "high" ? 1.6 : 1.25
+      this.opts.quality === "low" ? 1.25 : 2
     );
+    this.dpr = this.maxDpr;
     this.renderer.setPixelRatio(this.dpr);
     this.renderer.shadowMap.enabled = this.high;
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -1365,6 +1371,63 @@ export class TowerScene {
     // ========================================================================
     // STAGE 02-03: TWIN PRECISION OPTICAL CALIBRATION GANTRIES
     // ========================================================================
+    // Each gantry is a bench-mounted optical calibration arm: weighted base
+    // with bolts, anodized column with clamp collars, a jointed boom with a
+    // parallel stay rod, and a sensor head with a glass lens and LED ring.
+    const powderCoat = stdMat({
+      color: "#25282d",
+      roughness: 0.68,
+      metalness: 0.35,
+      envMap: env,
+      envMapIntensity: 0.6,
+    });
+    const anodized = stdMat({
+      color: "#b4bac2",
+      roughness: 0.3,
+      metalness: 0.92,
+      envMap: env,
+      envMapIntensity: 0.9,
+    });
+    const housing = stdMat({
+      color: "#17181b",
+      roughness: 0.42,
+      metalness: 0.25,
+      envMap: env,
+      envMapIntensity: 0.7,
+    });
+    const lensGlass = stdMat({
+      color: "#06090c",
+      roughness: 0.04,
+      metalness: 0.6,
+      envMap: env,
+      envMapIntensity: 1.6,
+    });
+    const cableMat = stdMat({ color: "#0e0f11", roughness: 0.75 });
+
+    const cyl = (r: number, h: number, seg = 32, rTop = r) =>
+      this.geo(new THREE.CylinderGeometry(rTop, r, h, seg));
+    const part = (
+      geo: THREE.BufferGeometry,
+      mat: THREE.Material,
+      parent: THREE.Object3D,
+      x: number,
+      y: number,
+      z: number,
+      rx = 0,
+      rz = 0
+    ) => {
+      const m = new THREE.Mesh(geo, mat);
+      m.position.set(x, y, z);
+      m.rotation.set(rx, 0, rz);
+      m.castShadow = this.high;
+      m.receiveShadow = true;
+      parent.add(m);
+      return m;
+    };
+    const ring = (r: number, tube: number) =>
+      this.geo(new THREE.TorusGeometry(r, tube, 10, 48));
+    const boltGeo = cyl(0.055, 0.06, 6);
+
     for (const [side, gantry, arm] of [
       [-1, this.leftGantry, this.leftGantryArm] as const,
       [1, this.rightGantry, this.rightGantryArm] as const,
@@ -1372,18 +1435,61 @@ export class TowerScene {
       gantry.position.set(side * 7.2, 0.5, 0.4);
       this.scene.add(gantry);
 
-      this.box(titaniumDark, 0, 0.3, 0, 1.4, 0.6, 1.4, gantry);
-      this.box(brushedCopper, 0, 2.2, 0, 0.36, 3.4, 0.36, gantry);
+      // Weighted base: chamfered disc plus a raised boss, four cap bolts
+      part(cyl(0.82, 0.22, 48, 0.76), powderCoat, gantry, 0, 0.11, 0);
+      part(cyl(0.48, 0.14, 40, 0.42), powderCoat, gantry, 0, 0.29, 0);
+      for (let i = 0; i < 4; i++) {
+        const a = (i / 4) * Math.PI * 2 + Math.PI / 4;
+        part(boltGeo, anodized, gantry, Math.cos(a) * 0.6, 0.25, Math.sin(a) * 0.6);
+      }
+
+      // Column with clamp collars and a copper index ring
+      part(cyl(0.14, 3.3), anodized, gantry, 0, 1.99, 0);
+      part(cyl(0.21, 0.2), powderCoat, gantry, 0, 0.46, 0);
+      part(cyl(0.22, 0.26), powderCoat, gantry, 0, 3.5, 0);
+      part(ring(0.22, 0.022), brushedCopper, gantry, 0, 3.36, 0, Math.PI / 2);
+
       arm.position.set(0, 3.8, 0);
       gantry.add(arm);
-      this.box(limestoneBody, -side * 1.1, 0, 0, 2.4, 0.26, 0.28, arm);
-      this.box(brushedCopper, -side * 2.1, -0.35, 0, 0.38, 0.7, 0.38, arm);
-      const emitter = new THREE.Mesh(
-        this.geo(new THREE.SphereGeometry(0.14, 12, 10)),
-        this.cyanGlowMat
+
+      // Shoulder joint: hub on the Z axis with copper bearing rings
+      part(cyl(0.27, 0.44), housing, arm, 0, 0, 0, Math.PI / 2);
+      part(ring(0.27, 0.024), brushedCopper, arm, 0, 0, 0.22);
+      part(ring(0.27, 0.024), brushedCopper, arm, 0, 0, -0.22);
+
+      // Boom with a parallel stay rod and link blocks
+      const reach = 2.2;
+      part(cyl(0.1, reach - 0.3), anodized, arm, -side * (reach / 2), 0, 0, 0, Math.PI / 2);
+      part(cyl(0.035, reach - 0.4), anodized, arm, -side * (reach / 2), 0.2, 0, 0, Math.PI / 2);
+      this.box(housing, -side * 0.32, 0.1, 0, 0.12, 0.34, 0.16, arm);
+      this.box(housing, -side * (reach - 0.32), 0.1, 0, 0.12, 0.34, 0.16, arm);
+
+      // Elbow hub, wrist and sensor head
+      const tip = -side * reach;
+      part(cyl(0.18, 0.36), housing, arm, tip, 0, 0, Math.PI / 2);
+      part(ring(0.18, 0.018), brushedCopper, arm, tip, 0, 0.18);
+      part(cyl(0.075, 0.34), anodized, arm, tip, -0.32, 0);
+      part(cyl(0.2, 0.42, 32, 0.17), housing, arm, tip, -0.66, 0);
+      part(cyl(0.13, 0.04), lensGlass, arm, tip, -0.885, 0);
+      part(ring(0.165, 0.016), this.cyanGlowMat, arm, tip, -0.88, 0, Math.PI / 2);
+
+      // Signal cable along the boom, looping down behind the shoulder
+      const cablePath = new THREE.CatmullRomCurve3([
+        vec3(tip + side * 0.12, -0.5, 0.14),
+        vec3(tip + side * 0.2, 0.08, 0.14),
+        vec3(-side * (reach / 2), 0.13, 0.13),
+        vec3(-side * 0.3, 0.1, 0.16),
+        vec3(side * 0.05, -0.25, 0.32),
+        vec3(side * 0.12, -0.75, 0.22),
+      ]);
+      part(
+        this.geo(new THREE.TubeGeometry(cablePath, 48, 0.028, 8, false)),
+        cableMat,
+        arm,
+        0,
+        0,
+        0
       );
-      emitter.position.set(-side * 2.3, -0.55, 0);
-      arm.add(emitter);
     }
 
     // ========================================================================
@@ -1833,15 +1939,24 @@ export class TowerScene {
     const ratio = this.perfSlow / this.perfN;
     this.perfSlow = 0;
     this.perfN = 0;
+    // Step resolution down gently when frames run slow, never below 1x
+    // (sub-1x is what made the scene blurry), and step back up once the
+    // GPU keeps up again.
     if (ratio >= 0.5) {
-      if (this.dpr > 0.71) {
-        this.dpr = Math.max(0.7, Math.min(this.dpr * 0.75, 0.8));
-        this.renderer.setPixelRatio(this.dpr);
-        this.renderer.setSize(this.width, this.height, false);
+      if (this.dpr > 1.01) {
+        this.setDpr(Math.max(1, this.dpr * 0.85));
       } else {
         this.lowPower = true;
       }
+    } else if (ratio <= 0.1 && this.dpr < this.maxDpr - 0.01) {
+      this.setDpr(Math.min(this.maxDpr, this.dpr * 1.15));
     }
+  }
+
+  private setDpr(dpr: number) {
+    this.dpr = dpr;
+    this.renderer.setPixelRatio(dpr);
+    this.renderer.setSize(this.width, this.height, false);
   }
 
   private fitDistance(
