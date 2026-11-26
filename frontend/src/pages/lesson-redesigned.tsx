@@ -1,3 +1,5 @@
+import { codingAPI, type LessonCodingBlock } from "@/api/coding";
+import { LessonPracticeBlocks } from "@/components/coding/LessonPracticeBlocks";
 import { AstraSymbol } from "@/components/design-system/AstraSymbol";
 import { useCallback } from "react";
 import * as React from "react";
@@ -1054,6 +1056,27 @@ export const LessonPageRedesigned = () => {
   const [currentTime, setCurrentTime] = React.useState(0);
   const [playbackRate] = React.useState(1);
   const playerRef = React.useRef<VideoPlayerHandle>(null);
+
+  // Practice blocks (coding challenges placed in this lesson by the instructor).
+  const [codingBlocks, setCodingBlocks] = React.useState<LessonCodingBlock[]>([]);
+  const practiceLessonId = Number(String(lessonId ?? "").replace(/^(lesson|quiz|assignment)-/, ""));
+  React.useEffect(() => {
+    const courseIdNum = Number(numericCourseId);
+    if (!Number.isFinite(courseIdNum) || !Number.isFinite(practiceLessonId)) {
+      setCodingBlocks([]);
+      return;
+    }
+    let active = true;
+    codingAPI
+      .lessonBlocks(courseIdNum, practiceLessonId)
+      .then((blocks) => active && setCodingBlocks(blocks))
+      .catch(() => active && setCodingBlocks([]));
+    return () => {
+      active = false;
+    };
+  }, [numericCourseId, practiceLessonId]);
+  const pauseForPractice = React.useCallback(() => playerRef.current?.pause(), []);
+  const resumeAfterPractice = React.useCallback(() => playerRef.current?.play(), []);
 
   // Enhanced features state
   const [notes, setNotes] = React.useState<
@@ -2530,6 +2553,14 @@ export const LessonPageRedesigned = () => {
                 </button>
               )}
             </div>
+
+            <LessonPracticeBlocks
+              blocks={codingBlocks}
+              currentTime={currentTime}
+              isPlaying={isPlaying}
+              onPause={pauseForPractice}
+              onResume={resumeAfterPractice}
+            />
 
             {/* Description */}
             {lesson.description && (

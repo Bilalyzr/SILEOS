@@ -257,6 +257,8 @@ from .coding_assessment import (  # noqa: F401
     CodingSubmission,
     CodingCaseResult,
     CodingJudgeJob,
+    LessonCodingBlock,
+    CodingDraft,
 )
 from .meiporul_operations import (  # noqa: F401
     ImmersiveLabSite,

@@ -8,6 +8,8 @@ from app.schemas.coding_assessment import (
     ChallengeAction,
     ChallengeCreate,
     ChallengeUpdate,
+    DraftSave,
+    LessonBlocksReplace,
     SubmissionCreate,
 )
 from app.services import coding_assessment_service as service
@@ -98,3 +100,44 @@ def submission(
     user=Depends(AuthService.get_current_active_user),
 ):
     return service.submission_detail(db, submission_id, user)
+
+
+@router.get("/courses/{course_id}/lessons/{lesson_id}/blocks")
+def lesson_blocks(
+    course_id: int,
+    lesson_id: int,
+    db: Session = Depends(get_db),
+    user=Depends(AuthService.get_current_active_user),
+):
+    return service.lesson_blocks(db, course_id, lesson_id, user)
+
+
+@router.put("/courses/{course_id}/lessons/{lesson_id}/blocks")
+def replace_lesson_blocks(
+    course_id: int,
+    lesson_id: int,
+    command: LessonBlocksReplace,
+    db: Session = Depends(get_db),
+    user=Depends(AuthService.get_current_active_user),
+):
+    return service.replace_lesson_blocks(db, course_id, lesson_id, command, user)
+
+
+@router.get("/challenges/{slug}/draft")
+def get_draft(
+    slug: str,
+    language: str,
+    db: Session = Depends(get_db),
+    user=Depends(AuthService.get_current_active_user),
+):
+    return service.get_draft(db, slug, language, user)
+
+
+@router.put("/challenges/{slug}/draft")
+def save_draft(
+    slug: str,
+    command: DraftSave,
+    db: Session = Depends(get_db),
+    user=Depends(AuthService.get_current_active_user),
+):
+    return service.save_draft(db, slug, command, user)

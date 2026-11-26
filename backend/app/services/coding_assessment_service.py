@@ -19,11 +19,13 @@ from sqlalchemy.exc import IntegrityError
 from app.models.coding_assessment import (
     CodingCaseResult,
     CodingChallenge,
+    CodingDraft,
     CodingJudgeJob,
     CodingSubmission,
     CodingTestCase,
+    LessonCodingBlock,
 )
-from app.models.course import Course
+from app.models.course import Course, Lesson
 from app.models.enrollment import Enrollment
 from app.services.course_access import ADMIN_ROLES, can_edit
 
@@ -296,19 +298,16 @@ def challenge_action(db, challenge_id: int, command, user) -> dict:
     return _editor_dict(db, challenge)
 
 
-def _student_challenge(db, slug: str, user) -> CodingChallenge:
-    challenge = db.query(CodingChallenge).filter_by(slug=slug, status="published").first()
-    if challenge is None:
-        raise HTTPException(404, "Coding challenge not found.")
-    course = db.get(Course, challenge.course_id)
+def _course_learner_access(db, course, user) -> None:
+    """Editors and admins pass. Everyone else must be enrolled in a published course."""
     if user.role in ADMIN_ROLES or can_edit(db, course, user):
-        return challenge
+        return
     if course is None or course.post_status not in {"publish", "published"}:
         raise HTTPException(404, "Coding challenge not found.")
     enrolled = (
         db.query(Enrollment.id)
         .filter(
-            Enrollment.course_id == challenge.course_id,
+            Enrollment.course_id == course.id,
             Enrollment.user_id == user.id,
             Enrollment.enrollment_status.in_(ACTIVE_ENROLLMENTS),
         )
@@ -316,7 +315,124 @@ def _student_challenge(db, slug: str, user) -> CodingChallenge:
     )
     if enrolled is None:
         raise HTTPException(403, "Enroll in this course to access the coding assessment.")
+
+
+def _student_challenge(db, slug: str, user) -> CodingChallenge:
+    challenge = db.query(CodingChallenge).filter_by(slug=slug, status="published").first()
+    if challenge is None:
+        raise HTTPException(404, "Coding challenge not found.")
+    _course_learner_access(db, db.get(Course, challenge.course_id), user)
     return challenge
+
+
+def _lesson_in_course(db, course_id: int, lesson_id: int) -> Lesson:
+    lesson = db.query(Lesson).filter_by(id=lesson_id, post_parent=course_id).first()
+    if lesson is None:
+        raise HTTPException(404, "Lesson not found.")
+    return lesson
+
+
+def _block_dict(block: LessonCodingBlock, challenge: CodingChallenge, editor: bool) -> dict:
+    data = {
+        "id": block.id,
+        "challenge_slug": challenge.slug,
+        "title": challenge.title,
+        "allowed_languages": list(challenge.allowed_languages or []),
+        "time_limit_ms": challenge.time_limit_ms,
+        "memory_limit_mb": challenge.memory_limit_mb,
+        "max_attempts": challenge.max_attempts,
+        "position_seconds": block.position_seconds,
+        "instructions": block.instructions or "",
+        "ordinal": block.ordinal,
+    }
+    if editor:
+        data["challenge_status"] = challenge.status
+    return data
+
+
+def lesson_blocks(db, course_id: int, lesson_id: int, user) -> list[dict]:
+    course = db.get(Course, course_id)
+    _course_learner_access(db, course, user)
+    _lesson_in_course(db, course_id, lesson_id)
+    editor = user.role in ADMIN_ROLES or can_edit(db, course, user)
+    rows = (
+        db.query(LessonCodingBlock, CodingChallenge)
+        .join(CodingChallenge, CodingChallenge.id == LessonCodingBlock.challenge_id)
+        .filter(LessonCodingBlock.lesson_id == lesson_id, CodingChallenge.course_id == course_id)
+        .order_by(LessonCodingBlock.ordinal, LessonCodingBlock.id)
+        .all()
+    )
+    return [
+        _block_dict(block, challenge, editor)
+        for block, challenge in rows
+        if editor or challenge.status == "published"
+    ]
+
+
+def replace_lesson_blocks(db, course_id: int, lesson_id: int, command, user) -> list[dict]:
+    course = db.get(Course, course_id)
+    if course is None or not (user.role in ADMIN_ROLES or can_edit(db, course, user)):
+        raise HTTPException(403, "Only course editors can change practice blocks.")
+    _lesson_in_course(db, course_id, lesson_id)
+
+    seen = set()
+    resolved = []
+    for index, item in enumerate(command.blocks):
+        challenge = db.query(CodingChallenge).filter_by(slug=item.challenge_slug).first()
+        if challenge is None or challenge.course_id != course_id:
+            raise HTTPException(422, f"Block {index + 1}: challenge not found in this course.")
+        if challenge.status != "published":
+            raise HTTPException(422, f"Block {index + 1}: publish the challenge before adding it to a lesson.")
+        key = (challenge.id, item.position_seconds)
+        if key in seen:
+            raise HTTPException(422, f"Block {index + 1}: the same challenge is already at that time.")
+        seen.add(key)
+        resolved.append((challenge, item, index))
+
+    db.query(LessonCodingBlock).filter_by(lesson_id=lesson_id).delete(synchronize_session=False)
+    for challenge, item, index in resolved:
+        db.add(LessonCodingBlock(
+            lesson_id=lesson_id,
+            challenge_id=challenge.id,
+            position_seconds=item.position_seconds,
+            instructions=item.instructions.strip(),
+            ordinal=index,
+        ))
+    _save(db)
+    return lesson_blocks(db, course_id, lesson_id, user)
+
+
+def get_draft(db, slug: str, language: str, user) -> dict | None:
+    challenge = _student_challenge(db, slug, user)
+    row = (
+        db.query(CodingDraft)
+        .filter_by(user_id=user.id, challenge_id=challenge.id, language=language)
+        .first()
+    )
+    if row is None:
+        return None
+    return {"language": row.language, "source_code": row.source_code, "updated_at": row.updated_at}
+
+
+def save_draft(db, slug: str, command, user) -> dict:
+    challenge = _student_challenge(db, slug, user)
+    if command.language not in (challenge.allowed_languages or []):
+        raise HTTPException(422, "This language is not enabled for the challenge.")
+    source = command.source_code.replace("\x00", "")
+    if len(source.encode("utf-8")) > challenge.max_source_bytes:
+        raise HTTPException(413, "Source code exceeds this challenge's size limit.")
+    row = (
+        db.query(CodingDraft)
+        .filter_by(user_id=user.id, challenge_id=challenge.id, language=command.language)
+        .first()
+    )
+    if row is None:
+        row = CodingDraft(user_id=user.id, challenge_id=challenge.id, language=command.language)
+        db.add(row)
+    row.source_code = source
+    _save(db)
+    db.refresh(row)
+    return {"language": row.language, "source_code": row.source_code, "updated_at": row.updated_at}
 
 
 def learner_challenge(db, slug: str, user) -> dict:

@@ -29,6 +29,8 @@ interface CodeEditorProps {
   onChange: (value: string) => void
   errors: ErrorLocation[]
   label: string
+  /** Fixed height in pixels. Omit to fill the available space. */
+  height?: number
 }
 
 /**
@@ -37,7 +39,7 @@ interface CodeEditorProps {
  * language's keywords plus identifiers from the starter code. Errors from the
  * last run appear as markers on the lines they point to.
  */
-export default function CodeEditor({ language, value, starterCode, onChange, errors, label }: CodeEditorProps) {
+export default function CodeEditor({ language, value, starterCode, onChange, errors, label, height }: CodeEditorProps) {
   const hostRef = useRef<HTMLDivElement | null>(null)
   const editorRef = useRef<MonacoTypes.editor.IStandaloneCodeEditor | null>(null)
   const onChangeRef = useRef(onChange)
@@ -127,5 +129,9 @@ export default function CodeEditor({ language, value, starterCode, onChange, err
     return () => registration.dispose()
   }, [language, starterCode])
 
-  return <div ref={hostRef} className="min-h-[430px] flex-1 overflow-hidden rounded-xl border border-white/10 focus-within:border-violet-500" />
+  return <div
+    ref={hostRef}
+    style={height ? { height } : undefined}
+    className={`${height ? '' : 'min-h-[430px] flex-1 '}overflow-hidden rounded-xl border border-white/10 focus-within:border-violet-500`}
+  />
 }

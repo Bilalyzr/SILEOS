@@ -1,6 +1,6 @@
 # Live Coding Platform: Implementation Plan
 
-Status: **Phase 0 done** (5 of 6 languages working end to end; Java blocked). **Phase 1 built and verified on dev.** Owner: to be assigned.
+Status: **Phase 0 and Phase 1 done.** **Phase 2 built and verified on dev** (lesson practice blocks, drafts, curriculum editor). Owner: to be assigned.
 Last reviewed: 2026-11-26.
 
 Goal: let students write, run, test and submit code inside SILEOS, during live classes and while watching recorded lessons, with automatic progress saving and instructor analytics.
@@ -119,14 +119,29 @@ Still open:
 
 ### Phase 2: Drafts and lesson-embedded practice (size M)
 
-- New model `CodingDraft`: user, challenge, language, source, updated timestamp. Unique per user, challenge and language.
-- Endpoints: `GET` and `PUT` a draft, with `PUT` rate-limited.
-- Frontend: debounced autosave (about 1 second), localStorage as a fallback, and a "saved" indicator.
-- New lesson block: a practice block linked to a challenge and a timestamp.
-- Player: pause at the timestamp, open the workspace beside the video, resume on completion, and store the playback position.
-- Completion of the block counts toward lesson progress.
+**Result (2026-11-26, dev):** Instructors attach published challenges to a lesson in the curriculum editor. The learner's video pauses at the set time and opens the workspace. Drafts are saved to the account.
 
-**Done when:** a student can pause a recorded lesson, solve the attached challenge, resume, and find the same draft after a reload.
+What was built:
+- **Data:** `lesson_coding_blocks` (lesson, challenge, timestamp in seconds or NULL for after the lesson, instructions) and `coding_drafts` (one row per learner, challenge and language). Both are created at backend start; `backend/migrations/20261126_lesson_coding_blocks.sql` documents them.
+- **API:** `GET` and `PUT /api/v1/utporul/coding/courses/{course}/lessons/{lesson}/blocks`, and `GET` and `PUT /api/v1/utporul/coding/challenges/{slug}/draft`.
+  - Editors replace the lesson's blocks. Only published challenges from the same course are accepted. A challenge can't appear twice at the same time.
+  - Learners read blocks only if enrolled, and see only published challenges.
+  - Drafts belong to the learner. One learner can't read another's.
+- **Curriculum editor:** a "Coding practice" section in each video lesson. Pick a published challenge, give a time in seconds (or leave it empty for after the lesson), add instructions, and save.
+- **Lesson player:** when playback reaches a timed block, the video pauses and a dialog opens with the workspace. "Continue lesson" closes it and resumes. Escape or the close button also closes it. A block opens once per view. Untimed blocks are listed under the video as "Practice in this lesson".
+- **Workspace:** the judge workspace is now a component, `CodingWorkspace`, used on the full page and in the lesson dialog. Drafts autosave one second after typing. The copy on this device is written first, so typing survives a dropped connection.
+
+Verification:
+- Backend: 16 tests pass. These cover attaching and listing blocks, enrollment rules, draft-only challenges, cross-course attachment, duplicates, negative times, replacing blocks, draft privacy, and draft language and size limits.
+- Frontend: 19 unit tests pass, covering trigger order, finished blocks, timestamp formatting and draft keys. Typecheck shows only the 3 existing `Home.tsx` errors.
+- Browser (Playwright, dev, 11 checks): the instructor adds a block at 3 seconds. The student sees it, the video pauses at 3 seconds, the draft survives a reload, a correct answer scores 2 of 2, "Continue lesson" resumes the video, and the block does not reopen.
+
+Limits and follow-ups:
+- Only video lessons show the practice section. Text lessons do not.
+- Each block takes one challenge. Reusing a challenge in several lessons is allowed.
+- The dialog does not check whether the learner watched up to the timestamp, so a learner who seeks past it still gets the block.
+- Practice is for learning only. Grading and live class exercises are Phase 4.
+- The browser test expects a clean lesson. Saving again adds another row and can hit the duplicate check.
 
 ### Phase 3: Analytics and performance scoring (size M)
 
@@ -199,4 +214,5 @@ Recommended order: Phases 0, 1 and 2 first, then 3 and 4. Phase 5 later.
 
 - **2026-11-26:** Plan written from an audit of the existing coding, judge and live class code.
 - **2026-11-26:** Phase 0 built on dev: Judge0 stack, per-language memory floor, cgroup v2 workaround. Five of six languages pass end to end; Java blocked.
+- **2026-11-26:** Phase 2 built on dev: lesson practice blocks, learner drafts, curriculum editor section, lesson player dialog.
 - **2026-11-26:** Phase 1 built on dev: Monaco editor with markers and fallback. Judge worker exempted from the general rate limit; internal routes blocked at the edge.

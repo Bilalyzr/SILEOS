@@ -94,3 +94,18 @@ class JudgeFail(Command):
     lease_token: str = Field(min_length=16, max_length=80)
     error: str = Field(min_length=3, max_length=2000)
     retryable: bool = True
+
+
+class LessonBlockIn(Command):
+    challenge_slug: str = Field(min_length=3, max_length=120)
+    position_seconds: int | None = Field(default=None, ge=0, le=86400)
+    instructions: str = Field(default="", max_length=2000)
+
+
+class LessonBlocksReplace(Command):
+    blocks: list[LessonBlockIn] = Field(default_factory=list, max_length=20)
+
+
+class DraftSave(Command):
+    language: Language
+    source_code: str = Field(default="", max_length=262144)

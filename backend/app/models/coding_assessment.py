@@ -233,3 +233,66 @@ class CodingJudgeJob(Base):
         CheckConstraint("attempts >= 0", name="ck_coding_judge_job_attempts"),
         Index("ix_coding_judge_claim", "status", "available_at", "priority", "id"),
     )
+
+
+class LessonCodingBlock(Base):
+    """A practice challenge placed in a lesson.
+
+    `position_seconds` is where playback pauses for the learner to practise.
+    NULL means the block is listed after the lesson rather than triggered.
+    """
+
+    __tablename__ = "lesson_coding_blocks"
+
+    id = Column(Integer, primary_key=True)
+    lesson_id = Column(
+        Integer,
+        ForeignKey("lessons.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    challenge_id = Column(
+        Integer,
+        ForeignKey("coding_challenges.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    position_seconds = Column(Integer, nullable=True)
+    instructions = Column(Text, nullable=False, default="")
+    ordinal = Column(Integer, nullable=False, default=0)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+
+    __table_args__ = (
+        CheckConstraint(
+            "position_seconds IS NULL OR position_seconds >= 0",
+            name="ck_lesson_coding_block_position",
+        ),
+        UniqueConstraint("lesson_id", "challenge_id", "position_seconds", name="uq_lesson_coding_block"),
+    )
+
+
+class CodingDraft(Base):
+    """A learner's unsaved source for one challenge and language, kept between visits."""
+
+    __tablename__ = "coding_drafts"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    challenge_id = Column(
+        Integer,
+        ForeignKey("coding_challenges.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    language = Column(String(30), nullable=False)
+    source_code = Column(Text, nullable=False, default="")
+    updated_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        server_default=func.now(),
+        onupdate=func.now(),
+    )
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "challenge_id", "language", name="uq_coding_draft"),
+    )

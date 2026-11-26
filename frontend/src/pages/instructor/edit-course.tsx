@@ -1,3 +1,4 @@
+import LessonPracticeEditor from "@/components/coding/LessonPracticeEditor";
 import { CourseLinkField } from "@/components/course/CourseLinkField";
 import { AstraSymbol } from "@/components/design-system/AstraSymbol";
 import { PageLayout, PageHeader } from "@/components/design-system/PageLayout";
@@ -2250,6 +2251,12 @@ export function EditCourse() {
                                                     {lecture.type ===
                                                       "video" && (
                                                       <div className="space-y-3">
+                                                        <LessonPracticeEditor
+                                                          courseId={course.id}
+                                                          lessonId={Number(
+                                                            String(lecture.id).replace(/^lesson-/, ""),
+                                                          )}
+                                                        />
                                                         {/* Content-type sub-toggle (spec B7, plan Task 5/9): a
                                               "video" lecture's actual player content can be a
                                               plain video, a sandboxed H5P interactive item, or a

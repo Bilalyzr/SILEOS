@@ -187,6 +187,7 @@ Services hold business rules. Routers stay thin. Examples:
 - **State** (`store/`): Zustand for auth, cart, course and quiz state. TanStack Query handles server data.
 - **Auth gateway** (`components/auth/gateway/`): the sign-in and sign-up experience ("Infinity Gateway"). `auth-layout.tsx` wraps `/login` and `/register`, and `GatewayCanvas.tsx` draws the animated network behind them.
 - **3D** (`components/sympho/`, `pages/meiporul-ar.tsx`): three.js scenes for the hero and the AR gallery. Models are GLB files in `frontend/public/models/ar/` and are meshopt-compressed for the gallery (decoder at `public/vendor/meshopt_decoder.js`).
+- **Lesson practice** (`components/coding/LessonPracticeBlocks.tsx`, `LessonPracticeEditor.tsx`): instructors attach challenges to video lessons in the curriculum editor. The lesson player pauses at a timed block and opens `CodingWorkspace`. Data in `lesson_coding_blocks`; learner drafts in `coding_drafts`. See `docs/CODING_PLATFORM_PLAN.md`, Phase 2.
 - **Coding workspace editor** (`components/coding/`): Monaco, loaded lazily on `/coding/:slug`. `VITE_CODING_EDITOR=textarea` at build time restores the plain textarea. Error markers come from `errorLocations.ts`. See `docs/CODING_PLATFORM_PLAN.md`, Phase 1.
 - **Page guides** (`page-guides.ts`): contextual help. Auth pages are excluded on purpose.
 - **Frontend is baked at build time.** `VITE_*` variables are read during `npm run build`, so changing them needs a rebuild.
@@ -388,6 +389,7 @@ cd backend && pytest -q                                       # run tests on the
 ## 10. Changelog
 
 - **2026-11-26:** Live coding platform plan added at `docs/CODING_PLATFORM_PLAN.md` (proposed, not started).
+- **2026-11-26:** Lesson practice blocks and learner drafts added (Phase 2). Instructors set blocks in the curriculum editor; learners practise in the lesson player.
 - **2026-11-26:** Coding workspace uses Monaco with error markers and a textarea fallback (Phase 1). Judge worker routes exempt from the general rate limit and blocked at the dev edge.
 - **2026-11-26:** Judge0 sandbox added on dev for the coding worker (Phase 0): 5 of 6 languages pass end to end; Java blocked. Worker gained a Node memory floor.
 - **2026-11-26:** First version of this knowledge base, written from the repository layout, compose files, routers, services, nginx configs and CI workflow.

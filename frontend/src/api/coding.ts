@@ -99,6 +99,34 @@ export interface CodingSubmission {
   results: CodingCaseResult[]
 }
 
+export interface LessonCodingBlock {
+  id: number
+  challenge_slug: string
+  title: string
+  allowed_languages: CodingLanguage[]
+  time_limit_ms: number
+  memory_limit_mb: number
+  max_attempts: number
+  /** Seconds into the lesson where playback pauses. null lists the block after the lesson. */
+  position_seconds: number | null
+  instructions: string
+  ordinal: number
+  /** Only returned to editors. */
+  challenge_status?: ChallengeStatus
+}
+
+export interface LessonCodingBlockInput {
+  challenge_slug: string
+  position_seconds: number | null
+  instructions: string
+}
+
+export interface CodingDraft {
+  language: CodingLanguage
+  source_code: string
+  updated_at: string
+}
+
 export const codingAPI = {
   editorCourses: async () =>
     (await api.get<CodingCourse[]>('/utporul/coding/courses')).data,
@@ -126,4 +154,12 @@ export const codingAPI = {
     })).data,
   submission: async (submissionId: number) =>
     (await api.get<CodingSubmission>(`/utporul/coding/submissions/${submissionId}`)).data,
+  lessonBlocks: async (courseId: number, lessonId: number) =>
+    (await api.get<LessonCodingBlock[]>(`/utporul/coding/courses/${courseId}/lessons/${lessonId}/blocks`)).data,
+  saveLessonBlocks: async (courseId: number, lessonId: number, blocks: LessonCodingBlockInput[]) =>
+    (await api.put<LessonCodingBlock[]>(`/utporul/coding/courses/${courseId}/lessons/${lessonId}/blocks`, { blocks })).data,
+  draft: async (slug: string, language: CodingLanguage) =>
+    (await api.get<CodingDraft | null>(`/utporul/coding/challenges/${slug}/draft`, { params: { language } })).data,
+  saveDraft: async (slug: string, language: CodingLanguage, sourceCode: string) =>
+    (await api.put<CodingDraft>(`/utporul/coding/challenges/${slug}/draft`, { language, source_code: sourceCode })).data,
 }
