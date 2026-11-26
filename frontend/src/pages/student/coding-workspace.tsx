@@ -1,8 +1,14 @@
-import { useEffect, useRef, useState } from 'react'
+import { Component, Suspense, lazy, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, CheckCircle2, Clock3, Cpu, Loader2, Play, ShieldCheck, XCircle } from 'lucide-react'
 import { codingAPI, type CodingLanguage, type CodingSubmission, type LearnerChallenge } from '@/api/coding'
 import { plannerError } from '@/api/planner'
+import { codingEditorMode } from '@/components/coding/editorConfig'
+import { errorLocations, type ErrorLocation } from '@/components/coding/errorLocations'
+
+// Monaco is large, so it loads only when this page opens. If it fails to load,
+// the boundary below falls back to the plain textarea.
+const CodeEditor = lazy(() => import('@/components/coding/CodeEditor'))
 
 const terminal = new Set(['passed', 'failed', 'error', 'cancelled'])
 const languageLabels: Record<CodingLanguage, string> = {
@@ -19,6 +25,11 @@ export default function CodingWorkspacePage() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const pollRef = useRef<number | undefined>()
+  const editorMode = codingEditorMode()
+  const errors = useMemo<ErrorLocation[]>(() => {
+    if (!submission) return []
+    return submission.results.flatMap((result) => errorLocations(submission.language, result.stderr || ''))
+  }, [submission])
 
   useEffect(() => {
     let active = true
@@ -114,7 +125,22 @@ export default function CodingWorkspacePage() {
           </select>
           <div className="flex items-center gap-2 text-xs text-emerald-300"><ShieldCheck className="h-4 w-4" />Network disabled · isolated execution</div>
         </div>
-        <textarea aria-label="Source code" spellCheck={false} value={source} onChange={(event) => setSource(event.target.value)} className="min-h-[430px] flex-1 resize-none rounded-xl border border-white/10 bg-[#0d111a] p-5 font-mono text-sm leading-6 text-slate-100 outline-none focus:border-violet-500" />
+        {editorMode === 'monaco' ? (
+          <EditorBoundary fallback={sourceTextarea(source, setSource)}>
+            <Suspense fallback={sourceTextarea(source, setSource)}>
+              <CodeEditor
+                language={language}
+                value={source}
+                starterCode={challenge.starter_code[language] || ''}
+                onChange={setSource}
+                errors={submission?.language === language ? errors : []}
+                label="Source code"
+              />
+            </Suspense>
+          </EditorBoundary>
+        ) : (
+          sourceTextarea(source, setSource)
+        )}
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
           <p className="text-xs text-slate-500">Hidden expected outputs stay on the LMS and are never sent to the runner.</p>
           <button onClick={() => void submit()} disabled={busy || !source.trim() || remaining <= 0} className="inline-flex items-center gap-2 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-50">
@@ -126,6 +152,24 @@ export default function CodingWorkspacePage() {
       </section>
     </div>
   </main>
+}
+
+function sourceTextarea(value: string, onChange: (value: string) => void) {
+  return <textarea aria-label="Source code" spellCheck={false} value={value} onChange={(event) => onChange(event.target.value)} className="min-h-[430px] flex-1 resize-none rounded-xl border border-white/10 bg-[#0d111a] p-5 font-mono text-sm leading-6 text-slate-100 outline-none focus:border-violet-500" />
+}
+
+/** Shows the fallback if the editor throws while loading or rendering. */
+class EditorBoundary extends Component<{ fallback: ReactNode; children: ReactNode }, { failed: boolean }> {
+  state = { failed: false }
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+  componentDidCatch(error: unknown) {
+    console.warn('Code editor unavailable, using the plain textarea.', error)
+  }
+  render() {
+    return this.state.failed ? this.props.fallback : this.props.children
+  }
 }
 
 function InfoBlock({ title, text }: { title: string; text: string }) {

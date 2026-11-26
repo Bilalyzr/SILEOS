@@ -187,6 +187,7 @@ Services hold business rules. Routers stay thin. Examples:
 - **State** (`store/`): Zustand for auth, cart, course and quiz state. TanStack Query handles server data.
 - **Auth gateway** (`components/auth/gateway/`): the sign-in and sign-up experience ("Infinity Gateway"). `auth-layout.tsx` wraps `/login` and `/register`, and `GatewayCanvas.tsx` draws the animated network behind them.
 - **3D** (`components/sympho/`, `pages/meiporul-ar.tsx`): three.js scenes for the hero and the AR gallery. Models are GLB files in `frontend/public/models/ar/` and are meshopt-compressed for the gallery (decoder at `public/vendor/meshopt_decoder.js`).
+- **Coding workspace editor** (`components/coding/`): Monaco, loaded lazily on `/coding/:slug`. `VITE_CODING_EDITOR=textarea` at build time restores the plain textarea. Error markers come from `errorLocations.ts`. See `docs/CODING_PLATFORM_PLAN.md`, Phase 1.
 - **Page guides** (`page-guides.ts`): contextual help. Auth pages are excluded on purpose.
 - **Frontend is baked at build time.** `VITE_*` variables are read during `npm run build`, so changing them needs a rebuild.
 
@@ -340,6 +341,7 @@ Restarting nginx after a frontend rebuild is needed because nginx caches contain
 | Payments fail on dev | Razorpay keys are placeholders | Expected on dev. Use test keys on a staging stack. |
 | Email not sent | SMTP not configured or invalid | Check `SMTP_*` in `.env` and run `backend/check_smtp.py`. |
 | Coding challenge never graded | `code-judge-worker` not running, or Judge0 down | `docker compose ps judge0-server code-judge-worker`. The worker runs by default on dev. |
+| Coding submissions stay `queued` for a long time | Worker throttled by the general rate limit (1000 requests per hour) | `/api/v1/internal/coding/` is exempt in `security_middleware.py`. Check the worker log for `429`. |
 | Judge0 runs fail with `Internal Error … /box/script.py` | isolate cannot use cgroup v2 | Judge0 must use per-process limits (`ENABLE_PER_PROCESS_AND_THREAD_*=true` in `judge0/judge0.conf`). |
 | Node or TypeScript run times out or aborts | Memory cap too low for Node's address space | The worker applies a 1 GB floor (`MIN_MEMORY_MB` in `code-judge-worker/worker.py`). |
 | Java submissions fail with `pthread_create EAGAIN` | JVM exceeds Judge0 thread and address-space caps | Known blocker. Do not enable Java in challenges yet. |
@@ -386,6 +388,7 @@ cd backend && pytest -q                                       # run tests on the
 ## 10. Changelog
 
 - **2026-11-26:** Live coding platform plan added at `docs/CODING_PLATFORM_PLAN.md` (proposed, not started).
+- **2026-11-26:** Coding workspace uses Monaco with error markers and a textarea fallback (Phase 1). Judge worker routes exempt from the general rate limit and blocked at the dev edge.
 - **2026-11-26:** Judge0 sandbox added on dev for the coding worker (Phase 0): 5 of 6 languages pass end to end; Java blocked. Worker gained a Node memory floor.
 - **2026-11-26:** First version of this knowledge base, written from the repository layout, compose files, routers, services, nginx configs and CI workflow.
 - **2026-10-30:** Infinity Gateway sign-in and sign-up redesign; logout now fully revokes sessions; hero swapped to Meta Quest 3S; gallery models compressed (meshopt); opening loader smoothed; page-header blueprints redesigned.

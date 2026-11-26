@@ -1,6 +1,6 @@
 # Live Coding Platform: Implementation Plan
 
-Status: **Phase 0 in progress** (5 of 6 languages working end to end; Java blocked). Owner: to be assigned.
+Status: **Phase 0 done** (5 of 6 languages working end to end; Java blocked). **Phase 1 built and verified on dev.** Owner: to be assigned.
 Last reviewed: 2026-11-26.
 
 Goal: let students write, run, test and submit code inside SILEOS, during live classes and while watching recorded lessons, with automatic progress saving and instructor analytics.
@@ -92,14 +92,30 @@ Still open for Phase 0: the Java decision, and a production review of privileged
 
 ### Phase 1: Editor upgrade (size M)
 
-- Add Monaco behind a lazy import in the student workspace.
-- Map languages to Monaco modes and keep the same six languages.
-- Show autocomplete for keywords and identifiers from starter code.
-- Add an error panel that maps stderr line numbers to editor markers.
-- Keep the textarea fallback behind a feature flag.
-- Check bundle size; the editor chunk must not load on non-coding pages.
+**Result (2026-11-26, dev):** Monaco is in place on the workspace page, with error markers on failing lines. A plain textarea remains as a fallback.
 
-**Done when:** the workspace highlights syntax, shows errors on the right lines, and the main bundle size does not grow noticeably.
+What was built:
+- `monaco-editor` 0.57.0, pinned. (0.58.0 was excluded: it was published three days before this work.)
+- `frontend/src/components/coding/CodeEditor.tsx`: Monaco wrapper. Loaded lazily by the workspace page, so it downloads only on that page. Only the six judge languages and their workers are registered.
+- Autocomplete: keywords per language, plus identifiers from the starter code.
+- Error markers: `errorLocations.ts` reads line and column from judge stderr for Python, JavaScript, TypeScript, C, C++ and Java. Markers clear after a run with no errors.
+- Fallback: `VITE_CODING_EDITOR=textarea` at build time restores the textarea. An error boundary also falls back if Monaco fails to load.
+- `acceptSuggestionOnEnter` is off, so pressing Enter never changes a learner's words.
+
+Verification:
+- Unit tests: 11 passing (error parsing, mode flag, identifiers).
+- Typecheck: no new errors. The 3 pre-existing `Home.tsx` errors remain.
+- Build: `CodeEditor` chunk is 2.8 MB raw and about 730 KB gzipped. It loads only on the workspace page. The TypeScript worker (7 MB) loads only for JavaScript and TypeScript challenges.
+- Browser (Playwright, dev stack, 9 checks): the editor renders, typed code is held, a failing run shows an error squiggle on line 1, a passing run scores 2 of 2, and markers clear.
+
+Problems found during testing:
+- **Judge worker throttled (fixed in backend and edge).** The general rate limit caps each client at 1000 requests per hour. The worker polls about once a second, so it hit the cap after about 17 minutes and submissions stuck in `queued`. Fix: `/api/v1/internal/coding/` is exempt from the general limit, since every call carries the runner token. The dev edge also returns 404 for these routes, because the worker calls the backend directly.
+- **Monaco key handling.** Enter accepted suggestions, which changed typed words. Fixed by turning off `acceptSuggestionOnEnter`.
+
+Still open:
+- Mobile layout is not checked.
+- Live class and lesson embedding are Phases 2 and 4.
+- The Playwright run leaves its test submissions in the dev database.
 
 ### Phase 2: Drafts and lesson-embedded practice (size M)
 
@@ -183,3 +199,4 @@ Recommended order: Phases 0, 1 and 2 first, then 3 and 4. Phase 5 later.
 
 - **2026-11-26:** Plan written from an audit of the existing coding, judge and live class code.
 - **2026-11-26:** Phase 0 built on dev: Judge0 stack, per-language memory floor, cgroup v2 workaround. Five of six languages pass end to end; Java blocked.
+- **2026-11-26:** Phase 1 built on dev: Monaco editor with markers and fallback. Judge worker exempted from the general rate limit; internal routes blocked at the edge.

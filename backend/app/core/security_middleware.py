@@ -236,6 +236,9 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             "/api/v1/enrollments/",
             # Page telemetry must not exhaust a learner's navigation budget.
             "/api/v1/analytics/track",
+            # The judge worker polls these about once a second. Every call carries
+            # X-Code-Runner-Token, and the routes are not reachable through the edge.
+            "/api/v1/internal/coding/",
         ]
         return any(path.startswith(skip_path) for skip_path in skip_paths)
 
