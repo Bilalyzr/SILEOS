@@ -169,6 +169,7 @@ Services hold business rules. Routers stay thin. Examples:
 
 - **`recording-worker`** runs `python -m app.workers.recording_lessons` and the background loops (`BACKGROUND_TASK_MODE=worker`). Keeping loops out of the API workers stops them running once per uvicorn process.
 - **`app/workers/runtime.py`** is a supervised maintenance scheduler. Redis picks the scheduler. Durable database claims and Postgres advisory locks are the safety boundary, so duplicate delivery is avoided at the database layer.
+- **Judge0 sandbox** (`docker-compose.judge0.yml`, `judge0/judge0.conf`, gitignored): `judge0-server`, `judge0-workers`, `judge0-db`, `judge0-redis`. Internal network only, privileged. Runs on dev and is wired to `code-judge-worker`. Java is currently blocked; see `docs/CODING_PLATFORM_PLAN.md`, Phase 0.
 - **`code-judge-worker`** leases Utporul coding submissions and runs each test case in a Judge0 sandbox with networking disabled. It never executes learner code itself. Enable with compose profile `coding`.
 
 ### 3.6 Streaming service (`streaming-service/video_streaming.py`)
@@ -338,7 +339,10 @@ Restarting nginx after a frontend rebuild is needed because nginx caches contain
 | 3D model missing in AR gallery | GLB not in `public/models/ar`, or meshopt decoder not loaded | Confirm the file exists and that `MESHOPT_DECODER_SRC` is set in `meiporul-ar.tsx`. |
 | Payments fail on dev | Razorpay keys are placeholders | Expected on dev. Use test keys on a staging stack. |
 | Email not sent | SMTP not configured or invalid | Check `SMTP_*` in `.env` and run `backend/check_smtp.py`. |
-| Coding challenge never graded | `code-judge-worker` not running (profile `coding`) | Start with `--profile coding`. |
+| Coding challenge never graded | `code-judge-worker` not running, or Judge0 down | `docker compose ps judge0-server code-judge-worker`. The worker runs by default on dev. |
+| Judge0 runs fail with `Internal Error … /box/script.py` | isolate cannot use cgroup v2 | Judge0 must use per-process limits (`ENABLE_PER_PROCESS_AND_THREAD_*=true` in `judge0/judge0.conf`). |
+| Node or TypeScript run times out or aborts | Memory cap too low for Node's address space | The worker applies a 1 GB floor (`MIN_MEMORY_MB` in `code-judge-worker/worker.py`). |
+| Java submissions fail with `pthread_create EAGAIN` | JVM exceeds Judge0 thread and address-space caps | Known blocker. Do not enable Java in challenges yet. |
 | Tests fail on stale expectations | Tests out of date with UI or API changes | Update the test to the current behaviour, after checking the change is intended. |
 
 Useful commands:
@@ -381,6 +385,8 @@ cd backend && pytest -q                                       # run tests on the
 
 ## 10. Changelog
 
+- **2026-11-26:** Live coding platform plan added at `docs/CODING_PLATFORM_PLAN.md` (proposed, not started).
+- **2026-11-26:** Judge0 sandbox added on dev for the coding worker (Phase 0): 5 of 6 languages pass end to end; Java blocked. Worker gained a Node memory floor.
 - **2026-11-26:** First version of this knowledge base, written from the repository layout, compose files, routers, services, nginx configs and CI workflow.
 - **2026-10-30:** Infinity Gateway sign-in and sign-up redesign; logout now fully revokes sessions; hero swapped to Meta Quest 3S; gallery models compressed (meshopt); opening loader smoothed; page-header blueprints redesigned.
 - **2026-10-29:** Backend moved to 4 uvicorn workers without reload (performance fix); frontend stale-build volume fixed.

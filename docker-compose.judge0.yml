@@ -1,0 +1,89 @@
+# Judge0 sandbox for the Utporul coding worker (Phase 0 of the coding platform).
+# Loaded via COMPOSE_FILE in .env. Judge0 runs learner code in isolate sandboxes;
+# it is NOT published to the host and sits on an internal network with its own
+# Postgres and Redis. The worker reaches it over tutor-network.
+#
+# privileged: Judge0's isolate sandbox needs cgroup and namespace access. Keep
+# this host-local and never expose judge0-server beyond tutor-network.
+services:
+  judge0-server:
+    image: judge0/judge0:1.13.1
+    privileged: true
+    env_file:
+      - ./judge0/judge0.conf
+    depends_on:
+      judge0-db:
+        condition: service_healthy
+      judge0-redis:
+        condition: service_healthy
+    networks:
+      - tutor-network
+      - judge0-internal
+    restart: unless-stopped
+
+  judge0-workers:
+    image: judge0/judge0:1.13.1
+    command: ["./scripts/workers"]
+    privileged: true
+    env_file:
+      - ./judge0/judge0.conf
+    depends_on:
+      judge0-db:
+        condition: service_healthy
+      judge0-redis:
+        condition: service_healthy
+    networks:
+      - judge0-internal
+    restart: unless-stopped
+
+  judge0-db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_DB=judge0
+      - POSTGRES_USER=judge0
+      - POSTGRES_PASSWORD=${JUDGE0_DB_PASSWORD:-judge0-dev}
+    volumes:
+      - judge0_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U judge0 -d judge0"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks:
+      - judge0-internal
+    restart: unless-stopped
+
+  judge0-redis:
+    image: redis:7-alpine
+    command: ["sh", "-c", "redis-server --requirepass \"$$REDIS_PASSWORD\""]
+    environment:
+      - REDIS_PASSWORD=${JUDGE0_REDIS_PASSWORD:-judge0-redis-dev}
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$$REDIS_PASSWORD\" ping | grep -q PONG"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks:
+      - judge0-internal
+    restart: unless-stopped
+
+  backend:
+    environment:
+      - CODE_RUNNER_TOKEN=${CODE_RUNNER_TOKEN:-}
+
+  code-judge-worker:
+    profiles: !reset []
+    environment:
+      - JUDGE0_URL=http://judge0-server:2358
+      - JUDGE0_AUTH_TOKEN=${JUDGE0_AUTH_TOKEN:-}
+      - CODE_RUNNER_TOKEN=${CODE_RUNNER_TOKEN:-}
+    depends_on:
+      judge0-server:
+        condition: service_started
+
+volumes:
+  judge0_db:
+
+networks:
+  judge0-internal:
+    internal: true

@@ -37,6 +37,12 @@ LANGUAGE_PREFIXES = {
 }
 
 
+# Judge0 caps memory as virtual address space (RLIMIT_AS) because cgroup accounting
+# is not available on this host. Node reserves far more address space than it uses
+# and aborts at start-up below about 1 GB, so these languages get a floor.
+MIN_MEMORY_MB = {"javascript": 1024, "typescript": 1024}
+
+
 def _headers() -> dict[str, str]:
     return {"X-Code-Runner-Token": RUNNER_TOKEN}
 
@@ -99,7 +105,7 @@ def _execute_case(
         "stdin": case.get("input_text", ""),
         "cpu_time_limit": max(0.1, float(limits["time_ms"]) / 1000),
         "wall_time_limit": max(1.0, float(limits["time_ms"]) / 1000 + 1),
-        "memory_limit": int(limits["memory_mb"]) * 1024,
+        "memory_limit": max(int(limits["memory_mb"]), MIN_MEMORY_MB.get(job["language"], 0)) * 1024,
         "max_file_size": 1024,
         "enable_network": False,
         "redirect_stderr_to_stdout": False,

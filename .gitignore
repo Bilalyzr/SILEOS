@@ -293,3 +293,4 @@ SILEOS/
 /frontend/public/models/ar/*
 !/frontend/public/models/ar/apple-vision-pro.glb
 !/models/ar/apple-vision-pro.glb
+judge0/judge0.conf

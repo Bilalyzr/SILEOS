@@ -1,0 +1,185 @@
+# Live Coding Platform: Implementation Plan
+
+Status: **Phase 0 in progress** (5 of 6 languages working end to end; Java blocked). Owner: to be assigned.
+Last reviewed: 2026-11-26.
+
+Goal: let students write, run, test and submit code inside SILEOS, during live classes and while watching recorded lessons, with automatic progress saving and instructor analytics.
+
+---
+
+## 1. What already exists
+
+Build on these rather than replacing them.
+
+| Area | Existing piece | Location |
+|---|---|---|
+| Challenge model | `CodingChallenge`: slug, statement, allowed languages, starter code, time and memory limits, attempt cap, draft or published status | `backend/app/models/coding_assessment.py` |
+| Test cases | `CodingTestCase`: ordinal, visible or hidden, input, expected output, comparison mode, weight | same file |
+| Submissions | `CodingSubmission`: language, source hash, idempotency key, status, score, passed and total cases, attempt number, judge version | same file |
+| API | Course challenges, learner challenges, submit (returns 202), submission detail | `backend/app/routers/coding_assessments.py` |
+| Service | Editor and learner logic, submit, job claim, complete and fail | `backend/app/services/coding_assessment_service.py` |
+| Judge | Leases jobs, runs each case in Judge0 with networking off, six languages | `code-judge-worker/worker.py` |
+| Internal judge API | Worker callbacks | `backend/app/routers/coding_judge_internal.py` |
+| Student UI | Workspace and practice pages | `frontend/src/pages/student/coding-workspace.tsx`, `code-practice.tsx` |
+| Instructor UI | Authoring studio | `frontend/src/pages/instructor/coding-studio.tsx` |
+| API client | Coding calls | `frontend/src/api/coding.ts` |
+| Certificates | Coding referenced in certificate logic | `backend/app/services/certificate_service.py` |
+| Tests | Coding assessment tests | `backend/tests/test_coding_assessments.py` |
+
+## 2. Gap analysis
+
+| Requirement | Status | Gap |
+|---|---|---|
+| Syntax highlighting and autocomplete | Missing | Editor is a plain `<textarea>` |
+| Multiple languages | Partial | Six languages, all through Judge0 |
+| Code run and test in browser | Partial | Works through the judge, but Judge0 is not running on dev |
+| Error handling and debugging | Partial | Raw output only, no line mapping |
+| Automated test validation | Present | Hidden and visible cases |
+| Performance scoring | Partial | Per-case time and memory not confirmed as stored |
+| Submission history and analytics | Partial | History exists; instructor metrics need checking |
+| Pause a lesson, practise, resume | Missing | No embedded coding step in lessons |
+| Automatic progress saving | Missing | No draft storage |
+| Live class exercise sharing | Missing | Live classes have polls only |
+| Collaborative coding and live review | Missing | No realtime layer |
+| Student certificate and progress view | Partial | Certificate hook exists, no coding criteria |
+
+## 3. Architecture decisions
+
+**Execution stays in the sandbox.** Learner code never runs inside the backend. The judge worker remains the only executor, with networking disabled and CPU and memory limits applied.
+
+**Editor: Monaco.** Use `@monaco-editor/react`, lazy-loaded so it stays out of the main bundle. Monaco gives highlighting, autocomplete and diagnostics. Keep the textarea as a fallback for weak connections.
+
+**Drafts: server-stored.** Drafts live in the database, not only in the browser, so they survive a device change. localStorage is a fast local cache.
+
+**Realtime: deferred.** Live results start with polling. Collaborative editing needs a stateful WebSocket layer and is deferred to Phase 5.
+
+**Lessons: timestamped practice blocks.** A practice block attaches to a lesson at a timestamp. The player pauses there, opens the editor beside the video, and resumes on completion.
+
+## 4. Phases
+
+### Phase 0: Infrastructure (size S, about 1 day)
+
+**Result (2026-11-26, dev):** Judge0 runs on the dev stack and submissions are scored end to end through the backend and the worker. Python, JavaScript, TypeScript, C and C++ pass. Java is blocked (see below).
+
+What was built:
+- `docker-compose.judge0.yml` (added to `COMPOSE_FILE`): `judge0-server`, `judge0-workers`, `judge0-db` and `judge0-redis`. Judge0 sits on an internal network and is not published to the host. `code-judge-worker` now starts by default.
+- `judge0/judge0.conf` (gitignored, holds secrets): Judge0 runtime settings, loaded with `env_file`.
+- `.env`: `CODE_RUNNER_TOKEN`, `JUDGE0_AUTH_TOKEN`, `JUDGE0_URL` and database passwords.
+- `code-judge-worker/worker.py`: `MIN_MEMORY_MB` floor of 1024 MB for JavaScript and TypeScript.
+
+Problems found and how they were fixed:
+| Symptom | Cause | Fix |
+|---|---|---|
+| Judge0 connects to `localhost` | Config not applied | Use `env_file` instead of a mounted file |
+| Every run: `Internal Error … /box/script.py` | isolate `--cg` needs cgroup v1; host is cgroup v2 | `ENABLE_PER_PROCESS_AND_THREAD_*=true` so Judge0 uses rlimits |
+| Node aborts or times out under 512 MB | Node reserves far more virtual memory than it uses | 1 GB floor for JavaScript and TypeScript |
+| TypeScript compile limit | Compile uses `MAX_CPU_TIME_LIMIT` (default 5 s) | Raised to 15 s, wall 20 s |
+| Java `pthread_create EAGAIN` | JVM thread and address-space needs exceed Judge0 caps (max 120 processes or threads) | Not fixed. See below. |
+
+Verification:
+- Direct Judge0 checks: 16 of 17 pass. The failing one is Java.
+- End to end (real database, service layer, worker and Judge0): Python, JavaScript, TypeScript, C and C++ each score 100 (2 of 2 cases).
+- Sandbox: network is blocked, CPU time limit is enforced, runtime and compile errors are reported, and huge output is capped.
+
+Known limitations:
+- **Java is blocked.** The JVM fails to create threads under Judge0's process cap. Tried and failed: smaller heap and code cache, serial GC, one GC thread, and a larger address-space limit. Options: (a) run Java on a host with cgroup v1 or with a newer Judge0 (needs approval, as it changes the host), (b) drop Java from the challenge language list until fixed. Recommended: (b) now, then (a) later.
+- **Memory is virtual, not resident.** Judge0 limits address space (RLIMIT_AS) because cgroup accounting is off on this host. Programs can use more real RAM than the challenge limit suggests.
+- **Process cap is high.** `MAX_PROCESSES_AND_OR_THREADS=120` is Judge0's maximum. Fork-bomb protection is weaker than with cgroups, but still bounded.
+- **Privileged containers.** `judge0-server` and `judge0-workers` run privileged. Keep them on this host and off public networks.
+- **Compose profile.** The `coding` profile is overridden in `docker-compose.judge0.yml`, so the worker runs by default on dev.
+
+Still open for Phase 0: the Java decision, and a production review of privileged containers.
+
+### Phase 1: Editor upgrade (size M)
+
+- Add Monaco behind a lazy import in the student workspace.
+- Map languages to Monaco modes and keep the same six languages.
+- Show autocomplete for keywords and identifiers from starter code.
+- Add an error panel that maps stderr line numbers to editor markers.
+- Keep the textarea fallback behind a feature flag.
+- Check bundle size; the editor chunk must not load on non-coding pages.
+
+**Done when:** the workspace highlights syntax, shows errors on the right lines, and the main bundle size does not grow noticeably.
+
+### Phase 2: Drafts and lesson-embedded practice (size M)
+
+- New model `CodingDraft`: user, challenge, language, source, updated timestamp. Unique per user, challenge and language.
+- Endpoints: `GET` and `PUT` a draft, with `PUT` rate-limited.
+- Frontend: debounced autosave (about 1 second), localStorage as a fallback, and a "saved" indicator.
+- New lesson block: a practice block linked to a challenge and a timestamp.
+- Player: pause at the timestamp, open the workspace beside the video, resume on completion, and store the playback position.
+- Completion of the block counts toward lesson progress.
+
+**Done when:** a student can pause a recorded lesson, solve the attached challenge, resume, and find the same draft after a reload.
+
+### Phase 3: Analytics and performance scoring (size M)
+
+- Store per-case time and memory from Judge0 results on each submission.
+- Scoring: pass rate is primary. Time and memory act as tie-breakers, with weights set per challenge.
+- Instructor metrics endpoint: pass rate, attempts, common failing cases, and time to first pass per challenge.
+- Instructor report view in `coding-studio.tsx`, with CSV export through the existing CSV safety helpers.
+- Student progress view: completed and attempted challenges, scores, and history.
+- Coding completion criteria for certificates, behind a per-course setting.
+
+**Done when:** an instructor can see pass rates and failing cases for a challenge, and a student can see their scores over time.
+
+### Phase 4: Live class exercises (size M to L)
+
+- Instructor pushes a published challenge to a live session, following the pattern in `live_class_polls.py`.
+- Students see the challenge in the live view and submit as normal.
+- Live results board with polling, refreshing every few seconds.
+- Grading is optional per session. Ungraded practice still records submissions.
+- Instructor can reveal a model solution after the session.
+
+**Done when:** an instructor can push a challenge mid-class, watch submissions arrive on a results board, and close it.
+
+### Phase 5: Collaboration and live review (size L, deferred)
+
+- Add a WebSocket endpoint in FastAPI, or a small y-websocket service.
+- Use Yjs with `y-monaco` for shared editing in a session room.
+- Line-anchored review comments stored as rows linked to a submission.
+- Instructor review queue.
+
+**Done when:** two students can edit the same file and an instructor can leave a comment on a specific line of a submission.
+
+**Note:** this phase adds a stateful realtime service with its own scaling and failure modes. Start only after Phases 0 to 4 are stable and students ask for it.
+
+### Phase 6: Hardening (runs alongside all phases)
+
+- Per-user rate limits on runs and submissions.
+- Queue backpressure in the judge worker, with a clear message when the queue is full.
+- Load test at live-class scale, for example 100 students submitting within one minute.
+- Tests:
+  - Pytest for each new route and service rule.
+  - Vitest for editor and autosave logic.
+  - Playwright for the lesson practice flow.
+- Monitoring: queue depth, judge latency, failure rate, in the existing observability router.
+
+## 5. Security notes
+
+- Judge0 sandbox: no network, CPU, memory and wall-time limits, output size caps, and no shared filesystem between runs.
+- Source size is capped by `max_source_bytes` on each challenge.
+- Hidden test case inputs and expected outputs must never reach the learner API. Check this in every new endpoint.
+- Live exercise pushes must check that the instructor owns the course.
+- Draft endpoints must check ownership on every read and write.
+
+## 6. Open decisions
+
+1. **Judge0 hosting:** self-hosted (more control, privileged containers) or an external service.
+2. **Collaboration:** in scope for the first release, or after Phase 4.
+3. **Live grading:** should live-class exercises count toward grades?
+4. **Languages:** are the six current languages enough for launch?
+
+Recommended order: Phases 0, 1 and 2 first, then 3 and 4. Phase 5 later.
+
+## 7. Testing and rollout
+
+- Dev first: enable per course, starting with one pilot course.
+- Feature flag: `CODING_PLATFORM_V2` controls Monaco, drafts and lesson blocks separately, so each can be turned off without a rebuild of the backend.
+- Rollout: pilot course, then a small cohort, then all courses.
+- Rollback: disable the flags. Existing submissions and drafts are kept.
+
+## 8. Changelog
+
+- **2026-11-26:** Plan written from an audit of the existing coding, judge and live class code.
+- **2026-11-26:** Phase 0 built on dev: Judge0 stack, per-language memory floor, cgroup v2 workaround. Five of six languages pass end to end; Java blocked.
