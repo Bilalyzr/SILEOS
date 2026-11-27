@@ -27,13 +27,16 @@ interface CodingWorkspaceProps {
   slug: string
   /** Inside a lesson: no page header, single column, shorter editor. */
   embedded?: boolean
+  /** Live class exercises send submissions through the live endpoint instead. */
+  submitOverride?: (language: CodingLanguage, source: string, idempotencyKey: string) => Promise<CodingSubmission>
 }
 
 /**
  * The judge workspace: problem, editor, run and submit, and results.
- * Used as a full page (/coding/:slug) and inside a lesson's practice block.
+ * Used as a full page (/coding/:slug), inside a lesson's practice block, and
+ * in a live class session.
  */
-export function CodingWorkspace({ slug, embedded = false }: CodingWorkspaceProps) {
+export function CodingWorkspace({ slug, embedded = false, submitOverride }: CodingWorkspaceProps) {
   const [challenge, setChallenge] = useState<LearnerChallenge | null>(null)
   const [language, setLanguage] = useState<CodingLanguage>('python')
   const [source, setSource] = useState('')
@@ -99,7 +102,9 @@ export function CodingWorkspace({ slug, embedded = false }: CodingWorkspaceProps
     setSubmission(null)
     try {
       const idempotencyKey = globalThis.crypto?.randomUUID?.() || `code-${Date.now()}-${Math.random()}`
-      const queued = await codingAPI.submit(slug, language, source, idempotencyKey)
+      const queued = submitOverride
+        ? await submitOverride(language, source, idempotencyKey)
+        : await codingAPI.submit(slug, language, source, idempotencyKey)
       setSubmission(queued)
       if (terminal.has(queued.status)) setBusy(false)
       else pollRef.current = window.setTimeout(() => void poll(queued.id), 700)

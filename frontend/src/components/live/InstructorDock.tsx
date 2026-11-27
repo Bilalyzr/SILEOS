@@ -1,19 +1,21 @@
 import * as React from 'react'
-import { Users, Vote, Timer as TimerIcon, Circle, MicOff, Lock, Unlock } from 'lucide-react'
+import { Users, Vote, Timer as TimerIcon, Circle, MicOff, Lock, Unlock, Code2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { AttendancePanel } from './AttendancePanel'
 import { PollPanel } from './PollPanel'
+import { LiveChallengePanel } from './LiveChallengePanel'
 import { RaiseHandList } from './RaiseHandList'
 import { useLiveClassStore } from '@/store/liveClassStore'
 import { startRecordingIntent, stopRecordingIntent, type LiveClassOut } from '@/api/liveClasses'
 
 const PARTICIPANT_COUNT_POLL_MS = 10_000
 
-type DockTab = 'people' | 'polls' | 'timer' | 'recording'
+type DockTab = 'people' | 'polls' | 'challenge' | 'timer' | 'recording'
 
 const TABS: { key: DockTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { key: 'people', label: 'People', icon: Users },
   { key: 'polls', label: 'Polls', icon: Vote },
+  { key: 'challenge', label: 'Coding', icon: Code2 },
   { key: 'timer', label: 'Timer', icon: TimerIcon },
   { key: 'recording', label: 'Recording', icon: Circle },
 ]
@@ -181,6 +183,8 @@ export const InstructorDock: React.FC<InstructorDockProps> = ({ liveClass, jitsi
         )}
 
         {tab === 'polls' && <PollPanel classId={liveClass.id} isModerator />}
+
+        {tab === 'challenge' && <LiveChallengePanel classId={liveClass.id} isStaff courseId={liveClass.course_id} />}
 
         {tab === 'timer' && (
           <div className="flex flex-col items-center justify-center gap-4 py-8">

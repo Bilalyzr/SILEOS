@@ -260,6 +260,10 @@ from .coding_assessment import (  # noqa: F401
     LessonCodingBlock,
     CodingDraft,
 )
+from .coding_live import (  # noqa: F401
+    LiveCodingChallenge,
+    LiveCodingSubmission,
+)
 from .meiporul_operations import (  # noqa: F401
     ImmersiveLabSite,
     ImmersiveDevice,

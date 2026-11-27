@@ -1,6 +1,6 @@
 # Live Coding Platform: Implementation Plan
 
-Status: **Phase 0 and Phase 1 done.** **Phase 2 done** (lesson practice blocks, drafts, curriculum editor). **Phase 3 built on dev** (analytics, instructor report, learner progress; certificate setting and per-challenge weights still open). Owner: to be assigned.
+Status: **Phase 0 and Phase 1 done.** **Phase 2 done** (lesson practice blocks, drafts, curriculum editor). **Phase 3 done** (analytics, instructor report, learner progress; certificate setting and per-challenge weights still open). **Phase 4 built on dev** (live class challenges, results board, solution reveal; gradebook link still open). Owner: to be assigned.
 Last reviewed: 2026-11-26.
 
 Goal: let students write, run, test and submit code inside SILEOS, during live classes and while watching recorded lessons, with automatic progress saving and instructor analytics.
@@ -165,6 +165,17 @@ Limits and follow-ups:
 - Not done: the certificate completion criteria (a per-course setting) and per-challenge tie-break weights. Both stay open for a follow-up.
 - Not done: browser (Playwright) run of the new screens. Not committed or pushed.
 
+**Phase 4 result (built on dev, 2026-11-27):**
+- Data: `live_coding_challenges` (one row per push: status open or closed, graded flag, instructions, model solution, reveal time) and `live_coding_submissions` (link from a live submission to the judge's `coding_submissions` row). Both are new tables, so no ALTER is needed; `create_all` creates them.
+- Rules: only the assigned instructor or an admin can push, close or reveal. A push must be a published challenge from the class's own course. Only one challenge can be open per class. Learners must have joined the class (attendance row) to submit. Submissions are rejected once the challenge is closed or the class has ended. Instructors cannot submit.
+- Model solution: stored with the push and returned to learners only after the instructor reveals it, which requires the challenge to be closed first.
+- Results board: polled every 5 seconds. Instructors see the full board. Learners see only their own row and a summary count. Source code is never shown on the board.
+- Grading: a graded session tags each live submission with `counts_for_grade`. It does not write to the gradebook yet, so that open decision remains.
+- API under `/api/v1/live/`: `classes/{id}/coding-challenges` (list, push), `coding-challenges/{id}` (learner view), `{id}/submissions`, `{id}/board`, `{id}/close`, `{id}/reveal`.
+- Frontend: the instructor dock has a "Coding" tab (`LiveChallengePanel`, staff mode). The learner join page shows the open challenge under the stage, using `CodingWorkspace` with a `submitOverride` so submissions go through the live endpoint.
+- Tests: 5 backend tests in `tests/test_coding_live.py` (26 coding tests pass in total). 4 frontend tests in `LiveChallengePanel.test.tsx`.
+- Not done: real-time push over SSE (polling is used instead), gradebook integration for graded sessions, and a Playwright run of the live flow with Jitsi.
+
 ### Phase 4: Live class exercises (size M to L)
 
 - Instructor pushes a published challenge to a live session, following the pattern in `live_class_polls.py`.
@@ -228,3 +239,4 @@ Recommended order: Phases 0, 1 and 2 first, then 3 and 4. Phase 5 later.
 - **2026-11-26:** Phase 2 built on dev: lesson practice blocks, learner drafts, curriculum editor section, lesson player dialog.
 - **2026-11-26:** Phase 1 built on dev: Monaco editor with markers and fallback. Judge worker exempted from the general rate limit; internal routes blocked at the edge.
 - **2026-11-27:** Phase 3 built on dev: instructor metrics and CSV export, learner progress, ranking tie-breaks. Certificate criteria and per-challenge weights still open.
+- **2026-11-27:** Phase 4 built on dev: live coding challenges with push, close, results board and model-solution reveal. Gradebook link and Playwright run still open.

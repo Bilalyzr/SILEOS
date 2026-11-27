@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { DevicePrecheck } from '@/components/live/DevicePrecheck'
 import { JitsiStage } from '@/components/live/JitsiStage'
+import { LiveChallengePanel } from '@/components/live/LiveChallengePanel'
 import { RecordingBadge } from '@/components/live/RecordingBadge'
 import { ErrorState } from '@/components/dashboard/primitives'
 import { useAuth } from '@/hooks/use-auth'
@@ -83,6 +84,7 @@ export function StudentLiveClassJoinPage() {
       )}
 
       {stage === 'in-call' && tokenData && (
+        <>
         <div className="h-[70vh] min-h-[420px] flex flex-col gap-2">
           {isRecording && <RecordingBadge isRecording className="self-start" />}
           <div className="flex-1 min-h-0">
@@ -104,6 +106,8 @@ export function StudentLiveClassJoinPage() {
             />
           </div>
         </div>
+        <LiveChallengePanel classId={classId} className="mt-4" />
+        </>
       )}
     </div>
   )

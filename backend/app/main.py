@@ -39,7 +39,7 @@ from app.routers import auth, courses, lessons, users, payments, payments_proxy,
 from app.routers import player, progress as progress_router, bunny, analytics, internships
 from app.routers import lab_studio
 from app.routers import admin_messages, candidate, companies, cohorts, company_billing, company_dashboard, student_workspace, export_import, ai, ai_tutor, ai_providers, question_banks, sileos, geogebra, three_d, virtual_labs, parents, course_type_capabilities
-from app.routers import live_class_session, live_classes, live_class_attendance, live_class_polls
+from app.routers import live_class_session, live_classes, live_class_attendance, live_class_polls, coding_live
 from app.routers import live_class_recordings, live_class_internal
 from app.routers import notifications as notifications_router
 from app.routers import superadmin
@@ -1463,6 +1463,7 @@ app.include_router(live_class_session.router, prefix="/api/v1/live", tags=["Live
 app.include_router(live_classes.router, prefix="/api/v1/live", tags=["Live Classes"])
 app.include_router(live_class_attendance.router, prefix="/api/v1/live", tags=["Live Classes"])
 app.include_router(live_class_polls.router, prefix="/api/v1/live", tags=["Live Classes"])
+app.include_router(coding_live.router, prefix="/api/v1/live", tags=["Live Classes"])
 app.include_router(live_class_recordings.router, prefix="/api/v1/live", tags=["Live Classes"])
 app.include_router(live_class_internal.router, prefix="/api/v1/internal/live", tags=["Live Classes Internal"])
 
