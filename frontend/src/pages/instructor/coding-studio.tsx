@@ -36,7 +36,10 @@ export default function CodingStudioPage() {
     codingAPI.editorCourses().then((data) => {
       if (!active) return
       setCourses(data)
-      setCourseId(data[0]?.id || 0)
+      // The curriculum editor links here with ?course=<id>; open that course when it is editable.
+      const requested = Number(new URLSearchParams(window.location.search).get('course'))
+      const match = data.find((course) => course.id === requested)
+      setCourseId(match?.id || data[0]?.id || 0)
     }).catch((reason) => active && setError(plannerError(reason))).finally(() => active && setLoading(false))
     return () => { active = false }
   }, [])

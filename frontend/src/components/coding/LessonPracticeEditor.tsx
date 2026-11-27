@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { codingAPI, type EditorChallenge, type LessonCodingBlock, type LessonCodingBlockInput } from '@/api/coding'
 import { plannerError } from '@/api/planner'
+import ChallengeCreator from './ChallengeCreator'
 
 interface LessonPracticeEditorProps {
   courseId: number
@@ -38,12 +40,20 @@ export default function LessonPracticeEditor({ courseId, lessonId }: LessonPract
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState<{ kind: 'ok' | 'error'; text: string } | null>(null)
+  const [loadError, setLoadError] = useState('')
+  const [creating, setCreating] = useState(false)
 
   useEffect(() => {
     let active = true
     setLoading(true)
+    setLoadError('')
     Promise.all([
-      codingAPI.editorChallenges(courseId).catch(() => [] as EditorChallenge[]),
+      codingAPI.editorChallenges(courseId).catch((reason) => {
+        // Show why the list is empty (for example, the course is not a Utporul course)
+        // instead of implying there are simply no challenges.
+        if (active) setLoadError(plannerError(reason))
+        return [] as EditorChallenge[]
+      }),
       codingAPI.lessonBlocks(courseId, lessonId).catch(() => [] as LessonCodingBlock[]),
     ]).then(([available, blocks]) => {
       if (!active) return
@@ -101,13 +111,39 @@ export default function LessonPracticeEditor({ courseId, lessonId }: LessonPract
         <h4 id={`practice-editor-${lessonId}`} className="text-sm font-semibold text-gray-900">Coding practice</h4>
         <p className="text-xs text-gray-500">Attach a published challenge. Add a time to pause the video there, or leave it empty to list it after the lesson.</p>
       </div>
-      <button type="button" onClick={add} disabled={loading || published.length === 0} className="rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50">
-        Add practice
-      </button>
+      <div className="flex gap-2">
+        <button type="button" onClick={() => setCreating(true)} disabled={loading || Boolean(loadError)} className="rounded-md bg-violet-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-violet-500 disabled:opacity-50">
+          New challenge
+        </button>
+        <button type="button" onClick={add} disabled={loading || published.length === 0} className="rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50">
+          Add practice
+        </button>
+      </div>
     </div>
+    {creating && (
+      <ChallengeCreator
+        courseId={courseId}
+        onClose={() => setCreating(false)}
+        onCreated={(challenge) => {
+          setCreating(false)
+          setChallenges((prev) => [...prev.filter((item) => item.id !== challenge.id), challenge])
+          setRows((prev) => [...prev, { key: newKey(), challenge_slug: challenge.slug, position: '', instructions: '' }])
+          setMessage({ kind: 'ok', text: `"${challenge.title}" is published and added below. Set a time if the video should pause there, then click Save practice.` })
+        }}
+      />
+    )}
 
     {loading && <p className="text-sm text-gray-500">Loading…</p>}
-    {!loading && published.length === 0 && <p className="text-sm text-gray-500">Publish a coding challenge in the Coding Studio first.</p>}
+    {!loading && loadError && <p role="alert" className="text-sm text-red-600">{loadError}</p>}
+    {!loading && !loadError && published.length === 0 && (
+      <p className="text-sm text-gray-500">
+        This course has no published coding challenge yet. Click <strong>New challenge</strong> to create one here, or use{' '}
+        <Link to={`/instructor/coding-studio?course=${courseId}`} className="font-medium text-violet-700 underline">
+          Coding Studio
+        </Link>{' '}
+        for reports and editing.
+      </p>
+    )}
 
     {rows.map((row, index) => <div key={row.key} className="grid gap-2 rounded-md border border-gray-200 p-3 sm:grid-cols-[1fr_120px_auto]">
       <label className="text-xs font-medium text-gray-600">

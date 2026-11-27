@@ -9,7 +9,7 @@ import {
   UserCog, FileText, Send, CheckCircle,
   ShieldCheck, ScrollText, Gauge, Trophy, Layers, Package, Receipt, Video,
   ClipboardList, Gamepad2, Puzzle, Library, BookMarked, History,
-  FlaskConical, Box, Brain } from 'lucide-react'
+  FlaskConical, Box, Brain, Code2 } from 'lucide-react'
 import type { SidebarItem } from './DashboardSidebar'
 
 export const ACCOUNT_NAV: SidebarItem[] = [
@@ -25,6 +25,7 @@ export const STUDENT_NAV: SidebarItem[] = [
     { kind: 'link', to: '/my-courses',        label: 'My courses',      icon: BookOpen },
     { kind: 'link', to: '/my-plan', label: 'My Learning Plan', icon: Brain, matchPrefix: '/my-plan' },
     { kind: 'link', to: '/student/live-classes', label: 'Live classes', icon: Video, matchPrefix: '/student/live-classes' },
+    { kind: 'link', to: '/coding', label: 'Code practice', icon: Code2, matchPrefix: '/coding' },
     { kind: 'link', to: '/my-library',       label: 'My Library',    icon: Library },
   ]},
   { kind: 'group', label: 'Progress', icon: BarChart3, children: [
@@ -65,6 +66,7 @@ export const INSTRUCTOR_NAV: SidebarItem[] = [
   ]},
   { kind: 'group', label: 'Content Studio', icon: Layers, children: [
     { to: '/instructor/lab-studio', label: 'Lab Studio', icon: FlaskConical },
+    { kind: 'link', to: '/instructor/coding-studio', label: 'Coding Studio', icon: Code2, matchPrefix: '/instructor/coding-studio' },
     { to: '/instructor/course-packages', label: 'Course Upload & Backup', icon: Package },
     { to: '/instructor/recording-lessons', label: 'Recording Lessons', icon: Video },
     { kind: 'link', to: '/instructor/ebooks',      label: 'My Ebooks',     icon: BookMarked, matchPrefix: '/instructor/ebooks' },

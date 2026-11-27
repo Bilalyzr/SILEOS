@@ -230,7 +230,13 @@ Limits and follow-ups:
 - Backpressure: when 500 judge jobs are queued or leased, new submissions return 503 with `Retry-After: 60` and a plain message. Both limits are constants in `coding_assessment_service.py`.
 - Monitoring: `services/coding_ops.py` adds these gauges to the existing `/metrics` scrape: `sasha_coding_queue_depth` (queued and leased), `sasha_coding_queue_oldest_seconds`, `sasha_coding_completed_last_hour`, `sasha_coding_error_ratio_last_hour`, and `sasha_coding_judge_latency_seconds` (p50 and p95). No learner data is exposed.
 - Tests: 4 backend tests in `tests/test_coding_hardening.py`, covering pacing, a full queue, a 100-learner burst (all 100 accepted), and health numbers. 4 new Vitest tests cover autosave: debounce, device-only fallback, and restore order. 39 backend coding tests and 34 frontend coding tests pass.
-- Not done: an HTTP load test against the dev server. The burst test runs in-process, and a live run would write real jobs that the worker would judge. Also not done: the Playwright lesson test was built in Phase 2 and is not repeated here, and the `/metrics` endpoint has no test (it needs the observability token).
+- HTTP load test on dev (2026-11-27), against the backend port directly, with 25 concurrent clients. A throwaway utporul course held one challenge and 100 labelled learners. **Caveat:** the dev backend was still running the code from 26 Nov (it has no auto-reload), so pacing and backpressure were not active during this run. Each learner submitted once, so pacing would not have triggered, but the run should be repeated now that the backend has been restarted. Results:
+  - All 100 submissions returned 202. No 429s or 503s.
+  - Submit latency: p50 1.75 s, p95 3.70 s, max 4.92 s.
+  - All 100 were judged `passed`. The queue drained in 218 s, about 2.2 s per job. The likely cause is the worker's concurrency (not checked yet). At this rate, 100 students submitting in the same minute would wait about 3.6 minutes for the last result. This is the main bottleneck for live-class scale.
+  - Test data was removed afterwards. Dev counts were back to 31 submissions and 9 utporul courses.
+- Not done: the `/metrics` endpoint has no test (it needs the observability token). The Playwright lesson test from Phase 2 is not repeated here.
+- Next step if live classes need faster judging: check the worker's concurrency, then consider more worker replicas or claiming several jobs at once.
 
 ## 5. Security notes
 
@@ -266,4 +272,4 @@ Recommended order: Phases 0, 1 and 2 first, then 3 and 4. Phase 5 later.
 - **2026-11-27:** Phase 4 built on dev: live coding challenges with push, close, results board and model-solution reveal. Gradebook link and Playwright run still open.
 - **2026-11-27:** Phase 5 part A built on dev: line-anchored review comments, review requests and the instructor review queue. Realtime shared editing (part B) waits for an infrastructure decision.
 - **2026-11-27:** Phase 5 part B built on dev: pair rooms with a FastAPI WebSocket, Redis fan-out, Yjs and y-monaco. Production nginx edge change still needs approval.
-- **2026-11-27:** Phase 6 hardening built on dev: per-learner pacing (429), judge queue backpressure (503), queue and latency gauges in `/metrics`, and autosave tests. HTTP load test not run.
+- **2026-11-27:** Phase 6 hardening built on dev: per-learner pacing (429), judge queue backpressure (503), queue and latency gauges in `/metrics`, and autosave tests. HTTP load test run on dev: 100 of 100 accepted and judged, 218 s to drain the queue.
