@@ -5,11 +5,14 @@ import { plannerError } from '@/api/planner'
 import { PageHeader, PageLayout } from '@/components/design-system/PageLayout'
 import InstructorReport from '@/components/coding/InstructorReport'
 import ReviewQueuePanel from '@/components/coding/ReviewQueuePanel'
+import { isWebChallenge } from '@/components/coding/webChecks'
+import { WebCheckFields, WebStarterFields, toggleChallengeLanguage, webProblems } from '@/components/coding/WebCheckFields'
 
 const LANGUAGES: Array<{ id: CodingLanguage; label: string }> = [
   { id: 'python', label: 'Python' }, { id: 'javascript', label: 'JavaScript' },
   { id: 'typescript', label: 'TypeScript' }, { id: 'java', label: 'Java' },
   { id: 'cpp', label: 'C++' }, { id: 'c', label: 'C' },
+  { id: 'html', label: 'HTML' }, { id: 'css', label: 'CSS' },
 ]
 const inputClass = 'mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100'
 const blankCase = (visibility: 'sample' | 'hidden' = 'hidden'): CodingTestCaseDraft => ({ visibility, input_text: '', expected_output: '', comparison: 'trimmed', weight: 1 })
@@ -105,15 +108,10 @@ export default function CodingStudioPage() {
   }
 
   const toggleLanguage = (language: CodingLanguage) => {
-    setDraft((current) => {
-      if (current.allowed_languages.includes(language)) {
-        if (current.allowed_languages.length === 1) return current
-        const starter = { ...current.starter_code }; delete starter[language]
-        return { ...current, allowed_languages: current.allowed_languages.filter((item) => item !== language), starter_code: starter }
-      }
-      return { ...current, allowed_languages: [...current.allowed_languages, language], starter_code: { ...current.starter_code, [language]: '' } }
-    })
+    setDraft((current) => toggleChallengeLanguage(current, language, () => [blankCase('sample'), blankCase('hidden')]))
   }
+  const web = isWebChallenge(draft.allowed_languages)
+  const webIssues = webProblems(draft)
 
   const patchCase = (index: number, patch: Partial<CodingTestCaseDraft>) => setDraft((current) => ({ ...current, test_cases: current.test_cases.map((test, testIndex) => testIndex === index ? { ...test, ...patch } : test) }))
   const removeCase = (index: number) => setDraft((current) => ({ ...current, test_cases: current.test_cases.filter((_, testIndex) => testIndex !== index) }))
@@ -175,7 +173,8 @@ export default function CodingStudioPage() {
               const active = draft.allowed_languages.includes(language.id)
               return <button type="button" key={language.id} onClick={() => toggleLanguage(language.id)} className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm ${active ? 'border-violet-300 bg-violet-50 text-violet-800' : 'border-slate-200 bg-white text-slate-500'}`}>{active && <Check className="h-3.5 w-3.5" />}{language.label}</button>
             })}</div>
-            <div className="mt-4 grid gap-4 lg:grid-cols-2">{draft.allowed_languages.map((language) => <label key={language} className="text-sm font-medium text-slate-800">{LANGUAGES.find((item) => item.id === language)?.label} starter<textarea rows={5} spellCheck={false} className={`${inputClass} font-mono`} value={draft.starter_code[language] || ''} onChange={(event) => setDraft({ ...draft, starter_code: { ...draft.starter_code, [language]: event.target.value } })} /></label>)}</div>
+            {web && <p className="mt-3 text-sm text-slate-500">HTML and CSS answers are rendered in a browser with scripts off and checked against the tests below. They cannot be mixed with programming languages.</p>}
+            {web ? <WebStarterFields draft={draft} onChange={(starter) => setDraft({ ...draft, starter_code: starter })} /> : <div className="mt-4 grid gap-4 lg:grid-cols-2">{draft.allowed_languages.map((language) => <label key={language} className="text-sm font-medium text-slate-800">{LANGUAGES.find((item) => item.id === language)?.label} starter<textarea rows={5} spellCheck={false} className={`${inputClass} font-mono`} value={draft.starter_code[language] || ''} onChange={(event) => setDraft({ ...draft, starter_code: { ...draft.starter_code, [language]: event.target.value } })} /></label>)}</div>}
           </section>
 
           <section>
@@ -191,8 +190,10 @@ export default function CodingStudioPage() {
             <div className="flex flex-wrap items-center justify-between gap-3"><div><h3 className="font-semibold text-slate-950">Test cases</h3><p className="mt-1 text-sm text-slate-500">Hidden expected outputs remain inside the LMS trust boundary.</p></div><button type="button" onClick={() => setDraft({ ...draft, test_cases: [...draft.test_cases, blankCase()] })} className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium"><Plus className="h-4 w-4" />Add test</button></div>
             <div className="mt-4 space-y-4">{draft.test_cases.map((test, index) => <div key={index} className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
               <div className="flex items-center justify-between gap-3"><div className="flex items-center gap-2 font-medium text-slate-900">{test.visibility === 'hidden' ? <EyeOff className="h-4 w-4 text-amber-600" /> : <Eye className="h-4 w-4 text-emerald-600" />}Test {index + 1}</div><button type="button" aria-label={`Remove test ${index + 1}`} disabled={draft.test_cases.length === 1} onClick={() => removeCase(index)} className="rounded-lg p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600 disabled:opacity-30"><X className="h-4 w-4" /></button></div>
-              <div className="mt-3 grid gap-3 md:grid-cols-2"><label className="text-xs font-medium uppercase tracking-wider text-slate-500">Visibility<select className={inputClass} value={test.visibility} onChange={(event) => patchCase(index, { visibility: event.target.value as 'sample' | 'hidden' })}><option value="sample">Sample · visible</option><option value="hidden">Hidden · private</option></select></label><label className="text-xs font-medium uppercase tracking-wider text-slate-500">Comparison<select className={inputClass} value={test.comparison} onChange={(event) => patchCase(index, { comparison: event.target.value as CodingTestCaseDraft['comparison'] })}><option value="trimmed">Trim trailing whitespace</option><option value="tokens">Token comparison</option><option value="exact">Exact output</option></select></label><label className="text-xs font-medium uppercase tracking-wider text-slate-500">Input<textarea rows={4} className={`${inputClass} font-mono normal-case tracking-normal`} value={test.input_text} onChange={(event) => patchCase(index, { input_text: event.target.value })} /></label><label className="text-xs font-medium uppercase tracking-wider text-slate-500">Expected output<textarea required rows={4} className={`${inputClass} font-mono normal-case tracking-normal`} value={test.expected_output} onChange={(event) => patchCase(index, { expected_output: event.target.value })} /></label></div>
+              <div className="mt-3 grid gap-3 md:grid-cols-2"><label className="text-xs font-medium uppercase tracking-wider text-slate-500">Visibility<select className={inputClass} value={test.visibility} onChange={(event) => patchCase(index, { visibility: event.target.value as 'sample' | 'hidden' })}><option value="sample">Sample · visible</option><option value="hidden">Hidden · private</option></select></label>{!web && <><label className="text-xs font-medium uppercase tracking-wider text-slate-500">Comparison<select className={inputClass} value={test.comparison} onChange={(event) => patchCase(index, { comparison: event.target.value as CodingTestCaseDraft['comparison'] })}><option value="trimmed">Trim trailing whitespace</option><option value="tokens">Token comparison</option><option value="exact">Exact output</option></select></label><label className="text-xs font-medium uppercase tracking-wider text-slate-500">Input<textarea rows={4} className={`${inputClass} font-mono normal-case tracking-normal`} value={test.input_text} onChange={(event) => patchCase(index, { input_text: event.target.value })} /></label><label className="text-xs font-medium uppercase tracking-wider text-slate-500">Expected output<textarea required rows={4} className={`${inputClass} font-mono normal-case tracking-normal`} value={test.expected_output} onChange={(event) => patchCase(index, { expected_output: event.target.value })} /></label></>}</div>
+              {web && <WebCheckFields test={test} index={index} onChange={(patch) => patchCase(index, patch)} />}
             </div>)}</div>
+            {web && webIssues.length > 0 && <ul className="mt-3 list-disc space-y-1 rounded-xl bg-amber-50 p-3 pl-7 text-sm text-amber-800">{webIssues.map((issue) => <li key={issue}>{issue}</li>)}</ul>}
           </section>
         </fieldset>
         {!isLocked && <div className="mt-6 flex justify-end"><button type="submit" disabled={busy || !courseId} className="si-btn-primary inline-flex items-center gap-2"><Save className="h-4 w-4" />{busy ? 'Saving…' : selected ? 'Save changes' : 'Create draft'}</button></div>}

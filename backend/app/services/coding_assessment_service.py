@@ -28,6 +28,7 @@ from app.models.coding_assessment import (
 from app.models.course import Course, Lesson
 from app.models.enrollment import Enrollment
 from app.services.course_access import ADMIN_ROLES, can_edit
+from app.services.web_checks import WEB_LANGUAGES, normalize_css_value, parse_check
 
 
 ACTIVE_ENROLLMENTS = ("enrolled", "active", "completed")
@@ -227,7 +228,11 @@ def _apply_definition(challenge: CodingChallenge, command):
         "max_attempts",
     ):
         setattr(challenge, field, getattr(command, field))
-    unknown_starters = set(command.starter_code) - set(command.allowed_languages)
+    allowed_starters = set(command.allowed_languages)
+    if "css" in allowed_starters:
+        # A CSS challenge keeps the page markup the learner's CSS is applied to.
+        allowed_starters.add("html")
+    unknown_starters = set(command.starter_code) - allowed_starters
     if unknown_starters:
         raise HTTPException(422, "Starter code contains a language that is not allowed.")
 
@@ -697,7 +702,20 @@ def claim_job(db, judge_version: str) -> dict | None:
             {"id": row.id, "input_text": row.input_text}
             for row in cases
         ],
+        # CSS submissions are applied to the instructor's page markup.
+        "page_html": (challenge.starter_code or {}).get("html", "") if submission.language == "css" else "",
     }
+
+
+def _outputs_match(actual: str, case: CodingTestCase, language: str) -> bool:
+    if language in WEB_LANGUAGES:
+        try:
+            kind = parse_check(case.input_text)["kind"]
+        except ValueError:
+            kind = ""
+        if kind == "css":
+            return normalize_css_value(actual) == normalize_css_value(case.expected_output)
+    return _normalize_output(actual, case.comparison) == _normalize_output(case.expected_output, case.comparison)
 
 
 def complete_job(db, job_id: int, command) -> dict:
@@ -737,8 +755,7 @@ def complete_job(db, job_id: int, command) -> dict:
         if status == "completed":
             status = (
                 "passed"
-                if _normalize_output(result.actual_output, case.comparison)
-                == _normalize_output(case.expected_output, case.comparison)
+                if _outputs_match(result.actual_output, case, submission.language)
                 else "wrong_answer"
             )
         score = Decimal(case.weight) if status == "passed" else Decimal("0")

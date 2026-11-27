@@ -1,6 +1,6 @@
 import { api } from './axios'
 
-export type CodingLanguage = 'python' | 'javascript' | 'typescript' | 'java' | 'cpp' | 'c'
+export type CodingLanguage = 'python' | 'javascript' | 'typescript' | 'java' | 'cpp' | 'c' | 'html' | 'css'
 export type ChallengeStatus = 'draft' | 'published' | 'retired'
 
 export interface CodingCourse {

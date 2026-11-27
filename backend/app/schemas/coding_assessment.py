@@ -2,10 +2,12 @@
 
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+
+from app.services.web_checks import WEB_LANGUAGES, parse_check
 
 
-Language = Literal["python", "javascript", "typescript", "java", "cpp", "c"]
+Language = Literal["python", "javascript", "typescript", "java", "cpp", "c", "html", "css"]
 
 
 class Command(BaseModel):
@@ -26,7 +28,7 @@ class ChallengeCreate(Command):
     input_format: str = Field(default="", max_length=5000)
     output_format: str = Field(default="", max_length=5000)
     constraints_text: str = Field(default="", max_length=5000)
-    allowed_languages: list[Language] = Field(min_length=1, max_length=6)
+    allowed_languages: list[Language] = Field(min_length=1, max_length=8)
     starter_code: dict[Language, str] = Field(default_factory=dict)
     time_limit_ms: int = Field(default=2000, ge=100, le=15000)
     memory_limit_mb: int = Field(default=256, ge=16, le=1024)
@@ -47,6 +49,26 @@ class ChallengeCreate(Command):
         if any(len(code.encode("utf-8")) > 100_000 for code in value.values()):
             raise ValueError("starter code is too large")
         return value
+
+    @model_validator(mode="after")
+    def web_rules(self):
+        """HTML/CSS challenges are checked in a browser, not by program output."""
+        languages = set(self.allowed_languages)
+        web = languages & WEB_LANGUAGES
+        if not web:
+            return self
+        if languages - WEB_LANGUAGES:
+            raise ValueError("HTML and CSS cannot be mixed with programming languages in one challenge.")
+        if "css" in web and not (self.starter_code.get("html") or "").strip():
+            raise ValueError("A CSS challenge needs the page HTML that the learner's CSS is applied to.")
+        for index, case in enumerate(self.test_cases, start=1):
+            try:
+                parse_check(case.input_text)
+            except ValueError as error:
+                raise ValueError(f"Test {index}: {error}") from None
+            if case.comparison == "tokens":
+                raise ValueError(f"Test {index}: HTML/CSS checks compare as exact or trimmed.")
+        return self
 
 
 class ChallengeUpdate(ChallengeCreate):

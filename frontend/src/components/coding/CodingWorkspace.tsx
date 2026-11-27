@@ -6,6 +6,7 @@ import { codingReviewAPI } from '@/api/codingReview'
 import { plannerError } from '@/api/planner'
 import { ReviewThread } from './ReviewThread'
 import { PairPanel } from './PairPanel'
+import { buildPreviewDocument, decodeCheck, describeCheck, isWebChallenge, isWebLanguage } from './webChecks'
 import { codingEditorMode } from './editorConfig'
 import { errorLocations, type ErrorLocation } from './errorLocations'
 import { useCodingDraft, type DraftStatus } from './useCodingDraft'
@@ -16,7 +17,7 @@ const CodeEditor = lazy(() => import('./CodeEditor'))
 
 const terminal = new Set(['passed', 'failed', 'error', 'cancelled'])
 const languageLabels: Record<CodingLanguage, string> = {
-  python: 'Python', javascript: 'JavaScript', typescript: 'TypeScript', java: 'Java', cpp: 'C++', c: 'C',
+  python: 'Python', javascript: 'JavaScript', typescript: 'TypeScript', java: 'Java', cpp: 'C++', c: 'C', html: 'HTML', css: 'CSS',
 }
 
 const draftLabels: Record<DraftStatus, string> = {
@@ -120,6 +121,7 @@ export function CodingWorkspace({ slug, embedded = false, submitOverride }: Codi
   const wrapper = embedded ? 'text-slate-100' : 'min-h-screen bg-[#080b12] text-slate-100'
   if (loading) return <div className={embedded ? 'p-6 text-slate-300' : 'min-h-screen bg-slate-950 p-8 text-slate-300'}>Loading coding workspace…</div>
   if (!challenge) return <div className={embedded ? 'p-6 text-red-300' : 'min-h-screen bg-slate-950 p-8 text-red-300'}>{error || 'Challenge not found.'}</div>
+  const webChallenge = isWebChallenge(challenge.allowed_languages)
   const remaining = Math.max(0, challenge.max_attempts - challenge.attempts_used - (submission ? 1 : 0))
 
   return <main className={wrapper}>
@@ -147,11 +149,21 @@ export function CodingWorkspace({ slug, embedded = false, submitOverride }: Codi
         {challenge.constraints_text && <InfoBlock title="Constraints" text={challenge.constraints_text} />}
         <div className="mt-5 space-y-3">
           <h3 className="font-semibold">Examples</h3>
-          {challenge.sample_cases.map((sample, index) => <div key={sample.ordinal} className="rounded-xl border border-white/10 bg-black/25 p-4 text-sm">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Example {index + 1}</p>
-            <pre className="overflow-x-auto text-emerald-300"><span className="text-slate-500">Input  </span>{sample.input_text || '(empty)'}</pre>
-            <pre className="mt-2 overflow-x-auto text-violet-300"><span className="text-slate-500">Output </span>{sample.expected_output}</pre>
-          </div>)}
+          {webChallenge && <p className="text-xs text-slate-400">Your page is checked in a browser with scripts turned off. These are the checks you can see; hidden checks also run.</p>}
+          {challenge.sample_cases.map((sample, index) => {
+            const check = webChallenge ? decodeCheck(sample.input_text) : null
+            return <div key={sample.ordinal} className="rounded-xl border border-white/10 bg-black/25 p-4 text-sm">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">{check ? 'Check' : 'Example'} {index + 1}</p>
+              {check ? (
+                <p className="text-emerald-300">{describeCheck(check, sample.expected_output)}</p>
+              ) : (
+                <>
+                  <pre className="overflow-x-auto text-emerald-300"><span className="text-slate-500">Input  </span>{sample.input_text || '(empty)'}</pre>
+                  <pre className="mt-2 overflow-x-auto text-violet-300"><span className="text-slate-500">Output </span>{sample.expected_output}</pre>
+                </>
+              )}
+            </div>
+          })}
         </div>
       </section>
 
@@ -160,7 +172,7 @@ export function CodingWorkspace({ slug, embedded = false, submitOverride }: Codi
           <select aria-label="Language" value={language} onChange={(event) => void chooseLanguage(event.target.value as CodingLanguage)} className="rounded-lg border border-white/10 bg-slate-900 px-3 py-2 text-sm">
             {challenge.allowed_languages.map((item) => <option key={item} value={item}>{languageLabels[item]}</option>)}
           </select>
-          <div className="flex items-center gap-2 text-xs text-emerald-300"><ShieldCheck className="h-4 w-4" />Network disabled · isolated execution</div>
+          <div className="flex items-center gap-2 text-xs text-emerald-300"><ShieldCheck className="h-4 w-4" />{webChallenge ? 'Scripts off · network blocked' : 'Network disabled · isolated execution'}</div>
         </div>
         {editorMode === 'monaco' ? (
           <EditorBoundary fallback={sourceTextarea(source, edit, embedded)}>
@@ -179,6 +191,9 @@ export function CodingWorkspace({ slug, embedded = false, submitOverride }: Codi
         ) : (
           sourceTextarea(source, edit, embedded)
         )}
+        {isWebLanguage(language) && (
+          <WebPreview document={buildPreviewDocument(language, source, challenge.starter_code.html || '')} />
+        )}
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
           <p className="text-xs text-slate-500" aria-live="polite">{draftLabels[draft.status] || 'Hidden expected outputs stay on the LMS and are never sent to the runner.'}</p>
           <button onClick={() => void submit()} disabled={busy || !source.trim() || remaining <= 0} className="inline-flex items-center gap-2 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-50">
@@ -192,6 +207,24 @@ export function CodingWorkspace({ slug, embedded = false, submitOverride }: Codi
       </section>
     </div>
   </main>
+}
+
+/**
+ * Live preview of an HTML/CSS page. The iframe sandbox has no permissions, so
+ * scripts never run and the page cannot reach this app, matching the judge.
+ */
+function WebPreview({ document: html }: { document: string }) {
+  const [shown, setShown] = useState(html)
+  useEffect(() => {
+    const id = window.setTimeout(() => setShown(html), 400)
+    return () => window.clearTimeout(id)
+  }, [html])
+  return (
+    <div className="mt-3">
+      <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-slate-500">Preview</p>
+      <iframe title="Page preview" sandbox="" srcDoc={shown} className="h-72 w-full rounded-xl border border-white/10 bg-white" />
+    </div>
+  )
 }
 
 /** Review for one finished submission: ask for review and read or leave line comments. */

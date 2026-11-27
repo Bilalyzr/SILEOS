@@ -8,6 +8,8 @@ import {
   type EditorChallenge,
 } from '@/api/coding'
 import { plannerError } from '@/api/planner'
+import { isWebChallenge } from './webChecks'
+import { WebCheckFields, WebStarterFields, toggleChallengeLanguage, webProblems } from './WebCheckFields'
 
 const LANGUAGES: Array<{ id: CodingLanguage; label: string }> = [
   { id: 'python', label: 'Python' },
@@ -16,6 +18,8 @@ const LANGUAGES: Array<{ id: CodingLanguage; label: string }> = [
   { id: 'cpp', label: 'C++' },
   { id: 'c', label: 'C' },
   { id: 'java', label: 'Java' },
+  { id: 'html', label: 'HTML' },
+  { id: 'css', label: 'CSS' },
 ]
 
 const field = 'mt-1 w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm text-gray-900'
@@ -53,7 +57,7 @@ export function publishProblems(draft: CodingChallengeDefinition): string[] {
   if (draft.allowed_languages.length === 0) problems.push('Choose at least one language.')
   if (draft.test_cases.some((test) => test.expected_output.trim() === '')) problems.push('Every test needs an expected output.')
   if (!draft.test_cases.some((test) => test.visibility === 'hidden')) problems.push('Add at least one hidden test.')
-  return problems
+  return [...problems, ...webProblems(draft)]
 }
 
 interface ChallengeCreatorProps {
@@ -91,15 +95,8 @@ export default function ChallengeCreator({ courseId, onClose, onCreated }: Chall
     }))
 
   const toggleLanguage = (language: CodingLanguage) =>
-    setDraft((current) => {
-      if (current.allowed_languages.includes(language)) {
-        if (current.allowed_languages.length === 1) return current
-        const starter = { ...current.starter_code }
-        delete starter[language]
-        return { ...current, allowed_languages: current.allowed_languages.filter((item) => item !== language), starter_code: starter }
-      }
-      return { ...current, allowed_languages: [...current.allowed_languages, language], starter_code: { ...current.starter_code, [language]: '' } }
-    })
+    setDraft((current) => toggleChallengeLanguage(current, language, () => [blankCase('sample'), blankCase('hidden')]))
+  const web = isWebChallenge(draft.allowed_languages)
 
   const createAndPublish = async () => {
     setShowProblems(true)
@@ -161,6 +158,10 @@ export default function ChallengeCreator({ courseId, onClose, onCreated }: Chall
                 )
               })}
             </div>
+            {web && <p className="mt-2 text-xs text-gray-500">HTML and CSS answers are rendered in a browser (scripts off) and checked against the tests below. They cannot be mixed with programming languages.</p>}
+            {web ? (
+              <WebStarterFields draft={draft} onChange={(starter) => setDraft({ ...draft, starter_code: starter })} />
+            ) : (
             <div className="mt-2 grid gap-2 sm:grid-cols-2">
               {draft.allowed_languages.map((language) => (
                 <label key={language} className="block text-xs font-medium text-gray-600">
@@ -169,6 +170,7 @@ export default function ChallengeCreator({ courseId, onClose, onCreated }: Chall
                 </label>
               ))}
             </div>
+            )}
           </fieldset>
 
           <div>
@@ -188,6 +190,7 @@ export default function ChallengeCreator({ courseId, onClose, onCreated }: Chall
                     </label>
                     <button type="button" disabled={draft.test_cases.length === 1} onClick={() => setDraft({ ...draft, test_cases: draft.test_cases.filter((_, i) => i !== index) })} className="text-xs text-red-600 disabled:opacity-40">Remove</button>
                   </div>
+                  {web ? <WebCheckFields test={test} index={index} onChange={(patch) => patchCase(index, patch)} /> : (
                   <div className="mt-2 grid gap-2 sm:grid-cols-2">
                     <label className="block text-xs font-medium text-gray-600">Test {index + 1} input
                       <textarea rows={2} spellCheck={false} value={test.input_text} onChange={(event) => patchCase(index, { input_text: event.target.value })} className={`${field} font-mono`} />
@@ -196,6 +199,7 @@ export default function ChallengeCreator({ courseId, onClose, onCreated }: Chall
                       <textarea rows={2} spellCheck={false} value={test.expected_output} onChange={(event) => patchCase(index, { expected_output: event.target.value })} className={`${field} font-mono`} />
                     </label>
                   </div>
+                  )}
                 </div>
               ))}
             </div>

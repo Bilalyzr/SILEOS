@@ -244,6 +244,16 @@ Limits and follow-ups:
 - Cause of the slow drain (confirmed): `code-judge-worker/worker.py` is a single loop that claims one job at a time and runs its test cases one after another. Dev runs one worker container (`docker-compose.prod.yml` sets 2 replicas). At this rate, 100 students submitting together wait about 3 minutes for the last result.
 - Next step if live classes need faster judging: run more worker replicas (the lease-based queue already supports several workers), or let one worker run jobs or test cases in parallel.
 
+### HTML and CSS challenges (added 2026-11-27)
+
+- **What:** instructors can pick HTML or CSS as a challenge language, in the course builder dialog or Coding Studio. HTML answers are whole pages. CSS answers are applied to page markup the instructor provides.
+- **How it is checked:** the judge worker renders the page in headless Chromium with page scripts off, offline, and with every request aborted. Each test is a check (text, style, exists, count, attribute) on a CSS selector, with an expected value. Style checks accept hex, `rgb()` or colour names. Scores are computed on the server like any other submission, so they count in reports, live classes and grading.
+- **Learner view:** a live preview of the page (sandboxed iframe, no scripts) and sample checks in plain words.
+- **Rules:** HTML/CSS cannot be mixed with programming languages; a CSS challenge needs page HTML; every check needs a selector, plus a property or attribute where relevant.
+- **No database change:** checks live in the existing test-case columns, and colour matching keys off the check kind, so the `comparison` constraint is unchanged.
+- **Tests:** 13 backend tests (`tests/test_coding_web.py`), 8 frontend tests (`webChecks.test.tsx`), and a self-test of the checker inside the worker image with no network.
+- **Browser test on dev:** 9 of 9 passed. An instructor created an HTML and a CSS challenge in the course builder and attached both to a lesson. The learner saw the sample checks in plain words and the live preview. A wrong heading failed, the correct HTML passed 3 of 3, and CSS written as `rgb()` matched a hex expected value and passed 2 of 2. Test challenges were removed afterwards.
+
 ## 5. Security notes
 
 - Judge0 sandbox: no network, CPU, memory and wall-time limits, output size caps, and no shared filesystem between runs.

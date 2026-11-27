@@ -1,7 +1,11 @@
 """Lease Utporul submissions and execute them through a Judge0 sandbox.
 
-This process never executes learner source itself. Judge0 receives one run per
+This process never executes learner programs itself. Judge0 receives one run per
 test case with network disabled and the challenge's CPU/memory limits applied.
+
+HTML and CSS submissions are not programs: they are rendered in headless
+Chromium with page scripts off and the network blocked, and the challenge's
+checks read values from the page (see web_check.py).
 """
 
 from __future__ import annotations
@@ -12,6 +16,10 @@ import time
 from typing import Any
 
 import httpx
+
+from web_check import WebJudge
+
+WEB_LANGUAGES = {"html", "css"}
 
 
 logging.basicConfig(
@@ -172,6 +180,7 @@ def run():
     endpoint = urlparse(JUDGE0_URL)
     if endpoint.scheme not in {"http", "https"} or not endpoint.hostname or endpoint.username or endpoint.password:
         raise SystemExit("JUDGE0_URL must identify a configured private Judge0 HTTP(S) endpoint without embedded credentials")
+    web_judge = WebJudge()
     with httpx.Client(timeout=httpx.Timeout(35, connect=5)) as client:
         language_ids: dict[str, int] = {}
         refresh_languages_at = 0.0
@@ -192,10 +201,13 @@ def run():
                     time.sleep(POLL_SECONDS)
                     continue
                 try:
-                    results = [
-                        _execute_case(client, job, case, language_ids)
-                        for case in job["test_cases"]
-                    ]
+                    if job["language"] in WEB_LANGUAGES:
+                        results = web_judge.run(job)
+                    else:
+                        results = [
+                            _execute_case(client, job, case, language_ids)
+                            for case in job["test_cases"]
+                        ]
                     completed = client.post(
                         f"{BACKEND_URL}/internal/coding/jobs/{job['job_id']}/complete",
                         headers=_headers(),
