@@ -236,7 +236,13 @@ Limits and follow-ups:
   - All 100 were judged `passed`. The queue drained in 218 s, about 2.2 s per job. The likely cause is the worker's concurrency (not checked yet). At this rate, 100 students submitting in the same minute would wait about 3.6 minutes for the last result. This is the main bottleneck for live-class scale.
   - Test data was removed afterwards. Dev counts were back to 31 submissions and 9 utporul courses.
 - Not done: the `/metrics` endpoint has no test (it needs the observability token). The Playwright lesson test from Phase 2 is not repeated here.
-- Next step if live classes need faster judging: check the worker's concurrency, then consider more worker replicas or claiming several jobs at once.
+- Rerun on dev (2026-11-27), with the restarted backend so pacing and backpressure were active. Same setup: 100 learners, 25 concurrent clients.
+  - All 100 returned 202, with no 429s or 503s.
+  - Submit latency: p50 1.42 s, p95 1.99 s, max 2.20 s. The first run's p95 was 3.70 s.
+  - All 100 were judged `passed`. The queue drained in 191 s, about 1.9 s per job.
+  - Test data was removed; dev counts were back to 31 submissions and 9 utporul courses.
+- Cause of the slow drain (confirmed): `code-judge-worker/worker.py` is a single loop that claims one job at a time and runs its test cases one after another. Dev runs one worker container (`docker-compose.prod.yml` sets 2 replicas). At this rate, 100 students submitting together wait about 3 minutes for the last result.
+- Next step if live classes need faster judging: run more worker replicas (the lease-based queue already supports several workers), or let one worker run jobs or test cases in parallel.
 
 ## 5. Security notes
 
