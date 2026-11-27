@@ -4,6 +4,7 @@ import { codingAPI, type CodingChallengeDefinition, type CodingCourse, type Codi
 import { plannerError } from '@/api/planner'
 import { PageHeader, PageLayout } from '@/components/design-system/PageLayout'
 import InstructorReport from '@/components/coding/InstructorReport'
+import ReviewQueuePanel from '@/components/coding/ReviewQueuePanel'
 
 const LANGUAGES: Array<{ id: CodingLanguage; label: string }> = [
   { id: 'python', label: 'Python' }, { id: 'javascript', label: 'JavaScript' },
@@ -196,6 +197,7 @@ export default function CodingStudioPage() {
     </div>
 
     <InstructorReport courseId={courseId} />
+    <ReviewQueuePanel courseId={courseId} />
   </PageLayout>
 }
 

@@ -264,6 +264,14 @@ from .coding_live import (  # noqa: F401
     LiveCodingChallenge,
     LiveCodingSubmission,
 )
+from .coding_review import (  # noqa: F401
+    CodingReviewComment,
+    CodingReviewRequest,
+)
+from .coding_collab import (  # noqa: F401
+    CodingCollabRoom,
+    CodingCollabMember,
+)
 from .meiporul_operations import (  # noqa: F401
     ImmersiveLabSite,
     ImmersiveDevice,

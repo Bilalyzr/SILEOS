@@ -2,7 +2,10 @@ import { Component, Suspense, lazy, useEffect, useMemo, useRef, useState, type R
 import { Link } from 'react-router-dom'
 import { ArrowLeft, CheckCircle2, Clock3, Cpu, Loader2, Play, ShieldCheck, XCircle } from 'lucide-react'
 import { codingAPI, type CodingLanguage, type CodingSubmission, type LearnerChallenge } from '@/api/coding'
+import { codingReviewAPI } from '@/api/codingReview'
 import { plannerError } from '@/api/planner'
+import { ReviewThread } from './ReviewThread'
+import { PairPanel } from './PairPanel'
 import { codingEditorMode } from './editorConfig'
 import { errorLocations, type ErrorLocation } from './errorLocations'
 import { useCodingDraft, type DraftStatus } from './useCodingDraft'
@@ -183,10 +186,44 @@ export function CodingWorkspace({ slug, embedded = false, submitOverride }: Codi
           </button>
         </div>
         {error && <div role="alert" className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-300">{error}</div>}
+        <PairPanel slug={slug} language={language} starterCode={challenge.starter_code[language] || ''} />
         {submission && <ResultPanel submission={submission} />}
+        {submission && terminal.has(submission.status) && <SubmissionReview submission={submission} />}
       </section>
     </div>
   </main>
+}
+
+/** Review for one finished submission: ask for review and read or leave line comments. */
+function SubmissionReview({ submission }: { submission: CodingSubmission }) {
+  const [requested, setRequested] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [error, setError] = useState('')
+
+  const ask = async () => {
+    setError('')
+    try {
+      await codingReviewAPI.requestReview(submission.id)
+      setRequested(true)
+    } catch (reason) {
+      setError(plannerError(reason))
+    }
+  }
+
+  return (
+    <div className="mt-4 rounded-xl border border-white/10 bg-black/20 p-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <button type="button" onClick={() => setOpen((value) => !value)} className="text-sm font-semibold text-violet-200 underline">
+          {open ? 'Hide review' : 'Review and comments'}
+        </button>
+        <button type="button" onClick={() => void ask()} disabled={requested} className="rounded-lg border border-violet-400/40 px-3 py-1.5 text-xs font-semibold text-violet-100 disabled:opacity-60">
+          {requested ? 'Review requested' : 'Ask for a review'}
+        </button>
+      </div>
+      {error && <p role="alert" className="mt-2 text-xs text-red-300">{error}</p>}
+      {open && <div className="mt-4"><ReviewThread submissionId={submission.id} source={submission.source_code} /></div>}
+    </div>
+  )
 }
 
 function sourceTextarea(value: string, onChange: (value: string) => void, embedded: boolean) {

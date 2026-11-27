@@ -76,6 +76,10 @@ export default defineConfig(({ mode }) => {
     // console warning (and subtle bugs with `instanceof` checks).
     dedupe: ['three', 'react', 'react-dom'],
     alias: {
+      // y-monaco imports monaco through its esm/vs path, which monaco's
+      // package exports do not map. Point it at the real folder so both
+      // resolve to one Monaco instance.
+      'monaco-editor/esm/vs': path.resolve(__dirname, './node_modules/monaco-editor/esm/vs'),
       '@': path.resolve(__dirname, './src'),
       '@/components': path.resolve(__dirname, './src/components'),
       '@/pages': path.resolve(__dirname, './src/pages'),

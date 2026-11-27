@@ -1,6 +1,6 @@
 # Live Coding Platform: Implementation Plan
 
-Status: **Phase 0 and Phase 1 done.** **Phase 2 done** (lesson practice blocks, drafts, curriculum editor). **Phase 3 done** (analytics, instructor report, learner progress; certificate setting and per-challenge weights still open). **Phase 4 built on dev** (live class challenges, results board, solution reveal; gradebook link still open). Owner: to be assigned.
+Status: **Phase 0 and Phase 1 done.** **Phase 2 done** (lesson practice blocks, drafts, curriculum editor). **Phase 3 done** (analytics, instructor report, learner progress; certificate setting and per-challenge weights still open). **Phase 4 built on dev** (live class challenges, results board, solution reveal; gradebook link still open). **Phase 5 built on dev** (review comments and queue, pair rooms over WebSocket; production nginx change still needs approval). Owner: to be assigned.
 Last reviewed: 2026-11-26.
 
 Goal: let students write, run, test and submit code inside SILEOS, during live classes and while watching recorded lessons, with automatic progress saving and instructor analytics.
@@ -197,6 +197,23 @@ Limits and follow-ups:
 
 **Note:** this phase adds a stateful realtime service with its own scaling and failure modes. Start only after Phases 0 to 4 are stable and students ask for it.
 
+**Phase 5 part A result (built on dev, 2026-11-27): review comments and queue.**
+- Data: `coding_review_comments` (line-anchored, open or resolved) and `coding_review_requests` (one per submission). New tables, created by `create_all`.
+- Rules: the submitter and course editors can read and comment on a submission; others get 404. Line numbers must fall inside the submitted source. Only the submitter can request a review, and only for a finished run. Only course editors can resolve comments or mark a review done.
+- API under `/api/v1/utporul/coding/`: `submissions/{id}/comments` (list, add), `comments/{id}/resolve`, `submissions/{id}/review-request`, `submissions/{id}/review-done`, `courses/{id}/review-queue`.
+- Frontend: `ReviewThread` (code with line gutters and comments) is in the learner's result panel and the instructor queue. `ReviewQueuePanel` is in Coding Studio.
+- Tests: 3 backend tests in `tests/test_coding_review.py` (29 coding tests pass in total). 3 frontend tests in `ReviewThread.test.tsx`.
+**Phase 5 part B result (built on dev, 2026-11-27): shared editing over a FastAPI WebSocket with Redis fan-out.**
+- Data: `coding_collab_rooms` (challenge, owner, language, invite code) and `coding_collab_members` (cap 4). The snapshot and tickets live in Redis.
+- Access: a learner opens a room for a published challenge and shares the invite code. Joining needs the code plus enrolment in the course, so rooms cannot be found by guessing ids. Only members can get a socket ticket. Tickets last 60 seconds and are single use.
+- Socket: `/api/v1/utporul/coding/collab-rooms/{id}/ws?ticket=…`. Binary frames only: byte 0 is 0 (update) or 1 (snapshot), then the Yjs bytes. Frames are capped at 512 KB. Malformed frames close with 1003. A forged or reused ticket closes with 4401.
+- Fan-out: each uvicorn worker keeps its own sockets. Frames are published to Redis channel `coding:collab:{room}` and relayed to the other workers' sockets, excluding the sender. Without Redis (tests), an in-memory bus is used, which is correct only for one worker.
+- Late joiners: the latest snapshot is stored in Redis for 7 days, and a new socket receives it first. Each client also sends a snapshot after changes (debounced 1.5 s), so a rejoining client catches up.
+- Frontend: `CollabEditor` (Monaco with `y-monaco`) and `PairPanel`, which is shown under each coding workspace. Only the room owner seeds starter code, and only when no saved text arrives. The room has no submit button; to submit, the learner copies the text into the normal editor.
+- Infrastructure: `yjs` 13.6.18, `y-monaco` 0.1.6 and `y-protocols` 1.0.6 are pinned. A Vite alias maps `monaco-editor/esm/vs` so y-monaco and the app share one Monaco. The dev nginx edge has a new location for `/api/v1/utporul/coding/collab-rooms/` with WebSocket headers.
+- Tests: 5 backend socket and room tests (`tests/test_coding_collab.py`), 1 cross-worker fan-out test against real Redis (`tests/test_collab_fanout.py`), 4 frame and URL tests. 35 coding backend tests pass. The production frontend build succeeds.
+- Not done: the production nginx edge (`nginx/conf.d/default.conf`) still needs the same WebSocket location. That file also serves other hostnames, so it needs a separate approval. Presence (who is online) and a browser test with two live clients are not built. Without Redis persistence, a flushed Redis loses saved snapshots until someone reconnects.
+
 ### Phase 6: Hardening (runs alongside all phases)
 
 - Per-user rate limits on runs and submissions.
@@ -240,3 +257,5 @@ Recommended order: Phases 0, 1 and 2 first, then 3 and 4. Phase 5 later.
 - **2026-11-26:** Phase 1 built on dev: Monaco editor with markers and fallback. Judge worker exempted from the general rate limit; internal routes blocked at the edge.
 - **2026-11-27:** Phase 3 built on dev: instructor metrics and CSV export, learner progress, ranking tie-breaks. Certificate criteria and per-challenge weights still open.
 - **2026-11-27:** Phase 4 built on dev: live coding challenges with push, close, results board and model-solution reveal. Gradebook link and Playwright run still open.
+- **2026-11-27:** Phase 5 part A built on dev: line-anchored review comments, review requests and the instructor review queue. Realtime shared editing (part B) waits for an infrastructure decision.
+- **2026-11-27:** Phase 5 part B built on dev: pair rooms with a FastAPI WebSocket, Redis fan-out, Yjs and y-monaco. Production nginx edge change still needs approval.

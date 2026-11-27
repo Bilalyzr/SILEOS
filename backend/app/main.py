@@ -1529,11 +1529,21 @@ app.include_router(math_pilot.router, prefix="/api/v1/math-pilot", tags=["Adapti
 from app.routers import curriculum_workspace
 app.include_router(curriculum_workspace.router, prefix="/api/v1/curriculum-workspace", tags=["Curriculum Workspace"])
 
-from app.routers import coding_assessments, coding_judge_internal
+from app.routers import coding_assessments, coding_collab, coding_judge_internal, coding_review
 app.include_router(
     coding_assessments.router,
     prefix="/api/v1/utporul/coding",
     tags=["Utporul coding assessments"],
+)
+app.include_router(
+    coding_review.router,
+    prefix="/api/v1/utporul/coding",
+    tags=["Utporul coding review"],
+)
+app.include_router(
+    coding_collab.router,
+    prefix="/api/v1/utporul/coding",
+    tags=["Utporul coding pair rooms"],
 )
 app.include_router(
     coding_judge_internal.router,
