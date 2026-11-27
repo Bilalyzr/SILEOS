@@ -162,4 +162,82 @@ export const codingAPI = {
     (await api.get<CodingDraft | null>(`/utporul/coding/challenges/${slug}/draft`, { params: { language } })).data,
   saveDraft: async (slug: string, language: CodingLanguage, sourceCode: string) =>
     (await api.put<CodingDraft>(`/utporul/coding/challenges/${slug}/draft`, { language, source_code: sourceCode })).data,
+  courseMetrics: async (courseId: number) =>
+    (await api.get<CourseCodingMetrics>(`/utporul/coding/courses/${courseId}/metrics`)).data,
+  courseMetricsCsv: async (courseId: number) =>
+    (await api.get<Blob>(`/utporul/coding/courses/${courseId}/metrics.csv`, { responseType: 'blob' })).data,
+  learnerProgress: async () =>
+    (await api.get<LearnerCodingProgress>('/utporul/coding/learner/progress')).data,
+}
+
+export interface FailingCaseMetric {
+  ordinal: number
+  visibility: 'sample' | 'hidden'
+  runs: number
+  failed: number
+  failure_breakdown: Record<string, number>
+}
+
+export interface LeaderboardRow {
+  user_id: number
+  learner_name: string
+  best_submission_id: number
+  best_score: number
+  passed: boolean
+  attempts: number
+  total_ms: number
+  peak_memory_kb: number
+  rank: number
+}
+
+export interface ChallengeMetrics {
+  id: number
+  slug: string
+  title: string
+  status: ChallengeStatus
+  learners_attempted: number
+  learners_passed: number
+  /** 0 to 1. */
+  pass_rate: number
+  total_submissions: number
+  median_minutes_to_first_pass: number | null
+  failing_cases: FailingCaseMetric[]
+  leaderboard: LeaderboardRow[]
+}
+
+export interface CourseCodingMetrics {
+  course_id: number
+  generated_at: string
+  challenges: ChallengeMetrics[]
+}
+
+export interface LearnerChallengeProgress {
+  slug: string
+  title: string
+  course_title: string
+  attempts: number
+  max_attempts: number
+  best_score: number
+  best_total_ms: number | null
+  passed: boolean
+  first_passed_at: string | null
+  last_submitted_at: string | null
+}
+
+export interface LearnerSubmissionHistory {
+  submission_id: number
+  challenge_slug: string
+  challenge_title: string
+  language: CodingLanguage
+  status: CodingSubmission['status']
+  score: number
+  submitted_at: string
+  total_ms: number
+  peak_memory_kb: number
+}
+
+export interface LearnerCodingProgress {
+  summary: { challenges_total: number; challenges_attempted: number; challenges_passed: number }
+  challenges: LearnerChallengeProgress[]
+  history: LearnerSubmissionHistory[]
 }

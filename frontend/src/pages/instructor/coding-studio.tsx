@@ -3,6 +3,7 @@ import { Check, ChevronRight, Eye, EyeOff, Plus, Rocket, Save, X } from 'lucide-
 import { codingAPI, type CodingChallengeDefinition, type CodingCourse, type CodingLanguage, type CodingTestCaseDraft, type EditorChallenge } from '@/api/coding'
 import { plannerError } from '@/api/planner'
 import { PageHeader, PageLayout } from '@/components/design-system/PageLayout'
+import InstructorReport from '@/components/coding/InstructorReport'
 
 const LANGUAGES: Array<{ id: CodingLanguage; label: string }> = [
   { id: 'python', label: 'Python' }, { id: 'javascript', label: 'JavaScript' },
@@ -193,6 +194,8 @@ export default function CodingStudioPage() {
         {!isLocked && <div className="mt-6 flex justify-end"><button type="submit" disabled={busy || !courseId} className="si-btn-primary inline-flex items-center gap-2"><Save className="h-4 w-4" />{busy ? 'Saving…' : selected ? 'Save changes' : 'Create draft'}</button></div>}
       </form>
     </div>
+
+    <InstructorReport courseId={courseId} />
   </PageLayout>
 }
 

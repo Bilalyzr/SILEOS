@@ -1,8 +1,13 @@
 """Utporul coding assessment authoring and learner submission APIs."""
 
+import csv
+import io
+
 from fastapi import APIRouter, Depends
+from fastapi.responses import Response
 from sqlalchemy.orm import Session
 
+from app.core.csv_safety import sanitize_csv_cell
 from app.core.database import get_db
 from app.schemas.coding_assessment import (
     ChallengeAction,
@@ -12,6 +17,7 @@ from app.schemas.coding_assessment import (
     LessonBlocksReplace,
     SubmissionCreate,
 )
+from app.services import coding_analytics_service as analytics
 from app.services import coding_assessment_service as service
 from app.services.auth_service import AuthService
 
@@ -91,6 +97,44 @@ def submit(
     user=Depends(AuthService.get_current_active_user),
 ):
     return service.submit(db, slug, command, user)
+
+
+@router.get("/courses/{course_id}/metrics")
+def course_metrics(
+    course_id: int,
+    db: Session = Depends(get_db),
+    user=Depends(AuthService.get_current_active_user),
+):
+    return analytics.instructor_metrics(db, course_id, user)
+
+
+@router.get("/courses/{course_id}/metrics.csv")
+def course_metrics_csv(
+    course_id: int,
+    db: Session = Depends(get_db),
+    user=Depends(AuthService.get_current_active_user),
+):
+    rows = analytics.instructor_metrics_rows(db, course_id, user)
+    buffer = io.StringIO()
+    writer = csv.writer(buffer)
+    for row in rows:
+        writer.writerow([sanitize_csv_cell(cell) for cell in row])
+    return Response(
+        content=buffer.getvalue(),
+        media_type="text/csv",
+        headers={
+            "Content-Disposition": f'attachment; filename="coding-metrics-course-{course_id}.csv"',
+            "Cache-Control": "no-store",
+        },
+    )
+
+
+@router.get("/learner/progress")
+def learner_progress(
+    db: Session = Depends(get_db),
+    user=Depends(AuthService.get_current_active_user),
+):
+    return analytics.learner_progress(db, user)
 
 
 @router.get("/submissions/{submission_id}")

@@ -1,6 +1,6 @@
 # Live Coding Platform: Implementation Plan
 
-Status: **Phase 0 and Phase 1 done.** **Phase 2 built and verified on dev** (lesson practice blocks, drafts, curriculum editor). Owner: to be assigned.
+Status: **Phase 0 and Phase 1 done.** **Phase 2 done** (lesson practice blocks, drafts, curriculum editor). **Phase 3 built on dev** (analytics, instructor report, learner progress; certificate setting and per-challenge weights still open). Owner: to be assigned.
 Last reviewed: 2026-11-26.
 
 Goal: let students write, run, test and submit code inside SILEOS, during live classes and while watching recorded lessons, with automatic progress saving and instructor analytics.
@@ -154,6 +154,17 @@ Limits and follow-ups:
 
 **Done when:** an instructor can see pass rates and failing cases for a challenge, and a student can see their scores over time.
 
+**Phase 3 result (built on dev, 2026-11-27):**
+- Per-case time and memory were already stored on `CodingCaseResult` by the Phase 0 judge path. No schema change was needed.
+- Ranking: score first, then total judge time, then peak memory, then submit time (`ranking_key` in `coding_analytics_service.py`). Per-challenge weights are not built yet; the order is fixed.
+- `GET /utporul/coding/courses/{id}/metrics`: pass rate, learners attempted and passed, total submissions, median minutes to first pass, top failing test cases (ordinal, visibility and failure counts only, never inputs or expected outputs), and a leaderboard of the top 50 learners.
+- `GET /utporul/coding/courses/{id}/metrics.csv`: one row per learner per challenge, cells sanitised by `csv_safety`. Editors only.
+- `GET /utporul/coding/learner/progress`: the learner's own challenges, best scores, attempts, first pass and the last 20 submissions.
+- Frontend: `InstructorReport` in Coding Studio; a progress panel on `/coding`; formatting helpers in `metricsFormat.ts`.
+- Tests: 5 backend tests in `tests/test_coding_analytics.py`; 4 frontend formatting tests. The full Vitest suite passed (23 tests) and the production build succeeded.
+- Not done: the certificate completion criteria (a per-course setting) and per-challenge tie-break weights. Both stay open for a follow-up.
+- Not done: browser (Playwright) run of the new screens. Not committed or pushed.
+
 ### Phase 4: Live class exercises (size M to L)
 
 - Instructor pushes a published challenge to a live session, following the pattern in `live_class_polls.py`.
@@ -216,3 +227,4 @@ Recommended order: Phases 0, 1 and 2 first, then 3 and 4. Phase 5 later.
 - **2026-11-26:** Phase 0 built on dev: Judge0 stack, per-language memory floor, cgroup v2 workaround. Five of six languages pass end to end; Java blocked.
 - **2026-11-26:** Phase 2 built on dev: lesson practice blocks, learner drafts, curriculum editor section, lesson player dialog.
 - **2026-11-26:** Phase 1 built on dev: Monaco editor with markers and fallback. Judge worker exempted from the general rate limit; internal routes blocked at the edge.
+- **2026-11-27:** Phase 3 built on dev: instructor metrics and CSV export, learner progress, ranking tie-breaks. Certificate criteria and per-challenge weights still open.
