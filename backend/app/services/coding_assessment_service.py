@@ -33,6 +33,10 @@ from app.services.course_access import ADMIN_ROLES, can_edit
 ACTIVE_ENROLLMENTS = ("enrolled", "active", "completed")
 LEASE_SECONDS = 90
 MAX_JUDGE_ATTEMPTS = 5
+# Phase 6 hardening: per-learner pacing and judge queue backpressure.
+SUBMITS_PER_MINUTE = 6
+QUEUE_CAPACITY = 500
+RETRY_AFTER_SECONDS = 60
 
 
 def _now():
@@ -457,6 +461,42 @@ def learner_challenge(db, slug: str, user) -> dict:
     return {**_challenge_dict(challenge), "sample_cases": samples, "attempts_used": attempts}
 
 
+def _enforce_submit_limits(db, user) -> None:
+    """Reject a new submission when the learner is submitting too fast or the judge queue is full.
+
+    Both checks run after the user row is locked, so two requests from one
+    learner cannot both pass the pacing check.
+    """
+    window_start = _now() - timedelta(seconds=RETRY_AFTER_SECONDS)
+    recent = (
+        db.query(func.count(CodingSubmission.id))
+        .filter(
+            CodingSubmission.user_id == user.id,
+            CodingSubmission.submitted_at >= window_start,
+        )
+        .scalar()
+        or 0
+    )
+    if recent >= SUBMITS_PER_MINUTE:
+        raise HTTPException(
+            429,
+            "You are submitting too quickly. Wait a minute, then try again.",
+            headers={"Retry-After": str(RETRY_AFTER_SECONDS)},
+        )
+    waiting = (
+        db.query(func.count(CodingJudgeJob.id))
+        .filter(CodingJudgeJob.status.in_(("queued", "leased")))
+        .scalar()
+        or 0
+    )
+    if waiting >= QUEUE_CAPACITY:
+        raise HTTPException(
+            503,
+            "The judge queue is full right now. Try again in a minute.",
+            headers={"Retry-After": str(RETRY_AFTER_SECONDS)},
+        )
+
+
 def submit(db, slug: str, command, user) -> dict:
     challenge = _student_challenge(db, slug, user)
     if command.language not in (challenge.allowed_languages or []):
@@ -488,6 +528,7 @@ def submit(db, slug: str, command, user) -> dict:
     )
     if attempts >= challenge.max_attempts:
         raise HTTPException(409, "The maximum number of attempts has been reached.")
+    _enforce_submit_limits(db, user)
     submission = CodingSubmission(
         challenge_id=challenge.id,
         user_id=user.id,

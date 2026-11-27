@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.core.config import get_settings
 from app.core.database import get_db
 from app.core.runtime_telemetry import telemetry
+from app.services.coding_ops import judge_health
 from app.services.runtime_service import snapshot, utc, now
 
 router = APIRouter()
@@ -28,6 +29,21 @@ async def metrics(db: Session = Depends(get_db)):
              "# TYPE sasha_runtime_job_dead gauge"]
     for job in runtime["jobs"]:
         lines.append(f'sasha_runtime_job_dead{{job="{job["name"]}"}} {int(job["status"] == "dead")}')
+    health = judge_health(db)
+    lines += [
+        "# TYPE sasha_coding_queue_depth gauge",
+        f'sasha_coding_queue_depth{{state="queued"}} {health["queue_queued"]}',
+        f'sasha_coding_queue_depth{{state="leased"}} {health["queue_leased"]}',
+        "# TYPE sasha_coding_queue_oldest_seconds gauge",
+        f"sasha_coding_queue_oldest_seconds {health['queue_oldest_seconds']}",
+        "# TYPE sasha_coding_completed_last_hour gauge",
+        f"sasha_coding_completed_last_hour {health['completed_last_hour']}",
+        "# TYPE sasha_coding_error_ratio_last_hour gauge",
+        f"sasha_coding_error_ratio_last_hour {health['error_ratio_last_hour']}",
+        "# TYPE sasha_coding_judge_latency_seconds gauge",
+        f'sasha_coding_judge_latency_seconds{{quantile="0.5"}} {health["judge_latency_p50_seconds"]}',
+        f'sasha_coding_judge_latency_seconds{{quantile="0.95"}} {health["judge_latency_p95_seconds"]}',
+    ]
     lines += ["# TYPE sasha_telemetry_available gauge", f"sasha_telemetry_available {int(counters['status'] == 'available')}"]
     if counters["status"] == "available":
         lines += ["# TYPE sasha_http_requests_15m gauge", f"sasha_http_requests_15m {counters['requests']}",

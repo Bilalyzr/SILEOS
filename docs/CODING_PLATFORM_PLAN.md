@@ -1,6 +1,6 @@
 # Live Coding Platform: Implementation Plan
 
-Status: **Phase 0 and Phase 1 done.** **Phase 2 done** (lesson practice blocks, drafts, curriculum editor). **Phase 3 done** (analytics, instructor report, learner progress; certificate setting and per-challenge weights still open). **Phase 4 built on dev** (live class challenges, results board, solution reveal; gradebook link still open). **Phase 5 built on dev** (review comments and queue, pair rooms over WebSocket; production nginx change still needs approval). Owner: to be assigned.
+Status: **Phase 0 and Phase 1 done.** **Phase 2 done** (lesson practice blocks, drafts, curriculum editor). **Phase 3 done** (analytics, instructor report, learner progress; certificate setting and per-challenge weights still open). **Phase 4 built on dev** (live class challenges, results board, solution reveal; gradebook link still open). **Phase 5 built on dev** (review comments and queue, pair rooms over WebSocket; production nginx change still needs approval). **Phase 6 built on dev** (pacing, queue backpressure, queue metrics; HTTP load test not run). Owner: to be assigned.
 Last reviewed: 2026-11-26.
 
 Goal: let students write, run, test and submit code inside SILEOS, during live classes and while watching recorded lessons, with automatic progress saving and instructor analytics.
@@ -225,6 +225,13 @@ Limits and follow-ups:
   - Playwright for the lesson practice flow.
 - Monitoring: queue depth, judge latency, failure rate, in the existing observability router.
 
+**Phase 6 result (built on dev, 2026-11-27):**
+- Pacing: a learner can make 6 new submissions per minute. The 7th returns 429 with `Retry-After: 60`. Replaying an existing idempotency key still returns the original submission. The check runs under the user row lock.
+- Backpressure: when 500 judge jobs are queued or leased, new submissions return 503 with `Retry-After: 60` and a plain message. Both limits are constants in `coding_assessment_service.py`.
+- Monitoring: `services/coding_ops.py` adds these gauges to the existing `/metrics` scrape: `sasha_coding_queue_depth` (queued and leased), `sasha_coding_queue_oldest_seconds`, `sasha_coding_completed_last_hour`, `sasha_coding_error_ratio_last_hour`, and `sasha_coding_judge_latency_seconds` (p50 and p95). No learner data is exposed.
+- Tests: 4 backend tests in `tests/test_coding_hardening.py`, covering pacing, a full queue, a 100-learner burst (all 100 accepted), and health numbers. 4 new Vitest tests cover autosave: debounce, device-only fallback, and restore order. 39 backend coding tests and 34 frontend coding tests pass.
+- Not done: an HTTP load test against the dev server. The burst test runs in-process, and a live run would write real jobs that the worker would judge. Also not done: the Playwright lesson test was built in Phase 2 and is not repeated here, and the `/metrics` endpoint has no test (it needs the observability token).
+
 ## 5. Security notes
 
 - Judge0 sandbox: no network, CPU, memory and wall-time limits, output size caps, and no shared filesystem between runs.
@@ -259,3 +266,4 @@ Recommended order: Phases 0, 1 and 2 first, then 3 and 4. Phase 5 later.
 - **2026-11-27:** Phase 4 built on dev: live coding challenges with push, close, results board and model-solution reveal. Gradebook link and Playwright run still open.
 - **2026-11-27:** Phase 5 part A built on dev: line-anchored review comments, review requests and the instructor review queue. Realtime shared editing (part B) waits for an infrastructure decision.
 - **2026-11-27:** Phase 5 part B built on dev: pair rooms with a FastAPI WebSocket, Redis fan-out, Yjs and y-monaco. Production nginx edge change still needs approval.
+- **2026-11-27:** Phase 6 hardening built on dev: per-learner pacing (429), judge queue backpressure (503), queue and latency gauges in `/metrics`, and autosave tests. HTTP load test not run.
