@@ -173,8 +173,13 @@ async def list_classes(
     query = live_class_service.apply_scope_visibility(query, scope, current_user, db)
 
     if scope == "upcoming":
+        # A class stays "upcoming" until its scheduled END, not its start. Filtering
+        # on the start time made a class vanish from every tab the moment its start
+        # passed (a class created for "now", or started a minute late): it was not
+        # upcoming, not live yet, and not past, so it could no longer be started
+        # or joined.
         query = query.filter(
-            LiveClass.scheduled_start >= now,
+            LiveClass.scheduled_end >= now,
             LiveClass.status.in_([LiveClassStatus.SCHEDULED, LiveClassStatus.LIVE]),
         ).order_by(LiveClass.scheduled_start.asc())
     elif scope == "past":

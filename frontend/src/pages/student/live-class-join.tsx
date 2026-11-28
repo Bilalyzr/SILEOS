@@ -12,9 +12,9 @@ import { RecordingBadge } from '@/components/live/RecordingBadge'
 import { ErrorState } from '@/components/dashboard/primitives'
 import { useAuth } from '@/hooks/use-auth'
 import { useLiveClassStore } from '@/store/liveClassStore'
-import { requestJoinToken, type JoinTokenOut } from '@/api/liveClasses'
+import { getLiveClass, requestJoinToken, type JoinTokenOut, type LiveClassOut } from '@/api/liveClasses'
 
-type Stage = 'precheck' | 'connecting' | 'in-call' | 'error' | 'left'
+type Stage = 'loading' | 'precheck' | 'connecting' | 'in-call' | 'error' | 'left' | 'ended'
 
 export function StudentLiveClassJoinPage() {
   const { id } = useParams<{ id: string }>()
@@ -22,10 +22,28 @@ export function StudentLiveClassJoinPage() {
   const navigate = useNavigate()
   const { fullName } = useAuth()
 
-  const [stage, setStage] = React.useState<Stage>('precheck')
+  const [stage, setStage] = React.useState<Stage>('loading')
+  const [liveClass, setLiveClass] = React.useState<LiveClassOut | null>(null)
   const [tokenData, setTokenData] = React.useState<JoinTokenOut | null>(null)
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
   const isRecording = useLiveClassStore((s) => s.isRecording)
+
+  // Check the class first: an ended or cancelled class must not offer the
+  // device check and a join button that can only fail afterwards.
+  React.useEffect(() => {
+    if (!Number.isFinite(classId)) return
+    let active = true
+    getLiveClass(classId)
+      .then((cls) => {
+        if (!active) return
+        setLiveClass(cls)
+        setStage(cls.status === 'ended' || cls.status === 'cancelled' ? 'ended' : 'precheck')
+      })
+      // If the status cannot be read, fall back to the old behaviour: the join
+      // request below reports the real reason.
+      .catch(() => active && setStage('precheck'))
+    return () => { active = false }
+  }, [classId])
 
   const handleContinue = React.useCallback(async () => {
     setStage('connecting')
@@ -46,6 +64,14 @@ export function StudentLiveClassJoinPage() {
     navigate('/student/live-classes')
   }, [navigate])
 
+  // The call closed itself because the instructor ended the class: show that
+  // clearly instead of silently dropping the learner on another page.
+  const handleEnded = React.useCallback(() => {
+    setTokenData(null)
+    setLiveClass((cls) => (cls ? { ...cls, status: 'ended' } : cls))
+    setStage('ended')
+  }, [])
+
   if (!Number.isFinite(classId)) {
     return <ErrorState title="Invalid class" description="This live class link looks incorrect." />
   }
@@ -59,6 +85,42 @@ export function StudentLiveClassJoinPage() {
         <ArrowLeft className="h-4 w-4" />
         Back to live classes
       </button>
+
+      {stage === 'loading' && (
+        <div className="flex items-center justify-center min-h-[240px]" role="status" aria-label="Loading class">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500" />
+        </div>
+      )}
+
+      {stage === 'ended' && (
+        <div className="max-w-lg mx-auto w-full rounded-xl border border-slate-200 bg-white p-6 text-center" role="status">
+          <h2 className="text-lg font-semibold text-slate-900">
+            {liveClass?.status === 'cancelled' ? 'This class was cancelled' : 'This class has ended'}
+          </h2>
+          <p className="mt-2 text-sm text-slate-600">
+            {liveClass?.title ? `“${liveClass.title}” is no longer running. ` : ''}
+            {liveClass?.recording_status === 'available'
+              ? 'You can watch the recording.'
+              : 'You can no longer join it.'}
+          </p>
+          <div className="mt-5 flex flex-wrap justify-center gap-2">
+            {liveClass?.recording_status === 'available' && (
+              <button
+                onClick={() => navigate(`/student/live-classes/${classId}/recording`)}
+                className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white"
+              >
+                Watch the recording
+              </button>
+            )}
+            <button
+              onClick={() => navigate('/student/live-classes')}
+              className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700"
+            >
+              Back to live classes
+            </button>
+          </div>
+        </div>
+      )}
 
       {stage === 'precheck' && (
         <div className="max-w-lg mx-auto w-full">
@@ -103,6 +165,7 @@ export function StudentLiveClassJoinPage() {
               displayName={fullName || 'Student'}
               classId={classId}
               onLeft={handleLeft}
+              onEnded={handleEnded}
             />
           </div>
         </div>

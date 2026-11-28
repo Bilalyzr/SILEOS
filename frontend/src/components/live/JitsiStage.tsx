@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Button } from '@/components/ui/button'
 import { useLiveClassStore } from '@/store/liveClassStore'
-import { sendHeartbeat } from '@/api/liveClasses'
+import { getLiveClass, reportRecordingFailed, sendHeartbeat } from '@/api/liveClasses'
 
 // ---------------------------------------------------------------------------
 // external_api.js loader — lazy-injected once, cached promise so repeated
@@ -64,6 +64,10 @@ const MODERATOR_TOOLBAR_BUTTONS = [
 ]
 
 const HEARTBEAT_INTERVAL_MS = 60_000
+/** How often a learner's call checks whether the instructor has ended the class.
+ * Heartbeats only run once a minute, so without this a learner stayed in the room
+ * for up to a minute (or forever, before the heartbeat error was handled). */
+const CLASS_STATUS_POLL_MS = 10_000
 
 /** True for an axios error whose response status is 409 (class ended) or
  * 403 (access revoked) — both mean the server will never accept another
@@ -84,6 +88,9 @@ export interface JitsiStageProps {
   classId: number
   onApiReady?: (api: any) => void
   onLeft: () => void
+  /** Called after the call has been closed because the class ended (or access
+   * was revoked). Defaults to `onLeft`. */
+  onEnded?: () => void
 }
 
 export const JitsiStage: React.FC<JitsiStageProps> = ({
@@ -95,7 +102,13 @@ export const JitsiStage: React.FC<JitsiStageProps> = ({
   classId,
   onApiReady,
   onLeft,
+  onEnded,
 }) => {
+  const onLeftRef = React.useRef(onLeft)
+  const onEndedRef = React.useRef(onEnded)
+  onLeftRef.current = onLeft
+  onEndedRef.current = onEnded
+  const statusIntervalRef = React.useRef<ReturnType<typeof setInterval> | null>(null)
   const containerRef = React.useRef<HTMLDivElement>(null)
   const apiRef = React.useRef<any>(null)
   const heartbeatIntervalRef = React.useRef<ReturnType<typeof setInterval> | null>(null)
@@ -114,6 +127,7 @@ export const JitsiStage: React.FC<JitsiStageProps> = ({
   const participantJoined = useLiveClassStore((s) => s.participantJoined)
   const participantLeft = useLiveClassStore((s) => s.participantLeft)
   const setRecording = useLiveClassStore((s) => s.setRecording)
+  const setRecordingError = useLiveClassStore((s) => s.setRecordingError)
   const resetSession = useLiveClassStore((s) => s.resetSession)
 
   const sendFinalHeartbeat = React.useCallback(() => {
@@ -133,6 +147,31 @@ export const JitsiStage: React.FC<JitsiStageProps> = ({
 
   React.useEffect(() => {
     let cancelled = false
+    let endedHandled = false
+
+    /** The class is over (ended by the instructor, cancelled, or access revoked):
+     * stop the timers, hang up so the learner is really out of the room and no
+     * longer heard, then tell the page so it can show an ended message. */
+    const closeBecauseClassEnded = () => {
+      if (endedHandled || cancelled) return
+      endedHandled = true
+      if (heartbeatIntervalRef.current) {
+        clearInterval(heartbeatIntervalRef.current)
+        heartbeatIntervalRef.current = null
+      }
+      if (statusIntervalRef.current) {
+        clearInterval(statusIntervalRef.current)
+        statusIntervalRef.current = null
+      }
+      setConnectionStatus('error', 'This class has ended')
+      if (apiRef.current) {
+        try { apiRef.current.executeCommand('hangup') } catch { /* already closed */ }
+        try { apiRef.current.dispose() } catch { /* iframe already torn down */ }
+        apiRef.current = null
+      }
+      ;(onEndedRef.current ?? onLeftRef.current)()
+    }
+
     startSession({ classId, roomName, isModerator })
     setLoadError(null)
     setIsReady(false)
@@ -208,6 +247,15 @@ export const JitsiStage: React.FC<JitsiStageProps> = ({
 
         api.addEventListener('recordingStatusChanged', (event: any) => {
           setRecording(Boolean(event?.on))
+          if (event?.error) {
+            // The recorder could not start (for example the recording service is
+            // unavailable). Say so, and correct the server: the instructor's start
+            // request was already stored as "requested" before the call tried.
+            setRecordingError('Recording could not start. The recording service is unavailable, so this class is not being recorded.')
+            if (isModerator) reportRecordingFailed(classId).catch(() => { /* best effort */ })
+          } else if (event?.on) {
+            setRecordingError(null)
+          }
         })
 
         api.addEventListener('readyToClose', () => {
@@ -226,17 +274,29 @@ export const JitsiStage: React.FC<JitsiStageProps> = ({
         heartbeatIntervalRef.current = setInterval(() => {
           sendHeartbeat(classId).catch((err) => {
             if (isTerminalHeartbeatError(err)) {
-              if (heartbeatIntervalRef.current) {
-                clearInterval(heartbeatIntervalRef.current)
-                heartbeatIntervalRef.current = null
-              }
-              setConnectionStatus('error', 'This class has ended')
+              closeBecauseClassEnded()
               return
             }
             // Transient network errors shouldn't tear down the call — the
             // next tick (or the final heartbeat on unmount) will retry.
           })
         }, HEARTBEAT_INTERVAL_MS)
+
+        // Learners also check the class status every few seconds, so ending the
+        // class closes their call promptly. The instructor ends the class
+        // themselves, so their console does not poll.
+        if (!isModerator) {
+          statusIntervalRef.current = setInterval(() => {
+            getLiveClass(classId)
+              .then((cls) => {
+                if (cls.status === 'ended' || cls.status === 'cancelled') closeBecauseClassEnded()
+              })
+              .catch((err) => {
+                if (isTerminalHeartbeatError(err)) closeBecauseClassEnded()
+                // Anything else is a transient network error: try again next tick.
+              })
+          }, CLASS_STATUS_POLL_MS)
+        }
       })
       .catch((err: Error) => {
         if (cancelled) return
@@ -249,6 +309,10 @@ export const JitsiStage: React.FC<JitsiStageProps> = ({
       if (heartbeatIntervalRef.current) {
         clearInterval(heartbeatIntervalRef.current)
         heartbeatIntervalRef.current = null
+      }
+      if (statusIntervalRef.current) {
+        clearInterval(statusIntervalRef.current)
+        statusIntervalRef.current = null
       }
       sendFinalHeartbeat()
       if (apiRef.current) {

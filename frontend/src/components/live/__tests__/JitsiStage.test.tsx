@@ -10,10 +10,14 @@ vi.mock('@/api/liveClasses', async () => {
   return {
     ...actual,
     sendHeartbeat: vi.fn().mockResolvedValue({ accumulated_seconds: 60, delta: 60 }),
+    getLiveClass: vi.fn().mockResolvedValue({ id: 42, status: 'live' }),
+    reportRecordingFailed: vi.fn().mockResolvedValue({ class_id: 42, recording_status: 'none' }),
   }
 })
 
 const sendHeartbeatMock = liveClassesApi.sendHeartbeat as unknown as ReturnType<typeof vi.fn>
+const getLiveClassMock = liveClassesApi.getLiveClass as unknown as ReturnType<typeof vi.fn>
+const reportRecordingFailedMock = liveClassesApi.reportRecordingFailed as unknown as ReturnType<typeof vi.fn>
 
 /** Flushes the microtask queue (the `loadExternalApiScript(...).then(...)`
  * chain JitsiStage's effect awaits) under fake timers, where
@@ -35,6 +39,7 @@ class MockJitsiMeetExternalAPI {
   options: any
   listeners: Record<string, Array<(event: any) => void>> = {}
   dispose = vi.fn()
+  executeCommand = vi.fn()
 
   constructor(domain: string, options: any) {
     this.domain = domain
@@ -57,6 +62,9 @@ describe('JitsiStage', () => {
     vi.useFakeTimers()
     MockJitsiMeetExternalAPI.instances = []
     sendHeartbeatMock.mockClear()
+    getLiveClassMock.mockReset()
+    reportRecordingFailedMock.mockClear()
+    getLiveClassMock.mockResolvedValue({ id: 42, status: 'live' })
     ;(window as any).JitsiMeetExternalAPI = MockJitsiMeetExternalAPI
     // Script is already "loaded" since window.JitsiMeetExternalAPI exists —
     // loadExternalApiScript resolves synchronously via Promise.resolve() in
@@ -302,5 +310,146 @@ describe('JitsiStage', () => {
 
     expect(screen.getByText(/couldn't connect/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /retry/i })).toBeInTheDocument()
+  })
+
+  describe('when the class ends', () => {
+    function renderStudent(onEnded: () => void, onLeft: () => void = () => {}) {
+      return render(
+        <JitsiStage
+          jitsiUrl="https://live.example.com"
+          roomName="si-end12345"
+          jwt="jwt"
+          isModerator={false}
+          displayName="Student"
+          classId={42}
+          onLeft={onLeft}
+          onEnded={onEnded}
+        />
+      )
+    }
+
+    it('hangs up and tells the page within 10 seconds of the instructor ending the class', async () => {
+      const onEnded = vi.fn()
+      renderStudent(onEnded)
+      await flushMicrotasks()
+      const instance = MockJitsiMeetExternalAPI.instances[0]
+
+      // Still live at the first check: the learner stays in the call.
+      await act(async () => { await vi.advanceTimersByTimeAsync(10_000) })
+      expect(onEnded).not.toHaveBeenCalled()
+
+      getLiveClassMock.mockResolvedValue({ id: 42, status: 'ended' })
+      await act(async () => { await vi.advanceTimersByTimeAsync(10_000) })
+      expect(instance.executeCommand).toHaveBeenCalledWith('hangup')
+      expect(instance.dispose).toHaveBeenCalled()
+      expect(onEnded).toHaveBeenCalledTimes(1)
+
+      // Handled once: no repeat notifications and no more checks.
+      await act(async () => { await vi.advanceTimersByTimeAsync(30_000) })
+      expect(onEnded).toHaveBeenCalledTimes(1)
+    })
+
+    it('also leaves when a heartbeat is refused because the class has ended', async () => {
+      const onEnded = vi.fn()
+      renderStudent(onEnded)
+      await flushMicrotasks()
+
+      sendHeartbeatMock.mockRejectedValue({ response: { status: 409 } })
+      await act(async () => { await vi.advanceTimersByTimeAsync(60_000) })
+      expect(onEnded).toHaveBeenCalledTimes(1)
+    })
+
+    it('falls back to onLeft when the page does not handle the end', async () => {
+      const onLeft = vi.fn()
+      render(
+        <JitsiStage
+          jitsiUrl="https://live.example.com"
+          roomName="si-fallback1"
+          jwt="jwt"
+          isModerator={false}
+          displayName="Student"
+          classId={42}
+          onLeft={onLeft}
+        />
+      )
+      await flushMicrotasks()
+      getLiveClassMock.mockResolvedValue({ id: 42, status: 'cancelled' })
+      await act(async () => { await vi.advanceTimersByTimeAsync(10_000) })
+      expect(onLeft).toHaveBeenCalledTimes(1)
+    })
+
+    it('keeps the call open on a transient network error while checking', async () => {
+      const onEnded = vi.fn()
+      renderStudent(onEnded)
+      await flushMicrotasks()
+      getLiveClassMock.mockRejectedValue(new Error('network down'))
+      await act(async () => { await vi.advanceTimersByTimeAsync(20_000) })
+      expect(onEnded).not.toHaveBeenCalled()
+    })
+
+    it('does not poll for the instructor, who ends the class themselves', async () => {
+      const onEnded = vi.fn()
+      render(
+        <JitsiStage
+          jitsiUrl="https://live.example.com"
+          roomName="si-mod-end1"
+          jwt="jwt"
+          isModerator
+          displayName="Instructor"
+          classId={42}
+          onLeft={() => {}}
+          onEnded={onEnded}
+        />
+      )
+      await flushMicrotasks()
+      getLiveClassMock.mockResolvedValue({ id: 42, status: 'ended' })
+      await act(async () => { await vi.advanceTimersByTimeAsync(30_000) })
+      expect(getLiveClassMock).not.toHaveBeenCalled()
+      expect(onEnded).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('when recording cannot start', () => {
+    function renderStage(isModerator: boolean) {
+      return render(
+        <JitsiStage
+          jitsiUrl="https://live.example.com"
+          roomName="si-rec12345"
+          jwt="jwt"
+          isModerator={isModerator}
+          displayName="Someone"
+          classId={42}
+          onLeft={() => {}}
+        />
+      )
+    }
+
+    it('tells the server and shows why, when the call reports an error', async () => {
+      renderStage(true)
+      await flushMicrotasks()
+      act(() => { MockJitsiMeetExternalAPI.instances[0].emit('recordingStatusChanged', { on: false, mode: 'file', error: 'service unavailable' }) })
+      expect(reportRecordingFailedMock).toHaveBeenCalledWith(42)
+      const { useLiveClassStore } = await import('@/store/liveClassStore')
+      expect(useLiveClassStore.getState().recordingError).toMatch(/not being recorded/)
+      expect(useLiveClassStore.getState().isRecording).toBe(false)
+    })
+
+    it('clears the message once recording really starts', async () => {
+      renderStage(true)
+      await flushMicrotasks()
+      const instance = MockJitsiMeetExternalAPI.instances[0]
+      act(() => { instance.emit('recordingStatusChanged', { on: false, error: 'service unavailable' }) })
+      act(() => { instance.emit('recordingStatusChanged', { on: true, mode: 'file' }) })
+      const { useLiveClassStore } = await import('@/store/liveClassStore')
+      expect(useLiveClassStore.getState().recordingError).toBeNull()
+      expect(useLiveClassStore.getState().isRecording).toBe(true)
+    })
+
+    it('only the instructor corrects the server', async () => {
+      renderStage(false)
+      await flushMicrotasks()
+      act(() => { MockJitsiMeetExternalAPI.instances[0].emit('recordingStatusChanged', { on: false, error: 'service unavailable' }) })
+      expect(reportRecordingFailedMock).not.toHaveBeenCalled()
+    })
   })
 })

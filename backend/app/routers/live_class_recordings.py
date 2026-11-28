@@ -99,6 +99,33 @@ async def stop_recording(
     return RecordingIntentOut(class_id=live_class.id, recording_status=live_class.recording_status.value)
 
 
+@router.post("/classes/{class_id}/recording/failed", response_model=RecordingIntentOut)
+async def recording_failed(
+    class_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(AuthService.get_current_active_user),
+):
+    """The call reported that recording could not start (for example the
+    recorder service is unavailable).
+
+    `recording/start` records the instructor's intent before the call has
+    tried anything, so without this the class stayed "requested" forever and
+    the class end would move it to "processing", waiting for a file that was
+    never written. Only a request that has not produced a recording yet is
+    reset; a class that already has a recording keeps its status.
+    """
+    live_class = _get_class_or_404(db, class_id)
+    _require_staff(live_class, current_user)
+
+    if live_class.recording_status == RecordingStatus.REQUESTED and not live_class.recording_video_id:
+        live_class.recording_status = RecordingStatus.NONE
+    live_class_service.log_event(db, live_class.id, current_user.id, "recording.failed")
+    db.commit()
+    db.refresh(live_class)
+
+    return RecordingIntentOut(class_id=live_class.id, recording_status=live_class.recording_status.value)
+
+
 @router.get("/past-classes-report")
 async def past_classes_report(
     course_id: int | None = None,

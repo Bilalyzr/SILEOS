@@ -96,13 +96,13 @@ class TestClaimShape:
         assert user_ctx["name"] == instructor.display_name
         assert user_ctx["email"] == instructor.user_email
         assert user_ctx["avatar"] == ""
-        assert user_ctx["moderator"] == "true"
+        assert user_ctx["moderator"] is True
 
         features = claims["context"]["features"]
-        assert features["screen-sharing"] == "true"
-        assert features["recording"] == "true"
-        assert features["livestreaming"] == "false"
-        assert features["transcription"] == "false"
+        assert features["screen-sharing"] is True
+        assert features["recording"] is True
+        assert features["livestreaming"] is False
+        assert features["transcription"] is False
 
     def test_student_non_moderator_claims(self, db, monkeypatch, live_course, instructor, student):
         monkeypatch.setattr(get_settings(), "JITSI_JWT_SECRET", "test-jitsi-secret-0123456789")
@@ -111,13 +111,13 @@ class TestClaimShape:
 
         claims = _decode(token, get_settings().JITSI_JWT_SECRET)
         user_ctx = claims["context"]["user"]
-        assert user_ctx["moderator"] == "false"
+        assert user_ctx["moderator"] is False
 
         features = claims["context"]["features"]
-        assert features["screen-sharing"] == "false"
-        assert features["recording"] == "false"
-        assert features["livestreaming"] == "false"
-        assert features["transcription"] == "false"
+        assert features["screen-sharing"] is False
+        assert features["recording"] is False
+        assert features["livestreaming"] is False
+        assert features["transcription"] is False
 
     def test_exp_equals_scheduled_end_plus_30min(self, db, monkeypatch, live_course, instructor):
         monkeypatch.setattr(get_settings(), "JITSI_JWT_SECRET", "test-jitsi-secret-0123456789")

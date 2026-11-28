@@ -93,6 +93,13 @@ export function InstructorLiveClassConsolePage() {
     setEnding(true)
     try {
       await endLiveClass(classId)
+      // Ending the class on the server does not touch the video room, so close
+      // the room for everyone too. Without this, students stayed in the call
+      // after the instructor had ended the class. Best effort: learners'
+      // calls also leave by themselves within a few seconds of seeing the
+      // class marked ended.
+      try { jitsiApiRef.current?.executeCommand('endConference') } catch { /* room already closed */ }
+      await new Promise((resolve) => setTimeout(resolve, 600))
       navigate(`/instructor/live-classes/${classId}/report`)
     } catch (err: any) {
       setErrorMessage(err?.response?.data?.detail || err?.message || 'Failed to end the class')

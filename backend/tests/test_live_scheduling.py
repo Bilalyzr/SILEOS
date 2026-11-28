@@ -372,6 +372,37 @@ class TestList:
         ids = [row["id"] for row in r.json()["items"]]
         assert ids.index(sooner.id) < ids.index(later.id)
 
+    def test_late_class_stays_listed_until_its_scheduled_end(self, client, db, as_user, instructor_user, live_course):
+        """A scheduled class whose start time has passed but whose end has not must
+        still appear in Upcoming. Before the fix it was in no tab at all, so the
+        instructor could not start it and students could not join it."""
+        late = _make_class(db, live_course, instructor_user, "si-late0001",
+                           start_delta=timedelta(minutes=-10), duration_minutes=60)
+        over = _make_class(db, live_course, instructor_user, "si-late0002",
+                           start_delta=timedelta(hours=-3), duration_minutes=60)
+
+        as_user(instructor_user)
+        upcoming = [row["id"] for row in client.get("/api/v1/live/classes", params={"scope": "upcoming"}).json()["items"]]
+        past = [row["id"] for row in client.get("/api/v1/live/classes", params={"scope": "past"}).json()["items"]]
+        live = [row["id"] for row in client.get("/api/v1/live/classes", params={"scope": "live"}).json()["items"]]
+        assert late.id in upcoming
+        assert late.id not in past and late.id not in live
+        # Once the scheduled end has passed it moves to Past instead.
+        assert over.id not in upcoming
+        assert over.id in past
+        # Every class is in at least one tab.
+        for cls in (late, over):
+            assert cls.id in upcoming + past + live
+
+    def test_late_class_is_listed_for_enrolled_students_too(self, client, db, as_user, student_user, instructor_user, live_course):
+        late = _make_class(db, live_course, instructor_user, "si-late0003",
+                           start_delta=timedelta(minutes=-5), duration_minutes=60)
+        db.add(Enrollment(course_id=live_course.id, user_id=student_user.id, enrollment_status="enrolled"))
+        db.commit()
+        as_user(student_user)
+        ids = [row["id"] for row in client.get("/api/v1/live/classes", params={"scope": "upcoming"}).json()["items"]]
+        assert late.id in ids
+
     def test_past_ordered_descending(self, client, db, as_user, instructor_user, live_course):
         older = _make_class(db, live_course, instructor_user, "si-list0009",
                              status=LiveClassStatus.ENDED, start_delta=timedelta(hours=-5),

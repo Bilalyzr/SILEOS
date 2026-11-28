@@ -244,6 +244,10 @@ export const startRecordingIntent = (classId: number): Promise<RecordingIntentOu
 export const stopRecordingIntent = (classId: number): Promise<RecordingIntentOut> =>
   apiRequest<RecordingIntentOut>(api.post(`/live/classes/${classId}/recording/stop`))
 
+/** The call reported that recording could not start. Resets a request that never recorded. */
+export const reportRecordingFailed = (classId: number): Promise<RecordingIntentOut> =>
+  apiRequest<RecordingIntentOut>(api.post(`/live/classes/${classId}/recording/failed`))
+
 export const fetchRecordingPlayback = (classId: number): Promise<RecordingPlaybackOut> =>
   apiRequest<RecordingPlaybackOut>(api.get(`/live/classes/${classId}/recording-playback`))
 

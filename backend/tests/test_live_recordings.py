@@ -199,6 +199,39 @@ class TestRecordingIntent:
         events = db.query(LiveClassEvent).filter(LiveClassEvent.class_id == lc.id).all()
         assert any(e.event == "recording.stopped" for e in events)
 
+    def test_failed_start_resets_a_request_that_never_recorded(self, client, db, as_user, rec_instructor, rec_course):
+        """The call said the recorder is unavailable: the class must not stay
+        'requested', or the class end would wait for a recording that never exists."""
+        lc = _make_class(db, rec_course, rec_instructor, "si-rec00020", recording_status=RecordingStatus.REQUESTED)
+        as_user(rec_instructor)
+
+        r = client.post(f"/api/v1/live/classes/{lc.id}/recording/failed")
+        assert r.status_code == 200, r.text
+        assert r.json()["recording_status"] == "none"
+        db.refresh(lc)
+        assert lc.recording_status == RecordingStatus.NONE
+
+        from app.models.live_class import LiveClassEvent
+        events = db.query(LiveClassEvent).filter(LiveClassEvent.class_id == lc.id).all()
+        assert any(e.event == "recording.failed" for e in events)
+
+    def test_failed_report_keeps_the_status_of_a_class_that_has_a_recording(self, client, db, as_user, rec_instructor, rec_course):
+        lc = _make_class(
+            db, rec_course, rec_instructor, "si-rec00021",
+            recording_status=RecordingStatus.AVAILABLE, recording_video_id="video-guid-1",
+        )
+        as_user(rec_instructor)
+        r = client.post(f"/api/v1/live/classes/{lc.id}/recording/failed")
+        assert r.status_code == 200, r.text
+        assert r.json()["recording_status"] == "available"
+
+    def test_failed_report_requires_the_assigned_instructor(self, client, db, as_user, other_instructor, rec_course, rec_instructor):
+        lc = _make_class(db, rec_course, rec_instructor, "si-rec00022", recording_status=RecordingStatus.REQUESTED)
+        as_user(other_instructor)
+        assert client.post(f"/api/v1/live/classes/{lc.id}/recording/failed").status_code == 403
+        db.refresh(lc)
+        assert lc.recording_status == RecordingStatus.REQUESTED
+
     def test_admin_may_start_recording(self, client, db, as_user, rec_instructor, rec_course):
         from app.models.user import User
 

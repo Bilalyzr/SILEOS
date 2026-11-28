@@ -53,6 +53,7 @@ export const InstructorDock: React.FC<InstructorDockProps> = ({ liveClass, jitsi
   const [elapsedSeconds, setElapsedSeconds] = React.useState(0)
 
   const isRecording = useLiveClassStore((s) => s.isRecording)
+  const recordingError = useLiveClassStore((s) => s.recordingError)
   const connectionStatus = useLiveClassStore((s) => s.connectionStatus)
 
   // Participant count — 10s poll of the Jitsi API, per the plan's binding
@@ -133,14 +134,16 @@ export const InstructorDock: React.FC<InstructorDockProps> = ({ liveClass, jitsi
 
   return (
     <div className={`flex flex-col h-full rounded-lg border border-slate-200 bg-white overflow-hidden ${className}`}>
-      <div className="flex border-b border-slate-100" role="tablist">
+      {/* Five tabs do not fit a narrow dock. The row scrolls by itself instead of
+          clipping its labels and shifting the whole panel sideways. */}
+      <div className="flex border-b border-slate-100 overflow-x-auto" role="tablist">
         {TABS.map(({ key, label, icon: Icon }) => (
           <button
             key={key}
             role="tab"
             aria-selected={tab === key}
             onClick={() => setTab(key)}
-            className={`flex-1 flex items-center justify-center gap-1.5 px-2 py-2.5 text-xs font-medium border-b-2 transition-colors ${
+            className={`flex-1 shrink-0 whitespace-nowrap flex items-center justify-center gap-1.5 px-2 py-2.5 text-xs font-medium border-b-2 transition-colors ${
               tab === key
                 ? 'border-primary-500 text-primary-700'
                 : 'border-transparent text-slate-500 hover:text-slate-700'
@@ -230,6 +233,11 @@ export const InstructorDock: React.FC<InstructorDockProps> = ({ liveClass, jitsi
                 />
               </button>
             </div>
+            {recordingError && !isRecording && (
+              <p role="alert" className="text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-md px-3 py-2">
+                {recordingError}
+              </p>
+            )}
             {isRecording && (
               <p className="text-xs text-danger-700 bg-danger-50 border border-danger-200 rounded-md px-3 py-2 flex items-center gap-1.5">
                 <Circle className="h-2.5 w-2.5 fill-danger-600 text-danger-600 animate-pulse" />

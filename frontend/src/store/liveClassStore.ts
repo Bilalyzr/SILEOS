@@ -38,6 +38,9 @@ interface LiveClassState {
   // Recording (mirrors Jitsi's recordingStatusChanged event; independent of
   // the server-truth `recording_status` on LiveClassOut, which is intent-only)
   isRecording: boolean
+  // Why recording could not start, when the call reported an error (for example
+  // the recorder service is unavailable). Null when there is nothing to report.
+  recordingError: string | null
 
   // Actions
   startSession: (params: { classId: number; roomName: string; isModerator: boolean }) => void
@@ -46,6 +49,7 @@ interface LiveClassState {
   participantLeft: (participantId: string) => void
   setRaisedHand: (participantId: string, raised: boolean) => void
   setRecording: (isRecording: boolean) => void
+  setRecordingError: (message: string | null) => void
   resetSession: () => void
 }
 
@@ -58,6 +62,7 @@ const initialSessionState = {
   participants: {} as Record<string, LiveParticipant>,
   raisedHands: [] as string[],
   isRecording: false,
+  recordingError: null as string | null,
 }
 
 export const useLiveClassStore = create<LiveClassState>((set, get) => ({
@@ -105,6 +110,8 @@ export const useLiveClassStore = create<LiveClassState>((set, get) => ({
   },
 
   setRecording: (isRecording) => set({ isRecording }),
+
+  setRecordingError: (recordingError) => set({ recordingError }),
 
   resetSession: () => set({ ...initialSessionState }),
 }))
