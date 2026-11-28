@@ -40,3 +40,9 @@ docker exec -i development-backend-1 sh -c 'cd /app && python -' < e2e/live-clas
 
 The test accounts' tokens last three hours. The manifest holds credentials, so keep it out of git.
 Results: `report.json` and `shots/` in the work directory.
+
+## Health check
+
+`bash e2e/live-class/healthcheck.sh` is a read-only check (about 2 s) of the video stack, recorder, moderator override,
+firewall rule and public reachability. Run it before a class or from cron; exit code 1 means something needs attention,
+and each failure line says what to do.

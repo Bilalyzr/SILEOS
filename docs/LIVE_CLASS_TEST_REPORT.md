@@ -36,11 +36,12 @@ passed" as the learner's own result. The suite now reads the learner's own "Pass
 
 ## Things to know (not defects, but must not be forgotten)
 
-- **Firewall drift.** The LC-13 rule was applied to the running firewall container's `/etc/caddy/Caddyfile`. The source
-  file `/opt/incubaseos/waf/Caddyfile` belongs to another project and was not edited, so if that project rebuilds the
-  firewall image, the rule is lost and code submissions return 403 again. The rule text is in the knowledge base.
+- **Firewall source.** The LC-13 rule was applied to the running firewall container and, on 2026-11-28, also added to
+  its source file `/opt/incubaseos/waf/Caddyfile` (backup kept beside it), so a rebuild keeps it. The file belongs to
+  the incubaseos project; keep the rule when editing it.
 - **Recording uploads.** Recordings are picked up by the recording worker, which may upload to the video CDN and call a
   transcription service. The test recordings were deleted from the recorder afterwards.
+- **Health check.** `bash e2e/live-class/healthcheck.sh` checks the video stack, recorder, moderator override, firewall rule (running and source) and public reachability in about 2 s, and exits 1 with a fix hint per failure. The recorder is no longer profile-gated, so it starts with the stack.
 - **Recorder start time.** Recording takes 15-30 s to begin; the instructor's switch turns on only then.
 
 ## Other observations (not changed)

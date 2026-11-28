@@ -307,9 +307,107 @@ describe('JitsiStage', () => {
     act(() => {
       instance.emit('errorOccurred', { error: { message: 'connection lost' } })
     })
+    await flushMicrotasks()
 
     expect(screen.getByText(/couldn't connect/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /retry/i })).toBeInTheDocument()
+  })
+
+  it('Retry reconnects: the call container stays mounted so a new call can attach (no appendChild-of-null)', async () => {
+    render(
+      <JitsiStage jitsiUrl="https://live.example.com" roomName="si-retry001" jwt="jwt" isModerator={false}
+        displayName="Student" classId={3} onLeft={() => {}} />
+    )
+    await flushMicrotasks()
+    act(() => { MockJitsiMeetExternalAPI.instances[0].emit('errorOccurred', { error: { message: 'connection lost' } }) })
+    await flushMicrotasks()
+
+    // The container must still be in the page while the error is shown.
+    expect(screen.getByTestId('jitsi-stage-container')).toBeInTheDocument()
+
+    await act(async () => { screen.getByRole('button', { name: /retry/i }).click() })
+    await flushMicrotasks()
+
+    expect(MockJitsiMeetExternalAPI.instances.length).toBe(2)
+    expect(MockJitsiMeetExternalAPI.instances[1].options.parentNode).toBeTruthy()
+    expect(screen.queryByText(/couldn't connect/i)).not.toBeInTheDocument()
+  })
+
+  it('a learner whose room was closed because the class ended leaves instead of seeing an error', async () => {
+    getLiveClassMock.mockResolvedValue({ id: 3, status: 'ended' })
+    const onEnded = vi.fn()
+    render(
+      <JitsiStage jitsiUrl="https://live.example.com" roomName="si-closed001" jwt="jwt" isModerator={false}
+        displayName="Student" classId={3} onLeft={() => {}} onEnded={onEnded} />
+    )
+    await flushMicrotasks()
+    act(() => { MockJitsiMeetExternalAPI.instances[0].emit('errorOccurred', {}) })
+    await flushMicrotasks()
+
+    expect(onEnded).toHaveBeenCalledTimes(1)
+    expect(screen.queryByText(/couldn't connect/i)).not.toBeInTheDocument()
+    getLiveClassMock.mockResolvedValue({ id: 42, status: 'live' })
+  })
+
+  it('shows the error when the class is still live (a real connection problem)', async () => {
+    getLiveClassMock.mockResolvedValue({ id: 3, status: 'live' })
+    render(
+      <JitsiStage jitsiUrl="https://live.example.com" roomName="si-live00001" jwt="jwt" isModerator={false}
+        displayName="Student" classId={3} onLeft={() => {}} />
+    )
+    await flushMicrotasks()
+    act(() => { MockJitsiMeetExternalAPI.instances[0].emit('errorOccurred', {}) })
+    await flushMicrotasks()
+
+    expect(screen.getByText(/couldn't connect/i)).toBeInTheDocument()
+  })
+
+  it('offers a fullscreen button in the call toolbar to everyone', async () => {
+    render(<JitsiStage jitsiUrl="https://live.example.com" roomName="si-fs000001" jwt="jwt" isModerator={false}
+      displayName="Student" classId={3} onLeft={() => {}} />)
+    await flushMicrotasks()
+    expect(MockJitsiMeetExternalAPI.instances[0].options.configOverwrite.toolbarButtons).toContain('fullscreen')
+  })
+
+  it('instructor closing the room from the toolbar ends the class instead of showing an error', async () => {
+    getLiveClassMock.mockResolvedValue({ id: 3, status: 'live' })
+    const onMeetingClosed = vi.fn()
+    render(<JitsiStage jitsiUrl="https://live.example.com" roomName="si-term0001" jwt="jwt" isModerator
+      displayName="Instructor" classId={3} onLeft={() => {}} onMeetingClosed={onMeetingClosed} />)
+    await flushMicrotasks()
+    act(() => { MockJitsiMeetExternalAPI.instances[0].emit('errorOccurred', { error: { name: 'conference.destroyed', message: 'The meeting has been terminated' } }) })
+    await flushMicrotasks()
+    expect(onMeetingClosed).toHaveBeenCalledTimes(1)
+    expect(screen.queryByText(/couldn't connect/i)).not.toBeInTheDocument()
+  })
+
+  it('a learner in a room that was terminated leaves instead of seeing an error', async () => {
+    getLiveClassMock.mockResolvedValue({ id: 3, status: 'live' })
+    const onEnded = vi.fn()
+    render(<JitsiStage jitsiUrl="https://live.example.com" roomName="si-term0002" jwt="jwt" isModerator={false}
+      displayName="Student" classId={3} onLeft={() => {}} onEnded={onEnded} />)
+    await flushMicrotasks()
+    act(() => { MockJitsiMeetExternalAPI.instances[0].emit('errorOccurred', { error: { name: 'conference.destroyed' } }) })
+    await flushMicrotasks()
+    expect(onEnded).toHaveBeenCalledTimes(1)
+    expect(screen.queryByText(/couldn't connect/i)).not.toBeInTheDocument()
+    getLiveClassMock.mockResolvedValue({ id: 42, status: 'live' })
+  })
+
+  it('ignores errors the server reports while closing the room after the call was left', async () => {
+    render(
+      <JitsiStage jitsiUrl="https://live.example.com" roomName="si-closing01" jwt="jwt" isModerator
+        displayName="Instructor" classId={3} onLeft={() => {}} />
+    )
+    await flushMicrotasks()
+    const instance = MockJitsiMeetExternalAPI.instances[0]
+
+    act(() => {
+      instance.emit('videoConferenceLeft', {})
+      instance.emit('errorOccurred', { error: { message: 'conference destroyed' } })
+    })
+
+    expect(screen.queryByText(/couldn't connect/i)).not.toBeInTheDocument()
   })
 
   describe('when the class ends', () => {

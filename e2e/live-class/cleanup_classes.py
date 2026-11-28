@@ -1,7 +1,7 @@
 from sqlalchemy import text
 from app.core.database import SessionLocal
 db = SessionLocal()
-ids = [r[0] for r in db.execute(text("select id from live_classes where title like 'LC suite%'"))]
+ids = [r[0] for r in db.execute(text("select id from live_classes where title like 'LC suite%' or title like 'End repro %'"))]
 if not ids:
     print("no suite classes to remove")
 else:

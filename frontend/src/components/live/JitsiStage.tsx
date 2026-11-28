@@ -50,6 +50,7 @@ const STUDENT_TOOLBAR_BUTTONS = [
   'chat',
   'raisehand',
   'tileview',
+  'fullscreen',
   'hangup',
 ]
 
@@ -91,6 +92,9 @@ export interface JitsiStageProps {
   /** Called after the call has been closed because the class ended (or access
    * was revoked). Defaults to `onLeft`. */
   onEnded?: () => void
+  /** Moderator only: the room was closed from the call's own toolbar ("End meeting for all"),
+   * so the class itself is still open on the server. The page should end the class. */
+  onMeetingClosed?: () => void
 }
 
 export const JitsiStage: React.FC<JitsiStageProps> = ({
@@ -103,11 +107,14 @@ export const JitsiStage: React.FC<JitsiStageProps> = ({
   onApiReady,
   onLeft,
   onEnded,
+  onMeetingClosed,
 }) => {
   const onLeftRef = React.useRef(onLeft)
   const onEndedRef = React.useRef(onEnded)
+  const onMeetingClosedRef = React.useRef(onMeetingClosed)
   onLeftRef.current = onLeft
   onEndedRef.current = onEnded
+  onMeetingClosedRef.current = onMeetingClosed
   const statusIntervalRef = React.useRef<ReturnType<typeof setInterval> | null>(null)
   const containerRef = React.useRef<HTMLDivElement>(null)
   const apiRef = React.useRef<any>(null)
@@ -148,6 +155,10 @@ export const JitsiStage: React.FC<JitsiStageProps> = ({
   React.useEffect(() => {
     let cancelled = false
     let endedHandled = false
+    // Set once the call has been left or closed (instructor ended the room, learner hung up).
+    // The video server then reports errors while it tears the room down; those are not
+    // connection failures and must not replace the page with "Couldn't connect to the class".
+    let callClosed = false
 
     /** The class is over (ended by the instructor, cancelled, or access revoked):
      * stop the timers, hang up so the learner is really out of the room and no
@@ -155,6 +166,7 @@ export const JitsiStage: React.FC<JitsiStageProps> = ({
     const closeBecauseClassEnded = () => {
       if (endedHandled || cancelled) return
       endedHandled = true
+      callClosed = true
       if (heartbeatIntervalRef.current) {
         clearInterval(heartbeatIntervalRef.current)
         heartbeatIntervalRef.current = null
@@ -179,6 +191,9 @@ export const JitsiStage: React.FC<JitsiStageProps> = ({
     loadExternalApiScript(jitsiUrl)
       .then(() => {
         if (cancelled) return
+        // The container is always rendered, but guard anyway: constructing the API with
+        // no parent node throws "Cannot read properties of null (reading 'appendChild')".
+        if (!containerRef.current) return
         const JitsiMeetExternalAPI = (window as any).JitsiMeetExternalAPI
         if (!JitsiMeetExternalAPI) {
           throw new Error('JitsiMeetExternalAPI is not available on window')
@@ -258,13 +273,46 @@ export const JitsiStage: React.FC<JitsiStageProps> = ({
           }
         })
 
+        api.addEventListener('videoConferenceLeft', () => { callClosed = true })
+
         api.addEventListener('readyToClose', () => {
+          callClosed = true
           onLeft()
         })
 
         api.addEventListener('errorOccurred', (event: any) => {
-          setConnectionStatus('error', event?.error?.message || 'A Jitsi conference error occurred')
-          setLoadError(event?.error?.message || 'A Jitsi conference error occurred')
+          if (callClosed || endedHandled) return
+          const message = event?.error?.message || 'A Jitsi conference error occurred'
+          const showError = () => {
+            if (cancelled || callClosed || endedHandled) return
+            setConnectionStatus('error', message)
+            setLoadError(message)
+          }
+          // When the instructor ends the class the video server closes the room and reports
+          // an error to everyone still in it, a few seconds before a learner's own status
+          // check would notice. That is the class ending, not a connection failure: ask the
+          // server before showing "Couldn't connect to the class".
+          // "conference.destroyed / The meeting has been terminated": the room was closed on
+          // purpose (the instructor used End meeting for all). Not a connection failure.
+          const meetingTerminated = /destroyed|terminated/i.test(`${event?.error?.name ?? ''} ${event?.error?.message ?? ''} ${event?.name ?? ''}`)
+          getLiveClass(classId)
+            .then((cls) => {
+              if (cls.status === 'ended' || cls.status === 'cancelled') {
+                // The instructor's console navigates to the report by itself; learners leave now.
+                if (!isModerator) closeBecauseClassEnded()
+                return
+              }
+              if (meetingTerminated || callClosed) {
+                callClosed = true
+                // Learners: the room is gone, so they are out. The instructor: closing the
+                // room from the toolbar must also end the class, or it stays "live" with nobody in it.
+                if (isModerator) (onMeetingClosedRef.current ?? onLeftRef.current)()
+                else closeBecauseClassEnded()
+                return
+              }
+              showError()
+            })
+            .catch(() => { if (meetingTerminated) { callClosed = true; (isModerator ? (onMeetingClosedRef.current ?? onLeftRef.current) : onEndedRef.current ?? onLeftRef.current)() } else showError() })
         })
 
         // 60s heartbeat cadence while the stage is mounted. Stops itself on
@@ -328,32 +376,29 @@ export const JitsiStage: React.FC<JitsiStageProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jitsiUrl, roomName, jwt, isModerator, displayName, classId, retryKey])
 
-  if (loadError) {
-    return (
-      <div className="flex flex-col items-center justify-center h-full min-h-[320px] rounded-lg border border-danger-200 bg-danger-50 text-center p-8">
-        <p className="font-semibold text-danger-700 mb-1">Couldn't connect to the class</p>
-        <p className="text-sm text-danger-600 mb-4 max-w-sm">{loadError}</p>
-        <Button
-          variant="destructive"
-          onClick={() => {
-            retryKeyRef.current += 1
-            setRetryKey(retryKeyRef.current)
-          }}
-        >
-          Retry
-        </Button>
-      </div>
-    )
-  }
-
   return (
     <div className="relative w-full h-full min-h-[320px] rounded-lg overflow-hidden bg-neutral-900">
-      {!isReady && (
+      {!isReady && !loadError && (
         <div className="absolute inset-0 flex items-center justify-center text-white/80 text-sm">
           Connecting to class…
         </div>
       )}
       <div ref={containerRef} className="w-full h-full" data-testid="jitsi-stage-container" />
+      {loadError && (
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center rounded-lg border border-danger-200 bg-danger-50 text-center p-8">
+          <p className="font-semibold text-danger-700 mb-1">Couldn't connect to the class</p>
+          <p className="text-sm text-danger-600 mb-4 max-w-sm">{loadError}</p>
+          <Button
+            variant="destructive"
+            onClick={() => {
+              retryKeyRef.current += 1
+              setRetryKey(retryKeyRef.current)
+            }}
+          >
+            Retry
+          </Button>
+        </div>
+      )}
       <button type="button" onClick={() => setLowBandwidth((v) => !v)} aria-pressed={lowBandwidth} data-testid="low-bandwidth-toggle"
         className={`absolute top-2 right-2 z-10 px-2 py-1 text-[11px] rounded-full border ${lowBandwidth ? 'bg-amber-400 text-black border-amber-500' : 'bg-black/50 text-white border-white/30'}`}>
         {lowBandwidth ? 'Low-bandwidth: on (180p)' : 'Low-bandwidth mode'}

@@ -107,6 +107,14 @@ export function InstructorLiveClassConsolePage() {
     }
   }, [classId, navigate])
 
+  // The instructor closed the room from the call's own toolbar (End meeting for all).
+  // That must end the class on the server too, otherwise it stays live with nobody in it.
+  const handleMeetingClosed = React.useCallback(async () => {
+    setEnding(true)
+    try { await endLiveClass(classId) } catch { /* already ended */ }
+    navigate(`/instructor/live-classes/${classId}/report`)
+  }, [classId, navigate])
+
   if (!Number.isFinite(classId)) {
     return <ErrorState title="Invalid class" description="This live class link looks incorrect." />
   }
@@ -197,6 +205,7 @@ export function InstructorLiveClassConsolePage() {
             classId={classId}
             onApiReady={handleApiReady}
             onLeft={handleLeft}
+            onMeetingClosed={handleMeetingClosed}
           />
           <InstructorDock liveClass={liveClass} jitsiApi={jitsiApiRef.current} />
         </div>
