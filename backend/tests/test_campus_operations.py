@@ -484,7 +484,9 @@ def test_recovery_cannot_adopt_another_campus_subscription(
     )
     url = f"{ROOT}/platform/billing-attempts/{row.id}/reconcile"
     assert client.post(url, json={"subscription_id": "sub_other"}).status_code == 403
-    as_user(make_user(role="admin"))
+    as_user(make_user(role="admin"))  # LMS admin is not a Campus administrator
+    assert client.post(url, json={"subscription_id": "sub_other"}).status_code == 403
+    as_user(make_user(role="campus_admin"))
     assert client.post(url, json={"subscription_id": "sub_other"}).status_code == 409
     db.refresh(row)
     assert row.gateway_subscription_id is None

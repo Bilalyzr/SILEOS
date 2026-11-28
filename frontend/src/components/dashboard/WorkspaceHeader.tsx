@@ -70,10 +70,13 @@ export function WorkspaceHeader({
       </form>
       <AccessibilityMenu />
       <Link to="/school" className="rd-labs-link">Classes 6–12</Link>
-      <Link to="/institutions" className="rd-labs-link" aria-label="Institution workspaces">
-        <Building2 size={17} />
-        <span>Campus</span>
-      </Link>
+      {/* Campus has its own administrators; LMS admin/superadmin don't see it. */}
+      {role !== "admin" && role !== "superadmin" && (
+        <Link to="/institutions" className="rd-labs-link" aria-label="Institution workspaces">
+          <Building2 size={17} />
+          <span>Campus</span>
+        </Link>
+      )}
       <Link to="/labs" className="rd-labs-link" aria-label="Learning labs">
         <FlaskConical size={17} />
         <span>Learning labs</span>

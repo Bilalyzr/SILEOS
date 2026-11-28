@@ -32,8 +32,8 @@ CurrentUser = Depends(AuthService.get_current_active_user)
 
 @router.get("/platform/plan-requests")
 def platform_requests(db: Session = Depends(get_db), user=CurrentUser):
-    if user.role not in ("admin", "superadmin"):
-        raise HTTPException(403, "Platform administrator access required.")
+    if user.role not in svc.PLATFORM_ADMIN_ROLES:
+        raise HTTPException(403, "Campus administrator access required.")
     return [
         {
             "id": r.id,
@@ -61,8 +61,8 @@ def review_request(
     db: Session = Depends(get_db),
     user=CurrentUser,
 ):
-    if user.role not in ("admin", "superadmin"):
-        raise HTTPException(403, "Platform administrator access required.")
+    if user.role not in svc.PLATFORM_ADMIN_ROLES:
+        raise HTTPException(403, "Campus administrator access required.")
     row = (
         db.query(InstitutionPlanRequest)
         .filter_by(id=request_id)

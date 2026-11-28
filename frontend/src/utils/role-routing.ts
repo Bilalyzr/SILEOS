@@ -41,6 +41,8 @@ const ROLE_HOME: Record<string, string> = {
   company: '/company/dashboard',
   company_manager: '/company/dashboard',
   spoc: '/spoc/dashboard',
+  // Campus platform administrator: lives in Campus only, signs in at /campus/login.
+  campus_admin: '/institutions',
 }
 
 /**

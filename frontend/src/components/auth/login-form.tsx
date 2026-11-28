@@ -18,7 +18,7 @@ import { useGoogleOAuth } from "@/hooks/use-google-oauth"
 import { isFirebaseConfigured } from "@/lib/firebase"
 import { RoleSelectionModal } from "@/components/auth/RoleSelectionModal"
 import { LoginForm as LoginFormType } from "@/types"
-import { roleHomePath, isNonStudentRole } from "@/utils/role-routing"
+import { roleHomePath, isNonStudentRole, normalizeRole } from "@/utils/role-routing"
 import toast from "react-hot-toast"
 
 const loginSchema = z.object({
@@ -30,7 +30,12 @@ const loginSchema = z.object({
   otp_code: z.string().optional(),
 })
 
-export const LoginForm: React.FC = () => {
+interface LoginFormProps {
+  /** "campus" = the separate Campus sign-in (/campus/login). */
+  portal?: "lms" | "campus"
+}
+
+export const LoginForm: React.FC<LoginFormProps> = ({ portal = "lms" }) => {
   // Tracks whether the last login attempt failed because the user is
   // unverified. Drives the inline "Resend verification email" button
   // so users stuck after an SMTP outage can retrigger delivery.
@@ -39,7 +44,7 @@ export const LoginForm: React.FC = () => {
   // Set once the server answers 401 "otp_required" — reveals the code field
   // and keeps it visible while the user fetches a code from their app.
   const [otpRequired, setOtpRequired] = React.useState(false)
-  const { login, isLoading, error, clearError } = useAuth()
+  const { login, logout, isLoading, error, clearError } = useAuth()
   const {
     signInWithGoogle,
     isLoading: isGoogleLoading,
@@ -76,6 +81,22 @@ export const LoginForm: React.FC = () => {
     }
     return (location.state as any)?.from?.pathname
   }, [searchParams, location.state])
+
+
+  // Campus has its own sign-in and its own administrators. LMS admin and
+  // superadmin accounts are refused here (and on every Campus route) so the two
+  // products never redirect into each other. Returns true when it handled routing.
+  const routeCampusLogin = React.useCallback(async (role: string | undefined): Promise<boolean> => {
+    if (portal !== "campus") return false
+    const normalized = normalizeRole(role)
+    if (normalized === "admin" || normalized === "superadmin") {
+      await logout()
+      toast.error("LMS administrators don't have Campus access. Campus administrators sign in here with their own account.", { duration: 7000 })
+      return true
+    }
+    navigate(getRedirectTarget() || "/institutions", { replace: true })
+    return true
+  }, [portal, logout, navigate, getRedirectTarget])
 
   const {
     register,
@@ -186,6 +207,7 @@ export const LoginForm: React.FC = () => {
       // For non-student roles we ALWAYS redirect to the role dashboard — never
       // honour `from`, because `from` may point at a student-only page like
       // /dashboard that would confuse the SPOC / company / instructor / admin.
+      if (await routeCampusLogin(userRole)) return
       if (isNonStudentRole(userRole)) {
         navigate(roleHomePath(userRole), { replace: true })
         return
@@ -221,7 +243,8 @@ export const LoginForm: React.FC = () => {
         const authStore = await import('@/store/auth').then(m => m.useAuthStore.getState())
         const userRole = authStore.user?.role
 
-        if (isNonStudentRole(userRole)) {
+        if (await routeCampusLogin(userRole)) return
+      if (isNonStudentRole(userRole)) {
           navigate(roleHomePath(userRole), { replace: true })
           return
         }
@@ -256,6 +279,7 @@ export const LoginForm: React.FC = () => {
       const authStore = await import('@/store/auth').then(m => m.useAuthStore.getState())
       const userRole = authStore.user?.role
 
+      if (await routeCampusLogin(userRole)) return
       if (isNonStudentRole(userRole)) {
         navigate(roleHomePath(userRole), { replace: true })
         return
@@ -350,7 +374,7 @@ export const LoginForm: React.FC = () => {
     // component fills the panel.
     <div className="w-full">
       <div className="ag-head">
-        <h2>Welcome back</h2>
+        <h2>{portal === "campus" ? "Campus sign in" : "Welcome back"}</h2>
         <p>Sign in to continue your learning path.</p>
       </div>
 

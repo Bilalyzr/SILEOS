@@ -19,6 +19,7 @@ const InstructorPayoutsPage = lazyPage(() => import("@/pages/instructor/payouts"
 const AdminPayoutsPage = lazyPage(() => import("@/pages/admin/payouts"));
 const AdminAiProvidersPage = lazyPage(() => import("@/pages/admin/ai-providers"));
 const CampusForInstitutionsPage = lazyPage(() => import("@/pages/campus-for-institutions"));
+const CampusLoginPage = lazyPage(() => import("@/pages/campus-login"));
 const HelpPage = lazyPage(() => import("@/pages/help"));
 const AccessibilityPage = lazyPage(() => import("@/pages/accessibility"));
 const LabWorkspace = lazyPage(() => import("@/pages/lab-workspace"));
@@ -43,6 +44,7 @@ import {
   ProtectedRoute,
   StudentRoute,
 } from "@/components/routing/protected-route";
+import { CampusRoute } from "@/components/routing/campus-route";
 import { ProfileCompletionGuard } from "@/components/auth/ProfileCompletionGuard";
 import { MainLayout } from "@/components/layout/main-layout";
 import {
@@ -770,6 +772,14 @@ function App() {
                           element={<LinkedInCallbackPage />}
                         />
                         <Route
+                          path="/campus/login"
+                          element={
+                            <AuthLayout>
+                              <CampusLoginPage />
+                            </AuthLayout>
+                          }
+                        />
+                        <Route
                           path="/login"
                           element={
                             <AuthLayout>
@@ -1241,11 +1251,11 @@ function App() {
                         />
                         <Route
                           path="/institutions"
-                          element={<ProtectedRoute><InstitutionsPage /></ProtectedRoute>}
+                          element={<CampusRoute><InstitutionsPage /></CampusRoute>}
                         />
                         <Route
                           path="/institutions/:institutionId/*"
-                          element={<ProtectedRoute><InstitutionsPage /></ProtectedRoute>}
+                          element={<CampusRoute><InstitutionsPage /></CampusRoute>}
                         />
                         <Route
                           path="/settings"

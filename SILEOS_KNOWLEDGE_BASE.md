@@ -234,6 +234,7 @@ Services hold business rules. Routers stay thin. Examples:
 
 ### 4.6 Campus OS
 
+- **Separate Campus administrators (2026-11-28).** Campus has its own sign-in, `/campus/login`, and its own platform role, `campus_admin`. LMS `admin` and `superadmin` have **no** Campus access: `CampusRoute` sends them back to their own dashboard, the backend `PLATFORM_ADMIN_ROLES` (`services/institution_service.py`) is `("campus_admin",)`, and the plan-request and billing-recovery endpoints answer 403 to them. Campus members (owner, admin, teacher, student) get in through their institution membership. Create a Campus admin with `backend/scripts/create_campus_admin.py` (email and password come from environment variables; it refuses to convert an LMS admin).
 - Admissions, tuition and fee collection, exams, transport, hostel, staff leave and substitution, parent portal and messaging. Each has a `campus_*` router and service.
 - Reminders are run by `tuition_reminders`. WhatsApp uses `whatsapp` and `campus_whatsapp`.
 
@@ -403,6 +404,7 @@ cd backend && pytest -q                                       # run tests on the
 
 ## 10. Changelog
 
+- **2026-11-28:** Campus given its own admin login. `/campus/login` and the `campus_admin` role added; LMS admin/superadmin blocked from `/institutions/*` (frontend `CampusRoute`, backend `PLATFORM_ADMIN_ROLES`). Also restored `Institution.tenant_id` on the model, whose removal made every institution workspace return 500. Tests: `test_institutions.py`, `test_campus_operations.py`, `campus-route.test.tsx`. Not yet committed or pushed.
 - **2026-11-26:** Live coding platform plan added at `docs/CODING_PLATFORM_PLAN.md` (proposed, not started).
 - **2026-11-26:** Lesson practice blocks and learner drafts added (Phase 2). Instructors set blocks in the curriculum editor; learners practise in the lesson player.
 - **2026-11-26:** Coding workspace uses Monaco with error markers and a textarea fallback (Phase 1). Judge worker routes exempt from the general rate limit and blocked at the dev edge.

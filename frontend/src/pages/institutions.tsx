@@ -249,7 +249,7 @@ export default function InstitutionsPage() {
   const nav = [
     {
       to: "/institutions",
-      label: "My institutions",
+      label: "Campus dashboard",
       icon: Building2,
       exact: true,
     },
@@ -260,11 +260,16 @@ export default function InstitutionsPage() {
           icon: s.icon,
         }))
       : []),
-    {
-      to: roleHomePath(user?.role),
-      label: "My LMS dashboard",
-      icon: GraduationCap,
-    },
+    // Campus administrators live in Campus only, so there is no LMS dashboard to return to.
+    ...(user?.role === "campus_admin"
+      ? []
+      : [
+          {
+            to: roleHomePath(user?.role),
+            label: "My LMS dashboard",
+            icon: GraduationCap,
+          },
+        ]),
   ];
   const content = () => {
     if (!id)
@@ -273,7 +278,7 @@ export default function InstitutionsPage() {
           <div className="campus-topline">
             <div>
               <span className="campus-eyebrow">SashaInfinity Campus</span>
-              <h1>Your institutions</h1>
+              <h1>Campus dashboard</h1>
               <p>
                 A shared home for schools, colleges and the people who make
                 them.
@@ -296,7 +301,7 @@ export default function InstitutionsPage() {
               </Button>
             }
           />
-          {(user?.role === "admin" || user?.role === "superadmin") && (
+          {user?.role === "campus_admin" && (
             <>
               <InstitutionPlanQueue />
               <BillingRecovery />
@@ -409,7 +414,7 @@ export default function InstitutionsPage() {
                   Retry
                 </Button>
                 <Button asChild>
-                  <Link to="/institutions">My institutions</Link>
+                  <Link to="/institutions">Campus dashboard</Link>
                 </Button>
               </div>
             }

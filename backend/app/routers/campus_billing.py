@@ -12,8 +12,8 @@ Current = Depends(AuthService.get_current_active_user)
 
 @router.get("/platform/billing-attempts")
 def billing_attempts(db: Session = Depends(get_db), user=Current):
-    if user.role not in ("admin", "superadmin"):
-        raise HTTPException(403, "Platform administrator access required.")
+    if user.role not in svc.PLATFORM_ADMIN_ROLES:
+        raise HTTPException(403, "Campus administrator access required.")
     return [
         {
             "id": r.id,
@@ -35,8 +35,8 @@ def reconcile_attempt(
     db: Session = Depends(get_db),
     user=Current,
 ):
-    if user.role not in ("admin", "superadmin"):
-        raise HTTPException(403, "Platform administrator access required.")
+    if user.role not in svc.PLATFORM_ADMIN_ROLES:
+        raise HTTPException(403, "Campus administrator access required.")
     row = db.get(CampusSubscription, attempt_id)
     if not row:
         raise HTTPException(404, "Checkout attempt not found.")

@@ -30,11 +30,11 @@ LIMITS = {
     "enterprise": {"members": 10000, "batches": 1000, "courses": 2000},
 }
 
-# Platform administrators (admin/superadmin) operate on EVERY institution —
-# without this they see zero campuses (list_mine is membership-scoped) and
-# every campus tool 404s for them, which is how "Bring your campus together",
-# fee-plan assignment and the trust/integrations tab all broke for QA.
-PLATFORM_ADMIN_ROLES = ("admin", "superadmin")
+# Campus platform administrators operate on EVERY institution (support, plan
+# approval, billing recovery). This is a Campus-only role, signed in through
+# /campus/login. LMS admin/superadmin deliberately have NO Campus access so the
+# two products keep separate administrators and separate redirects.
+PLATFORM_ADMIN_ROLES = ("campus_admin",)
 
 
 class _PlatformAdminMember:

@@ -152,6 +152,9 @@ export default function CampusForInstitutionsPage() {
             <SymphoButton to="/register?role=instructor" variant="ghost-dark">
               Start Your Workspace
             </SymphoButton>
+            <SymphoButton to="/campus/login" variant="ghost-dark">
+              Campus sign in
+            </SymphoButton>
           </>
         }
       />

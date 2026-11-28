@@ -395,13 +395,17 @@ def test_migration_upgrade_downgrade_roundtrip():
         assert len(inspect(connection).get_table_names()) == 9
 
 
-def test_platform_review_requires_admin_and_preserves_plan(
+def test_platform_review_requires_campus_admin_and_preserves_plan(
     campus, client, db, as_user, make_user
 ):
     owner, institution_id = campus
     client.post(f"{ROOT}/{institution_id}/plan-requests", json={"plan": "campus"})
     assert client.get(f"{ROOT}/platform/plan-requests").status_code == 403
-    as_user(make_user(role="admin"))
+    # LMS administrators are NOT Campus administrators: Campus has its own.
+    for lms_role in ("admin", "superadmin"):
+        as_user(make_user(role=lms_role))
+        assert client.get(f"{ROOT}/platform/plan-requests").status_code == 403
+    as_user(make_user(role="campus_admin"))
     queue = client.get(f"{ROOT}/platform/plan-requests").json()
     assert queue[0]["institution_id"] == institution_id
     request_id = queue[0]["id"]

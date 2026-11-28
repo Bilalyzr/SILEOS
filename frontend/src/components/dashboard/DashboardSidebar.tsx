@@ -49,7 +49,7 @@ export interface SidebarGroup {
 
 export type SidebarItem = SidebarLink | SidebarGroup
 
-export type Role = 'parent' | 'student' | 'instructor' | 'admin' | 'superadmin' | 'spoc' | 'company' | 'company_manager'
+export type Role = 'parent' | 'student' | 'instructor' | 'admin' | 'superadmin' | 'spoc' | 'company' | 'company_manager' | 'campus_admin'
 
 const ROLE_LABELS: Record<Role, string> = {
   parent: 'Parent',
@@ -60,6 +60,7 @@ const ROLE_LABELS: Record<Role, string> = {
   spoc: 'SPOC',
   company: 'Company',
   company_manager: 'Manager',
+  campus_admin: 'Campus',
 }
 
 // One chip style for every role: the chip sits on the navy sidebar, and
@@ -74,6 +75,7 @@ const ROLE_TONES: Record<Role, string> = {
   spoc: ROLE_CHIP,
   company: ROLE_CHIP,
   company_manager: ROLE_CHIP,
+  campus_admin: ROLE_CHIP,
 }
 
 // ---------------------------------------------------------------------------
@@ -139,6 +141,7 @@ const DEFAULT_HOME: Record<Role, string> = {
   spoc: '/spoc/dashboard',
   company: '/company/dashboard',
   company_manager: '/company/dashboard',
+  campus_admin: '/institutions',
 }
 
 export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({

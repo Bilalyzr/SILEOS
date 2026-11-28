@@ -18,7 +18,7 @@ import { NotificationBell } from '@/components/notifications/NotificationBell'
 
 const SASHA_LOGO_URL = '/brand/sasha-logo-small.png?v=lion2'
 
-export type Role = 'parent' | 'student' | 'instructor' | 'admin' | 'superadmin' | 'spoc' | 'company' | 'company_manager'
+export type Role = 'parent' | 'student' | 'instructor' | 'admin' | 'superadmin' | 'spoc' | 'company' | 'company_manager' | 'campus_admin'
 
 const ROLE_LABELS: Record<Role, string> = {
   parent: 'Parent',
@@ -29,6 +29,7 @@ const ROLE_LABELS: Record<Role, string> = {
   spoc: 'SPOC',
   company: 'Company',
   company_manager: 'Manager',
+  campus_admin: 'Campus',
 }
 
 const ROLE_TONES: Record<Role, string> = {
@@ -40,6 +41,7 @@ const ROLE_TONES: Record<Role, string> = {
   spoc:            'bg-emerald-100 text-emerald-700 ring-emerald-200/40',
   company:         'bg-sky-100 text-sky-700 ring-sky-200/40',
   company_manager: 'bg-amber-100 text-amber-700 ring-amber-200/40',
+  campus_admin:    'bg-orange-100 text-orange-700 ring-orange-200/40',
 }
 
 export interface DashboardNavbarProps {
@@ -63,6 +65,7 @@ const DEFAULT_HOME: Record<Role, string> = {
   spoc: '/spoc/dashboard',
   company: '/company/dashboard',
   company_manager: '/company/dashboard',
+  campus_admin: '/institutions',
 }
 
 export const DashboardNavbar: React.FC<DashboardNavbarProps> = ({
